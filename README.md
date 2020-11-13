@@ -1,4 +1,4 @@
-# sa3-project
+# checq.me
 Final project for SA3 course
 
 Team members:
