@@ -1,0 +1,17 @@
+{
+  "name": "sa3-project",
+  "version": "1.0.0",
+  "description": "Final Project for SA3 course",
+  "main": "index.js",
+  "repository": "git@github.com:martino-giorgi/sa3-project.git",
+  "author": "Martino Giorgi, Edoardo Riggio, Michele Cattaneo, Jacopo Di Ventura",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  }
+}
