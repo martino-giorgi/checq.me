@@ -14,5 +14,8 @@ if (alert) {
         email: email,
       }),
     });
+    document.getElementById("modal_close").click();
+    document.getElementById("modal_btn").style.display = "none";
+    // Todo: add info warning
   });
 }
