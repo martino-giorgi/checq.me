@@ -2,8 +2,15 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 const passport = require("passport");
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
+require("dotenv").config();
 
 const User = require("../models/User");
+const Token = require("../models/Token");
+
 
 module.exports = router;
 
@@ -50,18 +57,45 @@ router.post("/signup", (req, res) => {
         // Generate an hash from the password
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(new_user.password, salt, (err, hash) => {
-            if (err) throw err;
-            else {
+            if (err) {
+              console.log(err);
+            } else {
               new_user.password = hash;
               new_user
                 .save()
                 .then((user) => {
-                  req.flash(
-                    "success_msg",
-                    "You are now registered. Please confirm your email and log in"
-                  );
-                  // Account created with success. Redirect to login page
-                  res.redirect("/user/login");
+                  //create an email verification token for the new user
+                  let token = new Token({
+                    _userId: user._id,
+                    token: crypto.randomBytes(20).toString("hex"),
+                  });
+                  token
+                    .save()
+                    .then(() => {
+                      let transporter = nodemailer.createTransport({
+                        service: "Sendgrid",
+                        auth: {
+                          user: process.env.MAIL_USER,
+                          pass: process.env.MAIL_PASS,
+                        },
+                      });
+                      let verification_link = `http://${req.headers.host}/user/verify/${token.token}`;
+                      var mailOptions = {
+                        from: "marco.diventura@outlook.com",
+                        to: user.email,
+                        subject: `Checq.me account verification`,
+                        text: verification_link,
+                        html: `<a href="${verification_link}">Verify your account by clicking here!</a>`,
+                      };
+                      transporter.sendMail(mailOptions).then(()=>{
+                          res.redirect('/user/login');
+                      })
+                      .catch((err) => {
+                          console.log(err);
+                          res.status(500);
+                      })
+                    })
+                    .catch((error) => console.log(error));
                 })
                 .catch((error) => console.log(error));
             }
@@ -72,11 +106,38 @@ router.post("/signup", (req, res) => {
   }
 });
 
-// Login
+router.get("/verify/:token", (req, res) => {
+  Token.findOne({ token: req.params.token }, (err, token) => {
+    console.log(token);
+    if (!token || err) {
+      res.status(400).end(); //unable to verify due to server error or invalid/expired token
+    } else {
+      User.findOne({ _id: token._userId }, (err, user) => {
+        console.log(user);
+        if (err) throw err;
+        if (!user) {
+          res.status(400).end(); //unable to find a user for this token
+        } else if (user.isConfirmed) {
+          res.status(400).end(); //user is already verified (clicked twice on the confirmation link)
+        } else {
+          user.isConfirmed = true;
+          user.save((err) => {
+            if (err) {
+              res.status(500).end(); //could not set the user to verified so the verificaiton failed
+            } else {
+              res.redirect("/user/login"); //account verified successufully
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    //TODO redirects and flash
-    successRedirect: "/dashboard",
+    successRedirect: "/",
     failureRedirect: "/user/login",
     failureFlash: true,
   })(req, res, next);
