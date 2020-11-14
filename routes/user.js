@@ -11,6 +11,7 @@ require("dotenv").config();
 const User = require("../models/User");
 const Token = require("../models/Token");
 
+
 module.exports = router;
 
 router.get("/signup", (req, res) => {
@@ -136,18 +137,17 @@ router.get("/verify/:token", (req, res) => {
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    //TODO redirects and flash
     successRedirect: "/",
     failureRedirect: "/user/login",
     failureFlash: true,
   })(req, res, next);
 });
 
+// Logout
 router.get("/logout", (req, res) => {
   req.logout();
-  req.flash("success_logout_msg", "Logged out correctly");
-  //TODO redirects and flash handling
-  res.redirect("/");
+  req.flash("success_msg", "You are logged out");
+  res.redirect("/user/login");
 });
 
 module.exports = router;

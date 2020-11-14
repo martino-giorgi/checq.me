@@ -11,9 +11,10 @@ module.exports = (passport) => {
       User.findOne({ email: email }).then((user) => {
         if (!user) {
           return done(null, false, { message: "This email is not registered" });
-        }
-        else if(user.isConfirmed == false){
-          return done(null, false, { message: "Confirm your email before logging in" });
+        } else if (user.isConfirmed == false) {
+          return done(null, false, {
+            message: "Confirm your email before logging in",
+          });
         }
 
         // Check if passwords match

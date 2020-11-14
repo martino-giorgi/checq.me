@@ -1,25 +1,27 @@
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const flash = require('connect-flash');
-const session = require('express-session');
-const expressLayouts = require('express-ejs-layouts');
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const flash = require("connect-flash");
+const session = require("express-session");
+const expressLayouts = require("express-ejs-layouts");
 
-const routers = require('./routes');
+const routers = require("./routes");
 
 const app = express();
 
-app.set('view engine', 'ejs');
+const PORT = process.env.PORT || 3000;
+
+app.set("view engine", "ejs");
 app.use(expressLayouts);
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Passport Config
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 
 // DB Config
-const db = require('./config/keys').mongoURI;
+const db = require("./config/keys").mongoURI;
 
 // Connect to MongoDB
 mongoose
@@ -36,9 +38,9 @@ app.use(express.urlencoded({ extended: true }));
 //Express session
 app.use(
   session({
-    secret: 'secret',
+    secret: "secret",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 
@@ -50,22 +52,29 @@ app.use(passport.session());
 app.use(flash());
 
 // Global variables
-app.use(function(req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
   next();
 });
 
 // Route for index page
-app.use('/', routers.home);
+app.use("/", routers.home);
 
 // Route for user page
-app.use('/user', routers.user);
+app.use("/user", routers.user);
 
+// Route for dashboard page
+app.use("/dashboard", routers.dashboard);
 
-app.set('port', process.env.PORT || 3000);
+// Route for 404 error
+app.get("*", function (req, res) {
+  res.status(404).render("page404");
+});
 
-const server = app.listen(app.get('port'), () => {
-  console.log('Server started on http://localhost:' + server.address().port);
+app.set("port", PORT);
+
+const server = app.listen(app.get("port"), () => {
+  console.log("Server started on http://localhost:" + server.address().port);
 });
