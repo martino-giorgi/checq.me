@@ -13,7 +13,6 @@ const Token = require("../models/Token");
 const { resolve } = require("path");
 const { rejects } = require("assert");
 
-
 module.exports = router;
 
 router.get("/signup", (req, res) => {
@@ -78,12 +77,18 @@ router.post("/signup", (req, res) => {
                   token
                     .save()
                     .then(() => {
-                      send_verification_mail(req.headers.host, token, user.email).then((sent_email)=>{
-                        res.redirect("/user/login");
-                      }).catch((err)=>{
-                        console.log(err);
-                        res.status(500);
-                      });
+                      send_verification_mail(
+                        req.headers.host,
+                        token,
+                        user.email
+                      )
+                        .then((sent_email) => {
+                          res.redirect("/user/login");
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          res.status(500);
+                        });
                     })
                     .catch((error) => console.log(error));
                 })
@@ -114,6 +119,8 @@ router.get("/verify/:token", (req, res) => {
               res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
               res.redirect("/user/login"); //account verified successufully
+
+              // Todo: create a flash to display that the account is confirmed
             }
           });
         }
@@ -128,20 +135,24 @@ router.post("/verify/resend", (req, res) => {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
-          Token.deleteMany({ _userId: user._id })
-            .catch((err) => {});
-            let token = new Token({
-              _userId: user._id,
-              token: crypto.randomBytes(20).toString("hex"),
-            });
-            token.save().then(() => {
+          Token.deleteMany({ _userId: user._id }).catch((err) => {});
+          let token = new Token({
+            _userId: user._id,
+            token: crypto.randomBytes(20).toString("hex"),
+          });
+          token
+            .save()
+            .then(() => {
               console.log("resending");
-              send_verification_mail(req.headers.host, token, user.email).then((res)=>{
-                // console.log(res);
-                // console.log("end");
-                //email sent correctly! (the user needs to be aware that the operation was successful)
-              })
-            }).catch((err)=>{});
+              send_verification_mail(req.headers.host, token, user.email).then(
+                (res) => {
+                  // console.log(res);
+                  // console.log("end");
+                  // Todo: email sent correctly! (the user needs to be aware that the operation was successful)
+                }
+              );
+            })
+            .catch((err) => {});
         } else {
           res.status(400).end(); //the email does not correspond to a user
         }
@@ -152,10 +163,8 @@ router.post("/verify/resend", (req, res) => {
   }
 });
 
-
-
-function send_verification_mail(host, token, target_email){
-  return new Promise( (resolve, reject) => {
+function send_verification_mail(host, token, target_email) {
+  return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
       service: "Sendgrid",
       auth: {
@@ -172,7 +181,7 @@ function send_verification_mail(host, token, target_email){
       html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
     };
     resolve(transporter.sendMail(mailOptions));
-  })
+  });
 }
 
 router.post("/login", (req, res, next) => {
