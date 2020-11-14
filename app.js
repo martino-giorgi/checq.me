@@ -5,6 +5,8 @@ const passport = require("passport");
 const flash = require("connect-flash");
 const session = require("express-session");
 const expressLayouts = require("express-ejs-layouts");
+const sass = require("sass");
+const fs = require("fs");
 
 const routers = require("./routes");
 
@@ -16,6 +18,20 @@ app.set("view engine", "ejs");
 app.use(expressLayouts);
 
 app.use(express.static(path.join(__dirname, "public")));
+
+// Scss renderer
+sass.render(
+  { 
+    file: path.join(__dirname, "public/stylesheets/scss/style.scss"),
+    outputStyle: "compressed"
+  },
+  (error, result) => {
+    if (error) throw error;
+
+    const localPath = path.join(__dirname, "public/stylesheets/css/style.css");
+    fs.writeFileSync(localPath, result.css);
+  }
+);
 
 // Passport Config
 require("./config/passport")(passport);
