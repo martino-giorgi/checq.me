@@ -3,14 +3,12 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const passport = require("passport");
 const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 require("dotenv").config();
 
 const User = require("../models/User");
 const Token = require("../models/Token");
-
 
 module.exports = router;
 
@@ -64,6 +62,10 @@ router.post("/signup", (req, res) => {
               new_user
                 .save()
                 .then((user) => {
+                  req.flash(
+                    "success_msg",
+                    "You are now registered. Please confirm your email and log in"
+                  );
                   //create an email verification token for the new user
                   let token = new Token({
                     _userId: user._id,
@@ -87,13 +89,15 @@ router.post("/signup", (req, res) => {
                         text: verification_link,
                         html: `<a href="${verification_link}">Verify your account by clicking here!</a>`,
                       };
-                      transporter.sendMail(mailOptions).then(()=>{
-                          res.redirect('/user/login');
-                      })
-                      .catch((err) => {
+                      transporter
+                        .sendMail(mailOptions)
+                        .then(() => {
+                          res.redirect("/user/login");
+                        })
+                        .catch((err) => {
                           console.log(err);
                           res.status(500);
-                      })
+                        });
                     })
                     .catch((error) => console.log(error));
                 })
@@ -108,12 +112,10 @@ router.post("/signup", (req, res) => {
 
 router.get("/verify/:token", (req, res) => {
   Token.findOne({ token: req.params.token }, (err, token) => {
-    console.log(token);
     if (!token || err) {
       res.status(400).end(); //unable to verify due to server error or invalid/expired token
     } else {
       User.findOne({ _id: token._userId }, (err, user) => {
-        console.log(user);
         if (err) throw err;
         if (!user) {
           res.status(400).end(); //unable to find a user for this token
@@ -123,7 +125,7 @@ router.get("/verify/:token", (req, res) => {
           user.isConfirmed = true;
           user.save((err) => {
             if (err) {
-              res.status(500).end(); //could not set the user to verified so the verificaiton failed
+              res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
               res.redirect("/user/login"); //account verified successufully
             }
@@ -134,10 +136,9 @@ router.get("/verify/:token", (req, res) => {
   });
 });
 
-
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/dashboard",
     failureRedirect: "/user/login",
     failureFlash: true,
   })(req, res, next);
