@@ -1,0 +1,24 @@
+<head>
+  <title>checq.me - Login</title>
+</head>
+
+<body>
+  <%- include ("./partials/messages") %>
+
+  <form id="login_form" action="/user/login" method="post">
+    <div style="display: flex; flex-direction: column">
+
+      <div>
+        <label for="username">Email: </label>
+        <input type="text" name="email" />
+      </div>
+
+      <div>
+        <label for="password">Password: </label>
+        <input type="password" name="password" />
+      </div>
+      
+      <input type="submit" value="Login" />
+    </div>
+  </form>
+</body>
