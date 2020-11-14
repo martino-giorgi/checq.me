@@ -2,8 +2,6 @@
   <img height="100" src="https://github.com/martino-giorgi/checq.me/blob/main/public/assets/branding/logo/logo_blue.svg">
 </p>
 
-<br>
-
 <p align="center">
   <img src="https://img.shields.io/badge/Hosted_on_Heroku-informational?style=flat&logo=heroku&logoColor=white&color=430098">
   <img src="https://img.shields.io/badge/Node.JS-v12.18.3-informational?style=flat&color=007ec6">
