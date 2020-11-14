@@ -3,7 +3,31 @@
 </head>
 
 <body>
-    <h1>Dashboard</h1>
-    <p>Welcome <%= user.name %> to checq.me</p>
-    <a href="/user/logout">Logout</a>
+  <div class="wrapper">
+    <nav>
+      <img class="logo-s" src="assets/branding/logo/logo_white.svg" alt="checq.me logo" />
+
+      <span class="nav-button">
+        <a class="active" id="nav-1" href="/dashboard"> <img id="svg1" src="assets/icons/nav/dashboard_sel.svg" alt="dashboard icon" /> </a>
+      </span>
+
+      <span class="nav-button">
+        <a id="nav-2"> <img id="svg2" src="assets/icons/nav/classroom.svg" alt="classroom icon" /> </a>
+      </span>
+
+      <span class="nav-button">
+        <a id="nav-3"> <img id="svg3" src="assets/icons/nav/schedule.svg" alt="schedule icon" /> </a>
+      </span>
+
+      <span class="nav-button">
+        <a id="nav-4"> <img id="svg4" src="assets/icons/nav/profile.svg" alt="profile icon" /> </a>
+      </span>
+    </nav>
+
+    <main>
+      <h1>Dashboard</h1>
+      <p>Welcome <%= user.name %> to checq.me</p>
+      <a href="/user/logout">Logout</a>
+    </main>
+  </div>
 </body>

@@ -136,10 +136,9 @@ router.get('/verify/:token', (req, res) => {
 
 router.post('')
 
-
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/dashboard',
     failureRedirect: '/user/login',
     failureFlash: true,
   })(req, res, next);
