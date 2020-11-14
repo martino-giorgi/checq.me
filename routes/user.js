@@ -9,6 +9,8 @@ require("dotenv").config();
 
 const User = require("../models/User");
 const Token = require("../models/Token");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -74,30 +76,12 @@ router.post("/signup", (req, res) => {
                   token
                     .save()
                     .then(() => {
-                      let transporter = nodemailer.createTransport({
-                        service: "Sendgrid",
-                        auth: {
-                          user: process.env.MAIL_USER,
-                          pass: process.env.MAIL_PASS,
-                        },
+                      send_verification_mail(req.headers.host, token, user.email).then((sent_email)=>{
+                        res.redirect("/user/login");
+                      }).catch((err)=>{
+                        console.log(err);
+                        res.status(500);
                       });
-                      let verification_link = `http://${req.headers.host}/user/verify/${token.token}`;
-                      var mailOptions = {
-                        from: "marco.diventura@outlook.com",
-                        to: user.email,
-                        subject: `Checq.me account verification`,
-                        text: verification_link,
-                        html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
-                      };
-                      transporter
-                        .sendMail(mailOptions)
-                        .then(() => {
-                          res.redirect("/user/login");
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          res.status(500);
-                        });
                     })
                     .catch((error) => console.log(error));
                 })
@@ -137,6 +121,7 @@ router.get("/verify/:token", (req, res) => {
 });
 
 router.post("/verify/resend", (req, res) => {
+  console.log(req.body);
   if (req.body.email) {
     User.findOne({ email: req.body.email })
       .then((user) => {
@@ -148,9 +133,12 @@ router.post("/verify/resend", (req, res) => {
               token: crypto.randomBytes(20).toString("hex"),
             });
             token.save().then(() => {
-              send_verification_mail(req.headers.host, token).then(()=> {
-                res.redirect('/user/login');
-              }).catch(()=>res.status(500));
+              console.log("resending");
+              send_verification_mail(req.headers.host, token, user.email).then((res)=>{
+                // console.log(res);
+                // console.log("end");
+                //email sent correctly! (the user needs to be aware that the operation was successful)
+              })
             }).catch((err)=>{});
         } else {
           res.status(400).end(); //the email does not correspond to a user
@@ -164,23 +152,25 @@ router.post("/verify/resend", (req, res) => {
 
 
 
-function send_verification_mail(host, token){
-  let transporter = nodemailer.createTransport({
-    service: "Sendgrid",
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
-  let verification_link = `http://${host}/user/verify/${token.token}`;
-  var mailOptions = {
-    from: "marco.diventura@outlook.com",
-    to: user.email,
-    subject: `Checq.me account verification`,
-    text: verification_link,
-    html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
-  };
-  return transporter.sendMail(mailOptions);
+function send_verification_mail(host, token, target_email){
+  return new Promise( (resolve, reject) => {
+    let transporter = nodemailer.createTransport({
+      service: "Sendgrid",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+    let verification_link = `http://${host}/user/verify/${token.token}`;
+    var mailOptions = {
+      from: "marco.diventura@outlook.com",
+      to: target_email,
+      subject: `Checq.me account verification`,
+      text: verification_link,
+      html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
+    };
+    resolve(transporter.sendMail(mailOptions));
+  })
 }
 
 router.post("/login", (req, res, next) => {
