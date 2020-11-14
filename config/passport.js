@@ -12,6 +12,9 @@ module.exports = (passport) => {
         if (!user) {
           return done(null, false, { message: "This email is not registered" });
         }
+        else if(user.isConfirmed == false){
+          return done(null, false, { message: "Confirm your account email before logging in" });
+        }
 
         // Check if passwords match
         bcrypt.compare(password, user.password, (err, isMatch) => {

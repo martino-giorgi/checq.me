@@ -33,6 +33,7 @@ mongoose
 // Express body parser
 app.use(express.urlencoded({ extended: true }));
 
+//Express session
 app.use(
   session({
     secret: 'secret',
