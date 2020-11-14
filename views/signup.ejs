@@ -3,7 +3,7 @@
   </head>
   
   <body>
-    <% include ("./partials/messages") %>
+    <%- include ("./partials/messages") %>
     <form id="login_form" action="/user/signup" method="POST">
       <div style="display: flex; flex-direction: column">
         <div>
@@ -12,7 +12,7 @@
         </div>
         <div>
           <label for="surname">Surname</label>
-          <input required type="surname" name="surname" value="<%= typeof surname != 'undefined' ? surname : '' %>"/>
+          <input required type="text" name="surname" value="<%= typeof surname != 'undefined' ? surname : '' %>"/>
         </div>
         <div>
           <label for="email">Email</label>

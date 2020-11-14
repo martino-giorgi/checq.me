@@ -1,19 +1,9 @@
-<% if(typeof errors != 'undefined'){ %>
-<%    console.log(errors);  %>
-<%    errors.forEach(function(error) { %>
-    <div>
-      <%= error.msg %>
-    </div>
-    <% }); %> <% } %> <% if(success_msg != ''){ %>
-    <div>
-      <%= success_msg %>
-    </div>
-    <% } %> <% if(error_msg != ''){ %>
-    <div>
-      <%= error_msg %>
-    </div>
-    <% } %> <% if(error != ''){ %>
-    <div>
-      <%= error %>
-    </div>
-    <% } %>
+<% if (typeof errors != 'undefined') {
+  errors.forEach(error => {%>
+    <h1><%= error.msg %></h1>
+    <% });
+} %> 
+
+<% if(success_msg != ''){ %>
+  <h1><%= success_msg %></h1>
+<% } %> 
