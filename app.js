@@ -10,6 +10,8 @@ const routers = require("./routes");
 
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 
@@ -68,7 +70,7 @@ app.get("*", function (req, res) {
   res.status(404).render("page404");
 });
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", PORT);
 
 const server = app.listen(app.get("port"), () => {
   console.log("Server started on http://localhost:" + server.address().port);
