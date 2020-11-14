@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+// Copy the file template.env and rename it to .env
+// Insert the db_name and db_password inside of the .env file
+
 // Database name
 const DB_NAME = process.env.DB_NAME
 
@@ -11,6 +14,3 @@ dbPassword = 'mongodb+srv://checqme:'+ encodeURIComponent(DB_PASS) + `@checqme.w
 module.exports = {
     mongoURI: dbPassword
 };
-
-console.log('Now the value for DB_NAME is:', DB_NAME);
-console.log('Now the value for DB_PASS is:', DB_PASS);
