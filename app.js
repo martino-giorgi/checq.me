@@ -21,9 +21,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Scss renderer
 sass.render(
-  { 
+  {
     file: path.join(__dirname, "public/stylesheets/scss/style.scss"),
-    outputStyle: "compressed"
+    outputStyle: "compressed",
   },
   (error, result) => {
     if (error) throw error;
@@ -41,12 +41,13 @@ const db = require("./config/keys").mongoURI;
 
 // Connect to MongoDB
 mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true ,useUnifiedTopology: true, useCreateIndex: true}
-  )
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
 
 // Express body parser
 app.use(express.urlencoded({ extended: true }));
@@ -83,6 +84,9 @@ app.use("/user", routers.user);
 
 // Route for dashboard page
 app.use("/dashboard", routers.dashboard);
+
+// Route for Mastery Manager
+app.use("/manager", routers.mastery_manager);
 
 // Route for 404 error
 app.get("*", function (req, res) {

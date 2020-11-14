@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const passport = require("passport");
 const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 require("dotenv").config();
