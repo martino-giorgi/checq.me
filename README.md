@@ -3,7 +3,7 @@ Final project for SA3 course
 
 ### Team members:
 
-* Edoardo Riggio
+* Edoardo Riggi0
 * Jacopo Di Ventura
 * Martino Giorgi
 * Michele Cattaneo
