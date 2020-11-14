@@ -87,7 +87,7 @@ router.post("/signup", (req, res) => {
                         to: user.email,
                         subject: `Checq.me account verification`,
                         text: verification_link,
-                        html: `<a href="${verification_link}">Verify your account by clicking here!</a>`,
+                        html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
                       };
                       transporter
                         .sendMail(mailOptions)
@@ -135,6 +135,53 @@ router.get("/verify/:token", (req, res) => {
     }
   });
 });
+
+router.post("/verify/resend", (req, res) => {
+  if (req.body.email) {
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (user) {
+          Token.deleteMany({ _userId: user._id })
+            .catch((err) => {});
+            let token = new Token({
+              _userId: user._id,
+              token: crypto.randomBytes(20).toString("hex"),
+            });
+            token.save().then(() => {
+              send_verification_mail(req.headers.host, token).then(()=> {
+                res.redirect('/user/login');
+              }).catch(()=>res.status(500));
+            }).catch((err)=>{});
+        } else {
+          res.status(400).end(); //the email does not correspond to a user
+        }
+      })
+      .catch((err) => {});
+  } else {
+    res.status(400).end(); //no email was given
+  }
+});
+
+
+
+function send_verification_mail(host, token){
+  let transporter = nodemailer.createTransport({
+    service: "Sendgrid",
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+  let verification_link = `http://${host}/user/verify/${token.token}`;
+  var mailOptions = {
+    from: "marco.diventura@outlook.com",
+    to: user.email,
+    subject: `Checq.me account verification`,
+    text: verification_link,
+    html: `<a href='${verification_link}'>Verify your account by clicking here!</a>`,
+  };
+  return transporter.sendMail(mailOptions);
+}
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
