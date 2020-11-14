@@ -13,7 +13,7 @@ module.exports = (passport) => {
           return done(null, false, { message: "This email is not registered" });
         }
         else if(user.isConfirmed == false){
-          return done(null, false, { message: "Confirm your account email before logging in" });
+          return done(null, false, { message: "Confirm your email before logging in" });
         }
 
         // Check if passwords match
