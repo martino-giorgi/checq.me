@@ -1,33 +1,48 @@
-<head>
-    <title>checq.me - Signup</title>
-  </head>
-  
-  <body>
-    <%- include ("./partials/messages") %>
-    <form id="login_form" action="/user/signup" method="POST">
-      <div style="display: flex; flex-direction: column">
-        <div>
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <h1 class="text-center mb-3">
+        <i class="fas fa-user-plus"></i> Signup
+      </h1>
+      <%- include ("./partials/messages") %>
+
+      <form action="/user/signup" method="POST">
+        <div class="form-group">
           <label for="name">Name</label>
-          <input required type="text" name="name" value="<%= typeof name != 'undefined' ? name : '' %>"/>
+          <input required type="text" id="name" name="name" class="form-control" placeholder="Enter Name"
+            value="<%= typeof name != 'undefined' ? name : '' %>" />
         </div>
-        <div>
+
+        <div class="form-group">
           <label for="surname">Surname</label>
-          <input required type="text" name="surname" value="<%= typeof surname != 'undefined' ? surname : '' %>"/>
+          <input required type="text" id="surname" name="surname" class="form-control" placeholder="Enter Surname"
+            value="<%= typeof surname != 'undefined' ? surname : '' %>" />
         </div>
-        <div>
+
+        <div class="form-group">
           <label for="email">Email</label>
-          <input required type="email" name="email" value="<%= typeof email != 'undefined' ? email : '' %>"/>
+          <input required type="email" id="email" name="email" class="form-control" placeholder="Enter Email"
+            value="<%= typeof email != 'undefined' ? email : '' %>" />
         </div>
-        <div>
+
+        <div class="form-group">
           <label for="password">Password</label>
-          <input required type="password" name="password" />
+          <input required type="password" id="password" name="password" class="form-control"
+            placeholder="Create Password" value="<%= typeof password != 'undefined' ? password : '' %>" />
         </div>
-        <div>
+
+        <div class="form-group">
           <label for="conf_password">Confirm Password</label>
-          <input required type="password" name="conf_password" />
+          <input required type="password" id="conf_password" name="conf_password" class="form-control"
+            placeholder="Confirm Password" value="<%= typeof conf_password != 'undefined' ? conf_password : '' %>" />
         </div>
-        <input type="submit" value="Signup" />
-      </div>
-    </form>
-  </body>
-  
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Sign Up
+        </button>
+      </form>
+
+      <p class="lead mt-4">Have An Account? <a href="/user/login">Login</a></p>
+    </div>
+  </div>
+</div>
