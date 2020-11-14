@@ -1,0 +1,33 @@
+<head>
+    <title>checq.me - Signup</title>
+  </head>
+  
+  <body>
+    <% include ("./partials/messages") %>
+    <form id="login_form" action="/user/signup" method="POST">
+      <div style="display: flex; flex-direction: column">
+        <div>
+          <label for="name">Name</label>
+          <input required type="text" name="name" value="<%= typeof name != 'undefined' ? name : '' %>"/>
+        </div>
+        <div>
+          <label for="surname">Surname</label>
+          <input required type="surname" name="surname" value="<%= typeof surname != 'undefined' ? surname : '' %>"/>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input required type="email" name="email" value="<%= typeof email != 'undefined' ? email : '' %>"/>
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input required type="password" name="password" />
+        </div>
+        <div>
+          <label for="conf_password">Confirm Password</label>
+          <input required type="password" name="conf_password" />
+        </div>
+        <input type="submit" value="Signup" />
+      </div>
+    </form>
+  </body>
+  
