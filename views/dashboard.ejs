@@ -3,7 +3,18 @@
 </head>
 
 <body>
-    <h1>Dashboard</h1>
-    <p>Welcome <%= user.name %> to checq.me</p>
-    <a href="/user/logout">Logout</a>
+  <div class="wrapper">
+    
+    <%- include("./partials/navigation") %>
+
+    <main>
+      <div class="header">
+        <h1 class="main-header"> Welcome Back, <%= user.name %>! </h1>
+
+        <a class="button-text normal red" href="/user/logout">
+          <img class="icon-s" src="assets/icons/buttons/logout.svg" alt="logout icon" />Logout
+        </a>
+      </div>
+    </main>
+  </div>
 </body>

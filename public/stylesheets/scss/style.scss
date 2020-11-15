@@ -1,4 +1,64 @@
+@import "./partials/dashboard";
+@import "./partials/vars.scss";
+
+
 * {
     font-family: "Roboto";
-    color: green
+}
+
+.black {
+    color: $black;
+}
+
+.white {
+    color: $white;
+}
+
+.primary {
+    color: $primary;
+}
+
+.red {
+    color: $red;
+}
+
+// Text Styles
+
+// ===============================
+//             TITLES
+// ===============================
+
+h1 {
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 49px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.normal {
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+
+// Main Components
+
+// ===============================
+//             ICONS
+// ===============================
+
+.logo-s {
+    height: 90px;
+    padding: 26px 26px 36px 26px;
+}
+
+.icon-s {
+    height: 24px;
+    width: 24px;
 }
