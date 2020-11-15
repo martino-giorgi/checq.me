@@ -118,8 +118,8 @@ router.get("/verify/:token", (req, res) => {
             if (err) {
               res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
-              res.redirect("/user/login"); //account verified successufully
-
+              // res.redirect("/user/login"); //account verified successufully
+              res.render("login", {email:user.email});
               // Todo: create a flash to display that the account is confirmed
             }
           });
@@ -130,7 +130,6 @@ router.get("/verify/:token", (req, res) => {
 });
 
 router.post("/verify/resend", (req, res) => {
-  console.log(req.body);
   if (req.body.email) {
     User.findOne({ email: req.body.email })
       .then((user) => {
@@ -143,7 +142,6 @@ router.post("/verify/resend", (req, res) => {
           token
             .save()
             .then(() => {
-              console.log("resending");
               send_verification_mail(req.headers.host, token, user.email).then(
                 (res) => {
                   // console.log(res);
@@ -185,12 +183,26 @@ function send_verification_mail(host, token, target_email) {
 }
 
 router.post("/login", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/user/login",
-    failureFlash: true,
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    
+    if (user) {
+      return req.login(user, err => {
+        if (err) { return next(err); }
+        res.redirect('/dashboard');
+      })
+    }
+
+    if (info.err_id === 1) {
+      return res.render('login', {email: req.body.email, info});
+    }
+
+    if (info.err_id === 2) {
+      return res.render('login', {email: req.body.email, info});
+    }
   })(req, res, next);
 });
+
 
 // Logout
 router.get("/logout", (req, res) => {
