@@ -4,6 +4,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Hosted_on_Heroku-informational?style=flat&logo=heroku&logoColor=white&color=430098">
+  <img src="https://img.shields.io/badge/Designed_on_Figma-informational?style=flat&logo=figma&logoColor=white&color=F24E1E">
   <img src="https://img.shields.io/badge/Node.JS-v12.18.3-informational?style=flat&color=007ec6">
 </p>
 
