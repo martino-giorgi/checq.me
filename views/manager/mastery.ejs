@@ -1,15 +1,17 @@
-<body onload="init_manager()">
+<body onload="init()">
     <div class="container mt-3">
         <h3>Mastery Check List</h3>
-        <% collection.forEach(element => { %>
+        <% result.forEach(element => { %>
         <div class="card mt-5">
-            <div class="card-header">
-                Mastery Check
+            <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">
+                <span>Mastery Check</span> <button style="float: right;" type="button"
+                    class="btn btn-primary delete_btn">Delete</button>
             </div>
             <div class="card-body">
                 <h5 class="card-title"><%= element.name %></h5>
-                <small data-id="<%= element._id%>">Id: <%= element._id%></small>
+                <small id="id_container" data-id="<%= element._id%>">Id: <%= element._id%></small>
                 <p class="card-text"><%= element.description %></p>
+                <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
             </div>
         </div>
         <% }); %>
@@ -18,7 +20,7 @@
 
     <div class="container mt-5">
         <h1>Mastery Check Manager</h1>
-        <form id="create_form" action="/manager" method="POST" enctype="multipart/form-data">
+        <form id="create_form" action="/manager/mastery" method="POST">
             <div class="form-group">
                 <label for="input_name">Mastery Check name</label>
                 <input required type="text" name="input_name" class="form-control" id="input_name">
@@ -33,13 +35,8 @@
                     Available
                 </label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" name="check_mandatory" type="checkbox" id="check_mandatory">
-                <label class="form-check-label" for="check_mandatory">
-                    Mandatory
-                </label>
-            </div>
             <button type="submit" class="btn btn-primary">Create Mastery Check</button>
         </form>
     </div>
+    <script src="/js/ajax_mastery.js"></script>
 </body>
