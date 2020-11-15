@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated } = require("../config/auth");
 
+
 const MasteryCheck = require("../models/MasteryCheck");
+const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
@@ -46,3 +48,15 @@ router.delete("/mastery", ensureAuthenticated, (req, res) => {
     res.status(200).end();
   });
 });
+
+router.get('/classroom', ensureAuthenticated, (req, res) => {
+  if (req.user.role < 1) {
+    Classroom.find({}).then( result => {
+      res.render('manager/classrooms', {collection: result})
+    })
+  } 
+  else {
+    res.status(403).send("You don't have permission to view this page");
+  } 
+});
+ 
