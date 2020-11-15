@@ -1,19 +1,26 @@
+@import "./vars.scss";
+
+// Dashboard components wrapper
 .wrapper {
     display: flex;
     flex-flow: row;
 }
+
+
+// Dashboard components
+
+// ===============================
+//         NAVIGATION BAR
+// ===============================
 
 nav {
     display: flex;
     flex-flow: column;
 
     height: 100vh;
-    background-color: #374293;
+    background-color: $primary;
 
-    .logo-s {
-        height: 90px;
-        padding: 26px 26px 36px 26px;
-    }
+    font-family: "Roboto", sans-serif;
 
     .nav-button {
         display: flex;
@@ -31,6 +38,41 @@ nav {
     }
 }
 
+
+// ===============================
+//          MAIN CONTENT
+// ===============================
+
 main {
     display: flex;
+    flex-flow: column;
+
+    width: 100vw;
+
+    font-family: "Roboto", sans-serif;
+
+    .header {
+        display: flex;
+        flex-flow: row;
+
+        align-items: center;
+        justify-content: space-between;
+
+        .main-header {
+            padding-top: 27px;
+            padding-bottom: 27px;
+            padding-left: 27px;
+        }
+
+        .button-text {
+            padding-top: 27px;
+            padding-bottom: 27px;
+            padding-right: 32px;
+
+            .icon-s {
+                margin-bottom: 2px;
+                margin-right: 6px;
+            }
+        }
+    }
 }

@@ -17,7 +17,11 @@ router.get("/signup", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("login", {});
+  if (req.isUnauthenticated()) {
+    res.render("login", {});
+  } else {
+    res.redirect("/dashboard");
+  }
 });
 
 router.post("/signup", (req, res) => {
