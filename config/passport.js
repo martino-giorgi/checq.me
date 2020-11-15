@@ -10,10 +10,14 @@ module.exports = (passport) => {
       // Check if there is an account for that email
       User.findOne({ email: email }).then((user) => {
         if (!user) {
-          return done(null, false, { message: "This email is not registered" });
+          return done(null, false, {
+            message: "Email or password incorrect",
+            err_id: 1,
+          });
         } else if (user.isConfirmed == false) {
           return done(null, false, {
             message: "Confirm your email before logging in",
+            err_id: 2,
           });
         }
 
@@ -24,7 +28,10 @@ module.exports = (passport) => {
           if (isMatch) {
             return done(null, user);
           } else {
-            return done(null, false, { message: "Password incorrect" });
+            return done(null, false, {
+              message: "Email or password incorrect",
+              err_id: 1,
+            });
           }
         });
       });

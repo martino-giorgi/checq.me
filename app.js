@@ -3,7 +3,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const flash = require("connect-flash");
-const session = require("express-session");
+// const session = require("express-session");
+const session = require("cookie-session");
 const expressLayouts = require("express-ejs-layouts");
 const sass = require("sass");
 const fs = require("fs");
@@ -51,6 +52,7 @@ mongoose
 
 // Express body parser
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 //Express session
 app.use(
