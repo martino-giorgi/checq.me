@@ -87,6 +87,9 @@ app.use("/user", routers.user);
 // Route for dashboard page
 app.use("/dashboard", routers.dashboard);
 
+// Route for Manager
+app.use("/manager", routers.manager);
+
 // Route for 404 error
 app.get("*", function (req, res) {
   res.status(404).render("page404");

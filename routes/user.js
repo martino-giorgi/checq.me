@@ -84,7 +84,9 @@ router.post("/signup", (req, res) => {
                         user.email
                       )
                         .then((sent_email) => {
-                          res.redirect("/user/login");
+                          res.render("login", {
+                            info: { message: "Please confirm your email" },
+                          });
                         })
                         .catch((err) => {
                           console.log(err);
