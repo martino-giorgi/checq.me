@@ -5,6 +5,7 @@ const { ensureAuthenticated } = require("../config/auth");
 
 const MasteryCheck = require("../models/MasteryCheck");
 const Classroom = require("../models/Classroom");
+const User = require("../models/User");
 
 module.exports = router;
 
@@ -49,9 +50,12 @@ router.delete("/mastery", ensureAuthenticated, (req, res) => {
   });
 });
 
+/*
+  Get all the classrooms where the current user is the lecturer
+*/
 router.get('/classroom', ensureAuthenticated, (req, res) => {
   if (req.user.role < 1) {
-    Classroom.find({}).then( result => {
+    Classroom.find({lecturer: req.user}).then( result => {
       res.render('manager/classrooms', {collection: result})
     })
   } 
@@ -60,3 +64,37 @@ router.get('/classroom', ensureAuthenticated, (req, res) => {
   } 
 });
  
+/*
+  Render the form to add a new classroom
+*/
+router.get('/classroom/new', ensureAuthenticated, (req, res)=> {
+  if (req.user.role < 1) {
+    
+      res.render('manager/new_classroom', {});
+
+  } 
+  else {
+    res.status(403).send("You don't have permission to view this page");
+  } 
+})
+
+/*
+  Post a new classroom
+*/
+router.post('/classroom/new', ensureAuthenticated, (req, res)=> {
+  if (!req.body.name || !req.body.description) {
+    res.status(400); 
+  }
+  const new_class = new Classroom({
+    name: req.body.name,
+    description: req.body.description,
+    lecturer: req.user,
+    teaching_assistants: [],
+    topics: [],
+    is_ordered_mastery: false
+  })
+
+  new_class.save().then(() => {
+    res.redirect("/manager/classroom");
+  });
+});
