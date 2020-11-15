@@ -11,62 +11,34 @@
         <div class="form-group">
           <label for="email">Email</label>
 
-          <input
-            required
-            type="email"
-            id="email"
-            name="email"
-            class="form-control"
-            placeholder="Enter Email"
-            value="<%=x%>"
-          />
+          <input required type="email" id="email" name="email" class="form-control" placeholder="Enter Email"
+            value="<%=x%>" />
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input
-            required
-            type="password"
-            id="password"
-            name="password"
-            class="form-control"
-            placeholder="Enter Password"
-          />
+          <input required type="password" id="password" name="password" class="form-control"
+            placeholder="Enter Password" />
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
       <!-- Button trigger modal -->
-      <button
-        type="button"
-        class="btn btn-primary d-none"
-        id="modal_btn"
-        data-toggle="modal"
-        data-target="#verification_modal"
-      >
+      <button type="button" class="btn btn-primary d-none" id="modal_btn" data-toggle="modal"
+        data-target="#verification_modal">
         Send again your verification link
       </button>
 
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="verification_modal"
-        tabindex="-1"
-        aria-labelledby="verification_modal"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="verification_modal" tabindex="-1" aria-labelledby="verification_modal"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">
                 Send verification link again
               </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -74,22 +46,11 @@
               <form id="modal_form" enctype="multipart/form-data">
                 <div class="form-group">
                   <label for="email">Email address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    id="modal_email"
-                    aria-describedby="emailHelp"
-                    value=<%=x%>
-                  />
+                  <input type="email" name="email" class="form-control" id="modal_email" aria-describedby="emailHelp"
+                    value=<%=x%> />
                 </div>
                 <button type="submit" class="btn btn-primary">Send</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  id="modal_close"
-                  data-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary" id="modal_close" data-dismiss="modal">
                   Close
                 </button>
               </form>
@@ -101,3 +62,5 @@
     </div>
   </div>
 </div>
+
+<script src="/js/ajax_login.js "></script>
