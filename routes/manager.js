@@ -10,7 +10,7 @@ module.exports = router;
 // Mastery Manager
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role < 2) {
-    res.render("manager/manager");
+    res.render("manager/manager", { user: req.user });
   } else {
     res.status(403).send("You don't have permission to view this page");
   }
