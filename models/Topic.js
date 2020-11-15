@@ -10,6 +10,10 @@ const TopicSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     questions: [{type: mongoose.Schema.ObjectId, ref: 'Question'}]
 })
 

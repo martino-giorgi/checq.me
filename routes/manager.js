@@ -6,6 +6,7 @@ const { ensureAuthenticated } = require("../config/auth");
 const MasteryCheck = require("../models/MasteryCheck");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
+const Topic = require("../models/Topic");
 
 module.exports = router;
 
@@ -55,7 +56,7 @@ router.delete("/mastery", ensureAuthenticated, (req, res) => {
 */
 router.get('/classroom', ensureAuthenticated, (req, res) => {
   if (req.user.role < 1) {
-    Classroom.find({lecturer: req.user}).then( result => {
+    Classroom.find({lecturer: req.user}).populate('topics').then( result => {
       res.render('manager/classrooms', {collection: result})
     })
   } 
@@ -99,13 +100,51 @@ router.post('/classroom/new', ensureAuthenticated, (req, res)=> {
   });
 });
 
+/*
+  Get the form to add a new topic to the selected class
+*/
 router.get('/classroom/add_topic/:classroom/:name', ensureAuthenticated, (req, res) => {
   if (req.user.role < 1) {
-    
-    res.render('manager/new_topic', {name: req.params.name});
+    let model = {
+      name: req.params.name,
+      classroom: req.params.classroom
+    }
+    res.render('manager/new_topic', model);
 
   } 
   else {
     res.status(403).send("You don't have permission to view this page");
   } 
 })
+
+router.post('/classroom/add_topic', ensureAuthenticated, (req, res) => {
+  if (req.user.role < 1) {
+    Classroom.findOne({_id: req.body.classroom}).then( this_class => {
+      
+      if (!this_class) {
+        res.status(400).end();
+      } else {
+        const new_topic = new Topic({
+          name: req.body.name,
+          description: req.body.description,
+          questions: []
+        });
+        new_topic.save().then( () => {
+          this_class.topics.push(new_topic);
+          this_class.save((error) => {
+            if (error) {
+              res.status(500).end();
+            } else {
+              res.redirect('manager/classroom');
+            }
+          })
+        })
+        
+      }
+    });    
+  }
+  else {
+    res.status(403).send("You don't have permission to view this page");
+  }
+})
+
