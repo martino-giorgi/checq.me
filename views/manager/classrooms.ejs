@@ -1,5 +1,6 @@
 <h1>My Classrooms:</h1>
-
+<a href="./classroom/new">Create new classroom</a>
+<hr>
 <% collection.forEach((n)=>{ %>
     <div>
         <h3>Class: <%= n.name%></h3>
@@ -7,7 +8,7 @@
         <h4>Topics:</h4>
 
         <% n.topics.forEach( (t) => { %>
-            <h5><%=t.name%></h5>
+            <h5>- <%=t.name%>: <%= t.description%></h5>
         <%}) %>
 
         <a href="./classroom/add_topic/<%= n._id%>/<%=n.name%>" >Add new Topic</a>

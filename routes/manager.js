@@ -117,10 +117,13 @@ router.get('/classroom/add_topic/:classroom/:name', ensureAuthenticated, (req, r
   } 
 })
 
+/*
+  Post a topic and link it to the classroom
+*/
 router.post('/classroom/add_topic', ensureAuthenticated, (req, res) => {
   if (req.user.role < 1) {
+    // find the classroom
     Classroom.findOne({_id: req.body.classroom}).then( this_class => {
-      
       if (!this_class) {
         res.status(400).end();
       } else {
@@ -129,13 +132,14 @@ router.post('/classroom/add_topic', ensureAuthenticated, (req, res) => {
           description: req.body.description,
           questions: []
         });
+        // save new topic and add it to the list of the class
         new_topic.save().then( () => {
           this_class.topics.push(new_topic);
           this_class.save((error) => {
             if (error) {
               res.status(500).end();
             } else {
-              res.redirect('manager/classroom');
+              res.redirect('/manager/classroom');
             }
           })
         })
