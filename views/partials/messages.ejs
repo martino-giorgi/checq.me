@@ -26,9 +26,10 @@
 </div>
 <% } %>
 
-<% if (error != ''){ %>
+<% if (error != '' || typeof info != 'undefined'){ %>
 <div id="unconfirmed_alert" class="alert alert-danger alert-dismissible fade show" role="alert">
   <%= error %>
+  <%= info.message %>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
