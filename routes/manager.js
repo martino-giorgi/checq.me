@@ -37,9 +37,7 @@ router.post("/mastery", ensureAuthenticated, (req, res) => {
     description: req.body.description,
     available: req.body.available == "on" ? true : false,
   });
-  mc.save().then(() => {
-    res.redirect("/manager/mastery");
-  });
+  mc.save().then(() => res.status(200).end());
 });
 
 // Mastery Check delete
@@ -47,7 +45,6 @@ router.delete("/mastery", ensureAuthenticated, (req, res) => {
   if (req.user.role < 2) {
     MasteryCheck.deleteOne({ _id: req.body.id })
       .then(() => {
-        console.log("image deleted");
         res.status(200).end();
       })
       .catch((err) => console.log(err));

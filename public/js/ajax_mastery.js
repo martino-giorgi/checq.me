@@ -11,6 +11,7 @@ function init() {
           id,
         }),
       });
+      window.location.reload(true);
     });
   });
 
@@ -27,5 +28,6 @@ function init() {
         available: document.getElementById("check_available").value,
       }),
     });
+    window.location.reload(true);
   });
 }
