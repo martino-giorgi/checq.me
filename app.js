@@ -10,6 +10,7 @@ const sass = require("sass");
 const fs = require("fs");
 
 const routers = require("./routes");
+const router = require("./routes/profile");
 
 const app = express();
 
@@ -101,6 +102,8 @@ app.use("/topic", routers.topic);
 
 // Route for MasteryCheck
 app.use("/masterycheck", routers.masterycheck);
+
+app.use("/profile", routers.profile);
 
 // Route for 404 error
 app.get("*", function (req, res) {
