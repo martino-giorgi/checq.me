@@ -19,7 +19,7 @@
                         Available
                     </label>
                 </div>
-                <select id="form_classroom" class="form-control form-control-sm">
+                <select required id="form_classroom" class="form-control form-control-sm">
                     <%classroom_list.forEach(classroom => { %>
                     <option value="<%=classroom._id%>"><%=classroom.name%></option>
                     <%});%>
