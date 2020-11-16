@@ -90,3 +90,13 @@ router.get(
     res.render("manager/new_topic", model);
   }
 );
+
+router.get("/classroom/topic/:id", ensureAuthenticated, (req, res) => {
+  if (req.user.role < 1) {
+    Topic.findOne({ _id: req.params.id }).then((this_topic) => {
+      res.render("manager/topic", this_topic);
+    });
+  } else {
+    res.status(403).send("You don't have permission to view this page");
+  }
+});
