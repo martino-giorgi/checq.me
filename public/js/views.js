@@ -1,14 +1,10 @@
-//EJS Compiled Views - This file was automatically generated on Mon Nov 16 2020 10:16:22 GMT+0100 (Central European Standard Time)
-ejs.views_include = function (locals) {
-  console.log("views_include_setup", locals);
-  return function (path, d) {
-    console.log("ejs.views_include", path, d);
-    return ejs["views_" + path.replace(/\//g, "_")](
-      { ...d, ...locals },
-      null,
-      ejs.views_include(locals)
-    );
-  };
+//EJS Compiled Views - This file was automatically generated on Mon Nov 16 2020 23:53:48 GMT+0100 (Central European Standard Time)
+ejs.views_include = function(locals) {
+    console.log("views_include_setup",locals);
+    return function(path, d) {
+        console.log("ejs.views_include",path,d);
+        return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
+    }
 };
 ejs.views_dashboard = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
@@ -54,7 +50,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<head>\n  <title>checq.me - Dashboard</title>\n</head>\n\n<body>\n  <div class=\"wrapper\">\n\n    <%- include(\"./partials/navigation\", {active: \"dashboard\"}) %>\n\n    <main>\n      <div class=\"header\">\n        <h1 class=\"main-header\"> Welcome Back, <%= user.name %>! </h1>\n\n        <a class=\"button-text normal red\" href=\"/user/logout\">\n          <img class=\"icon-s\" src=\"assets/icons/buttons/logout.svg\" alt=\"logout icon\" />Logout\n        </a>\n      </div>\n    </main>\n  </div>\n</body>"
+  , __lines = "<head>\n  <title>checq.me - Dashboard</title>\n</head>\n\n<body>\n  <div class=\"wrapper\">\n\n    <%- include(\"./partials/navigation\", { active: \"dashboard\" }) %>\n\n    <main>\n      <div class=\"header\">\n        <h1 class=\"main-header\"> Welcome Back, <%= user.name %>! </h1>\n\n        <a class=\"button-text normal red\" href=\"/user/logout\">\n          <img class=\"icon-s\" src=\"assets/icons/buttons/logout.svg\" alt=\"logout icon\" />Logout\n        </a>\n      </div>\n    </main>\n  </div>\n</body>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -62,7 +58,7 @@ try {
   with (locals || {}) {
     ; __append("<head>\n  <title>checq.me - Dashboard</title>\n</head>\n\n<body>\n  <div class=\"wrapper\">\n\n    ")
     ; __line = 8
-    ; __append( include("./partials/navigation", {active: "dashboard"}) )
+    ; __append( include("./partials/navigation", { active: "dashboard" }) )
     ; __append("\n\n    <main>\n      <div class=\"header\">\n        <h1 class=\"main-header\"> Welcome Back, ")
     ; __line = 12
     ; __append(escapeFn( user.name ))
@@ -180,17 +176,17 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" />\n  <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n  <link rel=\"stylesheet\"\n    href=\"https://fonts.googleapis.com/css2?family%3DRoboto%3Aital%2Cwght%400%2C100%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C700%3B0%2C900%3B1%2C100%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C700%3B1%2C900%26display%3Dswap\" />\n  <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\" />\n  <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n    integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\" />\n\n  <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n    integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\">\n  <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n  <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap\">\n  <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\">\n\n  <title>checq.me</title>\n</head>\n\n<body>\n  <%- body %>\n\n  <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\"\n    integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\"\n    crossorigin=\"anonymous\"></script>\n  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js\"\n    integrity=\"sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut\"\n    crossorigin=\"anonymous\"></script>\n  <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js\"\n    integrity=\"sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k\"\n    crossorigin=\"anonymous\"></script>\n</body>\n\n</html>"
+  , __lines = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n\n    <!-- Favicon setup -->\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"assets/branding/favicon/apple-touch-icon.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"assets/branding/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"assets/branding/favicon/favicon-16x16.png\">\n    <link rel=\"manifest\" href=\"assets/branding/favicon/site.webmanifest\">\n    <link rel=\"mask-icon\" href=\"assets/branding/favicon/safari-pinned-tab.svg\" color=\"#374293\">\n    <meta name=\"msapplication-TileColor\" content=\"#374293\">\n    <meta name=\"theme-color\" content=\"#374293\">\n\n    <!-- External stylesheets -->\n    <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n      integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\" />\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n      integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\">\n    <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n\n    <!-- Internal stylesheet -->\n    <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\">\n\n    <title>checq.me</title>\n  </head>\n\n  <body>\n    <%- body %>\n\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\"\n      integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\"\n      crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js\"\n      integrity=\"sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut\"\n      crossorigin=\"anonymous\"></script>\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js\"\n      integrity=\"sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k\"\n      crossorigin=\"anonymous\"></script>\n  </body>\n</html>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" />\n  <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n  <link rel=\"stylesheet\"\n    href=\"https://fonts.googleapis.com/css2?family%3DRoboto%3Aital%2Cwght%400%2C100%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C700%3B0%2C900%3B1%2C100%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C700%3B1%2C900%26display%3Dswap\" />\n  <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\" />\n  <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n    integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\" />\n\n  <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n    integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\">\n  <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n  <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap\">\n  <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\">\n\n  <title>checq.me</title>\n</head>\n\n<body>\n  ")
-    ; __line = 27
+    ; __append("<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n\n    <!-- Favicon setup -->\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"assets/branding/favicon/apple-touch-icon.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"assets/branding/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"assets/branding/favicon/favicon-16x16.png\">\n    <link rel=\"manifest\" href=\"assets/branding/favicon/site.webmanifest\">\n    <link rel=\"mask-icon\" href=\"assets/branding/favicon/safari-pinned-tab.svg\" color=\"#374293\">\n    <meta name=\"msapplication-TileColor\" content=\"#374293\">\n    <meta name=\"theme-color\" content=\"#374293\">\n\n    <!-- External stylesheets -->\n    <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n      integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\" />\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\"\n      integrity=\"sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/\" crossorigin=\"anonymous\">\n    <link rel=\"stylesheet\" href=\"https://bootswatch.com/4/journal/bootstrap.min.css\" />\n\n    <!-- Internal stylesheet -->\n    <link rel=\"stylesheet\" href=\"/stylesheets/css/style.css\">\n\n    <title>checq.me</title>\n  </head>\n\n  <body>\n    ")
+    ; __line = 31
     ; __append( body )
-    ; __append("\n\n  <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\"\n    integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\"\n    crossorigin=\"anonymous\"></script>\n  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js\"\n    integrity=\"sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut\"\n    crossorigin=\"anonymous\"></script>\n  <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js\"\n    integrity=\"sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k\"\n    crossorigin=\"anonymous\"></script>\n</body>\n\n</html>")
-    ; __line = 40
+    ; __append("\n\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\"\n      integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\"\n      crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js\"\n      integrity=\"sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut\"\n      crossorigin=\"anonymous\"></script>\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js\"\n      integrity=\"sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k\"\n      crossorigin=\"anonymous\"></script>\n  </body>\n</html>")
+    ; __line = 43
   }
   return __output;
 } catch (e) {
@@ -272,7 +268,7 @@ try {
 
 }
 
-ejs.views_manager_classrooms = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+ejs.views_manager_classrooms_add_classroom = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
   var lines = str.split('\n');
@@ -316,14 +312,137 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% collection.forEach((n)=>{ %>\n    <div>\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <a href=\"./manager/classroom/topic/<%=t._id%>\">view</a></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
+  , __lines = "<h1>Add a new Class</h1>\n<form id=\"new_class_form\" action=\"/manager/classroom/new\" , method=\"POST\">\n    <input id=\"input_name\" required type=\"text\" , name=\"name\" placeholder=\"Classroom name\">\n    <input id=\"input_desc\" required type=\"text\" , name=\"description\" placeholder=\"Classroom descrition\">\n    <input required type=\"submit\">\n</form>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<h1>Add a new Class</h1>\n<form id=\"new_class_form\" action=\"/manager/classroom/new\" , method=\"POST\">\n    <input id=\"input_name\" required type=\"text\" , name=\"name\" placeholder=\"Classroom name\">\n    <input id=\"input_desc\" required type=\"text\" , name=\"description\" placeholder=\"Classroom descrition\">\n    <input required type=\"submit\">\n</form>")
+    ; __line = 6
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_classrooms_classrooms = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<body onload=\"init()\">\n    \n    <h1>My Classrooms</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<body onload=\"init()\">\n    \n    <h1>My Classrooms</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
+    ; __line = 17
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_classrooms_classrooms_list = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<% collection.forEach((n)=>{ %>\n    <div id=\"<%= n._id%>\">\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <a href=\"./manager/classroom/topic/<%=t._id%>\">view</a></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
     ;  collection.forEach((n)=>{ 
-    ; __append("\n    <div>\n        \n        <h3>Class: ")
+    ; __append("\n    <div id=\"")
+    ; __line = 2
+    ; __append(escapeFn( n._id))
+    ; __append("\">\n        \n        <h3>Class: ")
     ; __line = 4
     ; __append(escapeFn( n.name))
     ; __append("</h3>\n        <h4>Description: ")
@@ -356,7 +475,7 @@ try {
 
 }
 
-ejs.views_manager_manage_classes = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+ejs.views_manager_classrooms_new_topic = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
   var lines = str.split('\n');
@@ -400,14 +519,82 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<body onload=\"init()\">\n    \n    <h1>My Classrooms:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
+  , __lines = "<h1>Add a new topic for class</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"<%=id%>\">\n    <input type=\"submit\">\n</form>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<body onload=\"init()\">\n    \n    <h1>My Classrooms:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
-    ; __line = 17
+    ; __append("<h1>Add a new topic for class</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"")
+    ; __line = 5
+    ; __append(escapeFn(id))
+    ; __append("\">\n    <input type=\"submit\">\n</form>")
+    ; __line = 7
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_classrooms_topic = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<h1>Topic: ")
+    ; __append(escapeFn(name))
+    ; __append("</h1>\n<h2>")
+    ; __line = 2
+    ; __append(escapeFn(description))
+    ; __append("</h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>")
+    ; __line = 16
   }
   return __output;
 } catch (e) {
@@ -479,7 +666,7 @@ try {
 
 }
 
-ejs.views_manager_mastery = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+ejs.views_manager_mastery_mastery = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
   var lines = str.split('\n');
@@ -523,224 +710,171 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<body onload=\"init()\">\n    <div class=\"container\">\n        <a href=\"/manager\" class=\"badge badge-primary\">Back to Manager</a>\n\n        <div class=\"container mt-3\">\n            <h3>Mastery Check List</h3>\n            <% result.forEach(element => { %>\n            <div class=\"card mt-5\">\n                <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n                    <span>Mastery Check</span> <button style=\"float: right;\" type=\"button\"\n                        class=\"btn btn-primary delete_btn\">Delete</button>\n                </div>\n                <div class=\"card-body\">\n                    <h5 class=\"card-title\"><%= element.name %></h5>\n                    <small id=\"id_container\" data-id=\"<%= element._id%>\">Id: <%= element._id%></small>\n                    <p class=\"card-text\"><%= element.description %></p>\n                    <p class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n                </div>\n            </div>\n            <% }); %>\n        </div>\n\n\n        <div class=\"container mt-5\">\n            <h1>Mastery Check Manager</h1>\n            <form id=\"create_form\" action=\"/masterycheck\" method=\"POST\">\n                <div class=\"form-group\">\n                    <label for=\"input_name\">Mastery Check name</label>\n                    <input required type=\"text\" name=\"input_name\" class=\"form-control\" id=\"input_name\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"input_description\">Mastery Check description</label>\n                    <input required type=\"text\" name=\"input_description\" class=\"form-control\" id=\"input_description\">\n                </div>\n                <div class=\"form-check\">\n                    <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\">\n                    <label class=\"form-check-label\" for=\"check_available\">\n                        Available\n                    </label>\n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src=\"/js/ajax_mastery.js\"></script>\n</body>"
+  , __lines = "<body onload=\"init()\">\n    <div class=\"wrapper\">\n        <%- include(\"../../partials/navigation\", { active: \"manager\" }) %>\n        <div>\n            <h1>Mastery Manager</h1>\n            <div id=\"list\" class=\"container\"></div>\n            <div id=\"add\" class=\"container\"></div>\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n        </div>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<body onload=\"init()\">\n    <div class=\"container\">\n        <a href=\"/manager\" class=\"badge badge-primary\">Back to Manager</a>\n\n        <div class=\"container mt-3\">\n            <h3>Mastery Check List</h3>\n            ")
-    ; __line = 7
-    ;  result.forEach(element => { 
-    ; __append("\n            <div class=\"card mt-5\">\n                <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n                    <span>Mastery Check</span> <button style=\"float: right;\" type=\"button\"\n                        class=\"btn btn-primary delete_btn\">Delete</button>\n                </div>\n                <div class=\"card-body\">\n                    <h5 class=\"card-title\">")
+    ; __append("<body onload=\"init()\">\n    <div class=\"wrapper\">\n        ")
+    ; __line = 3
+    ; __append( include("../../partials/navigation", { active: "manager" }) )
+    ; __append("\n        <div>\n            <h1>Mastery Manager</h1>\n            <div id=\"list\" class=\"container\"></div>\n            <div id=\"add\" class=\"container\"></div>\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n        </div>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
     ; __line = 14
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_mastery_mastery_add = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<body>\n    <div class=\"container\">\n        <a href=\"/manager\" class=\"badge badge-primary\">Back to Manager</a>\n\n        <div class=\"container mt-5\">\n            <h1>Mastery Check Manager</h1>\n            <form id=\"create_form\" method=\"POST\">\n                <div class=\"form-group\">\n                    <label for=\"input_name\">Mastery Check name</label>\n                    <input required type=\"text\" name=\"input_name\" class=\"form-control\" id=\"input_name\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"input_description\">Mastery Check description</label>\n                    <input required type=\"text\" name=\"input_description\" class=\"form-control\" id=\"input_description\">\n                </div>\n                <div class=\"form-check\">\n                    <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\">\n                    <label class=\"form-check-label\" for=\"check_available\">\n                        Available\n                    </label>\n                </div>\n                <select required id=\"form_classroom\" class=\"form-control form-control-sm\">\n                    <%classroom_list.forEach(classroom => { %>\n                    <option value=\"<%=classroom._id%>\"><%=classroom.name%></option>\n                    <%});%>\n                </select>\n                <button type=\"submit\" class=\"btn btn-primary\">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src=\"/js/ajax_mastery.js\"></script>\n</body>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<body>\n    <div class=\"container\">\n        <a href=\"/manager\" class=\"badge badge-primary\">Back to Manager</a>\n\n        <div class=\"container mt-5\">\n            <h1>Mastery Check Manager</h1>\n            <form id=\"create_form\" method=\"POST\">\n                <div class=\"form-group\">\n                    <label for=\"input_name\">Mastery Check name</label>\n                    <input required type=\"text\" name=\"input_name\" class=\"form-control\" id=\"input_name\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"input_description\">Mastery Check description</label>\n                    <input required type=\"text\" name=\"input_description\" class=\"form-control\" id=\"input_description\">\n                </div>\n                <div class=\"form-check\">\n                    <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\">\n                    <label class=\"form-check-label\" for=\"check_available\">\n                        Available\n                    </label>\n                </div>\n                <select required id=\"form_classroom\" class=\"form-control form-control-sm\">\n                    ")
+    ; __line = 23
+    ; classroom_list.forEach(classroom => { 
+    ; __append("\n                    <option value=\"")
+    ; __line = 24
+    ; __append(escapeFn(classroom._id))
+    ; __append("\">")
+    ; __append(escapeFn(classroom.name))
+    ; __append("</option>\n                    ")
+    ; __line = 25
+    ; });
+    ; __append("\n                </select>\n                <button type=\"submit\" class=\"btn btn-primary\">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src=\"/js/ajax_mastery.js\"></script>\n</body>")
+    ; __line = 31
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_mastery_mastery_list = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p class=\"card-text\"><%= element.description %></p>\n            <p class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n        </div>\n    </div>\n    <% }); %>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    ")
+    ; __line = 3
+    ;  result.forEach(element => { 
+    ; __append("\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: ")
+    ; __line = 10
+    ; __append(escapeFn( element.classroom))
+    ; __append("</h4>\n            <h5 class=\"card-title\">")
+    ; __line = 11
     ; __append(escapeFn( element.name ))
-    ; __append("</h5>\n                    <small id=\"id_container\" data-id=\"")
-    ; __line = 15
+    ; __append("</h5>\n            <small id=\"id_container\" data-id=\"")
+    ; __line = 12
     ; __append(escapeFn( element._id))
-    ; __append("\">Id: ")
+    ; __append("\">Mastery ID: ")
     ; __append(escapeFn( element._id))
-    ; __append("</small>\n                    <p class=\"card-text\">")
-    ; __line = 16
+    ; __append("</small>\n            <p class=\"card-text\">")
+    ; __line = 13
     ; __append(escapeFn( element.description ))
-    ; __append("</p>\n                    <p class=\"card-text\">")
-    ; __line = 17
+    ; __append("</p>\n            <p class=\"card-text\">")
+    ; __line = 14
     ; __append(escapeFn( element.available  ? "Available" : "Not Available" ))
-    ; __append("</p>\n                </div>\n            </div>\n            ")
-    ; __line = 20
+    ; __append("</p>\n        </div>\n    </div>\n    ")
+    ; __line = 17
     ;  }); 
-    ; __append("\n        </div>\n\n\n        <div class=\"container mt-5\">\n            <h1>Mastery Check Manager</h1>\n            <form id=\"create_form\" action=\"/masterycheck\" method=\"POST\">\n                <div class=\"form-group\">\n                    <label for=\"input_name\">Mastery Check name</label>\n                    <input required type=\"text\" name=\"input_name\" class=\"form-control\" id=\"input_name\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"input_description\">Mastery Check description</label>\n                    <input required type=\"text\" name=\"input_description\" class=\"form-control\" id=\"input_description\">\n                </div>\n                <div class=\"form-check\">\n                    <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\">\n                    <label class=\"form-check-label\" for=\"check_available\">\n                        Available\n                    </label>\n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src=\"/js/ajax_mastery.js\"></script>\n</body>")
-    ; __line = 45
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_new_classroom = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<h1>Add a new Class</h1>\n<form id=\"new_class_form\" action=\"/manager/classroom/new\" , method=\"POST\">\n    <input id=\"input_name\" required type=\"text\" , name=\"name\" placeholder=\"Classroom name\">\n    <input id=\"input_desc\" required type=\"text\" , name=\"description\" placeholder=\"Classroom descrition\">\n    <input required type=\"submit\">\n</form>"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<h1>Add a new Class</h1>\n<form id=\"new_class_form\" action=\"/manager/classroom/new\" , method=\"POST\">\n    <input id=\"input_name\" required type=\"text\" , name=\"name\" placeholder=\"Classroom name\">\n    <input id=\"input_desc\" required type=\"text\" , name=\"description\" placeholder=\"Classroom descrition\">\n    <input required type=\"submit\">\n</form>")
-    ; __line = 6
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_new_topic = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<h1>Add a new topic for class: <%=name%></h1>\n<form action=\"/topic\" method=\"POST\">\n    <input required type=\"text\", name=\"name\" placeholder=\"Topic name\">\n    <input required type=\"text\", name=\"description\" placeholder=\"Topic descrition\">\n    <input type=\"hidden\" name=\"classroom\" value=\"<%=classroom%>\">\n    <input required type=\"submit\">\n</form>"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<h1>Add a new topic for class: ")
-    ; __append(escapeFn(name))
-    ; __append("</h1>\n<form action=\"/topic\" method=\"POST\">\n    <input required type=\"text\", name=\"name\" placeholder=\"Topic name\">\n    <input required type=\"text\", name=\"description\" placeholder=\"Topic descrition\">\n    <input type=\"hidden\" name=\"classroom\" value=\"")
-    ; __line = 5
-    ; __append(escapeFn(classroom))
-    ; __append("\">\n    <input required type=\"submit\">\n</form>")
-    ; __line = 7
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_topic = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<h1>Topic: ")
-    ; __append(escapeFn(name))
-    ; __append("</h1>\n<h2>")
-    ; __line = 2
-    ; __append(escapeFn(description))
-    ; __append("</h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>")
-    ; __line = 16
+    ; __append("\n</div>")
+    ; __line = 18
   }
   return __output;
 } catch (e) {
@@ -956,35 +1090,35 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<nav>\n  <img class=\"logo-s\" src=\"assets/branding/logo/logo_white.svg\" alt=\"checq.me logo\" />\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'dashboard' ? \"active\" : \"\" %>\" id=\"nav-1\" href=\"/dashboard\">\n      <img id=\"svg1\" src=\"assets/icons/nav/dashboard.svg\" alt=\"dashboard icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'classroom' ? \"active\" : \"\" %>\" id=\"nav-2\">\n      <img id=\"svg2\" src=\"assets/icons/nav/classroom.svg\" alt=\"classroom icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'schedule' ? \"active\" : \"\" %>\" id=\"nav-3\">\n      <img id=\"svg3\" src=\"assets/icons/nav/schedule.svg\" alt=\"schedule icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'profile' ? \"active\" : \"\" %>\" id=\"nav-4\">\n      <img id=\"svg4\" src=\"assets/icons/nav/profile.svg\" alt=\"profile icon\" />\n    </a>\n  </span>\n\n  <% if (user.role < 2) { %>\n    <span class=\"nav-button\">\n      <a class=\"<%= active === 'manager' ? \"active\" : \"\" %>\" id=\"nav-5\" href=\"/manager\">\n        <img id=\"svg5\" src=\"assets/icons/nav/manager.svg\" alt=\"manager icon\" />\n      </a>\n    </span>\n  <% } %>\n</nav>\n\n<!-- <script src=\"/js/ajax_dashboard.js\"></script> -->"
+  , __lines = "<nav>\n  <img class=\"logo-s\" src=\"/assets/branding/logo/logo_white.svg\" alt=\"checq.me logo\" />\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'dashboard' ? \"active\" : \"not_active\" %>\" id=\"nav-1\" href=\"/dashboard\">\n      <img id=\"svg1\" src=\"/assets/icons/nav/dashboard.svg\" alt=\"dashboard icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'classroom' ? \"active\" : \"not_active\" %>\" id=\"nav-2\">\n      <img id=\"svg2\" src=\"/assets/icons/nav/classroom.svg\" alt=\"classroom icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'schedule' ? \"active\" : \"not_active\" %>\" id=\"nav-3\">\n      <img id=\"svg3\" src=\"/assets/icons/nav/schedule.svg\" alt=\"schedule icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'profile' ? \"active\" : \"not_active\" %>\" id=\"nav-4\">\n      <img id=\"svg4\" src=\"/assets/icons/nav/profile.svg\" alt=\"profile icon\" />\n    </a>\n  </span>\n\n  <% if (user.role < 2) { %>\n  <span class=\"nav-button\">\n    <a class=\"<%= active === 'manager' ? \"active\" : \"not_active\" %>\" id=\"nav-5\" href=\"/manager\">\n      <img id=\"svg5\" src=\"/assets/icons/nav/manager.svg\" alt=\"manager icon\" />\n    </a>\n  </span>\n  <% } %>\n</nav>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<nav>\n  <img class=\"logo-s\" src=\"assets/branding/logo/logo_white.svg\" alt=\"checq.me logo\" />\n\n  <span class=\"nav-button\">\n    <a class=\"")
+    ; __append("<nav>\n  <img class=\"logo-s\" src=\"/assets/branding/logo/logo_white.svg\" alt=\"checq.me logo\" />\n\n  <span class=\"nav-button\">\n    <a class=\"")
     ; __line = 5
-    ; __append(escapeFn( active === 'dashboard' ? "active" : "" ))
-    ; __append("\" id=\"nav-1\" href=\"/dashboard\">\n      <img id=\"svg1\" src=\"assets/icons/nav/dashboard.svg\" alt=\"dashboard icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
+    ; __append(escapeFn( active === 'dashboard' ? "active" : "not_active" ))
+    ; __append("\" id=\"nav-1\" href=\"/dashboard\">\n      <img id=\"svg1\" src=\"/assets/icons/nav/dashboard.svg\" alt=\"dashboard icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
     ; __line = 11
-    ; __append(escapeFn( active === 'classroom' ? "active" : "" ))
-    ; __append("\" id=\"nav-2\">\n      <img id=\"svg2\" src=\"assets/icons/nav/classroom.svg\" alt=\"classroom icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
+    ; __append(escapeFn( active === 'classroom' ? "active" : "not_active" ))
+    ; __append("\" id=\"nav-2\">\n      <img id=\"svg2\" src=\"/assets/icons/nav/classroom.svg\" alt=\"classroom icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
     ; __line = 17
-    ; __append(escapeFn( active === 'schedule' ? "active" : "" ))
-    ; __append("\" id=\"nav-3\">\n      <img id=\"svg3\" src=\"assets/icons/nav/schedule.svg\" alt=\"schedule icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
+    ; __append(escapeFn( active === 'schedule' ? "active" : "not_active" ))
+    ; __append("\" id=\"nav-3\">\n      <img id=\"svg3\" src=\"/assets/icons/nav/schedule.svg\" alt=\"schedule icon\" />\n    </a>\n  </span>\n\n  <span class=\"nav-button\">\n    <a class=\"")
     ; __line = 23
-    ; __append(escapeFn( active === 'profile' ? "active" : "" ))
-    ; __append("\" id=\"nav-4\">\n      <img id=\"svg4\" src=\"assets/icons/nav/profile.svg\" alt=\"profile icon\" />\n    </a>\n  </span>\n\n  ")
+    ; __append(escapeFn( active === 'profile' ? "active" : "not_active" ))
+    ; __append("\" id=\"nav-4\">\n      <img id=\"svg4\" src=\"/assets/icons/nav/profile.svg\" alt=\"profile icon\" />\n    </a>\n  </span>\n\n  ")
     ; __line = 28
     ;  if (user.role < 2) { 
-    ; __append("\n    <span class=\"nav-button\">\n      <a class=\"")
+    ; __append("\n  <span class=\"nav-button\">\n    <a class=\"")
     ; __line = 30
-    ; __append(escapeFn( active === 'manager' ? "active" : "" ))
-    ; __append("\" id=\"nav-5\" href=\"/manager\">\n        <img id=\"svg5\" src=\"assets/icons/nav/manager.svg\" alt=\"manager icon\" />\n      </a>\n    </span>\n  ")
+    ; __append(escapeFn( active === 'manager' ? "active" : "not_active" ))
+    ; __append("\" id=\"nav-5\" href=\"/manager\">\n      <img id=\"svg5\" src=\"/assets/icons/nav/manager.svg\" alt=\"manager icon\" />\n    </a>\n  </span>\n  ")
     ; __line = 34
     ;  } 
-    ; __append("\n</nav>\n\n<!-- <script src=\"/js/ajax_dashboard.js\"></script> -->")
-    ; __line = 37
+    ; __append("\n</nav>")
+    ; __line = 35
   }
   return __output;
 } catch (e) {
@@ -1059,271 +1193,151 @@ try {
 
 }
 
-ejs.views_scheduler_selection = function (
-  locals,
-  escapeFn,
-  include = ejs.views_include(locals),
-  rethrow
+ejs.views_scheduler_selection = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
-  rethrow =
-    rethrow ||
-    function rethrow(err, str, flnm, lineno, esc) {
-      var lines = str.split("\n");
-      var start = Math.max(lineno - 3, 0);
-      var end = Math.min(lines.length, lineno + 3);
-      var filename = esc(flnm);
-      // Error context
-      var context = lines
-        .slice(start, end)
-        .map(function (line, i) {
-          var curr = i + start + 1;
-          return (curr == lineno ? " >> " : "    ") + curr + "| " + line;
-        })
-        .join("\n");
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
 
-      // Alter exception message
-      err.path = filename;
-      err.message =
-        (filename || "ejs") +
-        ":" +
-        lineno +
-        "\n" +
-        context +
-        "\n\n" +
-        err.message;
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
 
-      throw err;
-    };
-  escapeFn =
-    escapeFn ||
-    function (markup) {
-      return markup == undefined
-        ? ""
-        : String(markup).replace(_MATCH_HTML, encode_char);
-    };
-  var _ENCODE_HTML_RULES = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&#34;",
-      "'": "&#39;",
-    },
-    _MATCH_HTML = /[&<>'"]/g;
-  function encode_char(c) {
-    return _ENCODE_HTML_RULES[c] || c;
-  }
-  var __line = 1,
-    __lines =
-      '<select id="classroom_selection" onchange="">\n<%classrooms.forEach(classroom => { %>\n    <option value="<%=classroom._id%>"><%=classroom.name%></option>\n<%});%>\n</select>',
-    __filename = undefined;
-  try {
-    var __output = "";
-    function __append(s) {
-      if (s !== undefined && s !== null) __output += s;
-    }
-    with (locals || {}) {
-      __append('<select id="classroom_selection" onchange="">\n');
-      __line = 2;
-      classrooms.forEach((classroom) => {
-        __append('\n    <option value="');
-        __line = 3;
-        __append(escapeFn(classroom._id));
-        __append('">');
-        __append(escapeFn(classroom.name));
-        __append("</option>\n");
-        __line = 4;
-      });
-      __append("\n</select>");
-      __line = 5;
-    }
-    return __output;
-  } catch (e) {
-    rethrow(e, __lines, __filename, __line, escapeFn);
-  }
+  throw err;
 };
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<select id=\"classroom_selection\" onchange=\"\">\n<%classrooms.forEach(classroom => { %>\n    <option value=\"<%=classroom._id%>\"><%=classroom.name%></option>\n<%});%>\n</select>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<select id=\"classroom_selection\" onchange=\"\">\n")
+    ; __line = 2
+    ; classrooms.forEach(classroom => { 
+    ; __append("\n    <option value=\"")
+    ; __line = 3
+    ; __append(escapeFn(classroom._id))
+    ; __append("\">")
+    ; __append(escapeFn(classroom.name))
+    ; __append("</option>\n")
+    ; __line = 4
+    ; });
+    ; __append("\n</select>")
+    ; __line = 5
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
 
-ejs.views_mastery_add = function (
-  locals,
-  escapeFn,
-  include = ejs.views_include(locals),
-  rethrow
+}
+
+ejs.views_signup = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
-  rethrow =
-    rethrow ||
-    function rethrow(err, str, flnm, lineno, esc) {
-      var lines = str.split("\n");
-      var start = Math.max(lineno - 3, 0);
-      var end = Math.min(lines.length, lineno + 3);
-      var filename = esc(flnm);
-      // Error context
-      var context = lines
-        .slice(start, end)
-        .map(function (line, i) {
-          var curr = i + start + 1;
-          return (curr == lineno ? " >> " : "    ") + curr + "| " + line;
-        })
-        .join("\n");
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
 
-      // Alter exception message
-      err.path = filename;
-      err.message =
-        (filename || "ejs") +
-        ":" +
-        lineno +
-        "\n" +
-        context +
-        "\n\n" +
-        err.message;
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
 
-      throw err;
-    };
-  escapeFn =
-    escapeFn ||
-    function (markup) {
-      return markup == undefined
-        ? ""
-        : String(markup).replace(_MATCH_HTML, encode_char);
-    };
-  var _ENCODE_HTML_RULES = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&#34;",
-      "'": "&#39;",
-    },
-    _MATCH_HTML = /[&<>'"]/g;
-  function encode_char(c) {
-    return _ENCODE_HTML_RULES[c] || c;
-  }
-  var __line = 1,
-    __lines =
-      '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <select required id="form_classroom" class="form-control form-control-sm">\n                    <%classroom_list.forEach(classroom => { %>\n                    <option value="<%=classroom._id%>"><%=classroom.name%></option>\n                    <%});%>\n                </select>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>',
-    __filename = undefined;
-  try {
-    var __output = "";
-    function __append(s) {
-      if (s !== undefined && s !== null) __output += s;
-    }
-    with (locals || {}) {
-      __append(
-        '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <select required id="form_classroom" class="form-control form-control-sm">\n                    '
-      );
-      __line = 23;
-      classroom_list.forEach((classroom) => {
-        __append('\n                    <option value="');
-        __line = 24;
-        __append(escapeFn(classroom._id));
-        __append('">');
-        __append(escapeFn(classroom.name));
-        __append("</option>\n                    ");
-        __line = 25;
-      });
-      __append(
-        '\n                </select>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>'
-      );
-      __line = 31;
-    }
-    return __output;
-  } catch (e) {
-    rethrow(e, __lines, __filename, __line, escapeFn);
-  }
+  throw err;
 };
-
-ejs.views_mastery_list = function (
-  locals,
-  escapeFn,
-  include = ejs.views_include(locals),
-  rethrow
-) {
-  rethrow =
-    rethrow ||
-    function rethrow(err, str, flnm, lineno, esc) {
-      var lines = str.split("\n");
-      var start = Math.max(lineno - 3, 0);
-      var end = Math.min(lines.length, lineno + 3);
-      var filename = esc(flnm);
-      // Error context
-      var context = lines
-        .slice(start, end)
-        .map(function (line, i) {
-          var curr = i + start + 1;
-          return (curr == lineno ? " >> " : "    ") + curr + "| " + line;
-        })
-        .join("\n");
-
-      // Alter exception message
-      err.path = filename;
-      err.message =
-        (filename || "ejs") +
-        ":" +
-        lineno +
-        "\n" +
-        context +
-        "\n\n" +
-        err.message;
-
-      throw err;
-    };
-  escapeFn =
-    escapeFn ||
-    function (markup) {
-      return markup == undefined
-        ? ""
-        : String(markup).replace(_MATCH_HTML, encode_char);
-    };
-  var _ENCODE_HTML_RULES = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&#34;",
-      "'": "&#39;",
-    },
-    _MATCH_HTML = /[&<>'"]/g;
-  function encode_char(c) {
-    return _ENCODE_HTML_RULES[c] || c;
-  }
-  var __line = 1,
-    __lines =
-      '<div class="container mt-3">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class="card-title"><%= element.name %></h5>\n            <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>\n            <p class="card-text"><%= element.description %></p>\n            <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>\n        </div>\n    </div>\n    <% }); %>\n</div>',
-    __filename = undefined;
-  try {
-    var __output = "";
-    function __append(s) {
-      if (s !== undefined && s !== null) __output += s;
-    }
-    with (locals || {}) {
-      __append(
-        '<div class="container mt-3">\n    <h3>Mastery Check List</h3>\n    '
-      );
-      __line = 3;
-      result.forEach((element) => {
-        __append(
-          '\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h4>Classroom ID: '
-        );
-        __line = 10;
-        __append(escapeFn(element.classroom));
-        __append('</h4>\n            <h5 class="card-title">');
-        __line = 11;
-        __append(escapeFn(element.name));
-        __append('</h5>\n            <small id="id_container" data-id="');
-        __line = 12;
-        __append(escapeFn(element._id));
-        __append('">Mastery ID: ');
-        __append(escapeFn(element._id));
-        __append('</small>\n            <p class="card-text">');
-        __line = 13;
-        __append(escapeFn(element.description));
-        __append('</p>\n            <p class="card-text">');
-        __line = 14;
-        __append(escapeFn(element.available ? "Available" : "Not Available"));
-        __append("</p>\n        </div>\n    </div>\n    ");
-        __line = 17;
-      });
-      __append("\n</div>");
-      __line = 18;
-    }
-    return __output;
-  } catch (e) {
-    rethrow(e, __lines, __filename, __line, escapeFn);
-  }
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
 };
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div class=\"row mt-5\">\n  <div class=\"col-md-6 m-auto\">\n    <div class=\"card card-body\">\n      <h1 class=\"text-center mb-3\">\n        <i class=\"fas fa-user-plus\"></i> Signup\n      </h1>\n\n      <%- include(\"./partials/messages\") %>\n\n      <form action=\"/user/signup\" method=\"POST\">\n        <div class=\"form-group\">\n          <label for=\"name\">Name</label>\n          <input required type=\"text\" id=\"name\" name=\"name\" class=\"form-control\" placeholder=\"Enter Name\"\n            value=\"<%= typeof name != 'undefined' ? name : '' %>\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"surname\">Surname</label>\n          <input required type=\"text\" id=\"surname\" name=\"surname\" class=\"form-control\" placeholder=\"Enter Surname\"\n            value=\"<%= typeof surname != 'undefined' ? surname : '' %>\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"email\">Email</label>\n          <input required type=\"email\" id=\"email\" name=\"email\" class=\"form-control\" placeholder=\"Enter Email\"\n            value=\"<%= typeof email != 'undefined' ? email : '' %>\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"password\">Password</label>\n          <input required type=\"password\" id=\"password\" name=\"password\" class=\"form-control\"\n            placeholder=\"Create Password\" value=\"<%= typeof password != 'undefined' ? password : '' %>\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"conf_password\">Confirm Password</label>\n          <input required type=\"password\" id=\"conf_password\" name=\"conf_password\" class=\"form-control\"\n            placeholder=\"Confirm Password\" value=\"<%= typeof conf_password != 'undefined' ? conf_password : '' %>\" />\n        </div>\n\n        <button type=\"submit\" class=\"btn btn-primary btn-block\">\n          Sign Up\n        </button>\n      </form>\n\n      <p class=\"lead mt-4\">Have An Account? <a href=\"/user/login\">Login</a></p>\n    </div>\n  </div>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div class=\"row mt-5\">\n  <div class=\"col-md-6 m-auto\">\n    <div class=\"card card-body\">\n      <h1 class=\"text-center mb-3\">\n        <i class=\"fas fa-user-plus\"></i> Signup\n      </h1>\n\n      ")
+    ; __line = 8
+    ; __append( include("./partials/messages") )
+    ; __append("\n\n      <form action=\"/user/signup\" method=\"POST\">\n        <div class=\"form-group\">\n          <label for=\"name\">Name</label>\n          <input required type=\"text\" id=\"name\" name=\"name\" class=\"form-control\" placeholder=\"Enter Name\"\n            value=\"")
+    ; __line = 14
+    ; __append(escapeFn( typeof name != 'undefined' ? name : '' ))
+    ; __append("\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"surname\">Surname</label>\n          <input required type=\"text\" id=\"surname\" name=\"surname\" class=\"form-control\" placeholder=\"Enter Surname\"\n            value=\"")
+    ; __line = 20
+    ; __append(escapeFn( typeof surname != 'undefined' ? surname : '' ))
+    ; __append("\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"email\">Email</label>\n          <input required type=\"email\" id=\"email\" name=\"email\" class=\"form-control\" placeholder=\"Enter Email\"\n            value=\"")
+    ; __line = 26
+    ; __append(escapeFn( typeof email != 'undefined' ? email : '' ))
+    ; __append("\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"password\">Password</label>\n          <input required type=\"password\" id=\"password\" name=\"password\" class=\"form-control\"\n            placeholder=\"Create Password\" value=\"")
+    ; __line = 32
+    ; __append(escapeFn( typeof password != 'undefined' ? password : '' ))
+    ; __append("\" />\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"conf_password\">Confirm Password</label>\n          <input required type=\"password\" id=\"conf_password\" name=\"conf_password\" class=\"form-control\"\n            placeholder=\"Confirm Password\" value=\"")
+    ; __line = 38
+    ; __append(escapeFn( typeof conf_password != 'undefined' ? conf_password : '' ))
+    ; __append("\" />\n        </div>\n\n        <button type=\"submit\" class=\"btn btn-primary btn-block\">\n          Sign Up\n        </button>\n      </form>\n\n      <p class=\"lead mt-4\">Have An Account? <a href=\"/user/login\">Login</a></p>\n    </div>\n  </div>\n</div>")
+    ; __line = 49
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}

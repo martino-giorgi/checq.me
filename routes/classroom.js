@@ -58,10 +58,6 @@ router.get("/", ensureAuthenticated, (req, res) => {
 PROFESSOR ROUTES
 */
 
-router.get('/manage', ensureAuthenticated, ensureProfessor, (req, res) => {
-  res.render("manager/manage_classes")
-})
-
 //Post a new classroom
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);

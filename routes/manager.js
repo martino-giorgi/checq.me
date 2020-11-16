@@ -20,6 +20,11 @@ router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
   res.render("manager/mastery/mastery", { user: req.user });
 });
 
+// Classroom Manager renderer
+router.get("/classrooms",ensureAuthenticated,ensureProfessor, (req, res) => {
+  res.render("manager/classrooms/classrooms");
+})
+
 /*
   Render the form to add a new classroom
 */
