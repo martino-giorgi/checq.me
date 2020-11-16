@@ -16,15 +16,20 @@ const ClassroomSchema = new mongoose.Schema({
         required: false
     },
     lecturer: {
-        type: User,
-        required: true
+        type: mongoose.Schema.ObjectId, 
+        ref: 'User'
     },
-    teaching_assistants: {
-        type: [User],
-        required: false
-    },
-    topics: {
-        type: [Topic],
+    teaching_assistants: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'User'
+    }],
+
+    topics: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Topic'
+    }] ,
+    is_ordered_mastery: {
+        type: Boolean,
         required: true
     }
 

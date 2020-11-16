@@ -25,10 +25,10 @@ const QuestionSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    answer: {
-        type: [Answer],
-        required: true
-    }
+    answer: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Answer'
+    }]
 
 })
 
