@@ -25,8 +25,11 @@ router.get("/", ensureAuthenticated, (req, res) => {
       Classroom.find({ lecturer: req.user })
     .populate("topics")
     .then((result) => {
-      res.render("manager/classrooms", { collection: result });
-    });
+      res.json(result);
+    }).catch(err => {
+      console.log(err);
+      res.json({})
+    })
   } else if (req.user.role == 2){
     User.findOne({ _id: req.user._id })
     .then((user) => {

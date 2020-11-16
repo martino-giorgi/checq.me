@@ -15,9 +15,3 @@ module.exports = router;
 router.get("/", ensureAuthenticated, (req, res) => {
   res.render("scheduler/scheduler", { user: req.user });
 });
-
-router.post("/", ensureAuthenticated, ensureStudent, (req, res) => {
-  Classroom.findOne({ _id: req.body.class_id })
-    .then((classroom) => {})
-    .catch();
-});
