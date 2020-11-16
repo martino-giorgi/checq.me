@@ -24,12 +24,18 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.find({ lecturer: req.user })
     .populate("topics")
     .then((result) => {
-      res.render("manager/classrooms", { collection: result });
+      //res.render("manager/classrooms", { collection: result });
+      res.json(result);
     });
 });
 
+router.get('/manage', ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/manage_classes")
+})
+
 //Post a new classroom
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
