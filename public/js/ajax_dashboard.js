@@ -19,5 +19,5 @@ function assignEvents(nav_n, svg_n, name) {
 assignEvents(n1, 'svg1','dashboard');
 assignEvents(n2, 'svg2', 'classroom');
 assignEvents(n3, 'svg3', 'schedule');
-assignEvents(n4, 'svg4', 'manager');
-assignEvents(n5, 'svg5', 'profile');
+assignEvents(n4, 'svg4', 'profile');
+assignEvents(n5, 'svg5', 'manager');

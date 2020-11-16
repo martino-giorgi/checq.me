@@ -1,0 +1,5 @@
+<select id="classroom_selection" onchange="">
+<%classrooms.forEach(classroom => { %>
+    <option value="<%=classroom._id%>"><%=classroom.name%></option>
+<%});%>
+</select>

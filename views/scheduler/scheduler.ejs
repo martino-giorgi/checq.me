@@ -1,0 +1,31 @@
+<head>
+    <title>checq.me - Mastery Scheduler</title>
+  </head>
+  
+  <body onload="init()">
+    <div class="wrapper">
+      <%- include("../partials/navigation", {active: "scheduler"}) %>
+  
+      <main>
+        <div class="header">
+          <h1 class="main-header"><%= user.name %></h1>
+  
+          <a class="button-text normal red" href="/user/logout">
+            <img
+              class="icon-s"
+              src="assets/icons/buttons/logout.svg"
+              alt="logout icon"
+            />Logout
+          </a>
+        </div>
+  
+        <div id="classroom_selection_wrapper">
+          
+          </div>
+      </main>
+    </div>
+    <script src="/js/ajax_scheduler.js"></script>
+    <script src="/js/ejs.min.js"></script>
+    <script src="/js/views.js"></script>
+  </body>
+  

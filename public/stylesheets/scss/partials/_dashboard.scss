@@ -33,6 +33,10 @@ nav {
         color: #ffffff;
     }
 
+    .active {
+        background-color: $white;
+    }
+
     a:hover {
         cursor: pointer;
     }
