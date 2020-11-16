@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
 const path = require("path");
-
 
 const MasteryCheck = require("../models/MasteryCheck");
 const Classroom = require("../models/Classroom");
@@ -60,101 +59,42 @@ router.delete("/mastery", ensureAuthenticated, (req, res) => {
 /*
   Get all the classrooms where the current user is the lecturer
 */
-router.get('/classroom', ensureAuthenticated, (req, res) => {
+router.get("/classroom", ensureAuthenticated, (req, res) => {
   if (req.user.role < 1) {
-    Classroom.find({lecturer: req.user}).populate('topics').then( result => {
-      res.render('manager/classrooms', {collection: result})
-    })
-  } 
-  else {
+    Classroom.find({ lecturer: req.user })
+      .populate("topics")
+      .then((result) => {
+        res.render("manager/classrooms", { collection: result });
+      });
+  } else {
     res.status(403).send("You don't have permission to view this page");
-  } 
+  }
 });
- 
+
 /*
   Render the form to add a new classroom
 */
-router.get('/classroom/new', ensureAuthenticated, (req, res)=> {
-  if (req.user.role < 1) {
-    
-      res.render('manager/new_classroom', {});
-
-  } 
-  else {
-    res.status(403).send("You don't have permission to view this page");
-  } 
-})
-
-/*
-  Post a new classroom
-*/
-router.post('/classroom/new', ensureAuthenticated, (req, res)=> {
-  if (!req.body.name || !req.body.description) {
-    res.status(400); 
+router.get(
+  "/classroom/new",
+  ensureAuthenticated,
+  ensureProfessor,
+  (req, res) => {
+    res.render("manager/new_classroom");
   }
-  const new_class = new Classroom({
-    name: req.body.name,
-    description: req.body.description,
-    lecturer: req.user,
-    teaching_assistants: [],
-    topics: [],
-    is_ordered_mastery: false
-  })
-
-  new_class.save().then(() => {
-    res.redirect("/manager/classroom");
-  });
-});
+);
 
 /*
   Get the form to add a new topic to the selected class
 */
-router.get('/classroom/add_topic/:classroom/:name', ensureAuthenticated, (req, res) => {
-  if (req.user.role < 1) {
+router.get(
+  "/classroom/add_topic/:classroom/:name",
+  ensureAuthenticated,
+  ensureProfessor,
+  (req, res) => {
     let model = {
       name: req.params.name,
-      classroom: req.params.classroom
-    }
-    res.render('manager/new_topic', model);
-
-  } 
-  else {
-    res.status(403).send("You don't have permission to view this page");
-  } 
-})
-
-/*
-  Post a topic and link it to the classroom
-*/
-router.post('/classroom/add_topic', ensureAuthenticated, (req, res) => {
-  if (req.user.role < 1) {
-    // find the classroom
-    Classroom.findOne({_id: req.body.classroom}).then( this_class => {
-      if (!this_class) {
-        res.status(400).end();
-      } else {
-        const new_topic = new Topic({
-          name: req.body.name,
-          description: req.body.description,
-          questions: []
-        });
-        // save new topic and add it to the list of the class
-        new_topic.save().then( () => {
-          this_class.topics.push(new_topic);
-          this_class.save((error) => {
-            if (error) {
-              res.status(500).end();
-            } else {
-              res.redirect('/manager/classroom');
-            }
-          })
-        })
-        
-      }
-    });    
+      classroom: req.params.classroom,
+    };
+    res.render("manager/new_topic", model);
   }
-  else {
-    res.status(403).send("You don't have permission to view this page");
-  }
-})
-
+);
