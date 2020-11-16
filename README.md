@@ -17,7 +17,7 @@ The idea of this project is to create a web app that manages mastery checks and 
 When navigating the protected routes (dashboard, classroom, ...) the user must be logged in.
 To make sure they are you need to import and use `ensureAuthenticated`.
 
-### Example
+### Example 
 
 ```
 const { ensureAuthenticated } = require("../config/auth");

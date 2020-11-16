@@ -1,6 +1,7 @@
 // Login page alert handler for the validation link
 
 let alert = document.getElementById("unconfirmed_alert");
+console.log(alert);
 
 if (alert) {
   document.getElementById("modal_btn").classList.remove("d-none");

@@ -90,6 +90,18 @@ app.use("/dashboard", routers.dashboard);
 // Route for Manager
 app.use("/manager", routers.manager);
 
+// Route for Scheduler
+app.use("/scheduler", routers.scheduler);
+
+// Route for Classrooms
+app.use("/classroom", routers.classroom);
+
+// Route for Topic
+app.use("/topic", routers.topic);
+
+// Route for MasteryCheck
+app.use("/masterycheck", routers.masterycheck);
+
 // Route for 404 error
 app.get("*", function (req, res) {
   res.status(404).render("page404");

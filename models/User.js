@@ -26,11 +26,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: 2
     },
-    classrooms:{
-        type: Array,
-        required: false,
-        default: []
-    },
+    classrooms: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Classroom'
+    }],
     isConfirmed:{
         type: Boolean,
         required: false,

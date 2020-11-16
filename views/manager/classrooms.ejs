@@ -1,0 +1,17 @@
+<h1>My Classrooms:</h1>
+<a href="./manager/classroom/new">Create new classroom</a>
+<hr>
+<% collection.forEach((n)=>{ %>
+<div>
+    <h3>Class: <%= n.name%></h3>
+    <h4>Description: <%= n.description %></h4>
+    <h4>Topics:</h4>
+
+    <% n.topics.forEach( (t) => { %>
+    <h5>- <%=t.name%>: <%= t.description%> <a href="./manager/classroom/topic/<%=t._id%>">view</a></h5>
+    <%}) %>
+
+    <a href="./manager/classroom/add_topic/<%= n._id%>/<%=n.name%>">Add new Topic</a>
+    <hr>
+</div>
+<% }); %>

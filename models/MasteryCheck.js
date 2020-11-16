@@ -13,6 +13,11 @@ const MasteryCheckSchema = new mongoose.Schema({
     type: Boolean, // true if the student can schedule it, false otherwise
     required: true,
   },
+  class: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Classroom',
+    required: true
+  }
 });
 
 const MasteryCheck = mongoose.model("MasteryCheck", MasteryCheckSchema);

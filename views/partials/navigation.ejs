@@ -3,7 +3,7 @@
 
   <span class="nav-button">
     <a class="<%= active === 'dashboard' ? "active" : "" %>" id="nav-1" href="/dashboard">
-      <img id="svg1" src="assets/icons/nav/dashboard_sel.svg" alt="dashboard icon" />
+      <img id="svg1" src="assets/icons/nav/dashboard.svg" alt="dashboard icon" />
     </a>
   </span>
 
@@ -19,19 +19,19 @@
     </a>
   </span>
 
-  <% if (user.role < 2) {%>
   <span class="nav-button">
-    <a class="<%= active === 'manager' ? "active" : "" %>" id="nav-4" href="/manager">
-      <img id="svg4" src="assets/icons/nav/manager.svg" alt="manager icon" />
+    <a class="<%= active === 'profile' ? "active" : "" %>" id="nav-4">
+      <img id="svg4" src="assets/icons/nav/profile.svg" alt="profile icon" />
     </a>
   </span>
-  <%}%>
 
-  <span class="nav-button">
-      <a class="<%= active === 'profile' ? "active" : "" %>" id="nav-5">
-  <img id="svg5" src="assets/icons/nav/profile.svg" alt="profile icon" />
-  </a>
-  </span>
+  <% if (user.role < 2) { %>
+    <span class="nav-button">
+      <a class="<%= active === 'manager' ? "active" : "" %>" id="nav-5" href="/manager">
+        <img id="svg5" src="assets/icons/nav/manager.svg" alt="manager icon" />
+      </a>
+    </span>
+  <% } %>
 </nav>
 
-<script src="/js/ajax_dashboard.js"></script>
+<!-- <script src="/js/ajax_dashboard.js"></script> -->
