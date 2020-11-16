@@ -10,9 +10,6 @@ require("dotenv").config();
 const User = require("../models/User");
 const Token = require("../models/Token");
 
-const { resolve } = require("path");
-const { rejects } = require("assert");
-
 module.exports = router;
 
 router.get("/signup", (req, res) => {
@@ -20,7 +17,11 @@ router.get("/signup", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("login", {});
+  if (req.isUnauthenticated()) {
+    res.render("login", {});
+  } else {
+    res.redirect("/dashboard");
+  }
 });
 
 router.post("/signup", (req, res) => {
@@ -83,7 +84,9 @@ router.post("/signup", (req, res) => {
                         user.email
                       )
                         .then((sent_email) => {
-                          res.redirect("/user/login");
+                          res.render("login", {
+                            info: { message: "Please confirm your email" },
+                          });
                         })
                         .catch((err) => {
                           console.log(err);
@@ -119,7 +122,7 @@ router.get("/verify/:token", (req, res) => {
               res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
               // res.redirect("/user/login"); //account verified successufully
-              res.render("login", {email:user.email});
+              res.render("login", { email: user.email });
               // Todo: create a flash to display that the account is confirmed
             }
           });
@@ -185,24 +188,25 @@ function send_verification_mail(host, token, target_email) {
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-    
+
     if (user) {
-      return req.login(user, err => {
-        if (err) { return next(err); }
-        res.redirect('/dashboard');
-      })
+      return req.login(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/dashboard");
+      });
     }
 
     if (info.err_id === 1) {
-      return res.render('login', {email: req.body.email, info});
+      return res.render("login", { email: req.body.email, info });
     }
 
     if (info.err_id === 2) {
-      return res.render('login', {email: req.body.email, info});
+      return res.render("login", { email: req.body.email, info });
     }
   })(req, res, next);
 });
-
 
 // Logout
 router.get("/logout", (req, res) => {

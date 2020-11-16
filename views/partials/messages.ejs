@@ -26,9 +26,17 @@
 </div>
 <% } %>
 
-<% if (error != '' || typeof info != 'undefined'){ %>
-<div id="unconfirmed_alert" class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= error %>
+<% if (typeof info != 'undefined' && info.err_id == 1){ %>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <%= info.message %>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<% } %>
+
+<% if (typeof info != 'undefined' && info.err_id == 2) { console.log(info) %>
+<div id="unconfirmed_alert" class="alert alert-primary alert-dismissible fade show" role="alert">
   <%= info.message %>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>

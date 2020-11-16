@@ -1,10 +1,8 @@
 @import "./partials/dashboard";
 @import "./partials/vars.scss";
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
-* {
-    font-family: "Roboto";
-}
 
 .black {
     color: $black;
@@ -29,6 +27,7 @@
 // ===============================
 
 h1 {
+    font-family: "Roboto", sans-serif;
     font-size: 36px;
     font-style: normal;
     font-weight: 700;
@@ -38,12 +37,12 @@ h1 {
 }
 
 .normal {
+    font-family: "Roboto", sans-serif;
     font-size: 17px;
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0em;
-    text-align: left;
 }
 
 

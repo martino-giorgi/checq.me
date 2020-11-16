@@ -20,6 +20,8 @@ nav {
     height: 100vh;
     background-color: $primary;
 
+    font-family: "Roboto", sans-serif;
+
     .nav-button {
         display: flex;
         flex-flow: row;
@@ -28,11 +30,19 @@ nav {
         padding-right: 26px;
         padding-bottom: 11px;
 
-        color: #ffffff;
-    }
+        a:hover, .active {
+            background-color: $white;
+            border-radius: 5px;
+        }
 
-    a:hover {
-        cursor: pointer;
+        .not_active:not(:hover) {
+            filter: brightness(100);
+            -webkit-filter: brightness(100);
+        }
+
+        a:hover {
+            cursor: pointer;
+        }
     }
 }
 
@@ -46,6 +56,8 @@ main {
     flex-flow: column;
 
     width: 100vw;
+
+    font-family: "Roboto", sans-serif;
 
     .header {
         display: flex;
