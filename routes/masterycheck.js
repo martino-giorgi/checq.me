@@ -19,6 +19,7 @@ module.exports = router;
 PROFESSOR ROUTES
 */
 router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
@@ -43,6 +44,7 @@ router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     .catch((err) => console.log(err));
 });
 
-/*
-STUDENT ROUTES
-*/
+// GET mastery check list
+router.get("/list", ensureAuthenticated, ensureProfessor, (req, res) => {
+  MasteryCheck.find({}).then((result) => res.json(result));
+});
