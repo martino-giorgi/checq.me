@@ -4,7 +4,7 @@ function init() {
     btn.addEventListener("click", (e) => {
       let id = btn.parentNode.parentNode.querySelector("#id_container").dataset
         .id;
-      fetch("/manager/mastery", {
+      fetch("/masterycheck", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -19,7 +19,7 @@ function init() {
   let form = document.getElementById("create_form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    fetch("/manager/mastery", {
+    fetch("/masterycheck", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
