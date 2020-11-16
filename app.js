@@ -96,6 +96,9 @@ app.use("/scheduler", routers.scheduler);
 // Route for Classrooms
 app.use("/classroom", routers.classroom);
 
+// Route for Topic
+app.use("/topic", routers.topic);
+
 // Route for 404 error
 app.get("*", function (req, res) {
   res.status(404).render("page404");
