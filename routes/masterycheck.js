@@ -25,7 +25,9 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   const mc = new MasteryCheck({
     name: req.body.name,
     description: req.body.description,
-    available: req.body.available == "on" ? true : false,
+    available: req.body.available,
+    classroom: req.body.classroom,
+    author: req.user._id,
   });
   mc.save()
     .then(() => res.status(200).end())
@@ -43,6 +45,9 @@ router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     .catch((err) => console.log(err));
 });
 
-/*
-STUDENT ROUTES
-*/
+// GET mastery check list created by the current user
+router.get("/list/", ensureAuthenticated, ensureProfessor, (req, res) => {
+  MasteryCheck.find({ author: req.user._id }).then((result) =>
+    res.json(result)
+  );
+});

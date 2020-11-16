@@ -1,29 +1,10 @@
-<body onload="init()">
+<body>
     <div class="container">
         <a href="/manager" class="badge badge-primary">Back to Manager</a>
 
-        <div class="container mt-3">
-            <h3>Mastery Check List</h3>
-            <% result.forEach(element => { %>
-            <div class="card mt-5">
-                <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">
-                    <span>Mastery Check</span> <button style="float: right;" type="button"
-                        class="btn btn-primary delete_btn">Delete</button>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title"><%= element.name %></h5>
-                    <small id="id_container" data-id="<%= element._id%>">Id: <%= element._id%></small>
-                    <p class="card-text"><%= element.description %></p>
-                    <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
-                </div>
-            </div>
-            <% }); %>
-        </div>
-
-
         <div class="container mt-5">
             <h1>Mastery Check Manager</h1>
-            <form id="create_form" action="/masterycheck" method="POST">
+            <form id="create_form" method="POST">
                 <div class="form-group">
                     <label for="input_name">Mastery Check name</label>
                     <input required type="text" name="input_name" class="form-control" id="input_name">
@@ -38,6 +19,11 @@
                         Available
                     </label>
                 </div>
+                <select id="form_classroom" class="form-control form-control-sm">
+                    <%classroom_list.forEach(classroom => { %>
+                    <option value="<%=classroom._id%>"><%=classroom.name%></option>
+                    <%});%>
+                </select>
                 <button type="submit" class="btn btn-primary">Create Mastery Check</button>
             </form>
         </div>
