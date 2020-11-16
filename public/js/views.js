@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Mon Nov 16 2020 23:53:48 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Tue Nov 17 2020 00:49:09 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -372,14 +372,14 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<body onload=\"init()\">\n    \n    <h1>My Classrooms</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
+  , __lines = "<body onload=\"init()\">\n    <div id=\"classrooms_container\">\n        <h1>My Classrooms</h1> \n        <button id=\"new_class_button\">Create new classroom</button>\n\n        <section id=\"new_class_form_section\"></section>\n\n        <section id=\"new_topic_form_section\"></section>\n\n        <section id=\"classes\"></section>\n        \n        <hr>\n        \n        <script src=\"/js/ajax_classrooms.js\"></script>\n        <script src=\"/js/ejs.min.js\"></script>\n        <script src=\"/js/views.js\"></script>\n    </div>\n</body>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<body onload=\"init()\">\n    \n    <h1>My Classrooms</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
-    ; __line = 17
+    ; __append("<body onload=\"init()\">\n    <div id=\"classrooms_container\">\n        <h1>My Classrooms</h1> \n        <button id=\"new_class_button\">Create new classroom</button>\n\n        <section id=\"new_class_form_section\"></section>\n\n        <section id=\"new_topic_form_section\"></section>\n\n        <section id=\"classes\"></section>\n        \n        <hr>\n        \n        <script src=\"/js/ajax_classrooms.js\"></script>\n        <script src=\"/js/ejs.min.js\"></script>\n        <script src=\"/js/views.js\"></script>\n    </div>\n</body>")
+    ; __line = 18
   }
   return __output;
 } catch (e) {
@@ -432,7 +432,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% collection.forEach((n)=>{ %>\n    <div id=\"<%= n._id%>\">\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <a href=\"./manager/classroom/topic/<%=t._id%>\">view</a></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
+  , __lines = "<% collection.forEach((n)=>{ %>\n    <div id=\"<%= n._id%>\">\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <button class=\"view_topic_button\" value=\"<%=t._id%>\">view</button></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -456,9 +456,9 @@ try {
     ; __append(escapeFn(t.name))
     ; __append(": ")
     ; __append(escapeFn( t.description))
-    ; __append(" <a href=\"./manager/classroom/topic/")
+    ; __append(" <button class=\"view_topic_button\" value=\"")
     ; __append(escapeFn(t._id))
-    ; __append("\">view</a></h5>\n        ")
+    ; __append("\">view</button></h5>\n        ")
     ; __line = 10
     ; }) 
     ; __append(" \n\n        <button class=\"new_topic_button\" value=\"")
@@ -582,7 +582,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>"
+  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -593,8 +593,8 @@ try {
     ; __append("</h1>\n<h2>")
     ; __line = 2
     ; __append(escapeFn(description))
-    ; __append("</h2>\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\">\n</script>")
-    ; __line = 16
+    ; __append("</h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>")
+    ; __line = 18
   }
   return __output;
 } catch (e) {

@@ -26,12 +26,13 @@ API = function () {
             document.getElementById("classes").innerHTML = ejs.views_manager_classrooms_classrooms_list({ collection: classes })
 
             let buttons = document.getElementsByClassName("new_topic_button");
+            // Handle each button to add topics
             for (let i = 0; i < buttons.length; i++) {
                 let btn = buttons[i];
                 btn.addEventListener("click", (e) => {
                     let id = btn.value
                     
-                    let topic_form_section = document.getElementById("new_topic_form_section")
+                    let topic_form_section = document.getElementById("new_topic_form_section");
                     topic_form_section.innerHTML = ejs.views_manager_classrooms_new_topic({ id });
                     document.getElementById("new_topic_form").addEventListener("submit", (e) => {
                         e.preventDefault();
@@ -54,6 +55,16 @@ API = function () {
                     })
                 })
             }
+            
+            // handle each button to view the topic
+            let view_topic_buttons = document.getElementsByClassName("view_topic_button");
+            for (let j=0; j < view_topic_buttons.length; ++j) {
+                console.log(view_topic_buttons[j].value);
+                let btn = view_topic_buttons[j];
+                btn.addEventListener("click", (e) => {
+                    show_topic(btn.value);
+                })
+            }
 
         });
 
@@ -61,12 +72,20 @@ API = function () {
 
     // display in the form section the form to add a new class
     function show_newclass_form() {
+        
         document.getElementById('new_class_form_section').innerHTML = ejs.views_manager_classrooms_add_classroom({});
     }
 
-    // function show_topic(topic_id) {
-    //     document.getElementById('classrooms_container').innerHTML = ejs.views.manager_classrooms_topic({})
-    // }
+    function show_topic(topic_id) {
+        fetch(`/topic/${topic_id}`).then(res =>{
+            return res.json();
+        })
+        .then(res=> {
+            console.log(res);
+            document.getElementById('classrooms_container').innerHTML = ejs.views_manager_classrooms_topic(res)
+        })
+       
+    }
 
     // send values from the form used to create new classes
     // and handle view ( reload class list and clear form )
@@ -94,10 +113,20 @@ API = function () {
         })
     }
 
+    // Reset initial html and show list of classes
+    // this function is called when the view is replaced completely
+    // for example when displaying a topic, we need to reset the view "classrooms" to have
+    // the tags necessary for show_classes()
+    function show_start_view() {
+        document.body.innerHTML = ejs.views_manager_classrooms_classrooms();
+        show_classes();
+    }
+
     return {
         show_newclass_form,
         handle_newclass_form,
-        show_classes
-        // show_topic
+        show_classes,
+        show_topic,
+        show_start_view
     }
 }()

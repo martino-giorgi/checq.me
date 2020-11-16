@@ -6,7 +6,7 @@
         <h4>Topics:</h4>
 
         <% n.topics.forEach( (t) => { %>
-        <h5>- <%=t.name%>: <%= t.description%> <a href="./manager/classroom/topic/<%=t._id%>">view</a></h5>
+        <h5>- <%=t.name%>: <%= t.description%> <button class="view_topic_button" value="<%=t._id%>">view</button></h5>
         <%}) %> 
 
         <button class="new_topic_button" value="<%= n._id%>">Add new topic</button>
