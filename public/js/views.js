@@ -236,7 +236,7 @@ ejs.views_mastery_list = function (
   }
   var __line = 1,
     __lines =
-      '<div class="container mt-3">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h5 class="card-title"><%= element.name %></h5>\n            <small id="id_container" data-id="<%= element._id%>">Id: <%= element._id%></small>\n            <p class="card-text"><%= element.description %></p>\n            <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>\n        </div>\n    </div>\n    <% }); %>\n</div>',
+      '<div class="container mt-3">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class="card-title"><%= element.name %></h5>\n            <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>\n            <p class="card-text"><%= element.description %></p>\n            <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>\n        </div>\n    </div>\n    <% }); %>\n</div>',
     __filename = undefined;
   try {
     var __output = "";
@@ -250,26 +250,29 @@ ejs.views_mastery_list = function (
       __line = 3;
       result.forEach((element) => {
         __append(
-          '\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h5 class="card-title">'
+          '\n    <div class="card mt-5">\n        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">\n            <span>Mastery Check</span> <button style="float: right;" type="button"\n                class="btn btn-primary delete_btn">Delete</button>\n        </div>\n        <div class="card-body">\n            <h4>Classroom ID: '
         );
         __line = 10;
+        __append(escapeFn(element.classroom));
+        __append('</h4>\n            <h5 class="card-title">');
+        __line = 11;
         __append(escapeFn(element.name));
         __append('</h5>\n            <small id="id_container" data-id="');
-        __line = 11;
+        __line = 12;
         __append(escapeFn(element._id));
-        __append('">Id: ');
+        __append('">Mastery ID: ');
         __append(escapeFn(element._id));
         __append('</small>\n            <p class="card-text">');
-        __line = 12;
+        __line = 13;
         __append(escapeFn(element.description));
         __append('</p>\n            <p class="card-text">');
-        __line = 13;
+        __line = 14;
         __append(escapeFn(element.available ? "Available" : "Not Available"));
         __append("</p>\n        </div>\n    </div>\n    ");
-        __line = 16;
+        __line = 17;
       });
       __append("\n</div>");
-      __line = 17;
+      __line = 18;
     }
     return __output;
   } catch (e) {

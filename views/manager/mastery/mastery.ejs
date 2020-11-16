@@ -1,13 +1,13 @@
 <body onload="init()">
     <div class="wrapper">
-        <main>
-            <%- include("../../partials/navigation", { active: "manager" }) %>
+        <%- include("../../partials/navigation", { active: "manager" }) %>
+        <div>
             <h1>Mastery Manager</h1>
             <div id="list" class="container"></div>
             <div id="add" class="container"></div>
-        </main>
+            <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
+        </div>
     </div>
-    <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
     <script src="/js/ajax_mastery.js"></script>
     <script src="/js/ejs.min.js"></script>
     <script src="/js/views.js"></script>

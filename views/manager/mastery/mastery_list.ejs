@@ -7,8 +7,9 @@
                 class="btn btn-primary delete_btn">Delete</button>
         </div>
         <div class="card-body">
+            <h4>Classroom ID: <%= element.classroom%></h4>
             <h5 class="card-title"><%= element.name %></h5>
-            <small id="id_container" data-id="<%= element._id%>">Id: <%= element._id%></small>
+            <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
             <p class="card-text"><%= element.description %></p>
             <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
         </div>

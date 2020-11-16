@@ -18,6 +18,11 @@ const MasteryCheckSchema = new mongoose.Schema({
     ref: "Classroom",
     required: true,
   },
+  author: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 const MasteryCheck = mongoose.model("MasteryCheck", MasteryCheckSchema);
