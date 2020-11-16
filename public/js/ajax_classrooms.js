@@ -9,8 +9,6 @@ function init() {
         API.handle_newclass_form();
     });
     
-    // TODO: add listener to all buttons used to add new topic
-    // to show form view
      
 }
 
@@ -26,7 +24,15 @@ API = function () {
     function show_classes() {
         get_classes().then(classes => {
             document.getElementById("classes").innerHTML = ejs.views_manager_classrooms({ collection: classes })
+            
+            let buttons = document.getElementsByClassName("new_topic_button");
+            for(let i=0; i < buttons.length; i++) {
+                let btn = buttons[i];
+                // TODO
+            }
+
         });
+        
     }
 
     // display in the form section the form to add a new class
