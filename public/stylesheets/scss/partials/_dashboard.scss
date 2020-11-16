@@ -2,10 +2,9 @@
 
 // Dashboard components wrapper
 .wrapper {
-    display: flex;
-    flex-flow: row;
+  display: flex;
+  flex-flow: row;
 }
-
 
 // Dashboard components
 
@@ -14,69 +13,75 @@
 // ===============================
 
 nav {
+  display: flex;
+  flex-flow: column;
+
+  width: auto;
+
+  height: 100vh;
+  background-color: $primary;
+
+  font-family: "Roboto", sans-serif;
+
+  .nav-button {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
 
-    height: 100vh;
-    background-color: $primary;
+    padding-left: 26px;
+    padding-right: 26px;
+    padding-bottom: 11px;
 
-    font-family: "Roboto", sans-serif;
-
-    .nav-button {
-        display: flex;
-        flex-flow: row;
-        
-        padding-left: 26px;
-        padding-right: 26px;
-        padding-bottom: 11px;
-
-        color: #ffffff;
+    a:hover,
+    .active {
+      background-color: $white;
+      border-radius: 5px;
     }
 
-    .active {
-        background-color: $white;
+    .not_active:not(:hover) {
+      filter: brightness(100);
+      -webkit-filter: brightness(100);
     }
 
     a:hover {
-        cursor: pointer;
+      cursor: pointer;
     }
+  }
 }
-
 
 // ===============================
 //          MAIN CONTENT
 // ===============================
 
 main {
+  display: flex;
+  flex-flow: column;
+
+  width: 100vw;
+
+  font-family: "Roboto", sans-serif;
+
+  .header {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
 
-    width: 100vw;
+    align-items: center;
+    justify-content: space-between;
 
-    font-family: "Roboto", sans-serif;
-
-    .header {
-        display: flex;
-        flex-flow: row;
-
-        align-items: center;
-        justify-content: space-between;
-
-        .main-header {
-            padding-top: 27px;
-            padding-bottom: 27px;
-            padding-left: 27px;
-        }
-
-        .button-text {
-            padding-top: 27px;
-            padding-bottom: 27px;
-            padding-right: 32px;
-
-            .icon-s {
-                margin-bottom: 2px;
-                margin-right: 6px;
-            }
-        }
+    .main-header {
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-left: 27px;
     }
+
+    .button-text {
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-right: 32px;
+
+      .icon-s {
+        margin-bottom: 2px;
+        margin-right: 6px;
+      }
+    }
+  }
 }
