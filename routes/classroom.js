@@ -43,7 +43,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 
   new_class.save().then(() => {
-    res.redirect("/manager/classroom");
+    res.redirect("/classroom");
   });
 });
 

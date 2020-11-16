@@ -26,7 +26,6 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     available: req.body.available == "on" ? true : false,
-    class: 
   });
   mc.save()
     .then(() => res.status(200).end())
