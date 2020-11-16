@@ -1,23 +1,24 @@
 @import "./partials/dashboard";
 @import "./partials/vars.scss";
+@import "./partials/manager.scss";
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 
 .black {
-    color: $black;
+  color: $black;
 }
 
 .white {
-    color: $white;
+  color: $white;
 }
 
 .primary {
-    color: $primary;
+  color: $primary;
 }
 
 .red {
-    color: $red;
+  color: $red;
 }
 
 // Text Styles
@@ -27,24 +28,23 @@
 // ===============================
 
 h1 {
-    font-family: "Roboto", sans-serif;
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 49px;
-    letter-spacing: 0em;
-    text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 49px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
 .normal {
-    font-family: "Roboto", sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: 0em;
+  font-family: "Roboto", sans-serif;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0em;
 }
-
 
 // Main Components
 
@@ -53,11 +53,11 @@ h1 {
 // ===============================
 
 .logo-s {
-    height: 90px;
-    padding: 26px 26px 36px 26px;
+  height: 90px;
+  padding: 26px 26px 36px 26px;
 }
 
 .icon-s {
-    height: 24px;
-    width: 24px;
+  height: 24px;
+  width: 24px;
 }
