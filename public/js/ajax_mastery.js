@@ -39,7 +39,6 @@ function add() {
       return res.json();
     })
     .then((classroom_list) => {
-      console.log(classroom_list);
       dom.innerHTML = ejs.views_mastery_add({ classroom_list });
       btn.style.display = "none";
       // Client side POST for creating Mastery Check

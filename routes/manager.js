@@ -17,7 +17,7 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 
 // Mastery Manager renderer
 router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
-  res.render("manager/mastery/mastery");
+  res.render("manager/mastery/mastery", { user: req.user });
 });
 
 /*
