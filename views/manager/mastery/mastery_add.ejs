@@ -19,6 +19,11 @@
                         Available
                     </label>
                 </div>
+                <select id="form_classroom" class="form-control form-control-sm">
+                    <%classroom_list.forEach(classroom => { %>
+                    <option value="<%=classroom._id%>"><%=classroom.name%></option>
+                    <%});%>
+                </select>
                 <button type="submit" class="btn btn-primary">Create Mastery Check</button>
             </form>
         </div>

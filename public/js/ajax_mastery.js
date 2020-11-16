@@ -24,9 +24,9 @@ function print_list() {
     })
     .then((list) => {
       if (list.length > 0) {
-        document.getElementById("list").innerHTML = ejs.views_mastery_list(
-          list
-        );
+        document.getElementById("list").innerHTML = ejs.views_mastery_list({
+          result: list,
+        });
       }
     });
 }
@@ -34,21 +34,29 @@ function print_list() {
 function add() {
   let dom = document.getElementById("add");
   let btn = document.getElementById("add_btn");
-  dom.innerHTML = ejs.views_mastery_add();
-  btn.style.display = "none";
-  // Client side POST for creating Mastery Check
-  let form = document.getElementById("create_form");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    fetch("/masterycheck", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: document.getElementById("input_name").value,
-        description: document.getElementById("input_description").value,
-        available: document.getElementById("check_available").value,
-      }),
+  fetch("/classroom")
+    .then((res) => {
+      return res.json();
+    })
+    .then((classroom_list) => {
+      console.log(classroom_list);
+      dom.innerHTML = ejs.views_mastery_add({ classroom_list });
+      btn.style.display = "none";
+      // Client side POST for creating Mastery Check
+      let form = document.getElementById("create_form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch("/masterycheck", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: document.getElementById("input_name").value,
+            description: document.getElementById("input_description").value,
+            available: document.getElementById("check_available").value,
+            classroom: document.getElementById("form_classroom").value,
+          }),
+        });
+        print_list();
+      });
     });
-    print_list();
-  });
 }

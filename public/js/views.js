@@ -149,7 +149,7 @@ ejs.views_mastery_add = function (
   }
   var __line = 1,
     __lines =
-      '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>',
+      '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <select id="form_classroom" class="form-control form-control-sm">\n                    <%classroom_list.forEach(classroom => { %>\n                    <option value="<%=classroom._id%>"><%=classroom.name%></option>\n                    <%});%>\n                </select>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>',
     __filename = undefined;
   try {
     var __output = "";
@@ -158,9 +158,22 @@ ejs.views_mastery_add = function (
     }
     with (locals || {}) {
       __append(
-        '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>'
+        '<body>\n    <div class="container">\n        <a href="/manager" class="badge badge-primary">Back to Manager</a>\n\n        <div class="container mt-5">\n            <h1>Mastery Check Manager</h1>\n            <form id="create_form" method="POST">\n                <div class="form-group">\n                    <label for="input_name">Mastery Check name</label>\n                    <input required type="text" name="input_name" class="form-control" id="input_name">\n                </div>\n                <div class="form-group">\n                    <label for="input_description">Mastery Check description</label>\n                    <input required type="text" name="input_description" class="form-control" id="input_description">\n                </div>\n                <div class="form-check">\n                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">\n                    <label class="form-check-label" for="check_available">\n                        Available\n                    </label>\n                </div>\n                <select id="form_classroom" class="form-control form-control-sm">\n                    '
       );
-      __line = 26;
+      __line = 23;
+      classroom_list.forEach((classroom) => {
+        __append('\n                    <option value="');
+        __line = 24;
+        __append(escapeFn(classroom._id));
+        __append('">');
+        __append(escapeFn(classroom.name));
+        __append("</option>\n                    ");
+        __line = 25;
+      });
+      __append(
+        '\n                </select>\n                <button type="submit" class="btn btn-primary">Create Mastery Check</button>\n            </form>\n        </div>\n        <script src="/js/ajax_mastery.js"></script>\n</body>'
+      );
+      __line = 31;
     }
     return __output;
   } catch (e) {

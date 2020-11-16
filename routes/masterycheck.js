@@ -19,7 +19,6 @@ module.exports = router;
 PROFESSOR ROUTES
 */
 router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  console.log(req.body);
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
@@ -27,6 +26,7 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     available: req.body.available == "on" ? true : false,
+    classroom: req.body.classroom,
   });
   mc.save()
     .then(() => res.status(200).end())
