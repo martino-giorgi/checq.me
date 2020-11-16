@@ -20,6 +20,8 @@ nav {
     height: 100vh;
     background-color: $primary;
 
+    font-family: "Roboto", sans-serif;
+
     .nav-button {
         display: flex;
         flex-flow: row;
@@ -46,6 +48,8 @@ main {
     flex-flow: column;
 
     width: 100vw;
+
+    font-family: "Roboto", sans-serif;
 
     .header {
         display: flex;

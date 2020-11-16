@@ -9,11 +9,6 @@ const MasteryCheckSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  mandatory: {
-    // true if the student need to pass this mastery check to schedule the next one, false otherwise
-    type: Boolean,
-    required: false,
-  },
   available: {
     type: Boolean, // true if the student can schedule it, false otherwise
     required: true,
