@@ -37,6 +37,7 @@ nav {
 
         .not_active:not(:hover) {
             filter: brightness(100);
+            -webkit-filter: brightness(100);
         }
 
         a:hover {
