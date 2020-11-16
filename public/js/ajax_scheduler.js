@@ -3,18 +3,18 @@ function init(){
         // document.getElementById("test").innerHTML = "";
         console.log(user_classrooms);
         document.getElementById("classroom_selection_wrapper").innerHTML = ejs.views_scheduler_selection({classrooms: user_classrooms})
-        populate(user_classrooms[0]._id);
-    })
+        // populate(user_classrooms[0]._id);
+    }).catch(err => console.log(err));
 }
 
 
-function populate(classroom_id){
+// function populate(classroom_id){
     
-}
+// }
 
 API = function () {
     function getClasses(){
-        return fetch("/classrooms").then(res => {
+        return fetch("/classroom").then(res => {
             return res.json();
         })
     }
