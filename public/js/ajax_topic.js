@@ -29,4 +29,5 @@ document.getElementById('new_field').addEventListener( "click", (e) => {
     document.querySelector('form')
     .appendChild(label_node);
     
+    document.getElementById("input_counter").value = number_of_fields;
 })
