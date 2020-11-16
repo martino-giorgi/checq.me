@@ -1,0 +1,15 @@
+<h1>Topic: <%=name%></h1>
+<h2><%=description%></h2>
+<hr>
+<h2>Add questions for this topic:</h2>
+<button>Multiple choice question</button>
+<button>Open question</button>
+<form>
+    <span>Multiple choice question:</span>
+    <div><textarea name="text" rows="4" cols="50" placeholder="Insert the question text here:"></textarea></div>
+    <input id="0" type="text" name="0" placeholder="Option 1"><input type="checkbox" checked><label for="0"> Correct answer</label>
+</form>
+<div><button id="new_field">Add field</button></div>
+
+<script src="/js/ajax_topic.js">
+</script>
