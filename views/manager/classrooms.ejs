@@ -9,7 +9,7 @@
         <h5>- <%=t.name%>: <%= t.description%> <a href="./manager/classroom/topic/<%=t._id%>">view</a></h5>
         <%}) %> 
 
-        <a href="./manager/classroom/add_topic/<%= n._id%>/<%=n.name%>">Add new Topic</a>
+        <button class="new_topic_button" value="<%= n._id%>">Add new topic</button>
         <hr>
     </div>
 <% }); %>

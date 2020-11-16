@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Mon Nov 16 2020 17:20:04 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Mon Nov 16 2020 17:39:17 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -312,7 +312,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% collection.forEach((n)=>{ %>\n    <div>\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <a href=\"./manager/classroom/topic/<%=t._id%>\">view</a></h5>\n        <%}) %> \n\n        <a href=\"./manager/classroom/add_topic/<%= n._id%>/<%=n.name%>\">Add new Topic</a>\n        <hr>\n    </div>\n<% }); %>"
+  , __lines = "<% collection.forEach((n)=>{ %>\n    <div>\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <a href=\"./manager/classroom/topic/<%=t._id%>\">view</a></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -338,12 +338,10 @@ try {
     ; __append("\">view</a></h5>\n        ")
     ; __line = 10
     ; }) 
-    ; __append(" \n\n        <a href=\"./manager/classroom/add_topic/")
+    ; __append(" \n\n        <button class=\"new_topic_button\" value=\"")
     ; __line = 12
     ; __append(escapeFn( n._id))
-    ; __append("/")
-    ; __append(escapeFn(n.name))
-    ; __append("\">Add new Topic</a>\n        <hr>\n    </div>\n")
+    ; __append("\">Add new topic</button>\n        <hr>\n    </div>\n")
     ; __line = 15
     ;  }); 
   }
@@ -398,13 +396,13 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<body onload=\"init()\">\n    \n    <h1>My Classroomsssss:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n\n\n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
+  , __lines = "<body onload=\"init()\">\n    \n    <h1>My Classrooms:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<body onload=\"init()\">\n    \n    <h1>My Classroomsssss:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n\n\n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
+    ; __append("<body onload=\"init()\">\n    \n    <h1>My Classrooms:</h1> \n    <button id=\"new_class_button\">Create new classroom</button>\n\n    <section id=\"new_class_form_section\"></section>\n\n    <section id=\"new_topic_form_section\"></section>\n\n    <section id=\"classes\"></section>\n    \n    <hr>\n    \n    <script src=\"/js/ajax_classrooms.js\"></script>\n    <script src=\"/js/ejs.min.js\"></script>\n    <script src=\"/js/views.js\"></script>\n</body>")
     ; __line = 17
   }
   return __output;

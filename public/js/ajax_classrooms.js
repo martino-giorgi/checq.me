@@ -8,7 +8,10 @@ function init() {
         API.show_newclass_form();
         API.handle_newclass_form();
     });
-  
+    
+    // TODO: add listener to all buttons used to add new topic
+    // to show form view
+     
 }
 
 API = function () {
@@ -31,7 +34,8 @@ API = function () {
         document.getElementById('new_class_form_section').innerHTML = ejs.views_manager_new_classroom({});
     }
 
-
+    // send values from the form used to create new classes
+    // and handle view ( reload class list and clear form )
     function handle_newclass_form() {
         let form = document.getElementById("new_class_form");
         let section = document.getElementById("new_class_form_section");
