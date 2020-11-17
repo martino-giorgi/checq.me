@@ -4,7 +4,7 @@
 
 const mongoose =  require('mongoose');
 
-const AnswerSchema = new mongoose.Schema({
+const AppointmentSchema = new mongoose.Schema({
     mastery: {
         type: mongoose.Schema.ObjectId,
         ref: 'MasteryCheck',
@@ -25,6 +25,6 @@ const AnswerSchema = new mongoose.Schema({
     }
 })
 
-const Answer = mongoose.model('Answer', AnswerSchema);
+const Answer = mongoose.model('Appointment', AppointmentSchema);
 
 module.exports = Answer;
