@@ -60,6 +60,7 @@ function remove_last_field() {
         tos["input_node"].remove();
         tos["checkbox_node"].remove();
         tos["label_node"].remove();
+        number_of_fields--;
     } 
     // hide the button to delete fields if only one field is left 
     if (input_elements.length == 0) {
