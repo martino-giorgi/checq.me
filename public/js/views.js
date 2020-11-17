@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Tue Nov 17 2020 08:28:58 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Tue Nov 17 2020 11:25:12 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -582,7 +582,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n"
+  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <span id=\"fields_label\">Options: 1</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n"
   , __filename = undefined;
 try {
   var __output = "";
@@ -593,8 +593,8 @@ try {
     ; __append("</h1>\n<h2>")
     ; __line = 2
     ; __append(escapeFn(description))
-    ; __append("</h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n")
-    ; __line = 20
+    ; __append("</h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <span id=\"fields_label\">Options: 1</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n")
+    ; __line = 21
   }
   return __output;
 } catch (e) {
