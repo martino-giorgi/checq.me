@@ -85,6 +85,7 @@ API = function () {
             document.getElementById('classrooms_container').innerHTML = ejs.views_manager_classrooms_topic(res);
             // TODO: use the function from ajax_topic API
             handle_dynamic_fields();
+            handle_remove_field();
         })
        
     }

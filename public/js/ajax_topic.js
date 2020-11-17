@@ -18,6 +18,7 @@ function handle_dynamic_fields() {
             return;
         }
         document.getElementById("fields_label").innerHTML = "Options: " + (number_of_fields+1);
+        document.getElementById("delete_field").style.visibility = "visible";
 
         console.log("new field request")
         var input_node = document.createElement("input");
@@ -52,12 +53,20 @@ function handle_dynamic_fields() {
 
 function remove_last_field() {
     let tos = input_elements.pop();
-    // if these was still an element
+    // if there was still an element
     if(tos) {
-        for(elem in tos) {
-            elem.remove();
-        }
+        // tos is an object made by an input, a checkbox and a label
+        // all three needs to be removed
+        tos["input_node"].remove();
+        tos["checkbox_node"].remove();
+        tos["label_node"].remove();
     }
+}
+
+function handle_remove_field() {
+    document.getElementById("delete_field").addEventListener("click", (e) =>{
+        remove_last_field();
+    })
 }
 
 API_topic = function() {
