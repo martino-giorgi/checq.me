@@ -78,6 +78,42 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
+
+//create a new invite link
+router.post("/invite/:classroom_id", ensureAuthenticated, ensureProfessor, (req, res)=>{
+  Classroom.findById(req.params.classroom_id).then(c => {
+    if(c){
+      let token = new TokenClassroom({
+        _classId: c._id,
+        token: crypto.randomBytes(20).toString("hex"),
+      });
+      token.save().then(()=>{
+        res.json(`http://${req.headers.host}/user/verify/${token.token}`);
+      }).catch((err)=> {console.log(err);res.status(400)})
+    }else {
+      res.status(400);
+    }
+  });
+})
+
 /*
 STUDENT ROUTES
 */
+
+
+//this link will be given to the new students, once clicked it will automatically join the classroom
+//this route CANNOT be used as an API to interact with the database from ajax.
+router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
+  TokenClassroom.find({token: req.params.token}).then((t)=>{
+    User.findById(req.user._id).then(u => {
+      u.classrooms.push(t._classroomId);
+      u.save().then(err=>{
+        if(err){
+          console.log(err);
+        }else {
+          res.redirect('/dashboard');
+        }
+      })
+    }).catch(err => {console.log(err); res.send("error joining class, retry")})
+  }).catch(err => {console.log(err); res.send("error joining class, retry")})
+})
