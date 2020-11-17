@@ -121,24 +121,20 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
     .then((t) => {
       User.findById(req.user._id)
         .then((u) => {
-          if(u.classrooms.includes(t.classroom_id)){
-            res.status(400).send("You already joined this class").end();
-          } else {
-            u.classrooms.addToSet(t._classroomId);
-            u.save()
-              .then((new_u) => {
-                if (new_u) {
-                  res.redirect("/dashboard");
-                } else {
-                  console.log("error modifying user: " + u._id);
-                  res.status(400).send("error joining class, retry").end();
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-                res.send("error joining class, retry").end();
-              });
-          }
+          u.classrooms.addToSet(t._classroomId);
+          u.save()
+            .then((new_u) => {
+              if (new_u) {
+                res.redirect("/dashboard");
+              } else {
+                console.log("error modifying user: " + u._id);
+                res.status(400).send("error joining class, retry").end();
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              res.send("error joining class, retry").end();
+            });
         })
         .catch((err) => {
           console.log(err);
