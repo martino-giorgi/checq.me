@@ -1,0 +1,31 @@
+<body>
+    <div class="container">
+        <a href="/manager" class="badge badge-primary">Back to Manager</a>
+
+        <div class="container mt-5">
+            <h1>Mastery Check Manager</h1>
+            <form id="create_form" method="POST">
+                <div class="form-group">
+                    <label for="input_name">Mastery Check name</label>
+                    <input required type="text" name="input_name" class="form-control" id="input_name">
+                </div>
+                <div class="form-group">
+                    <label for="input_description">Mastery Check description</label>
+                    <input required type="text" name="input_description" class="form-control" id="input_description">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">
+                    <label class="form-check-label" for="check_available">
+                        Available
+                    </label>
+                </div>
+                <select required id="form_classroom" class="form-control form-control-sm">
+                    <%classroom_list.forEach(classroom => { %>
+                    <option value="<%=classroom._id%>"><%=classroom.name%></option>
+                    <%});%>
+                </select>
+                <button type="submit" class="btn btn-primary">Create Mastery Check</button>
+            </form>
+        </div>
+        <script src="/js/ajax_mastery.js"></script>
+</body>

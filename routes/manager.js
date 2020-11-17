@@ -11,64 +11,13 @@ const Topic = require("../models/Topic");
 module.exports = router;
 
 // Mastery Manager
-router.get("/", ensureAuthenticated, (req, res) => {
-  if (req.user.role < 2) {
-    res.render("manager/manager", { user: req.user });
-  } else {
-    res.status(403).send("You don't have permission to view this page");
-  }
+router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/manager", { user: req.user });
 });
 
-// Mastery Manager
-router.get("/mastery", ensureAuthenticated, (req, res) => {
-  if (req.user.role < 2) {
-    MasteryCheck.find({}).then((result) => {
-      res.render("manager/mastery", { result });
-    });
-  } else {
-    res.status(403).send("You don't have permission to view this page");
-  }
-});
-
-// Mastery Check add
-router.post("/mastery", ensureAuthenticated, (req, res) => {
-  if (!req.body.name || !req.body.description) {
-    res.status(400);
-  }
-  const mc = new MasteryCheck({
-    name: req.body.name,
-    description: req.body.description,
-    available: req.body.available == "on" ? true : false,
-  });
-  mc.save().then(() => res.status(200).end());
-});
-
-// Mastery Check delete
-router.delete("/mastery", ensureAuthenticated, (req, res) => {
-  if (req.user.role < 2) {
-    MasteryCheck.deleteOne({ _id: req.body.id })
-      .then(() => {
-        res.status(200).end();
-      })
-      .catch((err) => console.log(err));
-  } else {
-    res.status(403).send("You don't have permission to view this page");
-  }
-});
-
-/*
-  Get all the classrooms where the current user is the lecturer
-*/
-router.get("/classroom", ensureAuthenticated, (req, res) => {
-  if (req.user.role < 1) {
-    Classroom.find({ lecturer: req.user })
-      .populate("topics")
-      .then((result) => {
-        res.render("manager/classrooms", { collection: result });
-      });
-  } else {
-    res.status(403).send("You don't have permission to view this page");
-  }
+// Mastery Manager renderer
+router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/mastery/mastery", { user: req.user });
 });
 
 /*
@@ -98,3 +47,13 @@ router.get(
     res.render("manager/new_topic", model);
   }
 );
+
+router.get("/classroom/topic/:id", ensureAuthenticated, (req, res) => {
+  if (req.user.role < 1) {
+    Topic.findOne({ _id: req.params.id }).then((this_topic) => {
+      res.render("manager/topic", this_topic);
+    });
+  } else {
+    res.status(403).send("You don't have permission to view this page");
+  }
+});
