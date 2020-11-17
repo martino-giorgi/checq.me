@@ -2,6 +2,7 @@ var number_of_fields = 1;
 const max_fields = 6;
 // TODO: stack of inputs elements to allow to remove fields
 // TODO: allow only a certain umber of fields
+var input_elements = [];
 
 /*
     Appends a new input of type text to the form used to create multiple choice questions
@@ -34,6 +35,9 @@ function handle_dynamic_fields() {
         var label_node = document.createElement("label");
         label_node.innerHTML = "Correct answer";
         label_node.for = number_of_fields; // not correct
+
+        // Add the elements to the stack
+        input_elements.push({input_node, checkbox_node, label_node});
         
         document.querySelector('form')
         .appendChild(input_node);
@@ -44,6 +48,16 @@ function handle_dynamic_fields() {
         
         document.getElementById("input_counter").value = number_of_fields;
     })
+}
+
+function remove_last_field() {
+    let tos = input_elements.pop();
+    // if these was still an element
+    if(tos) {
+        for(elem in tos) {
+            elem.remove();
+        }
+    }
 }
 
 API_topic = function() {
