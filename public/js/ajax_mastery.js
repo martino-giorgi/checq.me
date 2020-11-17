@@ -28,7 +28,7 @@ function print_list() {
     })
     .then((list) => {
       if (list.length > 0) {
-        document.getElementById("list").innerHTML = ejs.views_mastery_list({
+        document.getElementById("list").innerHTML = ejs.views_mastery_mastery_list({
           result: list,
         });
         add_delete_event();
@@ -53,7 +53,7 @@ function add() {
       return res.json();
     })
     .then((classroom_list) => {
-      dom.innerHTML = ejs.views_mastery_add({ classroom_list });
+      dom.innerHTML = ejs.views_manager_mastery_mastery_add({ classroom_list });
       btn.style.display = "none";
       // Client side POST for creating Mastery Check
       let form = document.getElementById("create_form");

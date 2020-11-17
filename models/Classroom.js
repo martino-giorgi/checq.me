@@ -24,10 +24,6 @@ const ClassroomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'User'
     }],
-    topics: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'Topic'
-    }],
     is_ordered_mastery: {
         type: Boolean,
         required: true

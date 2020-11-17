@@ -1,6 +1,5 @@
 const express = require("express");
 const crypto = require("crypto");
-const ObjectId = require("mongodb").ObjectId;
 const router = express.Router();
 const {
   ensureAuthenticated,
@@ -79,6 +78,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 //create a new invite link
+//TODO if token for class already exists return the existing one.
 router.get(
   "/invite/:classroom_id",
   ensureAuthenticated,

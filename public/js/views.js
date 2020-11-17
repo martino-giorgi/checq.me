@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Tue Nov 17 2020 13:02:37 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Tue Nov 17 2020 21:54:50 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -432,7 +432,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% collection.forEach((n)=>{ %>\n    <div id=\"<%= n._id%>\">\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Topics:</h4>\n\n        <% n.topics.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <button class=\"view_topic_button\" value=\"<%=t._id%>\">view</button></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
+  , __lines = "<% collection.forEach((n)=>{ %>\n    <div id=\"<%= n._id%>\">\n        \n        <h3>Class: <%= n.name%></h3>\n        <h4>Description: <%= n.description %></h4>\n        <h4>Mastery Checks:</h4>\n\n        <% n.mastery_checks.forEach( (t) => { %>\n        <h5>- <%=t.name%>: <%= t.description%> <button class=\"view_topic_button\" value=\"<%=t._id%>\">view</button></h5>\n        <%}) %> \n\n        <button class=\"new_topic_button\" value=\"<%= n._id%>\">Add new topic</button>\n        <hr>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -448,9 +448,9 @@ try {
     ; __append("</h3>\n        <h4>Description: ")
     ; __line = 5
     ; __append(escapeFn( n.description ))
-    ; __append("</h4>\n        <h4>Topics:</h4>\n\n        ")
+    ; __append("</h4>\n        <h4>Mastery Checks:</h4>\n\n        ")
     ; __line = 8
-    ;  n.topics.forEach( (t) => { 
+    ;  n.mastery_checks.forEach( (t) => { 
     ; __append("\n        <h5>- ")
     ; __line = 9
     ; __append(escapeFn(t.name))

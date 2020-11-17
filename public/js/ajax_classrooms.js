@@ -23,6 +23,7 @@ API = function () {
 
     function show_classes() {
         get_classes().then(classes => {
+            console.log(classes);
             document.getElementById("classes").innerHTML = ejs.views_manager_classrooms_classrooms_list({ collection: classes })
 
             let buttons = document.getElementsByClassName("new_topic_button");

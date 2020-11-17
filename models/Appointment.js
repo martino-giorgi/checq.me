@@ -15,6 +15,11 @@ const AppointmentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    student:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
+    },
     time:{
         type: Date,
         required: true
@@ -22,7 +27,11 @@ const AppointmentSchema = new mongoose.Schema({
     grade:{
         type: String,
         required: false
-    }
+    },
+    attempt:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'MasteryAttempt',
+    },
 })
 
 const Answer = mongoose.model('Appointment', AppointmentSchema);
