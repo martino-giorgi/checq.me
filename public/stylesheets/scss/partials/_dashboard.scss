@@ -6,6 +6,40 @@
   flex-flow: row;
 }
 
+section {
+  display: flex;
+  flex-flow: row;
+}
+
+.box {
+  display: flexbox;
+  flex-flow: column;
+
+  background: #FFFFFF;
+  box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+  -webkit-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+
+  border-radius: 10px;
+}
+
+.header-box {
+  display: flex;
+  flex-flow: row;
+
+  align-items: center;
+  justify-content: left;
+
+  padding-top: 24px;
+  padding-left: 24px;
+  padding-bottom: 24px;
+
+  h3 {
+    margin: 0;
+    padding-left: 17px;
+  }
+}
+
 // Dashboard components
 
 // ===============================
@@ -56,9 +90,16 @@ main {
   display: flex;
   flex-flow: column;
 
+  justify-content: stretch;
+
   width: 100vw;
 
   font-family: "Roboto", sans-serif;
+
+
+  // ===============================
+  //             HEADER
+  // ===============================
 
   .header {
     display: flex;
@@ -81,6 +122,65 @@ main {
       .icon-s {
         margin-bottom: 2px;
         margin-right: 6px;
+      }
+    }
+  }
+
+  .column:nth-of-type(1) {
+    flex: 5;
+
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+
+  .column:nth-of-type(2) {
+    flex: 2;
+
+    padding-right: 26px;
+  }
+
+  .classrooms, .grades {
+    margin-top: 26px;
+  }
+
+  .profile {
+    div {
+      display: flex;
+      flex-flow: row;
+
+      align-items: center;
+
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-left: 40px;
+
+      .info {
+        display: flex;
+        flex-flow: column;
+
+        align-items: start;
+        justify-content: center;
+
+        p {
+          margin-bottom: 10px
+        }
+
+        .icon-text {
+          display: flex;
+          flex-flow: row;
+
+          justify-content: center;
+
+          margin-bottom: 6px;
+
+          img {
+            margin-right: 10px;
+          }
+
+          p {
+            margin: 2px 0 0 0;
+          }
+        }
       }
     }
   }
