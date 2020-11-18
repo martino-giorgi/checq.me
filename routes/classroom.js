@@ -70,7 +70,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     lecturer: req.user._id,
     teaching_assistants: [],
     topics: [],
-    is_ordered_mastery: req.body.is_ordered == 'on'? true : false,
+    is_ordered_mastery: req.body.is_ordered,
     university_domain: '@' + req.user.email.split('@')[1]
   });
 

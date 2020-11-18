@@ -10,7 +10,9 @@ function init(){
           .addEventListener("submit", (e) => {
             e.preventDefault();
             submit_form();
-          }); 
+            toggle_show_form();
+            window.FlashMessage.success('Class added!');
+          });
     })
 }
 
