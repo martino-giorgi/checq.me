@@ -32,6 +32,10 @@ const ClassroomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'MasteryCheck'
     }],
+    color: {
+        type: String,
+        required: true
+    },
     university_domain: {
         type: String,
         required: false

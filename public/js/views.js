@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Wed Nov 18 2020 21:05:25 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Wed Nov 18 2020 22:42:28 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -114,7 +114,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% classrooms.forEach(c => { %>\n    <div id=\"<%=c._id%>\">\n        <h2>Class: <%= c.name %></h2>\n        <button id=\"class_edit_button\" value=\"<%=c._id%>\">Manage</button>\n        <button id=\"generate_invite\" value=\"<%=c._id%>\">Generate invite link</button>\n    </div>\n<% }); %>"
+  , __lines = "<% classrooms.forEach(c => { %>\n    <div id=\"<%=c._id%>\">\n        <h2>Class: <%= c.name %></h2>\n        <button class=\"class_edit_button\" value=\"<%=c._id%>\">Manage</button>\n        <button id=\"generate_invite\" value=\"<%=c._id%>\">Generate invite link</button>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -127,13 +127,15 @@ try {
     ; __append("\">\n        <h2>Class: ")
     ; __line = 3
     ; __append(escapeFn( c.name ))
-    ; __append("</h2>\n        <button id=\"class_edit_button\" value=\"")
+    ; __append("</h2>\n        <button class=\"class_edit_button\" value=\"")
     ; __line = 4
     ; __append(escapeFn(c._id))
     ; __append("\">Manage</button>\n        <button id=\"generate_invite\" value=\"")
     ; __line = 5
     ; __append(escapeFn(c._id))
-    ; __append("\">Generate invite link</button>\n    </div>\n")
+    ; __append("\" onclick=\"generate_invite_link('")
+    ; __append(escapeFn(c._id))
+    ; __append("')\">Generate invite link</button>\n    </div>\n")
     ; __line = 7
     ;  }); 
   }
@@ -207,6 +209,70 @@ try {
     ; });
     ; __append("\n</select>")
     ; __line = 5
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_classrooms_classroom = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n<h1>Classroom Manager:</h1>\n<h2><%= %></h2>\n<script src=\"/js/ajax_classrooms.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include("../../partials/navigation", {active: 'manager'}) )
+    ; __append("\n<h1>Classroom Manager:</h1>\n<h2>")
+    ; __line = 3
+    ; __append(escapeFn( ))
+    ; __append("</h2>\n<script src=\"/js/ajax_classrooms.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>")
+    ; __line = 7
   }
   return __output;
 } catch (e) {

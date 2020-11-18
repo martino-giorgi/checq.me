@@ -13,6 +13,17 @@ function init(){
             toggle_show_form();
             window.FlashMessage.success('Class added!');
           });
+
+        // Add listeners to all "manage" buttons
+        let manage_buttons = document.getElementsByClassName("class_edit_button");
+        for(let i=0; i<manage_buttons.length; ++i) {
+            let btn = manage_buttons[i];
+            btn.addEventListener("click", (e) => {
+                API.get_class(btn.value).then( res => {
+                    let this_class = res;
+                })
+            })
+        }
     })
 }
 
@@ -53,13 +64,37 @@ function submit_form(){
     }) 
 }
 
+function generate_invite_link(id){
+    console.log(id);
+    let textarea = document.createElement("textarea");
+    textarea.style = {position: 'absolute', left: '-9999px'};
+    document.body.appendChild(textarea);
+    textarea.setAttribute('readonly', '');
+
+    API.get_invite_link(id).then(link => {
+        console.log(link);
+        textarea.value = link;
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            window.FlashMessage.success('Invite link copied to clipboard');
+        } catch (err) {
+            window.FlashMessage.faliure('Oops, unable to copy');
+        }
+       document.body.removeChild(textarea);
+    }).catch((err)=>{
+        console.log(err);
+        window.FlashMessage.faliure('Error generating link');
+        document.body.removeChild(textarea);
+    })
+}
+
 API = function (){
     // The current user will be defined in the function init()
     // when loading the class list for the first time
     let user = undefined;
 
     function post_classroom(content){
-       
         return fetch("/classroom/new", {method: "POST",headers: { "Content-Type": "application/json" }, body: content}).then((res)=>{
             return res.json();
         })
@@ -71,9 +106,23 @@ API = function (){
         })
     }
 
+    function get_invite_link(id){
+        return fetch("/classroom/invite/"+id).then(res => {
+            return res.json();
+        })
+    }
+    
+    function get_class(id) {
+        return fetch("/classroom/"+id).then( res => {
+            return res.json();
+        })
+    }
+
     return {
         post_classroom,
         get_classrooms,
+        get_invite_link,
+        get_class,
         user
     }
 }()
