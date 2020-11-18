@@ -26,7 +26,7 @@ function show_classes() {
         let id = btn.value;
 
         let topic_form_section = document.getElementById("new_topic_form_section");
-        topic_form_section.innerHTML = ejs.views_manager_classrooms_new_topic({id,});
+        topic_form_section.innerHTML = ejs.views_manager_classrooms_new_topic({ id, });
         document
           .getElementById("new_topic_form")
           .addEventListener("submit", (e) => {
@@ -149,3 +149,6 @@ API = function () {
     show_start_view,
   };
 }();
+
+
+

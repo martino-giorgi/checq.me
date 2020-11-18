@@ -17,6 +17,17 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
+
+
+router.get("/:c_id", ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/classrooms/classroom", { user: req.user });
+})
+
+
+
+
+//old routes:
+
 // Mastery Manager renderer
 router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
   res.render("manager/mastery/mastery", { user: req.user });
