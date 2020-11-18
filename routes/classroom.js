@@ -75,6 +75,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     teaching_assistants: [],
     topics: [],
     is_ordered_mastery: false,
+    color: randomColor()
   });
 
   new_class.save().then(() => {
@@ -85,3 +86,14 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
 /*
 STUDENT ROUTES
 */
+
+
+// Random color chooser
+function randomColor() {
+  let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
+                '1e88e5', '039be5', '00acc1', '00897b', '43a047',
+                'f4511e', '795548', '757575', '546e7a'];
+
+  color = colors[Math.floor(Math.random() * colors.length)];
+  return color;
+}
