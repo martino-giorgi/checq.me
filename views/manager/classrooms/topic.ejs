@@ -1,16 +1,22 @@
 <h1>Topic: <%=name%></h1>
 <h2><%=description%></h2>
+<button onclick="API.show_start_view()">Back to my classes</button>
+
 <hr>
 <h2>Add questions for this topic:</h2>
 <button>Multiple choice question</button>
 <button>Open question</button>
 <form>
     <span>Multiple choice question:</span>
+    <br>
+    <span id="fields_label">Options: 1</span>
     <div><textarea name="text" rows="4" cols="50" placeholder="Insert the question text here:"></textarea></div>
     <input id="0" type="text" name="0" placeholder="Option 1"><input type="checkbox" checked><label for="0"> Correct answer</label>
     <input id="input_counter" type="hidden" name="fields_number" value="1">
 </form>
 <div><button id="new_field">Add field</button></div>
+<div><button style="visibility: hidden" id="delete_field">Remove field</button></div>
 
-<script src="/js/ajax_topic.js">
-</script>
+<script src="/js/ajax_topic.js"></script>
+<script src="/js/ajax_classroom.js"></script>
+<script src="/js/ajax_classrooms.js"></script>

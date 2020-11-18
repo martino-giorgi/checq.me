@@ -1,0 +1,15 @@
+<% collection.forEach((n)=>{ %>
+    <div id="<%= n._id%>">
+        
+        <h3>Class: <%= n.name%></h3>
+        <h4>Description: <%= n.description %></h4>
+        <h4>Masteryheck:</h4>
+
+        <% n.masterycheck.forEach( (t) => { %>
+        <h5>- <%=t.name%>: <%= t.description%> <button class="view_mastery_button" value="<%=t._id%>">view</button></h5>
+        <%}) %> 
+
+        <button class="new_mastery_button" value="<%= n._id%>">Add new masterycheck</button>
+        <hr>
+    </div>
+<% }); %>

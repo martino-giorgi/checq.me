@@ -1,0 +1,5 @@
+{
+    "files":["views/scheduler/selection.ejs"],
+    "dirs":["views/manager/partial/"],
+    "output_dir": "public/js/"
+}
