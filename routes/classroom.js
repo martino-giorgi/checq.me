@@ -117,18 +117,6 @@ router.get(
 STUDENT ROUTES
 */
 
-<<<<<<< HEAD
-
-// Random color chooser
-function randomColor() {
-  let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
-                '1e88e5', '039be5', '00acc1', '00897b', '43a047',
-                'f4511e', '795548', '757575', '546e7a'];
-
-  color = colors[Math.floor(Math.random() * colors.length)];
-  return color;
-}
-=======
 //this link will be given to the new students, once clicked it will automatically join the classroom
 //this route CANNOT be used as an API to interact with the database from ajax.
 router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
@@ -162,4 +150,14 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
       res.send("error joining class, retry").end();
     });
 });
->>>>>>> 0f533c6a06dbf8be5dfbdfed39ca67a6cc4b240a
+
+
+// Random color chooser
+function randomColor() {
+  let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
+                '1e88e5', '039be5', '00acc1', '00897b', '43a047',
+                'f4511e', '795548', '757575', '546e7a'];
+
+  color = colors[Math.floor(Math.random() * colors.length)];
+  return color;
+}
