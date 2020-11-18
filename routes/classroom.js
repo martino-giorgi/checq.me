@@ -88,7 +88,7 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
       .populate("lecturer")
       .then((result) => {
         // 
-        res.render("manager/classrooms/classroom", {class: result})
+        res.json(result);
       })
       .catch((err) => {
         console.log(err);

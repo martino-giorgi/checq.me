@@ -21,6 +21,9 @@ function init(){
             btn.addEventListener("click", (e) => {
                 API.get_class(btn.value).then( res => {
                     let this_class = res;
+                    console.log(this_class);
+                    // Ciao Martino, fai quel che vuoi qui, quando clicchi
+                    // this_class è la classe corrispondente al bottone cliccato
                 })
             })
         }
