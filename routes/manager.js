@@ -12,7 +12,9 @@ module.exports = router;
 
 // Mastery Manager
 router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  res.render("manager/manager", { user: req.user });
+  Classroom.find({ lecturer: req.user._id }).then((classrooms) => {
+    res.render("manager/manager", { user: req.user, classrooms: classrooms });
+  });
 });
 
 // Mastery Manager renderer
@@ -21,9 +23,9 @@ router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 // Classroom Manager renderer
-router.get("/classrooms",ensureAuthenticated,ensureProfessor, (req, res) => {
+router.get("/classrooms", ensureAuthenticated, ensureProfessor, (req, res) => {
   res.render("manager/classrooms/classrooms");
-})
+});
 
 /*
   Render the form to add a new classroom

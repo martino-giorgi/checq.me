@@ -14,6 +14,7 @@ const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
+const { response } = require("express");
 
 module.exports = router;
 
@@ -24,7 +25,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
     Classroom.find({ lecturer: req.user })
       .populate("topics")
       .then((result) => {
-        res.json(result);
+        res.json({classrooms: result, user: req.user});
       })
       .catch((err) => {
         console.log(err);
@@ -66,14 +67,16 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   const new_class = new Classroom({
     name: req.body.name,
     description: req.body.description,
-    lecturer: req.user,
+    lecturer: req.user._id,
     teaching_assistants: [],
     topics: [],
-    is_ordered_mastery: false,
+    is_ordered_mastery: req.body.is_ordered == 'on'? true : false,
+    university_domain: '@' + req.user.email.split('@')[1]
   });
 
-  new_class.save().then(() => {
-    res.redirect("/classroom");
+  new_class.save().then((new_element) => {
+    // res.redirect("/classroom");
+    res.json(new_element)
   });
 });
 
