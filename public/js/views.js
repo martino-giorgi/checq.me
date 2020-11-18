@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Wed Nov 18 2020 21:05:25 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Wed Nov 18 2020 21:59:05 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -114,7 +114,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% classrooms.forEach(c => { %>\n    <div id=\"<%=c._id%>\">\n        <h2>Class: <%= c.name %></h2>\n        <button id=\"class_edit_button\" value=\"<%=c._id%>\">Manage</button>\n        <button id=\"generate_invite\" value=\"<%=c._id%>\">Generate invite link</button>\n    </div>\n<% }); %>"
+  , __lines = "<% classrooms.forEach(c => { %>\n    <div id=\"<%=c._id%>\">\n        <h2>Class: <%= c.name %></h2>\n        <button id=\"class_edit_button\" value=\"<%=c._id%>\">Manage</button>\n        <button id=\"generate_invite\" value=\"<%=c._id%>\" onclick=\"generate_invite_link('<%=c._id%>')\">Generate invite link</button>\n    </div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -133,7 +133,9 @@ try {
     ; __append("\">Manage</button>\n        <button id=\"generate_invite\" value=\"")
     ; __line = 5
     ; __append(escapeFn(c._id))
-    ; __append("\">Generate invite link</button>\n    </div>\n")
+    ; __append("\" onclick=\"generate_invite_link('")
+    ; __append(escapeFn(c._id))
+    ; __append("')\">Generate invite link</button>\n    </div>\n")
     ; __line = 7
     ;  }); 
   }

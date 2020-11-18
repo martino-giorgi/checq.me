@@ -2,6 +2,6 @@
     <div id="<%=c._id%>">
         <h2>Class: <%= c.name %></h2>
         <button id="class_edit_button" value="<%=c._id%>">Manage</button>
-        <button id="generate_invite" value="<%=c._id%>">Generate invite link</button>
+        <button id="generate_invite" value="<%=c._id%>" onclick="generate_invite_link('<%=c._id%>')">Generate invite link</button>
     </div>
 <% }); %>
