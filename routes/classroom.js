@@ -80,6 +80,22 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
+router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
+  Classroom.find({ _id: req.params.id })
+      .populate("teaching_assistants")
+      .populate("mastery_checks")
+      .populate("lecturer")
+      .then((result) => {
+        // 
+        res.render("manager/classrooms/classroom", {class: result})
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json({});
+      });
+        
+})
+
 //create a new invite link
 //TODO if token for class already exists return the existing one.
 router.get(

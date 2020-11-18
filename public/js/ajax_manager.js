@@ -13,6 +13,17 @@ function init(){
             toggle_show_form();
             window.FlashMessage.success('Class added!');
           });
+
+        // Add listeners to all "manage" buttons
+        let manage_buttons = document.getElementsByClassName("class_edit_button");
+        for(let i=0; i<manage_buttons.length; ++i) {
+            let btn = manage_buttons[i];
+            btn.addEventListener("click", (e) => {
+                API.get_class(btn.value).then( res => {
+                    let this_class = res;
+                })
+            })
+        }
     })
 }
 
@@ -100,11 +111,18 @@ API = function (){
             return res.json();
         })
     }
+    
+    function get_class(id) {
+        return fetch("/classroom/"+id).then( res => {
+            return res.json();
+        })
+    }
 
     return {
         post_classroom,
         get_classrooms,
         get_invite_link,
+        get_class,
         user
     }
 }()

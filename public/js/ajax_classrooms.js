@@ -10,7 +10,7 @@ function init() {
 }
 
 function show_classes() {
-  get_classes().then((classes) => {
+  API.get_classes().then((classes) => {
     console.log(classes);
     document.getElementById(
       "classes"
@@ -66,7 +66,7 @@ function show_classes() {
   });
 }
 
-API = (function () {
+API = function () {
   // returns a promise that will give all the classrooms of the professor
   function get_classes() {
     return fetch("/classroom").then((res) => {
@@ -141,10 +141,11 @@ API = (function () {
   }
 
   return {
+    get_classes,
     show_newclass_form,
     handle_newclass_form,
     show_classes,
     show_topic,
     show_start_view,
   };
-})();
+}();
