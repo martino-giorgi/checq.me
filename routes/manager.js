@@ -12,12 +12,19 @@ module.exports = router;
 
 // Mastery Manager
 router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  res.render("manager/manager", { user: req.user });
+  Classroom.find({ lecturer: req.user._id }).then((classrooms) => {
+    res.render("manager/manager", { user: req.user, classrooms: classrooms });
+  });
 });
 
 // Mastery Manager renderer
 router.get("/mastery", ensureAuthenticated, ensureProfessor, (req, res) => {
   res.render("manager/mastery/mastery", { user: req.user });
+});
+
+// Classroom Manager renderer
+router.get("/classrooms", ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/classrooms/classrooms");
 });
 
 /*
