@@ -70,6 +70,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     lecturer: req.user._id,
     teaching_assistants: [],
     topics: [],
+    color: randomColor(),
     is_ordered_mastery: req.body.is_ordered,
     university_domain: '@' + req.user.email.split('@')[1]
   });
@@ -171,3 +172,14 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
       res.send("error joining class, retry").end();
     });
 });
+
+
+// Random color chooser
+function randomColor() {
+  let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
+                '1e88e5', '039be5', '00acc1', '00897b', '43a047',
+                'f4511e', '795548', '757575', '546e7a'];
+
+  color = colors[Math.floor(Math.random() * colors.length)];
+  return color;
+}

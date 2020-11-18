@@ -143,6 +143,11 @@ main {
     margin-top: 26px;
   }
 
+
+  // ===============================
+  //            PROFILE
+  // ===============================
+
   .profile {
     div {
       display: flex;
@@ -179,6 +184,56 @@ main {
 
           p {
             margin: 2px 0 0 0;
+          }
+        }
+      }
+    }
+  }
+
+
+  // ===============================
+  //           CLASSROOMS
+  // ===============================
+
+  .classrooms {
+    .classroom-list {
+      display: flex;
+      flex-flow: row;
+
+      margin: 26px;
+
+      .classroom-box {
+        width: 120px;
+        height: 191px;
+
+        margin-right: 26px;
+
+        border-radius: 8px;
+
+        .circle {
+          display: block;
+
+          align-self: center;
+
+          width: 74px;
+          height: 74px;
+
+          border-radius: 50%;
+          background-color: $white;
+
+          p {
+            top: 0;
+            bottom: 0;
+
+            margin: auto;
+
+            font-family: Roboto, sans-serif;
+            font-size: 26px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 30px;
+            letter-spacing: 0em;
+            text-align: center;
           }
         }
       }

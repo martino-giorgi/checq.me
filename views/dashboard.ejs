@@ -9,7 +9,7 @@
 
     <main>
       <div class="header">
-        <h1 class="main-header"> Welcome Back, <%= user.name %>! </h1>
+        <h1 class="main-header"> Welcome Back, <%= capitalize(model.user.name) %>! </h1>
 
         <a class="button-text normal red" href="/user/logout">
           <img class="icon-s" src="/assets/icons/buttons/logout.svg" alt="logout icon" />Logout
@@ -34,8 +34,17 @@
               <h3 class="primary"> Classrooms </h3>
             </div>
 
-            <!-- Content -->
-
+            <div class="classroom-list">
+              <% model.classrooms.forEach((classroom) => { %>
+                <a>
+                  <div class="classroom-box" style="background-color: #<%= classroom.color %>;">
+                    <span class="circle">
+                      <p> <%= getInitials(classroom.name) %> </p>
+                    </span>
+                  </div>
+                </a>
+              <% }); %>
+            </div>
           </div>
         </div>
 
@@ -45,11 +54,11 @@
               <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
 
               <div class="info">
-                <p class="normal"> <%= capitalize(user.name) %> <%= capitalize(user.surname) %> </p>
+                <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
-                  <p class="small gray"> <%= user.email %>  </p>
+                  <p class="small gray"> <%= model.user.email %>  </p>
                 </span>
 
                 <span class="icon-text">
@@ -79,6 +88,17 @@
       return word
         .toLowerCase()
         .replace(/\w/, firstLetter => firstLetter.toUpperCase());
+    }
+
+    function getInitials (name) {
+      var names = name.split(' '),
+        initials = names[0].substring(0, 1).toUpperCase();
+      
+      if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      }
+
+      return initials;
     }
   %>
 </body>
