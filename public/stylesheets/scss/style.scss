@@ -12,6 +12,10 @@
   color: $white;
 }
 
+.gray {
+  color: $gray;
+}
+
 .primary {
   color: $primary;
 }
@@ -36,6 +40,15 @@ h1 {
   text-align: left;
 }
 
+h3 {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0em;
+}
+
 .normal {
   font-family: "Roboto", sans-serif;
   font-size: 17px;
@@ -44,6 +57,16 @@ h1 {
   line-height: 20px;
   letter-spacing: 0em;
 }
+
+.small {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0em;
+}
+
 
 // Main Components
 
@@ -56,7 +79,27 @@ h1 {
   padding: 26px 26px 36px 26px;
 }
 
+.icon-xs {
+  height: 14px;
+  width: 14px;
+}
+
 .icon-s {
   height: 24px;
   width: 24px;
+}
+
+.icon-xl {
+  height: 98px;
+  width: 98px
+}
+
+
+// ===============================
+//            LAYOUTS
+// ===============================
+
+.column {
+  display: flex;
+  flex-flow: column;
 }
