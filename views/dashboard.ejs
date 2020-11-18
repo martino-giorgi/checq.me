@@ -39,8 +39,10 @@
                 <a>
                   <div class="classroom-box" style="background-color: #<%= classroom.color %>;">
                     <span class="circle">
-                      <p> <%= getInitials(classroom.name) %> </p>
+                      <p style="color: #<%= classroom.color %>;"> <%= getInitials(classroom.name) %> </p>
                     </span>
+
+                    <p class="classroom-name"> <%= classroom.name %> </p>
                   </div>
                 </a>
               <% }); %>
@@ -92,7 +94,7 @@
 
     function getInitials (name) {
       var names = name.split(' '),
-        initials = names[0].substring(0, 1).toUpperCase();
+      initials = names[0].substring(0, 1).toUpperCase();
       
       if (names.length > 1) {
         initials += names[names.length - 1].substring(0, 1).toUpperCase();

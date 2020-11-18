@@ -178,7 +178,7 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
 function randomColor() {
   let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
                 '1e88e5', '039be5', '00acc1', '00897b', '43a047',
-                'f4511e', '795548', '757575', '546e7a'];
+                'f4511e', '795548', '546e7a'];
 
   color = colors[Math.floor(Math.random() * colors.length)];
   return color;
