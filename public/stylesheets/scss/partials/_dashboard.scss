@@ -203,6 +203,11 @@ main {
       margin: 26px;
 
       .classroom-box {
+        display: flex;
+        flex-flow: column;
+
+        align-items: center;
+
         width: 120px;
         height: 191px;
 
@@ -213,10 +218,10 @@ main {
         .circle {
           display: block;
 
-          align-self: center;
-
           width: 74px;
           height: 74px;
+
+          margin-top: 26px;
 
           border-radius: 50%;
           background-color: $white;
@@ -225,7 +230,7 @@ main {
             top: 0;
             bottom: 0;
 
-            margin: auto;
+            margin-top: 22px;
 
             font-family: Roboto, sans-serif;
             font-size: 26px;
@@ -235,6 +240,20 @@ main {
             letter-spacing: 0em;
             text-align: center;
           }
+        }
+        
+        .classroom-name {
+          margin-top: 22px;
+          margin-right: 15px;
+          margin-left: 15px;
+
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 17px;
+          text-align: center;
+          
+          color: $white;
         }
       }
     }
