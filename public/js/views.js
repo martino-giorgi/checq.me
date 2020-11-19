@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 17:39:14 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 19:26:38 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -70,6 +70,79 @@ try {
 
 }
 
+ejs.views_manager_partial_class_add_ta = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div>\n    <h3>Select your new TA:</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        <% partecipants.forEach(p => { %>\n            <option value=\"<%=p._id%>\"><%= p.name%> <%= p.surname%></option>\n        <% }); %>        \n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div>\n    <h3>Select your new TA:</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        ")
+    ; __line = 4
+    ;  partecipants.forEach(p => { 
+    ; __append("\n            <option value=\"")
+    ; __line = 5
+    ; __append(escapeFn(p._id))
+    ; __append("\">")
+    ; __append(escapeFn( p.name))
+    ; __append(" ")
+    ; __append(escapeFn( p.surname))
+    ; __append("</option>\n        ")
+    ; __line = 6
+    ;  }); 
+    ; __append("        \n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>")
+    ; __line = 9
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
 ejs.views_manager_partial_class_info = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
@@ -114,26 +187,26 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div>\n    \n    <h2> <%= name %></h2>\n    <h3> <%= description%></h3>\n    <h3> TAs: <%=teaching_assistants.length %></h3>\n    <h3> Partecipants: <%= partecipants.length%></h3>\n</div>"
+  , __lines = "<div>\n    <h2> <%= name %></h2>\n    <h3> <%= description%></h3>\n    <h3> TAs: <%=teaching_assistants.length %></h3>\n    <h3> Partecipants: <%= partecipants.length%></h3>\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<div>\n    \n    <h2> ")
-    ; __line = 3
+    ; __append("<div>\n    <h2> ")
+    ; __line = 2
     ; __append(escapeFn( name ))
     ; __append("</h2>\n    <h3> ")
-    ; __line = 4
+    ; __line = 3
     ; __append(escapeFn( description))
     ; __append("</h3>\n    <h3> TAs: ")
-    ; __line = 5
+    ; __line = 4
     ; __append(escapeFn(teaching_assistants.length ))
     ; __append("</h3>\n    <h3> Partecipants: ")
-    ; __line = 6
+    ; __line = 5
     ; __append(escapeFn( partecipants.length))
     ; __append("</h3>\n</div>")
-    ; __line = 7
+    ; __line = 6
   }
   return __output;
 } catch (e) {
@@ -335,7 +408,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_info\"></section>\n    </main>\n</div>\n\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
+  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button>Add Masterycheck</button>\n            <button onclick=\"show_ta_form()\">Assign a TA</button>\n        </section>\n        <section id=\"ta_form\"></section>\n        <section id=\"class_info\"></section>\n    </main>\n</div>\n\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -344,8 +417,8 @@ try {
     ; __append("<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    ")
     ; __line = 7
     ; __append( include("../../partials/navigation", {active: 'manager'}) )
-    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_info\"></section>\n    </main>\n</div>\n\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
-    ; __line = 21
+    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button>Add Masterycheck</button>\n            <button onclick=\"show_ta_form()\">Assign a TA</button>\n        </section>\n        <section id=\"ta_form\"></section>\n        <section id=\"class_info\"></section>\n    </main>\n</div>\n\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
+    ; __line = 26
   }
   return __output;
 } catch (e) {
