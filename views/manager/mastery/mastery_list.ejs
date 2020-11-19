@@ -3,7 +3,8 @@
     <% result.forEach(element => { %>
     <div class="card mt-5">
         <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">
-            <span>Mastery Check</span> <button style="float: right;" type="button"
+            <span>Mastery Check</span> 
+            <button style="float: right;" type="button"
                 class="btn btn-primary delete_btn">Delete</button>
         </div>
         <div class="card-body">
@@ -12,6 +13,12 @@
             <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
             <p class="card-text"><%= element.description %></p>
             <p class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
+            <p> 
+                <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
+                <% element.topics.forEach(topic => { %>
+                    <span>topic.name</span>
+                <% }); %>
+            </p>
         </div>
     </div>
     <% }); %>
