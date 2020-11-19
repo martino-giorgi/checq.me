@@ -256,6 +256,11 @@ main {
           color: $white;
         }
       }
+
+      .classroom-box:hover {
+        box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.171);
+        cursor: pointer;
+      }
     }
   }
 }
