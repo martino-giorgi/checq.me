@@ -48,10 +48,6 @@ function init_students(){
   document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
   set_navbar_active("a_nav_students");
   API.get_class_info(c_id).then(classroom => {
-    // console.log(classroom[0].partecipants);
-    // classroom[0].partecipants.forEach(p => {
-    //   console.log(p);
-    // })
     document.getElementById("student_list").innerHTML = ejs.views_manager_partial_students_list({partecipants:classroom[0].partecipants})
   })
 }
