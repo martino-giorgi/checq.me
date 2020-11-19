@@ -1,10 +1,11 @@
 var c_id = undefined;
 
-function init() {
+//CLASSROOM MANAGER -- SECTION: Mastery Checks
+function init_manager() {
   init_mastery();
   let url = new URL(window.location.href)
   c_id = url.searchParams.get('id')
-  
+  document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
   API.get_class_info(c_id).then( res => {
     
     API.class_obj = res[0];
@@ -38,6 +39,37 @@ function show_new_selected() {
 
   let str = `Are you sure you want <b>${selected_name} </b>to be your TA?`
   document.getElementById("selected_user").innerHTML = str;
+}
+
+//CLASSROOM MANAGER -- SECTION: Students
+function init_students(){
+  let url = new URL(window.location.href);
+  c_id = url.searchParams.get('id');
+  document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
+  set_navbar_active("a_nav_students");
+  API.get_class_info(c_id).then(classroom => {
+    // console.log(classroom[0].partecipants);
+    // classroom[0].partecipants.forEach(p => {
+    //   console.log(p);
+    // })
+    document.getElementById("student_list").innerHTML = ejs.views_manager_partial_students_list({partecipants:classroom[0].partecipants})
+  })
+}
+
+function set_navbar_active(element_id){
+  let navbar = document.getElementById("sub_navbar").querySelectorAll("a");
+  navbar.forEach(element => {
+    element.classList.remove("active")
+  });
+  document.getElementById(element_id).classList.add("active");
+}
+
+//CLASSROOM MANAGER -- SECTION: TAs
+function init_tas(){
+  let url = new URL(window.location.href);
+  c_id = url.searchParams.get('id');
+  document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
+  set_navbar_active("a_nav_tas");
 }
 
 
