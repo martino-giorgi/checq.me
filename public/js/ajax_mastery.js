@@ -1,4 +1,4 @@
-function init() {
+function init_mastery() {
   print_list();
   add_delete_event();
 }
@@ -28,7 +28,7 @@ function print_list() {
     })
     .then((list) => {
       if (list.length > 0) {
-        document.getElementById("list").innerHTML = ejs.views_mastery_mastery_list({
+        document.getElementById("list").innerHTML = ejs.views_manager_mastery_mastery_list({
           result: list,
         });
         add_delete_event();
@@ -42,7 +42,6 @@ function empty_field() {
   document.getElementById("input_name").value = "";
   document.getElementById("input_description").value = "";
   document.getElementById("check_available").checked = false;
-  document.getElementById("form_classroom").value = "";
 }
 
 function add() {
@@ -66,7 +65,7 @@ function add() {
             name: document.getElementById("input_name").value,
             description: document.getElementById("input_description").value,
             available: document.getElementById("check_available").checked,
-            classroom: document.getElementById("form_classroom").value,
+            classroom: c_id
           }),
         }).then(() => {
           empty_field();

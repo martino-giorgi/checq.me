@@ -1,5 +1,5 @@
 {
     "files":["views/scheduler/selection.ejs", "views/manager/classrooms/classroom.ejs"],
-    "dirs":["views/manager/partial/"],
+    "dirs":["views/manager/partial/", "views/manager/mastery/"],
     "output_dir": "public/js/"
 }

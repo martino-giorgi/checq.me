@@ -1,6 +1,9 @@
+var c_id = undefined;
+
 function init() {
+  init_mastery();
   let url = new URL(window.location.href)
-  let c_id = url.searchParams.get('id')
+  c_id = url.searchParams.get('id')
   
   API.get_class_info(c_id).then( res => {
     
@@ -20,14 +23,14 @@ function toggle_show_ta_form() {
   if (section.innerHTML == "") {
 
     section.innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
-    document.getElementById("partecipants_list").onchange = f
+    document.getElementById("partecipants_list").onchange = show_new_selected
   } 
   else {
     section.innerHTML = "";
   }
 }
 
-function f() {
+function show_new_selected() {
   let list = document.getElementById("partecipants_list");
   var selected_name = list.options[list.selectedIndex].text;
   // console.log(selected_name)
