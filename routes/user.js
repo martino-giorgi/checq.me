@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
 
 require("dotenv").config();
 
@@ -137,7 +138,7 @@ router.post("/verify/resend", (req, res) => {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
-          Token.deleteMany({ _userId: user._id }).catch((err) => {});
+          Token.deleteMany({ _userId: user._id }).catch((err) => { });
           let token = new Token({
             _userId: user._id,
             token: crypto.randomBytes(20).toString("hex"),
@@ -153,12 +154,12 @@ router.post("/verify/resend", (req, res) => {
                 }
               );
             })
-            .catch((err) => {});
+            .catch((err) => { });
         } else {
           res.status(400).end(); //the email does not correspond to a user
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   } else {
     res.status(400).end(); //no email was given
   }
@@ -214,5 +215,9 @@ router.get("/logout", (req, res) => {
   req.flash("success_msg", "You are logged out");
   res.redirect("/user/login");
 });
+
+router.put("/update", ensureAuthenticated, (req, res) => {
+  console.log(req.body);
+})
 
 module.exports = router;

@@ -12,6 +12,6 @@ module.exports = router;
 // Profile route
 router.get("/:id", ensureAuthenticated, (req, res) => {
   User.findOne({ _id: req.params.id }).then((user) => {
-    res.render("profile", { user });
+    res.render("profile/profile", { user });
   });
 });
