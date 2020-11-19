@@ -79,6 +79,10 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     // res.redirect("/classroom");
     res.json(new_element)
   });
+  User.findById(req.user._id).then(professor => {
+    professor.classrooms.addToSet(new_class._id);
+    professor.save();
+  })
 });
 
 router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
@@ -86,9 +90,10 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
       .populate("teaching_assistants")
       .populate("mastery_checks")
       .populate("lecturer")
+      .populate("partecipants")
       .then((result) => {
         // 
-        res.render("manager/classrooms/classroom", {class: result})
+        res.json(result);
       })
       .catch((err) => {
         console.log(err);
@@ -145,27 +150,36 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
-      User.findById(req.user._id)
-        .then((u) => {
-          u.classrooms.addToSet(t._classroomId);
-          u.save()
-            .then((new_u) => {
-              if (new_u) {
-                res.redirect("/dashboard");
-              } else {
-                console.log("error modifying user: " + u._id);
-                res.status(400).send("error joining class, retry").end();
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              res.send("error joining class, retry").end();
-            });
+
+      let p1 = Classroom.findById(t._classroomId);
+      let p2 = User.findById(req.user._id);
+
+      // Get classroom and user ( wait to have them both )
+      Promise.all([p1, p2]).then( values => {
+        let classroom = values[0];
+        let user = values[1];
+
+        user.classrooms.addToSet(t._classroomId);
+        classroom.partecipants.addToSet(req.user._id);
+
+        let p3 = classroom.save();
+        let p4 = user.save();
+
+        // Wait for both user and classroom to be saved
+        Promise.all([p3,p4]).then( results => {
+          if(results[0] && results[1]) {
+            res.redirect("/dashboard");
+          }
         })
-        .catch((err) => {
+        .catch( (err) => {
           console.log(err);
           res.send("error joining class, retry").end();
-        });
+        })
+      }) 
+      .catch( (err) => {
+        console.log(err);
+        res.send("error joining class, retry").end();
+      })
     })
     .catch((err) => {
       console.log(err);
