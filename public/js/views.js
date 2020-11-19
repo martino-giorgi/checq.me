@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 15:06:24 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 17:39:14 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -114,7 +114,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div>\n    \n    <h2> <%= name %></h2>\n    <h3> <%= description%></h3>\n    <h3> TAs: <%=teaching_assistants.length %></h3>\n</div>"
+  , __lines = "<div>\n    \n    <h2> <%= name %></h2>\n    <h3> <%= description%></h3>\n    <h3> TAs: <%=teaching_assistants.length %></h3>\n    <h3> Partecipants: <%= partecipants.length%></h3>\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -129,8 +129,11 @@ try {
     ; __append("</h3>\n    <h3> TAs: ")
     ; __line = 5
     ; __append(escapeFn(teaching_assistants.length ))
-    ; __append("</h3>\n</div>")
+    ; __append("</h3>\n    <h3> Partecipants: ")
     ; __line = 6
+    ; __append(escapeFn( partecipants.length))
+    ; __append("</h3>\n</div>")
+    ; __line = 7
   }
   return __output;
 } catch (e) {

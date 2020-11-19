@@ -90,6 +90,7 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
       .populate("teaching_assistants")
       .populate("mastery_checks")
       .populate("lecturer")
+      .populate("partecipants")
       .then((result) => {
         // 
         res.json(result);
