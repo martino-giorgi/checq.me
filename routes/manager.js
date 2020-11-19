@@ -19,8 +19,13 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 
 
 
-router.get("/:c_id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  res.render("manager/classrooms/classroom", { user: req.user });
+router.get("/classroom", ensureAuthenticated, ensureProfessor, (req, res) => {
+  
+  let data = {
+    user: req.user,
+    classroom: req.query.id
+  }
+  res.render("manager/classrooms/classroom", data);
 })
 
 

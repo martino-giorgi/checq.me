@@ -24,6 +24,10 @@ const ClassroomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'User'
     }],
+    partecipants: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'User'
+    }],
     is_ordered_mastery: {
         type: Boolean,
         required: true
