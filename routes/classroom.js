@@ -153,6 +153,7 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
       let p1 = Classroom.findById(t._classroomId);
       let p2 = User.findById(req.user._id);
 
+      // Get classroom and user ( wait to have them both )
       Promise.all([p1, p2]).then( values => {
         let classroom = values[0];
         let user = values[1];
@@ -162,6 +163,8 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
 
         let p3 = classroom.save();
         let p4 = user.save();
+
+        // Wait for both user and classroom to be saved
         Promise.all([p3,p4]).then( results => {
           if(results[0] && results[1]) {
             res.redirect("/dashboard");
@@ -176,29 +179,6 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
         console.log(err);
         res.send("error joining class, retry").end();
       })
-
-
-      // User.findById(req.user._id)
-      //   .then((u) => {
-      //     u.classrooms.addToSet(t._classroomId);
-      //     u.save()
-      //       .then((new_u) => {
-      //         if (new_u) {
-      //           res.redirect("/dashboard");
-      //         } else {
-      //           console.log("error modifying user: " + u._id);
-      //           res.status(400).send("error joining class, retry").end();
-      //         }
-      //       })
-      //       .catch((err) => {
-      //         console.log(err);
-      //         res.send("error joining class, retry").end();
-      //       });
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     res.send("error joining class, retry").end();
-      //   });
     })
     .catch((err) => {
       console.log(err);
