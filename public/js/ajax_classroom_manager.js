@@ -15,10 +15,16 @@ function display_class_info(classroom) {
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
 }
 
-function show_ta_form() {
-  console.log("clicked")
-  document.getElementById("ta_form").innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
-  document.getElementById("partecipants_list").onchange = f
+function toggle_show_ta_form() {
+  let section = document.getElementById("ta_form");
+  if (section.innerHTML == "") {
+
+    section.innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
+    document.getElementById("partecipants_list").onchange = f
+  } 
+  else {
+    section.innerHTML = "";
+  }
 }
 
 function f() {
