@@ -15,7 +15,19 @@ const Topic = require("../models/Topic");
 
 module.exports = router;
 
+router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
+  Topic.findOne({_id: req.params.id}).then( (this_topic) => {
+    if(!this_topic) {
+      res.status(400).end();
+    }
+    else {
+      res.json(this_topic);
+    }
+  })
+})
+
 router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
   // find the classroom
   Classroom.findOne({ _id: req.body.classroom }).then((this_class) => {
     if (!this_class) {
@@ -33,7 +45,7 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
           if (error) {
             res.status(500).end();
           } else {
-            res.redirect("/classroom");
+            res.status(200).end();
           }
         });
       });

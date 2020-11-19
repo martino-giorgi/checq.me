@@ -29,12 +29,20 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     classroom: req.body.classroom,
     author: req.user._id,
   });
-  mc.save()
-    .then(() => res.status(200).end())
-    .catch((err) => {
+  mc.save().then( mastery => {
+    Classroom.findById(req.body.classroom).then( classroom => {
+      classroom.mastery_checks.addToSet(mastery._id);
+      classroom.save().then(() => res.status(200).end());
+    })
+    .catch((err)=>{
       console.log(err);
       res.status(400).end();
-    });
+    })
+  })
+  .catch((err)=>{
+    console.log(err);
+    res.status(400).end();
+  })
 });
 
 router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
