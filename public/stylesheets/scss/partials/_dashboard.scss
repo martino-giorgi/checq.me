@@ -143,6 +143,11 @@ main {
     margin-top: 26px;
   }
 
+
+  // ===============================
+  //            PROFILE
+  // ===============================
+
   .profile {
     div {
       display: flex;
@@ -180,6 +185,75 @@ main {
           p {
             margin: 2px 0 0 0;
           }
+        }
+      }
+    }
+  }
+
+
+  // ===============================
+  //           CLASSROOMS
+  // ===============================
+
+  .classrooms {
+    .classroom-list {
+      display: flex;
+      flex-flow: row;
+
+      margin: 26px;
+
+      .classroom-box {
+        display: flex;
+        flex-flow: column;
+
+        align-items: center;
+
+        width: 120px;
+        height: 191px;
+
+        margin-right: 26px;
+
+        border-radius: 8px;
+
+        .circle {
+          display: block;
+
+          width: 74px;
+          height: 74px;
+
+          margin-top: 26px;
+
+          border-radius: 50%;
+          background-color: $white;
+
+          p {
+            top: 0;
+            bottom: 0;
+
+            margin-top: 22px;
+
+            font-family: Roboto, sans-serif;
+            font-size: 26px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 30px;
+            letter-spacing: 0em;
+            text-align: center;
+          }
+        }
+        
+        .classroom-name {
+          margin-top: 22px;
+          margin-right: 15px;
+          margin-left: 15px;
+
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 17px;
+          text-align: center;
+          
+          color: $white;
         }
       }
     }

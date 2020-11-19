@@ -1,6 +1,6 @@
 /**
  * Classroom schema
- */
+*/
 
 const mongoose =  require('mongoose');
 const User = require("./User");
@@ -24,9 +24,9 @@ const ClassroomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'User'
     }],
-    topics: [{
+    partecipants: [{
         type: mongoose.Schema.ObjectId, 
-        ref: 'Topic'
+        ref: 'User'
     }],
     is_ordered_mastery: {
         type: Boolean,
@@ -35,7 +35,15 @@ const ClassroomSchema = new mongoose.Schema({
     mastery_checks: [{
         type: mongoose.Schema.ObjectId, 
         ref: 'MasteryCheck'
-    }]
+    }],
+    color: {
+        type: String,
+        required: true
+    },
+    university_domain: {
+        type: String,
+        required: false
+    }
 });
 
 const Classroom = mongoose.model('Classroom', ClassroomSchema);

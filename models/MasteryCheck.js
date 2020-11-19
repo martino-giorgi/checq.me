@@ -23,6 +23,12 @@ const MasteryCheckSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  topics: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Topic",
+    },
+  ],
 });
 
 const MasteryCheck = mongoose.model("MasteryCheck", MasteryCheckSchema);

@@ -1,9 +1,8 @@
 <body>
     <div class="container">
-        <a href="/manager" class="badge badge-primary">Back to Manager</a>
 
         <div class="container mt-5">
-            <h1>Mastery Check Manager</h1>
+
             <form id="create_form" method="POST">
                 <div class="form-group">
                     <label for="input_name">Mastery Check name</label>
@@ -19,11 +18,7 @@
                         Available
                     </label>
                 </div>
-                <select required id="form_classroom" class="form-control form-control-sm">
-                    <%classroom_list.forEach(classroom => { %>
-                    <option value="<%=classroom._id%>"><%=classroom.name%></option>
-                    <%});%>
-                </select>
+                
                 <button type="submit" class="btn btn-primary">Create Mastery Check</button>
             </form>
         </div>
