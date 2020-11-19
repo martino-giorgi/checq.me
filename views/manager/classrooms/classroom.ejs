@@ -7,10 +7,19 @@
     <%- include("../../partials/navigation", {active: 'manager'}) %>
     <main>
         <h1>Classroom Manager</h1>
+        <section id="class_options">
+            <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
+            <button onclick="toggle_show_ta_form()">Assign a TA</button>
+        </section>
+        <div id="add" class="container"></div>
+        <section id="ta_form"></section>
         <section id="class_info"></section>
+        <div id="list" class="container"></div>
+        
     </main>
 </div>
 
+<script src="/js/ajax_mastery.js"></script>
 <script src="/js/flash.min.js"></script>
 <script src="/js/ajax_classroom_manager.js"></script>
 <script src="/js/ajax_topic.js"></script>
