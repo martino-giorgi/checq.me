@@ -145,27 +145,56 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
-      User.findById(req.user._id)
-        .then((u) => {
-          u.classrooms.addToSet(t._classroomId);
-          u.save()
-            .then((new_u) => {
-              if (new_u) {
-                res.redirect("/dashboard");
-              } else {
-                console.log("error modifying user: " + u._id);
-                res.status(400).send("error joining class, retry").end();
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              res.send("error joining class, retry").end();
-            });
+
+      let p1 = Classroom.findById(t._classroomId);
+      let p2 = User.findById(req.user._id);
+
+      Promise.all([p1, p2]).then( values => {
+        let classroom = values[0];
+        let user = values[1];
+
+        user.classrooms.addToSet(t._classroomId);
+        classroom.partecipants.addToSet(req.user._id);
+
+        let p3 = classroom.save();
+        let p4 = user.save();
+        Promise.all([p3,p4]).then( results => {
+          if(results[0] && results[1]) {
+            res.redirect("/dashboard");
+          }
         })
-        .catch((err) => {
+        .catch( (err) => {
           console.log(err);
           res.send("error joining class, retry").end();
-        });
+        })
+      }) 
+      .catch( (err) => {
+        console.log(err);
+        res.send("error joining class, retry").end();
+      })
+
+
+      // User.findById(req.user._id)
+      //   .then((u) => {
+      //     u.classrooms.addToSet(t._classroomId);
+      //     u.save()
+      //       .then((new_u) => {
+      //         if (new_u) {
+      //           res.redirect("/dashboard");
+      //         } else {
+      //           console.log("error modifying user: " + u._id);
+      //           res.status(400).send("error joining class, retry").end();
+      //         }
+      //       })
+      //       .catch((err) => {
+      //         console.log(err);
+      //         res.send("error joining class, retry").end();
+      //       });
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     res.send("error joining class, retry").end();
+      //   });
     })
     .catch((err) => {
       console.log(err);
