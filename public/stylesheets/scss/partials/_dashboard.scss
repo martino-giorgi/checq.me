@@ -1,0 +1,261 @@
+@import "./vars.scss";
+
+// Dashboard components wrapper
+.wrapper {
+  display: flex;
+  flex-flow: row;
+}
+
+section {
+  display: flex;
+  flex-flow: row;
+}
+
+.box {
+  display: flexbox;
+  flex-flow: column;
+
+  background: #FFFFFF;
+  box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+  -webkit-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+
+  border-radius: 10px;
+}
+
+.header-box {
+  display: flex;
+  flex-flow: row;
+
+  align-items: center;
+  justify-content: left;
+
+  padding-top: 24px;
+  padding-left: 24px;
+  padding-bottom: 24px;
+
+  h3 {
+    margin: 0;
+    padding-left: 17px;
+  }
+}
+
+// Dashboard components
+
+// ===============================
+//         NAVIGATION BAR
+// ===============================
+
+nav {
+  display: flex;
+  flex-flow: column;
+
+  width: auto;
+
+  height: 100vh;
+  background-color: $primary;
+
+  font-family: "Roboto", sans-serif;
+
+  .nav-button {
+    display: flex;
+    flex-flow: row;
+
+    padding-left: 26px;
+    padding-right: 26px;
+    padding-bottom: 11px;
+
+    a:hover,
+    .active {
+      background-color: $white;
+      border-radius: 5px;
+    }
+
+    .not_active:not(:hover) {
+      filter: brightness(100);
+      -webkit-filter: brightness(100);
+    }
+
+    a:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+// ===============================
+//          MAIN CONTENT
+// ===============================
+
+main {
+  display: flex;
+  flex-flow: column;
+
+  justify-content: stretch;
+
+  width: 100vw;
+
+  font-family: "Roboto", sans-serif;
+
+
+  // ===============================
+  //             HEADER
+  // ===============================
+
+  .header {
+    display: flex;
+    flex-flow: row;
+
+    align-items: center;
+    justify-content: space-between;
+
+    .main-header {
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-left: 27px;
+    }
+
+    .button-text {
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-right: 32px;
+
+      .icon-s {
+        margin-bottom: 2px;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .column:nth-of-type(1) {
+    flex: 5;
+
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+
+  .column:nth-of-type(2) {
+    flex: 2;
+
+    padding-right: 26px;
+  }
+
+  .classrooms, .grades {
+    margin-top: 26px;
+  }
+
+
+  // ===============================
+  //            PROFILE
+  // ===============================
+
+  .profile {
+    div {
+      display: flex;
+      flex-flow: row;
+
+      align-items: center;
+
+      padding-top: 27px;
+      padding-bottom: 27px;
+      padding-left: 40px;
+
+      .info {
+        display: flex;
+        flex-flow: column;
+
+        align-items: start;
+        justify-content: center;
+
+        p {
+          margin-bottom: 10px
+        }
+
+        .icon-text {
+          display: flex;
+          flex-flow: row;
+
+          justify-content: center;
+
+          margin-bottom: 6px;
+
+          img {
+            margin-right: 10px;
+          }
+
+          p {
+            margin: 2px 0 0 0;
+          }
+        }
+      }
+    }
+  }
+
+
+  // ===============================
+  //           CLASSROOMS
+  // ===============================
+
+  .classrooms {
+    .classroom-list {
+      display: flex;
+      flex-flow: row;
+
+      margin: 26px;
+
+      .classroom-box {
+        display: flex;
+        flex-flow: column;
+
+        align-items: center;
+
+        width: 120px;
+        height: 191px;
+
+        margin-right: 26px;
+
+        border-radius: 8px;
+
+        .circle {
+          display: block;
+
+          width: 74px;
+          height: 74px;
+
+          margin-top: 26px;
+
+          border-radius: 50%;
+          background-color: $white;
+
+          p {
+            top: 0;
+            bottom: 0;
+
+            margin-top: 22px;
+
+            font-family: Roboto, sans-serif;
+            font-size: 26px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 30px;
+            letter-spacing: 0em;
+            text-align: center;
+          }
+        }
+        
+        .classroom-name {
+          margin-top: 22px;
+          margin-right: 15px;
+          margin-left: 15px;
+
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 17px;
+          text-align: center;
+          
+          color: $white;
+        }
+      }
+    }
+  }
+}

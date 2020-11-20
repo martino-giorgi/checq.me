@@ -1,0 +1,106 @@
+<head>
+  <title>checq.me - Dashboard</title>
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <%- include("./partials/navigation", { active: "dashboard" })%>
+
+    <main>
+      <div class="header">
+        <h1 class="main-header"> Welcome Back, <%= capitalize(model.user.name) %>! </h1>
+
+        <a class="button-text normal red" href="/user/logout">
+          <img class="icon-s" src="/assets/icons/buttons/logout.svg" alt="logout icon" />Logout
+        </a>
+      </div>
+
+      <section>
+        <div class="column">
+          <div class="schedule box">
+            <div class="header-box">
+              <img class="icon-s" src="/assets/icons/sections/calendar.svg" alt="calendar icon" />
+              <h3 class="primary"> Schedule </h3>
+            </div>
+
+            <!-- Content -->
+
+          </div>
+
+          <div class="classrooms box">
+            <div class="header-box">
+              <img class="icon-s" src="/assets/icons/sections/classroom.svg" alt="classroom icon" />
+              <h3 class="primary"> Classrooms </h3>
+            </div>
+
+            <div class="classroom-list">
+              <% model.classrooms.forEach((classroom) => { %>
+                <a>
+                  <div class="classroom-box" style="background-color: #<%= classroom.color %>;">
+                    <span class="circle">
+                      <p style="color: #<%= classroom.color %>;"> <%= getInitials(classroom.name) %> </p>
+                    </span>
+
+                    <p class="classroom-name"> <%= classroom.name %> </p>
+                  </div>
+                </a>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="profile box">
+            <div>
+              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+
+              <div class="info">
+                <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
+
+                <span class="icon-text">
+                  <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
+                  <p class="small gray"> <%= model.user.email %>  </p>
+                </span>
+
+                <span class="icon-text">
+                  <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
+                  <p class="small gray"> university placeholder  </p>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grades box">
+            <div class="header-box">
+              <img class="icon-s" src="/assets/icons/sections/grades.svg" alt="grades icon" />
+              <h3 class="primary"> Grades </h3>
+            </div>
+
+            <!-- Content -->
+
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <%
+    function capitalize(word) {
+      return word
+        .toLowerCase()
+        .replace(/\w/, firstLetter => firstLetter.toUpperCase());
+    }
+
+    function getInitials (name) {
+      var names = name.split(' '),
+      initials = names[0].substring(0, 1).toUpperCase();
+      
+      if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      }
+
+      return initials;
+    }
+  %>
+</body>

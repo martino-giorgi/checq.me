@@ -1,0 +1,53 @@
+<nav>
+  <img class="logo-s" src="/assets/branding/logo/logo_white.svg" alt="checq.me logo" />
+
+  <span class="nav-button">
+    <a class="<%= active === 'dashboard' ? "active" : "not_active" %>" id="nav-1" href="/dashboard">
+      <img id="svg1" src="/assets/icons/nav/dashboard.svg" alt="dashboard icon" />
+    </a>
+  </span>
+
+  <span class="nav-button">
+    <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2">
+      <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
+    </a>
+  </span>
+
+  <span class="nav-button">
+    <a class="<%= active === 'schedule' ? "active" : "not_active" %>" id="nav-3">
+      <img id="svg3" src="/assets/icons/nav/schedule.svg" alt="schedule icon" />
+    </a>
+  </span>
+
+  <% if (active === 'dashboard') { %>
+    <span class="nav-button">
+      <a href="profile/<%= model.user._id %> " class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
+        <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
+      </a>
+    </span>
+  <% } else { %>
+    <span class="nav-button">
+      <a href="/profile/<%= user._id %> " class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
+        <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
+      </a>
+    </span>
+  <% } %>
+
+  <% if (active === 'dashboard') { %>
+    <% if (model.user.role < 2) { %>
+    <span class="nav-button">
+      <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
+        <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
+      </a>
+    </span>
+    <% } %>
+  <% } else { %>
+    <% if (user.role < 2) { %>
+      <span class="nav-button">
+        <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
+          <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
+        </a>
+      </span>
+      <% } %>
+  <% } %>
+</nav>

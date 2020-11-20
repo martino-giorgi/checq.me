@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/stylesheets/css/flash.min.css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<div class="wrapper">
+    <%- include("../partials/navigation", {active: 'manager'}) %>
+
+    <section id="classroom_list"></section>
+
+    <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
+
+    <section id="form" class="hidden"></section>
+</div>
+
+<script src="/js/flash.min.js"></script>
+<script src="js/ajax_manager.js"></script>
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>
+<script>
+    window.onload = init;
+</script>

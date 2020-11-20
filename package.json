@@ -1,9 +1,9 @@
 {
-  "name": "sa3-project",
+  "name": "checq.me",
   "version": "1.0.0",
   "description": "Final Project for SA3 course",
   "main": "index.js",
-  "repository": "git@github.com:martino-giorgi/sa3-project.git",
+  "repository": "git@github.com:martino-giorgi/checq.me.git",
   "author": "Martino Giorgi, Edoardo Riggio, Michele Cattaneo, Jacopo Di Ventura",
   "license": "MIT",
   "scripts": {
@@ -11,11 +11,21 @@
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "cookie-session": "^1.4.0",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "fs": "^0.0.1-security",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.17.1",
     "fs-extra": "^9.0.1",
     "glob-fs": "^0.1.7",
-    "path": "^0.12.7"
+    "mongoose": "^5.10.14",
+    "nodemailer": "^6.4.16",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "sass": "^1.29.0"
   }
 }

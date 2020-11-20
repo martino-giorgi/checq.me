@@ -1,0 +1,8 @@
+<% classrooms.forEach(c => { %>
+<div id="<%=c._id%>">
+    <h2>Class: <%= c.name %></h2>
+    <button class="class_edit_button" value="<%=c._id%>"><a href="/manager/classroom?id=<%=c._id%>">Manage</a></button>
+    <button id="generate_invite" value="<%=c._id%>" onclick="generate_invite_link('<%=c._id%>')">Generate invite
+        link</button>
+</div>
+<% }); %>
