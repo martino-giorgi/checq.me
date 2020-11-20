@@ -37,7 +37,16 @@ router.get("/", ensureAuthenticated, (req, res) => {
         if (user) {
           Classroom.find({ _id: { $in: user.classrooms } })
             .then((classrooms) => {
-              res.json(classrooms);
+              if (req.accepts('text/html')) {
+                let Model = {
+                  user: user,
+                  classrooms: classrooms,
+                }
+
+                res.render('classroom', { model: Model });
+              } else {
+                res.json(classrooms);
+              }
             })
             .catch((err) => {
               console.log(err);
@@ -103,7 +112,7 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
 })
 
 //create a new invite link
-//TODO if token for class already exists return the existing one.
+//TODO: if token for class already exists return the existing one.
 router.get(
   "/invite/:classroom_id",
   ensureAuthenticated,

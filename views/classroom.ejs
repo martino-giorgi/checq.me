@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <%- include("./partials/navigation", { active: 'classroom' }) %>
+
+  <table>
+    <thead>
+      <!-- Header -->
+
+      <tr>
+        <td class="class-color-header"></td>
+        <td class="small gray"> Name </td>
+        <td class="small gray"> Description </td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- Body -->
+
+      <% model.classrooms.forEach((classroom, index) => { %>
+        <tr>
+          <td class="class-color" style="background-color: #<%= classroom.color %>"></div>
+
+          <td class="normal class-name"> <%= classroom.name %> </td>
+          
+          <td>
+            <p class="normal hover-text" title="<%= classroom.description %>"> Hover Here </p>
+          </td>
+
+          <td>
+            
+          </td>
+        </tr>
+      <% }); %> 
+    </tbody>
+  </table>
+</div>
+
