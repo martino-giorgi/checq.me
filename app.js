@@ -15,7 +15,8 @@ const router = require("./routes/profile");
 
 const app = express();
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// Uncomment when SSL certificate is available
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 const PORT = process.env.PORT || 3000;
 
