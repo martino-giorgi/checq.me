@@ -216,8 +216,35 @@ router.get("/logout", (req, res) => {
   res.redirect("/user/login");
 });
 
-router.put("/update", ensureAuthenticated, (req, res) => {
-  console.log(req.body);
+router.put("/update", ensureAuthenticated, async (req, res) => {
+  if (req.body.password == undefined) {
+    // Update details
+    req.user.name = req.body.name;
+    req.user.surname = req.body.surname;
+    await req.user.save();
+    res.status(200).end();
+  } else {
+    // Update password
+    // Check if passwords match
+    if (req.body.password === req.body.conf_password) {
+      // Generate an hash from the password
+      let new_pass = req.body.password;
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(new_pass, salt, async (error, hash) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(hash);
+            req.user.password = hash;
+            await req.user.save();
+            res.status(200).end();
+          }
+        });
+      });
+    } else {
+      res.status(400).end();
+    }
+  }
 })
 
 module.exports = router;

@@ -10,8 +10,6 @@ const Topic = require("../models/Topic");
 module.exports = router;
 
 // Profile route
-router.get("/:id", ensureAuthenticated, (req, res) => {
-  User.findOne({ _id: req.params.id }).then((user) => {
-    res.render("profile/profile", { user });
-  });
+router.get("/", ensureAuthenticated, (req, res) => {
+  res.render("profile/profile", { user: { name: req.user.name, surname: req.user.surname, email: req.user.email, role: req.user.role, id: req.user._id } });
 });
