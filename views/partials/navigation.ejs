@@ -26,11 +26,11 @@
       </a>
     </span>
   <% } else { %>
-    <span class="nav-button">
-      <a href="profile/<%= user._id %> " class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
-        <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
-      </a>
-    </span>
+  <span class="nav-button">
+    <a href="/profile" class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
+      <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
+    </a>
+  </span>
   <% } %>
 
   <% if (active === 'dashboard' || active === 'classroom') { %>
@@ -42,12 +42,12 @@
     </span>
     <% } %>
   <% } else { %>
-    <% if (user.role < 2) { %>
-      <span class="nav-button">
-        <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
-          <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
-        </a>
-      </span>
-      <% } %>
+  <% if (user.role < 2) { %>
+  <span class="nav-button">
+    <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
+      <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
+    </a>
+  </span>
+  <% } %>
   <% } %>
 </nav>

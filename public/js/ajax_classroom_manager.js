@@ -1,9 +1,14 @@
+var c_id = undefined;
+
 function init() {
+  init_mastery();
   let url = new URL(window.location.href)
-  let c_id = url.searchParams.get('id')
+  c_id = url.searchParams.get('id')
   
   API.get_class_info(c_id).then( res => {
-    console.log(res);
+    
+    API.class_obj = res[0];
+    console.log(API.class_obj)
     display_class_info(res);
   })
 }
@@ -13,8 +18,32 @@ function display_class_info(classroom) {
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
 }
 
+function toggle_show_ta_form() {
+  let section = document.getElementById("ta_form");
+  if (section.innerHTML == "") {
+
+    section.innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
+    document.getElementById("partecipants_list").onchange = show_new_selected
+  } 
+  else {
+    section.innerHTML = "";
+  }
+}
+
+function show_new_selected() {
+  let list = document.getElementById("partecipants_list");
+  var selected_name = list.options[list.selectedIndex].text;
+  // console.log(selected_name)
+  // console.log("changed!")
+
+  let str = `Are you sure you want <b>${selected_name} </b>to be your TA?`
+  document.getElementById("selected_user").innerHTML = str;
+}
+
 
 API = (function () {
+  let class_obj = undefined;
+
   function get_class_info(id) {
     return fetch("/classroom/"+id).then( res => {
       return res.json();
@@ -56,7 +85,7 @@ API = (function () {
   }
 
   return {
-
+    class_obj,
     show_topic,
     show_start_view,
     get_class_info
