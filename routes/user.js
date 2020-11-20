@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const User = require("../models/User");
 const Token = require("../models/Token");
+const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
 
 module.exports = router;
 
@@ -214,5 +215,23 @@ router.get("/logout", (req, res) => {
   req.flash("success_msg", "You are logged out");
   res.redirect("/user/login");
 });
+
+
+
+//User manipulation routes
+
+router.post("/availability", ensureAuthenticated, ensureProfessor, (req, res) => {
+  
+  User.findByIdAndUpdate(req.user.id, {$set:{'availability':req.body.availability}}, {new: true}).then(r => {
+    console.log(r.availability["1"]);
+  })
+  res.end();
+})
+
+
+
+
+
+
 
 module.exports = router;
