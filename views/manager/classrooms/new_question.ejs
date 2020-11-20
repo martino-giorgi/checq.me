@@ -1,0 +1,27 @@
+<script src="/js/libs/codemirror-5.58.3/lib/codemirror.js"></script>
+<link rel="stylesheet" href="/js/libs/codemirror-5.58.3/lib/codemirror.css">
+<script src="/js/libs/codemirror-5.58.3/mode/javascript/javascript.js"></script>
+<link href="/js/libs/codemirror-5.58.3/theme/dracula.css" rel="stylesheet">
+
+<hr>
+<h2>Add question:</h2>
+<button>Multiple choice question</button>
+<button onclick="toggle_code_to_text()">Code question</button>
+<form>
+    <span>Multiple choice question:</span>
+    <br>
+    <span id="fields_label">Options: 1</span>
+    <div><textarea id="text_area" name="text" rows="4" cols="50" placeholder="Insert the question text here:"></textarea></div>
+    <div><textarea id="code_area" name="code" rows="4" cols="50" class="hidden"></textarea></div>
+    <input id="0" type="text" name="0" placeholder="Option 1"><input type="checkbox" checked><label for="0"> Correct answer</label>
+    <input id="input_counter" type="hidden" name="fields_number" value="1">
+</form>
+<div><button id="new_field">Add field</button></div>
+<div><button style="visibility: hidden" id="delete_field">Remove field</button></div>
+
+<script src="/js/ajax_question.js"></script>
+
+
+<script>
+    window.onload = init_question;
+</script>

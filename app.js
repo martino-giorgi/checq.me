@@ -105,6 +105,8 @@ app.use("/masterycheck", routers.masterycheck);
 
 app.use("/profile", routers.profile);
 
+app.use("/question", routers.question);
+
 // Route for 404 error
 app.get("*", function (req, res) {
   res.status(404).render("page404");
