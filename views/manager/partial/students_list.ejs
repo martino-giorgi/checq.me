@@ -1,9 +1,13 @@
 <ul>
   <%partecipants.forEach(usr => { %>
   <li>
-    <div>
-        <%=usr.name%>
-    </div>
+      <button class="swag_collapsible"><%=usr.name%></button>
+      <div class="swag_collapsible_content">
+        <p>
+          <button onclick="" >Remove student</button>
+          <button onclick="" >Message</button>
+        </p>
+      </div>
   </li>
   <%})%>
 </ul>
