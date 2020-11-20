@@ -89,8 +89,8 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.find({ _id: req.params.id })
       .populate("teaching_assistants")
       .populate("mastery_checks")
-      .populate("lecturer")
-      .populate("partecipants")
+      .populate({path: "lecturer", select: ['email', 'name', 'surname', 'classrooms', 'role']})
+      .populate({path:'partecipants', select: ['email', 'name', 'surname', 'classrooms', 'role']})
       .then((result) => {
         // 
         res.json(result);
