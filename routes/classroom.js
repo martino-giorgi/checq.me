@@ -92,7 +92,6 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
       .populate({path: "lecturer", select: ['email', 'name', 'surname', 'classrooms', 'role']})
       .populate({path:'partecipants', select: ['email', 'name', 'surname', 'classrooms', 'role']})
       .then((result) => {
-        // 
         res.json(result);
       })
       .catch((err) => {

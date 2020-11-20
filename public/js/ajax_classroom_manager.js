@@ -7,7 +7,6 @@ function init_manager() {
   c_id = url.searchParams.get('id')
   document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
   API.get_class_info(c_id).then( res => {
-    
     API.class_obj = res[0];
     console.log(API.class_obj)
     display_class_info(res);
@@ -48,7 +47,21 @@ function init_students(){
   document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({c_id});
   set_navbar_active("a_nav_students");
   API.get_class_info(c_id).then(classroom => {
-    document.getElementById("student_list").innerHTML = ejs.views_manager_partial_students_list({partecipants:classroom[0].partecipants})
+    document.getElementById("student_list").innerHTML = ejs.views_manager_partial_students_list({partecipants:classroom[0].partecipants});
+    var coll = document.getElementsByClassName("swag_collapsible");
+    let i;
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active_collapsable");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } 
+      });
+    }
+
   })
 }
 

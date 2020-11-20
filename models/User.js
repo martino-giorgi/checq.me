@@ -34,6 +34,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         required: false,
         default: false
+    },
+    avialability:{
+        type:Map,
+        of:{type: String},
+        required: false
     }
 })
 

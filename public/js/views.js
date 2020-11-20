@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 22:31:18 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Fri Nov 20 2020 10:28:27 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -406,23 +406,23 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<ul>\n  <%partecipants.forEach(usr => { %>\n  <li>\n    <div>\n        <%=usr.name%>\n    </div>\n  </li>\n  <%})%>\n</ul>\n"
+  , __lines = "\n  <%partecipants.forEach(usr => { %>\n\n      <button class=\"swag_collapsible\"><%=usr.name%></button>\n      <div class=\"swag_collapsible_content\">\n        <p>\n          <button onclick=\"\" >Remove student</button>\n          <button onclick=\"\" >Message</button>\n        </p>\n      </div>\n\n  <%})%>\n\n"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<ul>\n  ")
+    ; __append("\n  ")
     ; __line = 2
     ; partecipants.forEach(usr => { 
-    ; __append("\n  <li>\n    <div>\n        ")
-    ; __line = 5
+    ; __append("\n\n      <button class=\"swag_collapsible\">")
+    ; __line = 4
     ; __append(escapeFn(usr.name))
-    ; __append("\n    </div>\n  </li>\n  ")
-    ; __line = 8
+    ; __append("</button>\n      <div class=\"swag_collapsible_content\">\n        <p>\n          <button onclick=\"\" >Remove student</button>\n          <button onclick=\"\" >Message</button>\n        </p>\n      </div>\n\n  ")
+    ; __line = 12
     ; })
-    ; __append("\n</ul>\n")
-    ; __line = 10
+    ; __append("\n\n")
+    ; __line = 14
   }
   return __output;
 } catch (e) {

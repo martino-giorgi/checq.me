@@ -41,6 +41,6 @@ const MasteryAttemptSchema = new mongoose.Schema({
   ],
 });
 
-const Answer = mongoose.model("MasteryAttempt", MasteryAttemptSchema);
+const MasteryAttempt = mongoose.model("MasteryAttempt", MasteryAttemptSchema);
 
 module.exports = MasteryAttempt;
