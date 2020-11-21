@@ -6,6 +6,7 @@ var input_elements = [];
 var code_div;
 var text_div;
 var editor;
+var code_or_text = "text";
 
 function init_question() {
     handle_dynamic_fields();
@@ -35,11 +36,14 @@ function handle_dynamic_fields() {
         input_node.name = number_of_fields;
         input_node.placeholder = "Option " + (number_of_fields + 1);
         input_node.required = true;
-        number_of_fields ++;
+        
 
         var checkbox_node = document.createElement("input");
         checkbox_node.type = "checkbox";
+        checkbox_node.id = "check_"+number_of_fields
         checkbox_node.checked = true;
+
+        number_of_fields ++;
         
         var label_node = document.createElement("label");
         label_node.innerHTML = "Correct answer";
@@ -61,14 +65,25 @@ function handle_dynamic_fields() {
 
 // Toggle between showing the text area of the code area
 function toggle_code_to_text() {
-    
+    let btn = document.getElementById("question_type");
+    // this input tells if the question if of type text or code
+    let hidden_input = document.getElementById("code_or_text");
+
+    // switching from code -> text
     if (text_div.classList.contains("hidden")) {
         text_div.classList.remove("hidden");
         code_div.classList.add("hidden");
+        btn.innerHTML = "Code question"
+        hidden_input.value = "text";
+        code_or_text = "text";
     } 
+    // switching from text -> code
     else {
         text_div.classList.add("hidden");
         code_div.classList.remove("hidden");
+        btn.innerHTML = "Text question"
+        hidden_input.value = "code";
+        code_or_text = "code";
     }   
 }
 
@@ -85,11 +100,8 @@ function handle_code() {
     code_div = document.getElementById("code_div");
     text_div = document.getElementById("text_div");
     code_div.classList.add("hidden");
-
+    // when a new language is selected, call the function to set the new syntax highlight of CodeMirror
     document.getElementById("lang_select").onchange = change_language;
-    // code_area = document.getElementsByClassName("CodeMirror")[0];
-    // text_area = document.getElementById("text_area");
-    // code_area.classList.add("hidden");
 }
 
 // Get the value inside the editor area
@@ -97,6 +109,11 @@ function get_code() {
     return editor.getValue();
 }
 
+function get_text() {
+    return document.getElementById("text_area").value;
+}
+
+// Get the value of the selected option element and apply that mode to the editor
 function change_language() {
     let list = document.getElementById("lang_select");
     let selected_lang = list.options[list.selectedIndex].value;
@@ -128,6 +145,23 @@ function handle_remove_field() {
     document.getElementById("delete_field").addEventListener("click", (e) =>{
         remove_last_field();
     })
+}
+
+function post_question() {
+    console.log("posted")
+    let n_inputs = document.getElementById("input_counter").value;
+    let curr;
+    let curr_checkbox;
+    let options = [];
+    // populate the array of options:
+    for(let i=0; i<n_inputs; ++i) {
+       curr = document.getElementById(`${i}`);
+       curr_checkbox = document.getElementById("check_"+i);
+       // the array will contain tuples of the kind: ["option text", "true/false"]
+       options.push([curr.value, curr_checkbox.checked]);
+    }
+    // get question text:
+    let question_text = (code_or_text == "code") ? get_code() : get_text();
 }
 
 API_question = (function() {

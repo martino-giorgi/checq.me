@@ -19,8 +19,7 @@
 
 <hr>
 <h2>Add question:</h2>
-<button>Multiple choice question</button>
-<button onclick="toggle_code_to_text()">Code question</button>
+<button id="question_type" onclick="toggle_code_to_text()">Code question</button>
 <form>
     <span>Multiple choice question:</span>
     <br>
@@ -39,11 +38,13 @@
         <textarea id="code_area" name="code" rows="4" cols="50"></textarea>
     </div>
 
-    <input id="0" type="text" name="0" placeholder="Option 1"><input type="checkbox" checked><label for="0"> Correct answer</label>
+    <input id="0" type="text" name="0" placeholder="Option 1"><input id="check_0" type="checkbox" checked><label for="0"> Correct answer</label>
     <input id="input_counter" type="hidden" name="fields_number" value="1">
+    <input type="hidden" id="code_or_text" name="code_or_text" value="text">
 </form>
 <div><button id="new_field">Add field</button></div>
 <div><button style="visibility: hidden" id="delete_field">Remove field</button></div>
+<button onclick="post_question()">Add question</button>
 
 <script src="/js/ajax_question.js"></script>
 
