@@ -3,8 +3,8 @@ const max_fields = 6;
 // TODO: stack of inputs elements to allow to remove fields
 // TODO: allow only a certain umber of fields
 var input_elements = [];
-var code_area;
-var text_area;
+var code_div;
+var text_div;
 var editor;
 
 function init_question() {
@@ -62,13 +62,13 @@ function handle_dynamic_fields() {
 // Toggle between showing the text area of the code area
 function toggle_code_to_text() {
     
-    if (text_area.className == "hidden") {
-        text_area.classList.remove("hidden");
-        code_area.classList.add("hidden");
+    if (text_div.classList.contains("hidden")) {
+        text_div.classList.remove("hidden");
+        code_div.classList.add("hidden");
     } 
     else {
-        text_area.classList.add("hidden");
-        code_area.classList.remove("hidden");
+        text_div.classList.add("hidden");
+        code_div.classList.remove("hidden");
     }   
 }
 
@@ -82,14 +82,26 @@ function handle_code() {
         theme: "dracula",
         tabSize: 4
     });
-    code_area = document.getElementsByClassName("CodeMirror")[0];
-    text_area = document.getElementById("text_area");
-    code_area.classList.add("hidden");
+    code_div = document.getElementById("code_div");
+    text_div = document.getElementById("text_div");
+    code_div.classList.add("hidden");
+
+    document.getElementById("lang_select").onchange = change_language;
+    // code_area = document.getElementsByClassName("CodeMirror")[0];
+    // text_area = document.getElementById("text_area");
+    // code_area.classList.add("hidden");
 }
 
 // Get the value inside the editor area
 function get_code() {
     return editor.getValue();
+}
+
+function change_language() {
+    let list = document.getElementById("lang_select");
+    let selected_lang = list.options[list.selectedIndex].value;
+    console.log(selected_lang);
+    editor.setOption("mode", selected_lang);
 }
 
 // Remove the last input field that was added. 
