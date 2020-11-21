@@ -26,7 +26,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
     Classroom.find({ lecturer: req.user })
       .populate("topics")
       .then((result) => {
-        res.json({classrooms: result, user: req.user});
+        res.json({ classrooms: result, user: req.user });
       })
       .catch((err) => {
         console.log(err);
@@ -36,23 +36,30 @@ router.get("/", ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.user._id })
       .then((user) => {
         if (user) {
-          Classroom.find({ _id: { $in: user.classrooms } })
-            .then((classrooms) => {
-              if (req.accepts('text/html')) {
-                let Model = {
-                  user: user,
-                  classrooms: classrooms,
-                }
-
-                res.render('classroom', { model: Model });
-              } else {
+          if (req.accepts("application/json")) {
+            Classroom.find({ _id: { $in: user.classrooms } })
+              .then((classrooms) => {
                 res.json(classrooms);
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              res.json({});
-            });
+              })
+              .catch((err) => {
+                console.log(err);
+                res.json({});
+              });
+          } else {
+            Classroom.find({ _id: { $in: user.classrooms } })
+              .select({ teaching_assistants: 1, lecturer: 1 })
+              .populate({
+                path: "teaching_assistants",
+                select: ["email", "name", "surname"],
+              })
+              .populate({
+                path: "lecturer",
+                select: ["email", "name", "surname"],
+              })
+              .then((r) => {
+                res.json(r);
+              });
+          }
         } else {
           res.json({});
         }
