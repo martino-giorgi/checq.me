@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema({
     },
     availability:{
         type:Map,
-        // of:{type: [Number]},
+        of:{type: Array},
         required: false
     }
 })
