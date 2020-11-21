@@ -8,7 +8,7 @@
   </span>
 
   <span class="nav-button">
-    <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classroom">
+    <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
       <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
     </a>
   </span>
@@ -19,19 +19,11 @@
     </a>
   </span>
 
-  <% if (active === 'dashboard' || active === 'classroom') { %>
-    <span class="nav-button">
-      <a href="profile/<%= model.user._id %> " class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
-        <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
-      </a>
-    </span>
-  <% } else { %>
   <span class="nav-button">
-    <a href="/profile" class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4">
+    <a class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4" href="/profile">
       <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
     </a>
   </span>
-  <% } %>
 
   <% if (active === 'dashboard' || active === 'classroom') { %>
     <% if (model.user.role < 2) { %>

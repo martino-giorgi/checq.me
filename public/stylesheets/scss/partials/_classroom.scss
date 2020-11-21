@@ -1,6 +1,8 @@
 @import "./vars";
 
 table {
+  width: 100%;
+
   margin-top: 26px;
   margin-left: 26px;
   margin-right: 26px;
@@ -20,13 +22,16 @@ table {
       border-radius: 10px;
 
       .class-color {
+        padding: 4px;
+        width: 8px;
+        
         transform: translateX(-16px);
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
       }
 
       td {
-        padding: 12px 12px 12px 0;
+        padding: 18px 18px 18px 0;
         margin: 0;
 
         p {

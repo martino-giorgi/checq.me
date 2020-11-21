@@ -36,30 +36,14 @@ router.get("/", ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.user._id })
       .then((user) => {
         if (user) {
-          if (req.accepts("application/json")) {
-            Classroom.find({ _id: { $in: user.classrooms } })
-              .then((classrooms) => {
-                res.json(classrooms);
-              })
-              .catch((err) => {
-                console.log(err);
-                res.json({});
-              });
-          } else {
-            Classroom.find({ _id: { $in: user.classrooms } })
-              .select({ teaching_assistants: 1, lecturer: 1 })
-              .populate({
-                path: "teaching_assistants",
-                select: ["email", "name", "surname"],
-              })
-              .populate({
-                path: "lecturer",
-                select: ["email", "name", "surname"],
-              })
-              .then((r) => {
-                res.json(r);
-              });
-          }
+          Classroom.find({ _id: { $in: user.classrooms } })
+            .then((classrooms) => {
+              res.json(classrooms);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.json({});
+            });
         } else {
           res.json({});
         }

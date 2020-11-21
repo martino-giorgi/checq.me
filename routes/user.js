@@ -247,4 +247,13 @@ router.put("/update", ensureAuthenticated, async (req, res) => {
   }
 })
 
+// Get user info
+router.get('/:id', (req, res) => {
+  let id = req.params.id;
+
+  User.findOne({ _id: id })
+    .then((user) => res.status(200).json(user))
+    .catch((err) => res.status(404).json({}))
+})
+
 module.exports = router;

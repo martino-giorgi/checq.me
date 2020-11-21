@@ -1,6 +1,8 @@
 <div class="wrapper">
   <%- include("./partials/navigation", { active: 'classroom' }) %>
 
+  <p hidden id="class-n"> <%= model.classrooms.length %> </p>
+  
   <table>
     <thead>
       <!-- Header -->
@@ -9,6 +11,8 @@
         <td class="class-color-header"></td>
         <td class="small gray"> Name </td>
         <td class="small gray"> Description </td>
+        <td class="small gray"> Lecturer </td>
+        <td class="small gray"> Teaching Assistants </td>
       </tr>
     </thead>
 
@@ -22,15 +26,44 @@
           <td class="normal class-name"> <%= classroom.name %> </td>
           
           <td>
-            <p class="normal hover-text" title="<%= classroom.description %>"> Hover Here </p>
+            <p class="normal hover-text" id="hover-<%= index %>"> Hover Here </p>
+            <p hidden id="hover-content-<%= index %>"> <%= classroom.description %> </p>
           </td>
 
           <td>
-            
+            <p class="normal"> <%= classroom.lecturer.name %> <%= classroom.lecturer.surname %> </p>
           </td>
+
+          <% if (classroom.teaching_assistants.length > 0) { %>
+            <td>
+              <% for (let i = 0; i < classroom.teaching_assist; i++) { %> 
+                  <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
+              <% } %>
+            </td>
+          <% } else { %>
+            <td>
+              <p class="normal"> N.D. </p>
+            </td>
+          <% } %>
         </tr>
-      <% }); %> 
+      <% }); %>
     </tbody>
   </table>
 </div>
 
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script>
+  let n_of_classes = document.getElementById('class-n').innerHTML;
+
+  for (let i = 0; i < n_of_classes; i++) {
+    let content = document.getElementById(`hover-content-${i}`).innerHTML;
+
+    tippy(`#hover-${i}`, {
+      content: content,
+      placement: 'right-end',
+      offset: [5, -230]
+    });
+  }
+</script>
