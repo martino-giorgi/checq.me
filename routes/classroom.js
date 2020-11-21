@@ -20,6 +20,7 @@ module.exports = router;
 
 // if PROFESSOR/TA = Get all the classrooms where the current user is the professor
 // if STUDENT = returns all classes in which the student is enrolled
+
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 1 || req.user.role == 0) {
     Classroom.find({ lecturer: req.user })
