@@ -1,11 +1,14 @@
-<script src="/js/libs/codemirror-5.58.3/lib/codemirror.js"></script>
-<link rel="stylesheet" href="/js/libs/codemirror-5.58.3/lib/codemirror.css">
-<script src="/js/libs/codemirror-5.58.3/mode/javascript/javascript.js"></script>
-<script src="/js/libs/codemirror-5.58.3/mode/css/css.js"></script>
-<script src="/js/libs/codemirror-5.58.3/mode/python/python.js"></script>
-<script src="/js/libs/codemirror-5.58.3/mode/clike/clike.js"></script>
-<script src="/js/libs/codemirror-5.58.3/mode/xml/xml.js"></script>
-<link href="/js/libs/codemirror-5.58.3/theme/dracula.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css" rel="stylesheet">
+
+
 
 <% let langs = {"JavaScript" : "text/javascript", 
                 "Python" : "text/x-python",
@@ -17,35 +20,38 @@
             }
 %>
 
-<hr>
-<h2>Add question:</h2>
-<button id="question_type" onclick="toggle_code_to_text()">Code question</button>
-<form>
-    <span>Multiple choice question:</span>
-    <br>
-    <span id="fields_label">Options: 1</span>
+<div class="wrapper">
+    <%- include("../../partials/navigation", {active: 'manager'}) %>
+    <div>
+        <h2>Add question:</h2>
+        <button id="question_type" onclick="toggle_code_to_text()">Code question</button>
+        <form>
+            <span>Multiple choice question:</span>
+            <br>
+            <span id="fields_label">Options: 1</span>
 
-    <div id="text_div">
-        <textarea id="text_area" name="text" rows="4" cols="50" placeholder="Insert the question text here:"></textarea>
+            <div id="text_div">
+                <textarea id="text_area" name="text" rows="4" cols="50" placeholder="Insert the question text here:"></textarea>
+            </div>
+
+            <div id="code_div">
+                <select id="lang_select">
+                    <% Object.keys(langs).forEach( lang => { %>
+                        <option value="<%= langs[lang]%>" > <%= lang%> </option>
+                    <% }) %>
+                </select>
+                <textarea id="code_area" name="code" rows="4" cols="50"></textarea>
+            </div>
+
+            <input id="0" type="text" name="0" placeholder="Option 1"><input id="check_0" type="checkbox" checked><label for="0"> Correct answer</label>
+            <input id="input_counter" type="hidden" name="fields_number" value="1">
+            <input type="hidden" id="code_or_text" name="code_or_text" value="text">
+        </form>
+        <div><button id="new_field">Add field</button></div>
+        <div><button style="visibility: hidden" id="delete_field">Remove field</button></div>
+        <button onclick="post_question()">Post question</button>
     </div>
-
-    <div id="code_div">
-        <select id="lang_select">
-            <% Object.keys(langs).forEach( lang => { %>
-                <option value="<%= langs[lang]%>" > <%= lang%> </option>
-            <% }) %>
-        </select>
-        <textarea id="code_area" name="code" rows="4" cols="50"></textarea>
-    </div>
-
-    <input id="0" type="text" name="0" placeholder="Option 1"><input id="check_0" type="checkbox" checked><label for="0"> Correct answer</label>
-    <input id="input_counter" type="hidden" name="fields_number" value="1">
-    <input type="hidden" id="code_or_text" name="code_or_text" value="text">
-</form>
-<div><button id="new_field">Add field</button></div>
-<div><button style="visibility: hidden" id="delete_field">Remove field</button></div>
-<button onclick="post_question()">Add question</button>
-
+</div>
 <script src="/js/ajax_question.js"></script>
 
 

@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Sun Nov 22 2020 12:17:12 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Sun Nov 22 2020 12:59:16 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -558,14 +558,14 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<script src=\"/js/libs/codemirror-5.58.3/lib/codemirror.js\"></script>\n<link rel=\"stylesheet\" href=\"/js/libs/codemirror-5.58.3/lib/codemirror.css\">\n<script src=\"/js/libs/codemirror-5.58.3/mode/javascript/javascript.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/css/css.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/python/python.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/clike/clike.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/xml/xml.js\"></script>\n<link href=\"/js/libs/codemirror-5.58.3/theme/dracula.css\" rel=\"stylesheet\">\n\n<% let langs = {\"JavaScript\" : \"text/javascript\", \n                \"Python\" : \"text/x-python\",\n                \"C\" : \"text/x-csrc\",\n                \"C++\" : \"text/x-c++src\",\n                \"Java\" : \"text/x-java\",\n                \"HTML\" : \"application/xml\",\n                \"CSS\" : \"text/css\"\n            }\n%>\n\n<hr>\n<h2>Add question:</h2>\n<button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n\n    <div id=\"text_div\">\n        <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n    </div>\n\n    <div id=\"code_div\">\n        <select id=\"lang_select\">\n            <% Object.keys(langs).forEach( lang => { %>\n                <option value=\"<%= langs[lang]%>\" > <%= lang%> </option>\n            <% }) %>\n        </select>\n        <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n    </div>\n\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n    <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n<button onclick=\"post_question()\">Add question</button>\n\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n"
+  , __lines = "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js\"></script>\n\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css\">\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js\"></script>\n<link href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css\" rel=\"stylesheet\">\n\n\n\n<% let langs = {\"JavaScript\" : \"text/javascript\", \n                \"Python\" : \"text/x-python\",\n                \"C\" : \"text/x-csrc\",\n                \"C++\" : \"text/x-c++src\",\n                \"Java\" : \"text/x-java\",\n                \"HTML\" : \"application/xml\",\n                \"CSS\" : \"text/css\"\n            }\n%>\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <div>\n        <h2>Add question:</h2>\n        <button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n        <form>\n            <span>Multiple choice question:</span>\n            <br>\n            <span id=\"fields_label\">Options: 1</span>\n\n            <div id=\"text_div\">\n                <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n            </div>\n\n            <div id=\"code_div\">\n                <select id=\"lang_select\">\n                    <% Object.keys(langs).forEach( lang => { %>\n                        <option value=\"<%= langs[lang]%>\" > <%= lang%> </option>\n                    <% }) %>\n                </select>\n                <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n            </div>\n\n            <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n            <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n            <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n        </form>\n        <div><button id=\"new_field\">Add field</button></div>\n        <div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n        <button onclick=\"post_question()\">Post question</button>\n    </div>\n</div>\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<script src=\"/js/libs/codemirror-5.58.3/lib/codemirror.js\"></script>\n<link rel=\"stylesheet\" href=\"/js/libs/codemirror-5.58.3/lib/codemirror.css\">\n<script src=\"/js/libs/codemirror-5.58.3/mode/javascript/javascript.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/css/css.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/python/python.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/clike/clike.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/xml/xml.js\"></script>\n<link href=\"/js/libs/codemirror-5.58.3/theme/dracula.css\" rel=\"stylesheet\">\n\n")
-    ; __line = 10
+    ; __append("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js\"></script>\n\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css\">\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js\"></script>\n<link href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css\" rel=\"stylesheet\">\n\n\n\n")
+    ; __line = 13
     ;  let langs = {"JavaScript" : "text/javascript", 
                 "Python" : "text/x-python",
                 "C" : "text/x-csrc",
@@ -575,20 +575,23 @@ try {
                 "CSS" : "text/css"
             }
 
-    ; __line = 18
-    ; __append("\n\n<hr>\n<h2>Add question:</h2>\n<button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n\n    <div id=\"text_div\">\n        <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n    </div>\n\n    <div id=\"code_div\">\n        <select id=\"lang_select\">\n            ")
-    ; __line = 34
+    ; __line = 21
+    ; __append("\n\n<div class=\"wrapper\">\n    ")
+    ; __line = 24
+    ; __append( include("../../partials/navigation", {active: 'manager'}) )
+    ; __append("\n    <div>\n        <h2>Add question:</h2>\n        <button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n        <form>\n            <span>Multiple choice question:</span>\n            <br>\n            <span id=\"fields_label\">Options: 1</span>\n\n            <div id=\"text_div\">\n                <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n            </div>\n\n            <div id=\"code_div\">\n                <select id=\"lang_select\">\n                    ")
+    ; __line = 39
     ;  Object.keys(langs).forEach( lang => { 
-    ; __append("\n                <option value=\"")
-    ; __line = 35
+    ; __append("\n                        <option value=\"")
+    ; __line = 40
     ; __append(escapeFn( langs[lang]))
     ; __append("\" > ")
     ; __append(escapeFn( lang))
-    ; __append(" </option>\n            ")
-    ; __line = 36
+    ; __append(" </option>\n                    ")
+    ; __line = 41
     ;  }) 
-    ; __append("\n        </select>\n        <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n    </div>\n\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n    <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n<button onclick=\"post_question()\">Add question</button>\n\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n")
-    ; __line = 55
+    ; __append("\n                </select>\n                <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n            </div>\n\n            <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n            <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n            <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n        </form>\n        <div><button id=\"new_field\">Add field</button></div>\n        <div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n        <button onclick=\"post_question()\">Post question</button>\n    </div>\n</div>\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n")
+    ; __line = 61
   }
   return __output;
 } catch (e) {

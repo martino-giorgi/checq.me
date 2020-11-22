@@ -23,6 +23,6 @@ router.get("/new",
             ensureAuthenticated, 
             ensureProfessor || ensureTa,
             (req, res) => {
-    res.render("manager/classrooms/new_question", {})
+    res.render("manager/classrooms/new_question", {user: req.user})
 })
 

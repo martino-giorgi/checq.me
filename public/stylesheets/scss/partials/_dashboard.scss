@@ -47,9 +47,13 @@ section {
 // ===============================
 
 nav {
+  position: sticky;
   display: flex;
   flex-flow: column;
-
+  
+  top: 0;
+  bottom: 0;
+  
   width: auto;
 
   height: 100vh;
