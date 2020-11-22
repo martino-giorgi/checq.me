@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
 
 require("dotenv").config();
 
@@ -137,7 +138,7 @@ router.post("/verify/resend", (req, res) => {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
-          Token.deleteMany({ _userId: user._id }).catch((err) => {});
+          Token.deleteMany({ _userId: user._id }).catch((err) => { });
           let token = new Token({
             _userId: user._id,
             token: crypto.randomBytes(20).toString("hex"),
@@ -153,12 +154,12 @@ router.post("/verify/resend", (req, res) => {
                 }
               );
             })
-            .catch((err) => {});
+            .catch((err) => { });
         } else {
           res.status(400).end(); //the email does not correspond to a user
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   } else {
     res.status(400).end(); //no email was given
   }
@@ -214,5 +215,45 @@ router.get("/logout", (req, res) => {
   req.flash("success_msg", "You are logged out");
   res.redirect("/user/login");
 });
+
+router.put("/update", ensureAuthenticated, async (req, res) => {
+  if (req.body.password == undefined) {
+    // Update details
+    req.user.name = req.body.name;
+    req.user.surname = req.body.surname;
+    await req.user.save();
+    res.status(200).end();
+  } else {
+    // Update password
+    // Check if passwords match
+    if (req.body.password === req.body.conf_password) {
+      // Generate an hash from the password
+      let new_pass = req.body.password;
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(new_pass, salt, async (error, hash) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(hash);
+            req.user.password = hash;
+            await req.user.save();
+            res.status(200).end();
+          }
+        });
+      });
+    } else {
+      res.status(400).end();
+    }
+  }
+})
+
+// Get user info
+router.get('/:id', (req, res) => {
+  let id = req.params.id;
+
+  User.findOne({ _id: id })
+    .then((user) => res.status(200).json(user))
+    .catch((err) => res.status(404).json({}))
+})
 
 module.exports = router;
