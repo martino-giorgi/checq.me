@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Thu Nov 19 2020 23:38:32 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Sun Nov 22 2020 12:17:12 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -397,7 +397,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> \n            <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p class=\"card-text\"><%= element.description %></p>\n            <p class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p> \n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                    <span>topic.name</span>\n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>"
+  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> \n            <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p class=\"card-text\"><%= element.description %></p>\n            <p class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p> \n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                    <span>\n                        <a href=\"/question/new?topic=<%=topic._id %>\">\n                            <%=topic.name%>\n                        </a> |\n                    </span>\n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -429,14 +429,20 @@ try {
     ; __append("</span>\n                ")
     ; __line = 18
     ;  element.topics.forEach(topic => { 
-    ; __append("\n                    <span>topic.name</span>\n                ")
+    ; __append("\n                    <span>\n                        <a href=\"/question/new?topic=")
     ; __line = 20
-    ;  }); 
-    ; __append("\n            </p>\n        </div>\n    </div>\n    ")
+    ; __append(escapeFn(topic._id ))
+    ; __append("\">\n                            ")
+    ; __line = 21
+    ; __append(escapeFn(topic.name))
+    ; __append("\n                        </a> |\n                    </span>\n                ")
     ; __line = 24
     ;  }); 
+    ; __append("\n            </p>\n        </div>\n    </div>\n    ")
+    ; __line = 28
+    ;  }); 
     ; __append("\n</div>")
-    ; __line = 25
+    ; __line = 29
   }
   return __output;
 } catch (e) {
@@ -500,6 +506,89 @@ try {
     ; __append( include("../../partials/navigation", {active: 'manager'}) )
     ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n        \n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
     ; __line = 32
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_classrooms_new_question = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<script src=\"/js/libs/codemirror-5.58.3/lib/codemirror.js\"></script>\n<link rel=\"stylesheet\" href=\"/js/libs/codemirror-5.58.3/lib/codemirror.css\">\n<script src=\"/js/libs/codemirror-5.58.3/mode/javascript/javascript.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/css/css.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/python/python.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/clike/clike.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/xml/xml.js\"></script>\n<link href=\"/js/libs/codemirror-5.58.3/theme/dracula.css\" rel=\"stylesheet\">\n\n<% let langs = {\"JavaScript\" : \"text/javascript\", \n                \"Python\" : \"text/x-python\",\n                \"C\" : \"text/x-csrc\",\n                \"C++\" : \"text/x-c++src\",\n                \"Java\" : \"text/x-java\",\n                \"HTML\" : \"application/xml\",\n                \"CSS\" : \"text/css\"\n            }\n%>\n\n<hr>\n<h2>Add question:</h2>\n<button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n\n    <div id=\"text_div\">\n        <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n    </div>\n\n    <div id=\"code_div\">\n        <select id=\"lang_select\">\n            <% Object.keys(langs).forEach( lang => { %>\n                <option value=\"<%= langs[lang]%>\" > <%= lang%> </option>\n            <% }) %>\n        </select>\n        <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n    </div>\n\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n    <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n<button onclick=\"post_question()\">Add question</button>\n\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<script src=\"/js/libs/codemirror-5.58.3/lib/codemirror.js\"></script>\n<link rel=\"stylesheet\" href=\"/js/libs/codemirror-5.58.3/lib/codemirror.css\">\n<script src=\"/js/libs/codemirror-5.58.3/mode/javascript/javascript.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/css/css.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/python/python.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/clike/clike.js\"></script>\n<script src=\"/js/libs/codemirror-5.58.3/mode/xml/xml.js\"></script>\n<link href=\"/js/libs/codemirror-5.58.3/theme/dracula.css\" rel=\"stylesheet\">\n\n")
+    ; __line = 10
+    ;  let langs = {"JavaScript" : "text/javascript", 
+                "Python" : "text/x-python",
+                "C" : "text/x-csrc",
+                "C++" : "text/x-c++src",
+                "Java" : "text/x-java",
+                "HTML" : "application/xml",
+                "CSS" : "text/css"
+            }
+
+    ; __line = 18
+    ; __append("\n\n<hr>\n<h2>Add question:</h2>\n<button id=\"question_type\" onclick=\"toggle_code_to_text()\">Code question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n\n    <div id=\"text_div\">\n        <textarea id=\"text_area\" name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea>\n    </div>\n\n    <div id=\"code_div\">\n        <select id=\"lang_select\">\n            ")
+    ; __line = 34
+    ;  Object.keys(langs).forEach( lang => { 
+    ; __append("\n                <option value=\"")
+    ; __line = 35
+    ; __append(escapeFn( langs[lang]))
+    ; __append("\" > ")
+    ; __append(escapeFn( lang))
+    ; __append(" </option>\n            ")
+    ; __line = 36
+    ;  }) 
+    ; __append("\n        </select>\n        <textarea id=\"code_area\" name=\"code\" rows=\"4\" cols=\"50\"></textarea>\n    </div>\n\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input id=\"check_0\" type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n    <input type=\"hidden\" id=\"code_or_text\" name=\"code_or_text\" value=\"text\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n<button onclick=\"post_question()\">Add question</button>\n\n<script src=\"/js/ajax_question.js\"></script>\n\n\n<script>\n    window.onload = init_question;\n</script>\n")
+    ; __line = 55
   }
   return __output;
 } catch (e) {
@@ -574,71 +663,6 @@ try {
     ; __append(escapeFn(id))
     ; __append("\">\n    <input type=\"submit\">\n</form>")
     ; __line = 12
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_classrooms_topic = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<h1>Topic: <%=name%></h1>\n<h2><%=description%></h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<h1>Topic: ")
-    ; __append(escapeFn(name))
-    ; __append("</h1>\n<h2>")
-    ; __line = 2
-    ; __append(escapeFn(description))
-    ; __append("</h2>\n<button onclick=\"API.show_start_view()\">Back to my classes</button>\n\n<hr>\n<h2>Add questions for this topic:</h2>\n<button>Multiple choice question</button>\n<button>Open question</button>\n<form>\n    <span>Multiple choice question:</span>\n    <br>\n    <span id=\"fields_label\">Options: 1</span>\n    <div><textarea name=\"text\" rows=\"4\" cols=\"50\" placeholder=\"Insert the question text here:\"></textarea></div>\n    <input id=\"0\" type=\"text\" name=\"0\" placeholder=\"Option 1\"><input type=\"checkbox\" checked><label for=\"0\"> Correct answer</label>\n    <input id=\"input_counter\" type=\"hidden\" name=\"fields_number\" value=\"1\">\n</form>\n<div><button id=\"new_field\">Add field</button></div>\n<div><button style=\"visibility: hidden\" id=\"delete_field\">Remove field</button></div>\n\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ajax_classroom.js\"></script>\n<script src=\"/js/ajax_classrooms.js\"></script>\n")
-    ; __line = 23
   }
   return __output;
 } catch (e) {

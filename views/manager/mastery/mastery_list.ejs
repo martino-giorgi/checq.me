@@ -16,7 +16,11 @@
             <p> 
                 <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
                 <% element.topics.forEach(topic => { %>
-                    <span>topic.name</span>
+                    <span>
+                        <a href="/question/new?topic=<%=topic._id %>">
+                            <%=topic.name%>
+                        </a> |
+                    </span>
                 <% }); %>
             </p>
         </div>
