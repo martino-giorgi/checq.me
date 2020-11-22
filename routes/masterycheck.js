@@ -55,7 +55,9 @@ router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 
 // GET mastery check list created by the current user
 router.get("/list/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.find({ author: req.user._id, classroom: req.params.id }).then((result) =>
-    res.json(result)
+  MasteryCheck.find({ author: req.user._id, classroom: req.params.id })
+    .populate("topics")
+    .then((result) =>
+      res.json(result)
   );
 });
