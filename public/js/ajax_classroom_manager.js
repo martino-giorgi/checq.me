@@ -99,6 +99,3 @@ API = (function () {
     get_class_info
   };
 })();
-
-
-

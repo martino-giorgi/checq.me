@@ -20,12 +20,13 @@ module.exports = router;
 
 // if PROFESSOR/TA = Get all the classrooms where the current user is the professor
 // if STUDENT = returns all classes in which the student is enrolled
+
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 1 || req.user.role == 0) {
     Classroom.find({ lecturer: req.user })
       .populate("topics")
       .then((result) => {
-        res.json({classrooms: result, user: req.user});
+        res.json({ classrooms: result, user: req.user });
       })
       .catch((err) => {
         console.log(err);
@@ -103,7 +104,7 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
 })
 
 //create a new invite link
-//TODO if token for class already exists return the existing one.
+//TODO: if token for class already exists return the existing one.
 router.get(
   "/invite/:classroom_id",
   ensureAuthenticated,

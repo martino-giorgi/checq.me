@@ -29,20 +29,20 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     classroom: req.body.classroom,
     author: req.user._id,
   });
-  mc.save().then( mastery => {
-    Classroom.findById(req.body.classroom).then( classroom => {
+  mc.save().then(mastery => {
+    Classroom.findById(req.body.classroom).then(classroom => {
       classroom.mastery_checks.addToSet(mastery._id);
       classroom.save().then(() => res.status(200).end());
     })
-    .catch((err)=>{
+      .catch((err) => {
+        console.log(err);
+        res.status(400).end();
+      })
+  })
+    .catch((err) => {
       console.log(err);
       res.status(400).end();
     })
-  })
-  .catch((err)=>{
-    console.log(err);
-    res.status(400).end();
-  })
 });
 
 router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
@@ -54,10 +54,10 @@ router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 // GET mastery check list created by the current user
-router.get("/list/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.find({ author: req.user._id })
+router.get("/list/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
+  MasteryCheck.find({ author: req.user._id, classroom: req.params.id })
     .populate("topics")
     .then((result) =>
-    res.json(result)
+      res.json(result)
   );
 });
