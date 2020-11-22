@@ -11,3 +11,14 @@
 checq.me is a web application that allows students, professors, and TAs to easily manage mastery checks and preparation for them.
 
 The idea of this project is to create a web app that manages mastery checks and everything closely related to them. It will contain everything that a professor and its TAs need to manage mastery checks with ease and everything that a student may need to prepare and schedule them. The app will be developed with ease of use in mind, to make the process of managing and scheduling mastery checks much more fluid and easy
+
+## Project Progress
+
+The following is a table containing all of the milestones' last commits and Google Slides presentation links.
+
+| Date       | Milestone    | Final Commit         | Presentation Link              |
+| :--------- | :----------- | :------------------- | :----------------------------- |
+| 23/11/2020 | Milestone #1 | [#45e3e38][1-commit] | [Presentation][1-presentation] |
+
+[1-commit]: https://github.com/martino-giorgi/checq.me/commit/45e3e38c8495fdf87408eaefc78dccf502c901fe
+[1-presentation]: https://docs.google.com/presentation/d/1Ok_0_xCFdj2_HZViIVU45V3DoHg7GLhr2kIlExP6dF8/edit?usp=sharing
