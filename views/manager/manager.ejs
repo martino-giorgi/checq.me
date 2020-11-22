@@ -3,12 +3,13 @@
 
 <div class="wrapper">
     <%- include("../partials/navigation", {active: 'manager'}) %>
+    <div>
+        <section id="classroom_list"></section>
 
-    <section id="classroom_list"></section>
+        <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
 
-    <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
-
-    <section id="form" class="hidden"></section>
+        <section id="form" class="hidden"></section>
+    </div>
 </div>
 
 <script src="/js/flash.min.js"></script>

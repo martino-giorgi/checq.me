@@ -22,7 +22,8 @@ function add_delete_event() {
 }
 
 function print_list() {
-  fetch("/masterycheck/list")
+  let classroom_id = new URLSearchParams(window.location.search).get("id");
+  fetch(`/masterycheck/list/${classroom_id}`)
     .then((res) => {
       return res.json();
     })

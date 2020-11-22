@@ -100,6 +100,7 @@ app.use("/scheduler", routers.scheduler);
 
 // Route for Classrooms
 app.use("/classroom", routers.classroom);
+app.use("/classrooms", routers.classrooms);
 
 // Route for Topic
 app.use("/topic", routers.topic);
@@ -108,6 +109,8 @@ app.use("/topic", routers.topic);
 app.use("/masterycheck", routers.masterycheck);
 
 app.use("/profile", routers.profile);
+
+app.use("/question", routers.question);
 
 // Route for 404 error
 app.get("*", function (req, res) {
