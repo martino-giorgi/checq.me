@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Mon Nov 23 2020 19:57:14 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Mon Nov 23 2020 20:58:35 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
