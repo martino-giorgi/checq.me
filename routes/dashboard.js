@@ -6,7 +6,13 @@ const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
-// Dashboard
+/**
+ * Route serving the dashboard.
+ * @name get/dashboard
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/', ensureAuthenticated, (req, res) => {
   Classroom.find({ _id: { $in: req.user.classrooms }})
     .then((classrooms) => {

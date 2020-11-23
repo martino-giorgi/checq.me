@@ -18,9 +18,17 @@ const { response } = require("express");
 
 module.exports = router;
 
-// if PROFESSOR/TA = Get all the classrooms where the current user is the professor
-// if STUDENT = returns all classes in which the student is enrolled
 
+// COMMON ROUTES
+
+/**
+ * If PROFESSOR/TA -> Get all the classrooms where the current user is the professor/ta,
+ * if STUDENT -> returns all classes in which the student is enrolled.
+ * @name get/classroom
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 1 || req.user.role == 0) {
     Classroom.find({ lecturer: req.user })
@@ -55,11 +63,16 @@ router.get("/", ensureAuthenticated, (req, res) => {
   }
 });
 
-/*
-PROFESSOR ROUTES
-*/
 
-//Post a new classroom
+// PROFESSOR ROUTES
+
+/**
+ * Route creating a new classroom.
+ * @name post/classroom/new
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   if (!req.body.name || !req.body.description) {
@@ -86,72 +99,84 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   })
 });
 
+/**
+ * Route serving a classroom given its id.
+ * @name get/classroom/:id
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.find({ _id: req.params.id })
-      .populate("teaching_assistants")
-      .populate("mastery_checks")
-      .populate("lecturer")
-      .populate("partecipants")
-      .then((result) => {
-        // 
-        res.json(result);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({});
-      });
-        
+    .populate("teaching_assistants")
+    .populate("mastery_checks")
+    .populate("lecturer")
+    .populate("partecipants")
+    .then((result) => {
+      // 
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({});
+    });
 })
 
-//create a new invite link
-//TODO: if token for class already exists return the existing one.
-router.get(
-  "/invite/:classroom_id",
-  ensureAuthenticated,
-  ensureProfessor,
-  (req, res) => {
-    TokenClassroom.findOne({_classroomId: req.params.classroom_id}).then(c_t => {
-      if(c_t){
-        res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`)
-      } else {
-        Classroom.findById(req.params.classroom_id).then((c) => {
-          // console.log(c.lecturer.toString() == req.user._id.toString());
-          if (c && c.lecturer.toString() == req.user._id.toString()) {
-            let token = new TokenClassroom({
-              _classroomId: c._id,
-              token: crypto.randomBytes(20).toString("hex"),
+/**
+ * Route serving the classroom's token given its id.
+ * @name get/classroom/invite/:classroom_id
+ * @todo If token for class already exists return the existing one.
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get( "/invite/:classroom_id", ensureAuthenticated, ensureProfessor, (req, res) => {
+  TokenClassroom.findOne({_classroomId: req.params.classroom_id}).then(c_t => {
+    if(c_t){
+      res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`)
+    } else {
+      Classroom.findById(req.params.classroom_id).then((c) => {
+        // console.log(c.lecturer.toString() == req.user._id.toString());
+        if (c && c.lecturer.toString() == req.user._id.toString()) {
+          let token = new TokenClassroom({
+            _classroomId: c._id,
+            token: crypto.randomBytes(20).toString("hex"),
+          });
+          token
+            .save()
+            .then(() => {
+              res.json(
+                `http://${req.headers.host}/classroom/join/${token.token}`
+              );
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(400).end();
             });
-            token
-              .save()
-              .then(() => {
-                res.json(
-                  `http://${req.headers.host}/classroom/join/${token.token}`
-                );
-              })
-              .catch((err) => {
-                console.log(err);
-                res.status(400).end();
-              });
-          } else {
-            res.status(400).end();
-          }
-        });
-      }
-    })
-  }
-);
+        } else {
+          res.status(400).end();
+        }
+      });
+    }
+  })
+});
 
-/*
-STUDENT ROUTES
-*/
 
-//this link will be given to the new students, once clicked it will automatically join the classroom
-//this route CANNOT be used as an API to interact with the database from ajax.
+// STUDENT ROUTES
+
+/**
+ * Check if the invite link is valid, in which case the class that the link is referred to will
+ * be added to the student's classrooms list. This route CANNOT be used as an API to interact
+ * with the database from ajax.
+ * @name get/classroom/join/:token
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
-
       let p1 = Classroom.findById(t._classroomId);
       let p2 = User.findById(req.user._id);
 
@@ -189,7 +214,10 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
 });
 
 
-// Random color chooser
+/**
+ * Random color generator for the newly created classroom
+ * @returns {string} - random color hex string
+ */
 function randomColor() {
   let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
                 '1e88e5', '039be5', '00acc1', '00897b', '43a047',
