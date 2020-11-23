@@ -1,5 +1,10 @@
 @import "./vars";
 
+
+// ===============================
+//              TABLE
+// ===============================
+
 table {
   width: 100%;
 
@@ -10,11 +15,21 @@ table {
   border-collapse: separate; 
   border-spacing: 16px;
 
+
+  // ===============================
+  //          TABLE HEADER
+  // ===============================
+
   thead {
     .class-color-header {
       transform: translateX(-16px);
     }
   }
+
+
+  // ===============================
+  //           TABLE BODY
+  // ===============================
   
   tbody {
     tr {
@@ -52,6 +67,17 @@ table {
             cursor: help;
           }
         }
+
+        .circle {
+          img {
+            height: 24px;
+            width: 24px;
+          }
+        }
+      }
+
+      .class-detail-td {
+        width: 24px;
       }
     }
   }

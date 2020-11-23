@@ -1,6 +1,5 @@
 @import "./partials/dashboard";
 @import "./partials/vars";
-@import "./partials/mastery";
 @import "./partials/classroom";
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
@@ -107,4 +106,21 @@ h3 {
 
 .hidden {
   display: none;
+}
+
+
+// ===============================
+//             SHAPES
+// ===============================
+
+.circle {
+  display: flex;
+
+  height: 35px;
+  width: 35px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
 }

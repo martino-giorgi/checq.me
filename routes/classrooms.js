@@ -19,17 +19,6 @@ const { response } = require("express");
 module.exports = router;
 
 router.get("/", ensureAuthenticated, (req, res) => {
-	if (req.user.role == 1 || req.user.role == 0) {
-		Classroom.find({ lecturer: req.user })
-		.populate("topics")
-		.then((result) => {
-				res.json({ classrooms: result, user: req.user });
-		})
-		.catch((err) => {
-				console.log(err);
-				res.json({});
-		});
-	} else if (req.user.role == 2) {
 		User.findOne({ _id: req.user._id })
 			.select({
 				_id: 1,
@@ -65,5 +54,4 @@ router.get("/", ensureAuthenticated, (req, res) => {
 						});
 				}
 		});
-	}
 })

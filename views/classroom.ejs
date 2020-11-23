@@ -13,6 +13,8 @@
         <td class="small gray"> Description </td>
         <td class="small gray"> Lecturer </td>
         <td class="small gray"> Teaching Assistants </td>
+        <td class="small gray"> Grades </td>
+        <td class=""></td>
       </tr>
     </thead>
 
@@ -25,7 +27,7 @@
 
           <td class="normal class-name"> <%= classroom.name %> </td>
           
-          <td>
+          <td style="width: 160px">
             <p class="normal hover-text" id="hover-<%= index %>"> Hover Here </p>
             <p hidden id="hover-content-<%= index %>"> <%= classroom.description %> </p>
           </td>
@@ -36,7 +38,7 @@
 
           <% if (classroom.teaching_assistants.length > 0) { %>
             <td>
-              <% for (let i = 0; i < classroom.teaching_assist; i++) { %> 
+              <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
                   <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
               <% } %>
             </td>
@@ -45,6 +47,18 @@
               <p class="normal"> N.D. </p>
             </td>
           <% } %>
+
+          <td>
+            <!-- TODO: Add grades -->
+          </td>
+
+          <td class="class-detail-td">
+            <a href="">
+              <span class="circle" style="background-color: #<%= classroom.color %>">
+                <img src="/assets/icons/misc/chevron-right.svg" alt="chevron-right"></img>
+              </span>
+            </a>
+          </td>
         </tr>
       <% }); %>
     </tbody>
@@ -63,7 +77,7 @@
     tippy(`#hover-${i}`, {
       content: content,
       placement: 'right-end',
-      offset: [5, -230]
+      offset: [5, -40]
     });
   }
 </script>
