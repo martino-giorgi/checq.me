@@ -2,31 +2,26 @@ const express = require("express");
 const router = express.Router();
 const {
   ensureAuthenticated,
-  ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureHasNoGithubToken
 } = require("../config/auth");
-const path = require("path");
 
-const MasteryCheck = require("../models/MasteryCheck");
-const Classroom = require("../models/Classroom");
 const User = require("../models/User");
-const Topic = require("../models/Topic");
-const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
 const axios = require('axios');
 
 require('dotenv').config();
 
 module.exports = router;
 
-let token = null;
 
-router.get('/', (req, res) => {
+// TODO: Remember to change User Authorization Callback URL to "http://www.checq.me/github/oauth-callback"
+// in production
+
+router.get('/', ensureAuthenticated, ensureHasNoGithubToken, (req, res) => {
   res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`);
 });
 
-router.get('/oauth-callback', (req, res) => {
+
+router.get('/oauth-callback', ensureAuthenticated, ensureHasNoGithubToken, (req, res) => {
   const body = {
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
@@ -38,7 +33,29 @@ router.get('/oauth-callback', (req, res) => {
   axios.post(`https://github.com/login/oauth/access_token`, body, opts)
     .then((result) => {
       token = result.data['access_token'];
-      res.redirect('/dashboard')
+
+      axios({
+        method: 'get',
+        url: `https://api.github.com/user`,
+        headers: {
+          Authorization: 'token ' + token
+        }
+      }).then((response) => {
+        User.findById(req.user.id, (err, user) => {
+          if (err) throw err;
+  
+          user.githubToken = token;
+          user.githubId = response.data.id;
+
+          user.save((err) => {
+            if (err) {
+              res.status(500).end();
+            } else {
+              res.redirect('/dashboard');
+            }
+          });
+        });
+      });
     })
     .catch(err => res.status(500).json({ message: err.message }));
 });

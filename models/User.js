@@ -17,11 +17,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password:{ 
+    password: { 
         type: String,
         required: true
     },
-    role:{ 
+    role: { 
         type: Number, // 0 = Professor, 1 = TA, 2 = Student
         required: true,
         default: 2
@@ -30,10 +30,18 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'Classroom'
     }],
-    isConfirmed:{
+    isConfirmed: {
         type: Boolean,
         required: false,
         default: false
+    },
+    githubToken: {
+        type: Number,
+        required: false
+    },
+    githubId: {
+        type: Number,
+        required: false
     }
 })
 

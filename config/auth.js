@@ -26,5 +26,12 @@ module.exports = {
       return next();
     }
     res.status(403).send("You don't have permission to view this page");
+  },
+
+  ensureHasNoGithubToken: (req, res, next) => {
+    if(req.user.githubToken == '') {
+      return next();
+    }
+    res.redirect("/dashboard");
   }
 };

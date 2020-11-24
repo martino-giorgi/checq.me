@@ -11,9 +11,13 @@
             <h1>My Profile</h1>
             <h1><%= user.name %> <%= user.surname %></h1>
             <h4>Email: <%= user.email %> </h4>
-            <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show
-                Editor</button>
+            <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show Editor</button>
             <div id="update_form"></div>
+            <% if (user.githubId == "") { %> 
+                <a href="/github">Connect GitHub Account</a>
+            <% } else { %>
+                Connected to GitHub!
+            <% } %> 
         </div>
     </div>
 
