@@ -11,24 +11,28 @@ const Answer = require('./Answer');
 // - code: can be checked by a professor/TA ( optionally run )
 
 const QuestionSchema = new mongoose.Schema({
-    type: {
+    // type: {
+    //     type: String,
+    //     enum : ['direct','open', 'code'],
+    //     default: 'direct',
+    //     required: true
+    // },
+    // title: {
+    //     type: String,
+    //     required: true
+    // },
+    lang: {
         type: String,
-        enum : ['direct','open', 'code'],
-        default: 'direct',
         required: true
     },
-    title: {
-        type: String,
-        required: true
-    },
-    desciption: {
+    text: {
         type: String,
         required: false
     },
-    answer: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'Answer'
-    }]
+    answer: {
+        type: Array,
+        required: true
+    }
 })
 
 

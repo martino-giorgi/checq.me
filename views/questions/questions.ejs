@@ -1,0 +1,23 @@
+
+
+<div class="wrapper">
+    <%- include("../partials/navigation", {active: 'manager'}) %>
+    <div>
+        <h1>Get prepared by answering those questions!</h1>
+        <textarea id="text_area">
+
+        </textarea>
+        <section id="options_section">
+
+        </section>
+        <button id="next_question">Next Question</button>
+    </div>
+</div>
+
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>
+<script src="/js/ajax_answer_question.js"></script>
+<script>
+    window.onload = init_answer_question;
+</script>
+

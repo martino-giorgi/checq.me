@@ -7,6 +7,7 @@ var code_div;
 var text_div;
 var editor;
 var code_or_text = "text";
+var lang = "text";
 
 function init_question() {
     handle_dynamic_fields();
@@ -76,6 +77,7 @@ function toggle_code_to_text() {
         btn.innerHTML = "Code question"
         hidden_input.value = "text";
         code_or_text = "text";
+        lang = "text";
     } 
     // switching from text -> code
     else {
@@ -84,6 +86,7 @@ function toggle_code_to_text() {
         btn.innerHTML = "Text question"
         hidden_input.value = "code";
         code_or_text = "code";
+        lang = editor.getOption("mode");
     }   
 }
 
@@ -102,6 +105,7 @@ function handle_code() {
     code_div.classList.add("hidden");
     // when a new language is selected, call the function to set the new syntax highlight of CodeMirror
     document.getElementById("lang_select").onchange = change_language;
+    lang = editor.getOption("mode");
 }
 
 // Get the value inside the editor area
@@ -118,6 +122,7 @@ function change_language() {
     let list = document.getElementById("lang_select");
     let selected_lang = list.options[list.selectedIndex].value;
     console.log(selected_lang);
+    lang = selected_lang;
     editor.setOption("mode", selected_lang);
 }
 
@@ -148,7 +153,10 @@ function handle_remove_field() {
 }
 
 function post_question() {
-    console.log("posted")
+
+    let url = new URL(window.location.href)
+    topic_id = url.searchParams.get('topic')
+
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
     let curr_checkbox;
@@ -162,13 +170,36 @@ function post_question() {
     }
     // get question text:
     let question_text = (code_or_text == "code") ? get_code() : get_text();
+   
+    let body = JSON.stringify({
+        answer: options,
+        topic: topic_id,
+        text: question_text,
+        lang: lang
+    });
+
+    
+    API_question.post_question((body));
 }
 
 API_question = (function() {
 
+    function post_question(body) {
+
+        console.log(body)
+        console.log("posted from api");
+        fetch("/question/new", { 
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        })
+        .then((res) => {
+            return res.json();
+        });
+    }
+
     return {
-        code_area,
-        text_area
+        post_question
     }
     
 })()

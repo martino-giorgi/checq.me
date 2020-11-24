@@ -50,27 +50,44 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
       })
     }
   })
-  // find the classroom
-  // Classroom.findOne({ _id: req.body.classroom }).then((this_class) => {
-  //   if (!this_class) {
-  //     res.status(400).end();
-  //   } else {
-  //     const new_topic = new Topic({
-  //       name: req.body.name,
-  //       description: req.body.description,
-  //       questions: [],
-  //     });
-  //     // save new topic and add it to the list of the class
-  //     new_topic.save().then(() => {
-  //       this_class.topics.push(new_topic);
-  //       this_class.save((error) => {
-  //         if (error) {
-  //           res.status(500).end();
-  //         } else {
-  //           res.status(200).end();
-  //         }
-  //       });
-  //     });
-  //   }
-  // });
+  
 });
+
+
+// Get all the questions for the specified topic
+// If the request comes from a student, the answers are filtered out so that they are not sent.
+router.get("/:id/questions", ensureAuthenticated, (req, res) => {
+  
+  Topic.findById(req.params.id).populate("questions").then(result => {
+    // if professor or TA
+    if (req.user.role < 2) {
+      res.json(result.questions);
+    }
+    // if student
+    else {
+      
+      let filtered = [];
+      // for each element, filterout the answer
+      result.questions.forEach(elem => {
+        
+        elem.answer.forEach( answ => {
+          answ[1] = null;
+        });
+        
+        filtered.push(elem);
+      })
+      
+      res.json(filtered);
+      
+    }
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+
+  
+})
+
+router.get("/questions/answer", ensureAuthenticated, (req, res) => {
+  res.render("questions/questions", {user: req.user});
+})
