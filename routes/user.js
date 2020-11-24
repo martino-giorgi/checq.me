@@ -57,6 +57,7 @@ router.post("/signup", (req, res) => {
           password,
           githubToken: "",
           githubId: "",
+          gravatar: ""
         });
 
         // Generate an hash from the password

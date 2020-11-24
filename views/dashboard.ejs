@@ -53,7 +53,11 @@
         <div class="column">
           <div class="profile box">
             <div>
-              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+              <% if (model.user.gravatar == "") { %>
+                <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+              <% } else { %>
+                <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
+              <% } %> 
 
               <div class="info">
                 <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>

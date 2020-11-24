@@ -36,12 +36,16 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     githubToken: {
-        type: Number,
+        type: String,
         required: false
     },
     githubId: {
-        type: Number,
+        type: String,
         required: false
+    },
+    gravatar: {
+        type: String,
+        required: false,
     }
 })
 

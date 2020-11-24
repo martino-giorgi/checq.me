@@ -119,7 +119,7 @@ app.use("/hook", routers.hook);
 // Webhook
 const smee = new SmeeClient({
   source: 'https://smee.io/UMN2a46A0lROwbE',
-  target: 'http://localhost:3000/hooks',
+  target: 'http://localhost:3000/hook',
   logger: console
 })
 
