@@ -55,3 +55,21 @@ router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
 
 })
 
+router.post("/check", ensureAuthenticated, (req, res) => {
+  
+  Question.findById(req.body.question).then( q => {
+    let given_answers = req.body.answers;
+    let flag = true;
+    for(let i=0; i < given_answers.length; ++i) {
+      
+      if (!q.answer[given_answers[i]][1]) {
+        flag = false;
+      }
+    }
+    res.json({result: flag});
+  }) 
+  .catch(err => { 
+    console.log(err);
+  })
+})
+

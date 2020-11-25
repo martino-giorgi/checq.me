@@ -9,13 +9,15 @@ function init_answer_question() {
     console.log(topic_id)
 
     get_questions(topic_id).then( res => {
-        //console.log(res);
+        console.log(res);
         questions = res;
 
         if (questions && questions.length > 0) {
+            i = 0;
             set_question(questions[0])
             handle_next_button()
             init_editor(questions[0]);
+            handle_check_button();
         }
 
     })
@@ -27,22 +29,31 @@ function set_question(q) {
     section.innerHTML = "";
 
     // Show input buttons
-    for (let i=0; i< q.answer.length; ++i) {
-        console.log(q.answer[i]);
+    for (let j=0; j < q.answer.length; ++j) {
+        console.log(q.answer[j]);
         new_input = document.createElement("label");
         
-        new_input.innerHTML = q.answer[i][0];
+        new_input.innerHTML = q.answer[j][0];
 
         new_checkbox = document.createElement("input");
         new_checkbox.type = "checkbox";
+        new_checkbox.classList.add("option_checkbox")
+        new_checkbox.value = j;
         section.appendChild(new_input);
         section.appendChild(new_checkbox);
     }
 
+    let hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.value = q._id;
+    hidden.id = "question_id";
+    section.appendChild(hidden);
+
     // Set next button
     let btn = document.getElementById("next_question");
+    
     btn.value = ( (++i) % questions.length );
-    console.log(btn.value);
+    
 }
 
 function handle_next_button() {
@@ -52,6 +63,40 @@ function handle_next_button() {
         let value = button.value;
         set_question(questions[value]);
         update_editor(questions[value]);
+    })
+}
+
+function handle_check_button() {
+    let btn = document.getElementById("check_answer");
+    
+    btn.addEventListener("click", (e) => {
+        let checkboxes = document.getElementsByClassName("option_checkbox");
+        let hidden = document.getElementById("question_id");
+        console.log(hidden);
+        let checked_answers = []
+        for (const c of checkboxes) {
+            if (c.checked) {
+                checked_answers.push(c.value);
+                //console.log(c);
+            }
+        }
+        let body = JSON.stringify({
+            answers: checked_answers,
+            question: hidden.value
+        })
+        check_question(body).then( res=> {
+            // After getting the result, show it to the user in the view
+            let result_section = document.getElementById("answer_result");
+            if(res.result) {
+                result_section.innerHTML = "CORRECT!"
+                result_section.style.color = "green"
+            } else {
+                result_section.innerHTML = "WRONG!"
+                result_section.style.color = "red"
+            }
+            // make it disappear after 1 second
+            setTimeout(function(){ result_section.innerHTML=""; }, 1000);
+        })
     })
 }
 
@@ -80,6 +125,18 @@ function update_editor(q) {
 
 function get_questions(id) {
     return fetch("/topic/"+id+"/questions").then( res => {
+        return res.json();
+    })
+}
+
+function check_question(body) {
+    console.log(body);
+    return fetch("/question/check", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body
+    })
+    .then( res => {
         return res.json();
     })
 }

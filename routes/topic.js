@@ -69,7 +69,7 @@ router.get("/:id/questions", ensureAuthenticated, (req, res) => {
       let filtered = [];
       // for each element, filterout the answer
       result.questions.forEach(elem => {
-        
+
         elem.answer.forEach( answ => {
           answ[1] = null;
         });
