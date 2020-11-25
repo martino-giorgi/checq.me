@@ -1,0 +1,21 @@
+@import "./vars";
+
+.secondary-nav {
+  margin: 26px 26px 26px 26px;
+
+  border-right: 1px solid $gray;
+
+  .settings {
+    display: flex;
+    flex-direction: row;
+  
+    align-items: center;
+
+    margin-bottom: 16px;
+    margin-right: 10px;
+  
+    p {
+      margin: 0 16px 0 16px;
+    }
+  }
+}

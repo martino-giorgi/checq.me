@@ -46,11 +46,7 @@ router.get("/classrooms", ensureAuthenticated, ensureProfessor, (req, res) => {
 /*
   Render the form to add a new classroom
 */
-router.get(
-  "/classroom/new",
-  ensureAuthenticated,
-  ensureProfessor,
-  (req, res) => {
+router.get( "/classroom/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     res.render("manager/new_classroom");
   }
 );

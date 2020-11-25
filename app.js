@@ -120,7 +120,7 @@ app.use("/hook", routers.hook);
 const smee = new SmeeClient({
   source: 'https://smee.io/UMN2a46A0lROwbE',
   target: 'http://localhost:3000/hook',
-  logger: console
+  // logger: console
 })
 
 smee.start()

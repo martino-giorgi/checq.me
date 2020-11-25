@@ -1,27 +1,58 @@
 <head>
-    <title>checq.me - Profile</title>
+  <title>checq.me - Profile</title>
 </head>
 
 <body>
-    <div class="wrapper">
+  <div class="wrapper">
 
-        <%- include("../partials/navigation", { active: "profile" }) %>
+    <%- include("../partials/navigation", { active: "profile" }) %>
 
-        <div>
-            <h1>My Profile</h1>
-            <h1><%= user.name %> <%= user.surname %></h1>
-            <h4>Email: <%= user.email %> </h4>
-            <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show Editor</button>
-            <div id="update_form"></div>
-            <% if (user.githubId == "") { %> 
-                <a href="/github">Connect GitHub Account</a>
-            <% } else { %>
-                Connected to GitHub!
-            <% } %> 
+    <div class="secondary-nav">
+      <a href="">
+        <div class="settings">
+          <img src="/assets/icons/nav/edit.svg" alt="edit profile icon" />
+          <p class="normal gray"> Edit Profile </p>
         </div>
+      </a>
+
+      <a href="">
+        <div class="settings">
+          <img src="/assets/icons/nav/github.svg" alt="edit profile icon" />
+          <p class="normal gray"> GitHub Integration </p>
+        </div>
+      </a>
+
+      <a href="">
+        <div class="settings">
+          <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
+          <p class="normal gray"> Notifications </p>
+        </div>
+      </a>
+
+      <a href="">
+        <div class="settings">
+          <img src="/assets/icons/nav/security.svg" alt="edit profile icon" />
+          <p class="normal gray"> Password & Security </p>
+        </div>
+      </a>
     </div>
 
-    <script src="/js/ajax_profile.js"></script>
-    <script src="/js/ejs.min.js"></script>
-    <script src="/js/views.js"></script>
+    <div>
+      <h1>My Profile</h1>
+      <h1><%= user.name %> <%= user.surname %></h1>
+      <h4>Email: <%= user.email %> </h4>
+      <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show Editor</button>
+      <div id="update_form"></div>
+
+      <% if (user.githubId == "") { %> 
+          <a href="/github">Connect GitHub Account</a>
+      <% } else { %>
+          Connected to GitHub!
+      <% } %> 
+    </div>
+  </div>
+
+  <script src="/js/ajax_profile.js"></script>
+  <script src="/js/ejs.min.js"></script>
+  <script src="/js/views.js"></script>
 </body>
