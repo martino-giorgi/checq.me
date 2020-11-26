@@ -4,9 +4,9 @@ function init() {
   init_mastery();
   let url = new URL(window.location.href)
   c_id = url.searchParams.get('id')
-  
-  API.get_class_info(c_id).then( res => {
-    
+
+  API.get_class_info(c_id).then(res => {
+
     API.class_obj = res[0];
     console.log(API.class_obj)
     display_class_info(res);
@@ -24,7 +24,20 @@ function toggle_show_ta_form() {
 
     section.innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
     document.getElementById("partecipants_list").onchange = show_new_selected
-  } 
+  }
+  else {
+    section.innerHTML = "";
+  }
+}
+
+// Show/Hide professor assignment form
+function toggle_show_prof_form() {
+  let section = document.getElementById("prof_form");
+  if (section.innerHTML == "") {
+
+    section.innerHTML = ejs.views_manager_partial_class_add_prof(API.class_obj);
+    document.getElementById("partecipants_list").onchange = show_new_selected
+  }
   else {
     section.innerHTML = "";
   }
@@ -53,10 +66,10 @@ API = (function () {
   let class_obj = undefined;
 
   function get_class_info(id) {
-    return fetch("/classroom/"+id).then( res => {
+    return fetch("/classroom/" + id).then(res => {
       return res.json();
     })
-    
+
   }
 
   function add_topic(body) {
@@ -89,7 +102,7 @@ API = (function () {
   // for example when displaying a topic, we need to reset the view "classrooms" to have
   // the tags necessary for show_classes()
   function show_start_view() {
-    
+
   }
 
   return {
