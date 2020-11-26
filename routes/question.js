@@ -20,6 +20,13 @@ const Question = require("../models/Question");
 
 module.exports = router;
 
+/**
+ * Route serving the view to add new questions to a topic.
+ * @name get/question/new
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/new", 
             ensureAuthenticated, 
             ensureProfessor || ensureTa,
@@ -27,6 +34,13 @@ router.get("/new",
     res.render("manager/classrooms/new_question", {user: req.user})
 })
 
+/**
+ * Route serving the posting of new questions.
+ * @name post/question/new
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
             (req, res) => {
               //console.log(req.body);
@@ -55,6 +69,13 @@ router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
 
 })
 
+/**
+ * Route serving the posting of answers to questions to be checked.
+ * @name post/question/check
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/check", ensureAuthenticated, (req, res) => {
   
   Question.findById(req.body.question).then( q => {
@@ -66,6 +87,19 @@ router.post("/check", ensureAuthenticated, (req, res) => {
         flag = false;
         break;
       } else {
+        flag = true;
+      }
+    }
+    // if all given answers are wrong, check that also the expected ones are
+    if (given_answers.length == 0) {
+     
+      let all_wrong = true;
+      for(let j=0; j < q.answer.length; ++j) {
+        if (q.answer[j][1]) {
+          all_wrong = false;
+        }
+      }
+      if(all_wrong) {
         flag = true;
       }
     }

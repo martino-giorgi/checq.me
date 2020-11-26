@@ -9,17 +9,19 @@ var editor;
 var code_or_text = "text";
 var lang = "text";
 
+/**
+ * Initializes the view with the editor and event listeners.
+ */
 function init_question() {
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
 }
-/*
-    Appends a new input of type text to the form used to create multiple choice questions
-    everytime the button to add a field is clicked
-    The inputs have id=i and name=i for i in [0,1,2...]
-*/
 
+/**
+ * Adds a new inut field for a new option when the button is clicked.
+ * @listens click
+ */
 function handle_dynamic_fields() {
     document.getElementById('new_field').addEventListener( "click", (e) => {
 
@@ -64,7 +66,9 @@ function handle_dynamic_fields() {
     })
 }
 
-// Toggle between showing the text area of the code area
+/**
+ * Toggle between the code editor and the text area.
+ */
 function toggle_code_to_text() {
     let btn = document.getElementById("question_type");
     // this input tells if the question if of type text or code
@@ -90,7 +94,9 @@ function toggle_code_to_text() {
     }   
 }
 
-// Set up the code area, initially being hidden
+/**
+ * Set up the default text editor, with default values, initially being empty
+ */
 function handle_code() {    
     let edit_area = document.getElementById("code_area")
 
@@ -108,16 +114,25 @@ function handle_code() {
     lang = editor.getOption("mode");
 }
 
-// Get the value inside the editor area
+/**
+ * Get the value of the code editor
+ * @returns the content of the code editor.
+ */
 function get_code() {
     return editor.getValue();
 }
 
+/**
+ * Get the content of the textarea
+ * @returns the content of the textarea
+ */
 function get_text() {
     return document.getElementById("text_area").value;
 }
 
-// Get the value of the selected option element and apply that mode to the editor
+/**
+ * Change the language of the code editor depending on the selected option
+ */
 function change_language() {
     let list = document.getElementById("lang_select");
     let selected_lang = list.options[list.selectedIndex].value;
@@ -126,8 +141,9 @@ function change_language() {
     editor.setOption("mode", selected_lang);
 }
 
-// Remove the last input field that was added. 
-// By default there must be at least one field (option)
+/**
+ * Removes the last input field added, if there's more than one input.
+ */
 function remove_last_field() {
     let tos = input_elements.pop();
     // if there was still an element
@@ -145,13 +161,20 @@ function remove_last_field() {
     }
 }
 
-// Add listeners to remove input fields
+/**
+ * Add a listeners for the button to add option fields
+ * @listens click
+ */
 function handle_remove_field() {
     document.getElementById("delete_field").addEventListener("click", (e) =>{
         remove_last_field();
     })
 }
 
+/**
+ * Create the body containing the text and options for the new question
+ * to be posted
+ */
 function post_question() {
 
     let url = new URL(window.location.href)
@@ -184,6 +207,10 @@ function post_question() {
 
 API_question = (function() {
 
+    /**
+     * Post the given new question
+     * @param {Object} body The body of the question
+     */
     function post_question(body) {
 
         console.log(body)
