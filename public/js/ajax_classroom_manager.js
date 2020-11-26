@@ -30,6 +30,14 @@ function toggle_show_ta_form() {
   }
 }
 
+function toggle_show_topic_form() {
+  let model = {
+    id: API.class_obj._id,
+    masterychecks: API.class_obj.mastery_checks
+  }
+  document.getElementById("topic_form").innerHTML = ejs.views_manager_classrooms_new_topic(model)
+}
+
 function show_new_selected() {
   let list = document.getElementById("partecipants_list");
   var selected_name = list.options[list.selectedIndex].text;
@@ -132,6 +140,3 @@ API = (function () {
     get_class_info
   };
 })();
-
-
-
