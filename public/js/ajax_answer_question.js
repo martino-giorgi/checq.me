@@ -2,6 +2,9 @@ var questions = undefined;
 var i = 0;
 var editor = undefined;
 
+/**
+ * Initializes the view by showing the first question and adding event listeners.
+ */
 function init_answer_question() {
     
     let url = new URL(window.location.href)
@@ -23,6 +26,11 @@ function init_answer_question() {
     })
 }
 
+/**
+ * Creates the input fields for each option of the question,
+ * set the inputs and the next button.
+ * @param {Object} q The question to be set
+ */
 function set_question(q) {
     
     let section = document.getElementById("options_section");
@@ -56,6 +64,10 @@ function set_question(q) {
     
 }
 
+/**
+ * Set the new question and update the editor when navigating through questions
+ * @listens click
+ */
 function handle_next_button() {
     let button = document.getElementById("next_question");
     button.addEventListener("click", (e)=> {
@@ -66,6 +78,11 @@ function handle_next_button() {
     })
 }
 
+/**
+ * Creates the body object containing the options selected by the user
+ * to be send to the server to be checked
+ * @listens click
+ */
 function handle_check_button() {
     let btn = document.getElementById("check_answer");
     
@@ -86,8 +103,19 @@ function handle_check_button() {
         })
         check_question(body).then( res=> {
             // After getting the result, show it to the user in the view
-            let result_section = document.getElementById("answer_result");
-            if(res.result) {
+            show_answer(res.result);
+        })
+    })
+}
+
+/**
+   * Shows on the browser whether the given answer was correct.
+   *
+   * @param {Boolean} res The result of the given answer
+   */
+function show_answer(res) {
+    let result_section = document.getElementById("answer_result");
+            if(res) {
                 result_section.innerHTML = "CORRECT!"
                 result_section.style.color = "green"
             } else {
@@ -96,10 +124,13 @@ function handle_check_button() {
             }
             // make it disappear after 1 second
             setTimeout(function(){ result_section.innerHTML=""; }, 1000);
-        })
-    })
 }
 
+/**
+ * Initializes the textarea with CodeMirror, setting the correct language
+ * and the content.
+ * @param {Object} first_q The first question of the questions for the topic
+ */
 function init_editor(first_q) {
     let txt_area = document.getElementById("text_area");
     let lang = first_q.lang;
@@ -116,6 +147,10 @@ function init_editor(first_q) {
     editor.setValue(first_q.text);
 }
 
+/**
+ * Updates the editor with the new language and content for the given question.
+ * @param {Object} q The new question 
+ */
 function update_editor(q) {
     editor.setValue(q.text);
     editor.setOption("mode", q.lang);
@@ -123,12 +158,22 @@ function update_editor(q) {
 
 // DB comunication
 
+/**
+ * Get all the questions for the topic.
+ * @param {ObjectId} id The id of the topic
+ * @returns {Promise} The promise that will give all the questions for this topic
+ */
 function get_questions(id) {
     return fetch("/topic/"+id+"/questions").then( res => {
         return res.json();
     })
 }
 
+/**
+ * Sends the options selected by the user and checks if they are the expected answer.
+ * @param {Object} body The object containing the given answers
+ * @returns {Promise} The promise containing the asnwer from the server (true/false)
+ */
 function check_question(body) {
     console.log(body);
     return fetch("/question/check", { 
@@ -140,8 +185,3 @@ function check_question(body) {
         return res.json();
     })
 }
-
-
-// return fetch("/classroom/"+id).then( res => {
-//     return res.json();
-//   })
