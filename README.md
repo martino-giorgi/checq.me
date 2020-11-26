@@ -18,7 +18,7 @@ The following is a table containing all of the milestones last commits and Googl
 
 | Date       | GitHub Milestone      | Milestone    | Final Commit         | Presentation Link              |
 | :--------- | :-------------------- | :----------- | :------------------- | :----------------------------- |
-| 23/11/2020 | #########             | Milestone #1 | [#45e3e38][1-commit] | [Presentation][1-presentation] |
+| 23/11/2020 | ---                   | Milestone #1 | [#45e3e38][1-commit] | [Presentation][1-presentation] |
 | 30/11/2020 | [Milestone][1-github] | Milestone #2 |  |  |
 
 [1-commit]: https://github.com/martino-giorgi/checq.me/commit/45e3e38c8495fdf87408eaefc78dccf502c901fe
