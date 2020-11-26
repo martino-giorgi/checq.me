@@ -1,24 +1,15 @@
-let form_state = 0;
+function display(clicked) {
+    document.querySelectorAll(".secondary-nav > a > div").forEach((element) => {
+        element.classList.remove("active");
+    });
 
-function toggle_form() {
-    if (!form_state) {
-        document.getElementById("btn_profile").innerHTML = "Hide Editor"
+    document.querySelector(`#${clicked}-button > div`).classList.add("active");
 
-        document.getElementById("update_form").innerHTML = ejs.views_profile_update_form();
+    document.querySelectorAll(".wrapper > div:not(.secondary-nav)").forEach((element) => {
+        element.hidden = true;
+    })
 
-        let forms = document.querySelectorAll("FORM");
-        forms.forEach((e) => {
-            e.addEventListener("submit", (event) => {
-                event.preventDefault();
-                update_user(event);
-            });
-        });
-        form_state = 1;
-    } else {
-        document.getElementById("btn_profile").innerHTML = "Show Editor"
-        document.getElementById("update_form").innerHTML = "";
-        form_state = 0;
-    }
+    document.querySelector(`.wrapper > div#${clicked}`).hidden = false;
 }
 
 function update_user(event) {

@@ -37,9 +37,9 @@
             <div class="classroom-list">
               <% model.classrooms.forEach((classroom) => { %>
                 <a>
-                  <div class="classroom-box" style="background-color: #<%= classroom.color %>;">
+                  <div class="classroom-box" style="background-color: #<%= classroom.color %>">
                     <span class="circle">
-                      <p style="color: #<%= classroom.color %>;"> <%= getInitials(classroom.name) %> </p>
+                      <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
                     </span>
 
                     <p class="classroom-name"> <%= classroom.name %> </p>

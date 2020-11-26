@@ -8,28 +8,28 @@
     <%- include("../partials/navigation", { active: "profile" }) %>
 
     <div class="secondary-nav">
-      <a href="">
-        <div class="settings">
+      <a id="edit-button" onclick="display('edit')">
+        <div class="settings active">
           <img src="/assets/icons/nav/edit.svg" alt="edit profile icon" />
           <p class="normal gray"> Edit Profile </p>
         </div>
       </a>
 
-      <a href="">
+      <a id="github-button" onclick="display('github')">
         <div class="settings">
           <img src="/assets/icons/nav/github.svg" alt="edit profile icon" />
           <p class="normal gray"> GitHub Integration </p>
         </div>
       </a>
 
-      <a href="">
+      <a id="notifications-button" onclick="display('notifications')">
         <div class="settings">
           <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
           <p class="normal gray"> Notifications </p>
         </div>
       </a>
 
-      <a href="">
+      <a id="security-button" onclick="display('security')">
         <div class="settings">
           <img src="/assets/icons/nav/security.svg" alt="edit profile icon" />
           <p class="normal gray"> Password & Security </p>
@@ -37,18 +37,50 @@
       </a>
     </div>
 
-    <div>
+    <div id="edit">
       <h1>My Profile</h1>
       <h1><%= user.name %> <%= user.surname %></h1>
       <h4>Email: <%= user.email %> </h4>
-      <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show Editor</button>
-      <div id="update_form"></div>
 
+      <form id="update_details">
+        <div class="form-group">
+          <label for="input_name">Name</label>
+          <input type="text" class="form-control" id="input_name" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label for="input_surname">Surname</label>
+          <input type="text" class="form-control" id="input_surname" placeholder="Surname">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Information</button>
+      </form>
+    </div>
+
+    <div hidden id="github">
       <% if (user.githubId == "") { %> 
-          <a href="/github">Connect GitHub Account</a>
+        <a class="btn btn-block btn-social btn-github" href="/github">
+          <span class="fa fa-github"></span> Sign in with GitHub
+        </a>
       <% } else { %>
-          Connected to GitHub!
+        Connected to GitHub!
       <% } %> 
+    </div>
+
+    <div hidden id="notifications">
+      // TODO: Add notification manager
+    </div>
+
+    <div hidden id="security">
+      <form id="update_password_form">
+        <div class="form-group">
+          <label for="input_password">New Password</label>
+          <input type="password" class="form-control" id="input_newpassword" placeholder="New Password">
+        </div>
+        <div class="form-group">
+          <label for="input_confpassword">Confirm New Password</label>
+          <input type="password" class="form-control" id="input_confnewpassword" placeholder="Confirm New Password">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Password</button>
+      </form>
     </div>
   </div>
 

@@ -2,8 +2,13 @@
 
 .secondary-nav {
   margin: 26px 26px 26px 26px;
+  padding-right: 2px;
 
   border-right: 1px solid $gray;
+
+  .active {
+    filter: brightness(0);
+  }
 
   .settings {
     display: flex;
@@ -11,11 +16,18 @@
   
     align-items: center;
 
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     margin-right: 10px;
   
     p {
       margin: 0 16px 0 16px;
+    }
+
+    &:hover {
+      filter: brightness(0);
+      text-decoration: none;
+
+      cursor: pointer;
     }
   }
 }
