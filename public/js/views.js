@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 //EJS Compiled Views - This file was automatically generated on Thu Nov 26 2020 20:55:02 GMT+0100 (Central European Standard Time)
+=======
+//EJS Compiled Views - This file was automatically generated on Thu Nov 26 2020 18:24:13 GMT+0100 (Central European Standard Time)
+>>>>>>> Stashed changes
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -187,27 +191,31 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div>\n    <h3>Select your new TA:</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        <% partecipants.forEach(p => { %>\n            <option value=\"<%=p._id%>\"><%= p.name%> <%= p.surname%></option>\n        <% }); %>        \n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>"
+  , __lines = "<div>\n    <h3>Select your new TA:</h3>\n    <form id=\"ta_form\">\n    <select name=\"partecipants\" id=\"partecipants_list\">\n            <% partecipants.forEach(p => { %>\n                <option id=\"<%=p.role %>\" value=\"<%=p._id%>\"><%= p.name%> <%= p.surname%> <%=p.role == 1 ? \"(TA)\" : ((p.role == 0) ? \"(Prof)\" : \"(Stu)\") %></option>\n            <% }); %>        \n        </select>\n        <label id=\"selected_user\">Select a user:</label>\n    </form>\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<div>\n    <h3>Select your new TA:</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        ")
-    ; __line = 4
-    ;  partecipants.forEach(p => { 
-    ; __append("\n            <option value=\"")
+    ; __append("<div>\n    <h3>Select your new TA:</h3>\n    <form id=\"ta_form\">\n    <select name=\"partecipants\" id=\"partecipants_list\">\n            ")
     ; __line = 5
+    ;  partecipants.forEach(p => { 
+    ; __append("\n                <option id=\"")
+    ; __line = 6
+    ; __append(escapeFn(p.role ))
+    ; __append("\" value=\"")
     ; __append(escapeFn(p._id))
     ; __append("\">")
     ; __append(escapeFn( p.name))
     ; __append(" ")
     ; __append(escapeFn( p.surname))
-    ; __append("</option>\n        ")
-    ; __line = 6
+    ; __append(" ")
+    ; __append(escapeFn(p.role == 1 ? "(TA)" : ((p.role == 0) ? "(Prof)" : "(Stu)") ))
+    ; __append("</option>\n            ")
+    ; __line = 7
     ;  }); 
-    ; __append("        \n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>")
-    ; __line = 9
+    ; __append("        \n        </select>\n        <label id=\"selected_user\">Select a user:</label>\n    </form>\n</div>")
+    ; __line = 11
   }
   return __output;
 } catch (e) {
@@ -862,7 +870,11 @@ function encode_char(c) {
 };
 ;
 var __line = 1
+<<<<<<< Updated upstream
   , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
+=======
+  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n        \n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
+>>>>>>> Stashed changes
   , __filename = undefined;
 try {
   var __output = "";
@@ -871,8 +883,13 @@ try {
     ; __append("<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    ")
     ; __line = 7
     ; __append( include("../../partials/navigation", {active: 'manager'}) )
+<<<<<<< Updated upstream
     ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
     ; __line = 34
+=======
+    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n        \n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
+    ; __line = 32
+>>>>>>> Stashed changes
   }
   return __output;
 } catch (e) {

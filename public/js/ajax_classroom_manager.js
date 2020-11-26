@@ -14,7 +14,6 @@ function init() {
 }
 
 function display_class_info(classroom) {
-  console.log(classroom[0])
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
 }
 
@@ -53,12 +52,20 @@ function toggle_show_topic_form() {
 
 function show_new_selected() {
   let list = document.getElementById("partecipants_list");
+  let form = document.getElementById("ta_form");
   var selected_name = list.options[list.selectedIndex].text;
-  // console.log(selected_name)
-  // console.log("changed!")
+  let role = list.options[list.selectedIndex].id;
+  if (role == 2) {
+    // bugged, keeps adding elements
+    // let s1 = document.createElement("select");
+    // form.appendChild(s1);
+    // let o1 = document.createElement("option");
+    //   o1.innerHTML = "TA";
+    // s1.appendChild(o1)
+    let str = `Are you sure you want <b>${selected_name} </b>to be TA?`
+    document.getElementById("selected_user").innerHTML = str;
 
-  let str = `Are you sure you want <b>${selected_name} </b>to be your TA?`
-  document.getElementById("selected_user").innerHTML = str;
+  }
 }
 
 
