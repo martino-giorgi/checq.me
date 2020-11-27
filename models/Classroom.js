@@ -36,6 +36,10 @@ const ClassroomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'MasteryCheck'
     }],
+    mastery_days: [{
+        type: mongoose.Schema.ObjectId, 
+        ref: 'ClassroomMasteryDays'
+    }],
     color: {
         type: String,
         required: true

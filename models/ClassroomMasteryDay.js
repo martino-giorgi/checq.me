@@ -10,10 +10,6 @@ const ClassroomMasteryDaySchema = new mongoose.Schema({
         ref: 'Classroom',
         required: true
     },
-    day:{
-        type: Number,
-        required: true
-    },
     start_time:{
         type: Date,
         required: true

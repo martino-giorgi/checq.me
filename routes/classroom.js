@@ -1,5 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
+const moment = require("moment");
 const router = express.Router();
 const {
   ensureAuthenticated,
@@ -10,11 +11,11 @@ const {
 const path = require("path");
 
 const MasteryCheck = require("../models/MasteryCheck");
+const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
 
 module.exports = router;
 
@@ -147,6 +148,50 @@ router.get(
   }
 );
 
+//add a mastery day for this classroom, id of the classromm is expected in the body
+//TODO
+//check if there already is an entry with the same dates before adding
+router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
+  let start = moment(req.body.start, "YYYY-MM-DDTHH:mm", true);
+  let end = moment(req.body.end, "YYYY-MM-DDTHH:mm", true);
+  console.log(start, end);
+  if (start.isValid && end.isValid) {
+    const new_mastery_day = new ClassroomMasteryDay({
+      classroom: req.body._id,
+      start_time: start.valueOf(),
+      end_time: end.valueOf(),
+    });
+
+    new_mastery_day
+      .save()
+      .then((new_element) => {
+        Classroom.findByIdAndUpdate(
+          req.body._id,
+          { $set: { mastery_days: new_element._id } },
+          { new: true }
+        )
+          .select({ mastery_days: 1, _id: 0 })
+          .then((ms) => {
+            ClassroomMasteryDay.find()
+              .where("_id")
+              .in(ms.mastery_days)
+              .then((x) => {
+                res.json(x);
+              })
+              .catch((err) => {
+                console.log(err);
+                res.json({});
+              });
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json({});
+      });
+  } else {
+    res.json({});
+  }
+});
 /*
 STUDENT ROUTES
 */
