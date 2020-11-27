@@ -1,28 +1,4 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//   var calendarEl = document.getElementById('calendar');
-
-//   var calendar = new FullCalendar.Calendar(calendarEl, {
-//     plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list', 'moment', 'bootstrap' ],
-//     themeSystem: 'bootstrap',
-
-//     headerToolbar: {
-//       left: 'prev,next today',
-//       center: 'title',
-//       right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-//     },
-//     defaultView: 'timeGridWeek',
-//     navLinks: true, // can click day/week names to navigate views
-//     businessHours: true, // display business hours
-//     editable: true,
-//     selectable: true,
-//     dayMaxEvents: true, // allow "more" link when too many events
-//     // events: 'https://fullcalendar.io/demo-events.json'
-//   });
-
-//   calendar.render();
-// });
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   var calendarEl = document.getElementById('calendar');
   var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
@@ -32,10 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     initialView: 'timeGridWeek',
     initialDate: '2020-09-12',
+    firstDay: '1',
+    timeFormat: "H:mm",
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
     editable: true,
     selectable: true,
+    allDaySlot: false,
     events: [
       {
         title: 'Business Lunch',
@@ -54,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         end: '2020-09-20'
       },
       {
-        _id:'ciao',
+        _id: 'ciao',
         title: 'Party',
         start: '2020-09-29T20:00:00'
       },
@@ -88,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
         display: 'background',
         color: '#ff9f89'
       }
-    ]
+    ],
+    timeFormat: 'H(:mm)'
   });
 
   calendar.render();
@@ -101,6 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-let API = function() {
+let API = function () {
 
 }

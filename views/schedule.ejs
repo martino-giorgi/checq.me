@@ -3,21 +3,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css">
 
   <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
-<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
 
-<link href='/stylesheets/css/main.min.css' rel='stylesheet' />
+  <link href='/stylesheets/css/main.min.css' rel='stylesheet' />
 </head>
 
 <div class="wrapper">
   <%- include("./partials/navigation", {active: "scheduler"}) %>
- <style>
-   #calendar {
-  max-width: 900px;
-  margin: 0 auto;
-}
- </style>
-  <main>
-    <div id="calendar"></div>
+  <main id="calendar-main">
+    <div class="calendar-container">
+      <div id="calendar"></div>
+    </div>
   </main>
+
 </div>
 <script src="/js/ajax_schedule.js"></script>
