@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Thu Nov 26 2020 21:14:36 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Fri Nov 27 2020 14:48:39 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -62,156 +62,6 @@ try {
     ; __append(escapeFn( domain))
     ; __append("</label>\n    <input id=\"input_is_ordered\" type=\"checkbox\" name=\"is_ordered\" checked/>\n    <label for=\"is_ordered\">Sequential completion of masterychecks</label>\n    <input type=\"submit\"/>\n</form>")
     ; __line = 10
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_partial_class_add_prof = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<div>\n    <h3>Select the Professor</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        <% partecipants.forEach(p => { %>\n        <option value=\"<%=p._id%>\"><%= p.name%> <%= p.surname%></option>\n        <% }); %>\n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<div>\n    <h3>Select the Professor</h3>\n    <select name=\"partecipants\" id=\"partecipants_list\">\n        ")
-    ; __line = 4
-    ;  partecipants.forEach(p => { 
-    ; __append("\n        <option value=\"")
-    ; __line = 5
-    ; __append(escapeFn(p._id))
-    ; __append("\">")
-    ; __append(escapeFn( p.name))
-    ; __append(" ")
-    ; __append(escapeFn( p.surname))
-    ; __append("</option>\n        ")
-    ; __line = 6
-    ;  }); 
-    ; __append("\n    </select>\n    <label id=\"selected_user\">Select a user:</label>\n</div>")
-    ; __line = 9
-  }
-  return __output;
-} catch (e) {
-  rethrow(e, __lines, __filename, __line, escapeFn);
-}
-
-}
-
-ejs.views_manager_partial_class_add_ta = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
-) {
-rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
-  var filename = esc(flnm);
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i){
-    var curr = i + start + 1;
-    return (curr == lineno ? ' >> ' : '    ')
-      + curr
-      + '| '
-      + line;
-  }).join('\n');
-
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'ejs') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-
-  throw err;
-};
-escapeFn = escapeFn || function (markup) {
-  return markup == undefined
-    ? ''
-    : String(markup)
-      .replace(_MATCH_HTML, encode_char);
-};
-var _ENCODE_HTML_RULES = {
-      "&": "&amp;"
-    , "<": "&lt;"
-    , ">": "&gt;"
-    , '"': "&#34;"
-    , "'": "&#39;"
-    }
-  , _MATCH_HTML = /[&<>'"]/g;
-function encode_char(c) {
-  return _ENCODE_HTML_RULES[c] || c;
-};
-;
-var __line = 1
-  , __lines = "<div>\n    <h3>Select your new TA:</h3>\n    <form id=\"ta_form\">\n        <select name=\"partecipants\" id=\"partecipants_list\">\n            <% partecipants.forEach(p => { %>\n                <option id=\"<%=p.role %>\" value=\"<%=p._id%>\"><%= p.name%> <%= p.surname%> <%=p.role == 1 ? \"(TA)\" : ((p.role == 0) ? \"(Prof)\" : \"(Stu)\") %></option>\n            <% }); %>        \n        </select>\n        <label id=\"selected_user\">Select a user:</label>\n    </form>\n</div>"
-  , __filename = undefined;
-try {
-  var __output = "";
-  function __append(s) { if (s !== undefined && s !== null) __output += s }
-  with (locals || {}) {
-    ; __append("<div>\n    <h3>Select your new TA:</h3>\n    <form id=\"ta_form\">\n        <select name=\"partecipants\" id=\"partecipants_list\">\n            ")
-    ; __line = 5
-    ;  partecipants.forEach(p => { 
-    ; __append("\n                <option id=\"")
-    ; __line = 6
-    ; __append(escapeFn(p.role ))
-    ; __append("\" value=\"")
-    ; __append(escapeFn(p._id))
-    ; __append("\">")
-    ; __append(escapeFn( p.name))
-    ; __append(" ")
-    ; __append(escapeFn( p.surname))
-    ; __append(" ")
-    ; __append(escapeFn(p.role == 1 ? "(TA)" : ((p.role == 0) ? "(Prof)" : "(Stu)") ))
-    ; __append("</option>\n            ")
-    ; __line = 7
-    ;  }); 
-    ; __append("        \n        </select>\n        <label id=\"selected_user\">Select a user:</label>\n    </form>\n</div>")
-    ; __line = 11
   }
   return __output;
 } catch (e) {
@@ -362,6 +212,80 @@ try {
     ; __append("')\">Generate invite\n        link</button>\n</div>\n")
     ; __line = 8
     ;  }); 
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_manager_partial_class_student_list = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<style>\n    .p-4 {\n        padding: 1.5rem !important;\n    }\n\n    .mb-0,\n    .my-0 {\n        margin-bottom: 0 !important;\n    }\n\n    .shadow-sm {\n        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;\n    }\n\n    /* user-dashboard-info-box */\n    .user-dashboard-info-box .candidates-list .thumb {\n        margin-right: 20px;\n    }\n\n    .user-dashboard-info-box .candidates-list .thumb img {\n        width: 80px;\n        height: 80px;\n        -o-object-fit: cover;\n        object-fit: cover;\n        overflow: hidden;\n        border-radius: 50%;\n    }\n\n    .user-dashboard-info-box .title {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n        align-items: center;\n        padding: 30px 0;\n    }\n\n    .user-dashboard-info-box .candidates-list td {\n        vertical-align: middle;\n    }\n\n    .user-dashboard-info-box td li {\n        margin: 0 4px;\n    }\n\n    .user-dashboard-info-box .table thead th {\n        border-bottom: none;\n    }\n\n    .table.manage-candidates-top th {\n        border: 0;\n    }\n\n    .user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {\n        margin-bottom: 10px;\n    }\n\n    .table.manage-candidates-top {\n        min-width: 650px;\n    }\n\n    .user-dashboard-info-box .candidate-list-details ul {\n        color: #969696;\n    }\n\n    /* Candidate List */\n    .candidate-list {\n        background: #ffffff;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        border-bottom: 1px solid #eeeeee;\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n        align-items: center;\n        padding: 20px;\n        -webkit-transition: all 0.3s ease-in-out;\n        transition: all 0.3s ease-in-out;\n    }\n\n    .candidate-list:hover {\n        -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);\n        box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);\n        position: relative;\n        z-index: 99;\n    }\n\n    .candidate-list:hover a.candidate-list-favourite {\n        color: #e74c3c;\n        -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);\n        box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);\n    }\n\n    .candidate-list .candidate-list-image {\n        margin-right: 25px;\n        -webkit-box-flex: 0;\n        -ms-flex: 0 0 80px;\n        flex: 0 0 80px;\n        border: none;\n    }\n\n    .candidate-list .candidate-list-image img {\n        width: 80px;\n        height: 80px;\n        -o-object-fit: cover;\n        object-fit: cover;\n    }\n\n    .candidate-list-title {\n        margin-bottom: 5px;\n    }\n\n    .candidate-list-details ul {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n        margin-bottom: 0px;\n    }\n\n    .candidate-list-details ul li {\n        margin: 5px 10px 5px 0px;\n        font-size: 13px;\n    }\n\n    .candidate-list .candidate-list-favourite-time {\n        margin-left: auto;\n        text-align: center;\n        font-size: 13px;\n        -webkit-box-flex: 0;\n        -ms-flex: 0 0 90px;\n        flex: 0 0 90px;\n    }\n\n    .candidate-list .candidate-list-favourite-time span {\n        display: block;\n        margin: 0 auto;\n    }\n\n    .candidate-list .candidate-list-favourite-time .candidate-list-favourite {\n        display: inline-block;\n        position: relative;\n        height: 40px;\n        width: 40px;\n        line-height: 40px;\n        border: 1px solid #eeeeee;\n        border-radius: 100%;\n        text-align: center;\n        -webkit-transition: all 0.3s ease-in-out;\n        transition: all 0.3s ease-in-out;\n        margin-bottom: 20px;\n        font-size: 16px;\n        color: #646f79;\n    }\n\n    .candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {\n        background: #ffffff;\n        color: #e74c3c;\n    }\n\n    .candidate-banner .candidate-list:hover {\n        position: inherit;\n        -webkit-box-shadow: inherit;\n        box-shadow: inherit;\n        z-index: inherit;\n    }\n\n    .bg-white {\n        background-color: #ffffff !important;\n    }\n\n    .p-4 {\n        padding: 1.5rem !important;\n    }\n\n    .mb-0,\n    .my-0 {\n        margin-bottom: 0 !important;\n    }\n\n    .shadow-sm {\n        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;\n    }\n\n    .user-dashboard-info-box .candidates-list .thumb {\n        margin-right: 20px;\n    }\n</style>\n\n<div class=\"container mt-3 mb-4\">\n    <div class=\"mt-4 mt-lg-0\">\n        <div class=\"row\">\n            <div class=\"col-md-12\">\n                <div class=\"user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm\">\n                    <table class=\"table manage-candidates-top mb-0\">\n                        <thead>\n                            <tr>\n                                <th>Name</th>\n                                <th class=\"text-center\">Role</th>\n                                <th class=\"action text-right\">Action</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            <% partecipants.forEach(p => { %>\n                            <tr class=\"candidates-list\">\n                                <td class=\"title\">\n                                    <div class=\"thumb\">\n                                        <img class=\"img-fluid\" src=\"https://bootdey.com/img/Content/avatar/avatar7.png\"\n                                            alt=\"\">\n                                    </div>\n                                    <div class=\"candidate-list-details\">\n                                        <div class=\"candidate-list-info\">\n                                            <div class=\"candidate-list-title\">\n                                                <h5 class=\"mb-0\"><a href=\"#\"><%= p.name%> <%= p.surname %></a></h5>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </td>\n                                <td class=\"candidate-list-favourite-time text-center\">\n                                    <span class=\"candidate-list-time order-1\"><%= p.role === 2 ? \"Student\" : \"TA\"%>\n                                    </span>\n                                </td>\n                                <td>\n                                    <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\n                                        <li><a href=\"#\" class=\"text-info\" data-toggle=\"modal\"\n                                                data-target=\"#edit-user-modal\" title=\"\" data-original-title=\"Edit\"><i\n                                                    class=\"fas fa-pencil-alt\"></i></a></li>\n                                    </ul>\n                                </td>\n                            </tr>\n                            <% }) %>\n                        </tbody>\n                    </table>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\n    aria-hidden=\"true\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\n            </div>\n            <div class=\"modal-body\">\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Remove from Classroom\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Make as TA\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Make as Prof\n                </button>\n            </div>\n        </div>\n    </div>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<style>\n    .p-4 {\n        padding: 1.5rem !important;\n    }\n\n    .mb-0,\n    .my-0 {\n        margin-bottom: 0 !important;\n    }\n\n    .shadow-sm {\n        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;\n    }\n\n    /* user-dashboard-info-box */\n    .user-dashboard-info-box .candidates-list .thumb {\n        margin-right: 20px;\n    }\n\n    .user-dashboard-info-box .candidates-list .thumb img {\n        width: 80px;\n        height: 80px;\n        -o-object-fit: cover;\n        object-fit: cover;\n        overflow: hidden;\n        border-radius: 50%;\n    }\n\n    .user-dashboard-info-box .title {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n        align-items: center;\n        padding: 30px 0;\n    }\n\n    .user-dashboard-info-box .candidates-list td {\n        vertical-align: middle;\n    }\n\n    .user-dashboard-info-box td li {\n        margin: 0 4px;\n    }\n\n    .user-dashboard-info-box .table thead th {\n        border-bottom: none;\n    }\n\n    .table.manage-candidates-top th {\n        border: 0;\n    }\n\n    .user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {\n        margin-bottom: 10px;\n    }\n\n    .table.manage-candidates-top {\n        min-width: 650px;\n    }\n\n    .user-dashboard-info-box .candidate-list-details ul {\n        color: #969696;\n    }\n\n    /* Candidate List */\n    .candidate-list {\n        background: #ffffff;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        border-bottom: 1px solid #eeeeee;\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n        align-items: center;\n        padding: 20px;\n        -webkit-transition: all 0.3s ease-in-out;\n        transition: all 0.3s ease-in-out;\n    }\n\n    .candidate-list:hover {\n        -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);\n        box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);\n        position: relative;\n        z-index: 99;\n    }\n\n    .candidate-list:hover a.candidate-list-favourite {\n        color: #e74c3c;\n        -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);\n        box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);\n    }\n\n    .candidate-list .candidate-list-image {\n        margin-right: 25px;\n        -webkit-box-flex: 0;\n        -ms-flex: 0 0 80px;\n        flex: 0 0 80px;\n        border: none;\n    }\n\n    .candidate-list .candidate-list-image img {\n        width: 80px;\n        height: 80px;\n        -o-object-fit: cover;\n        object-fit: cover;\n    }\n\n    .candidate-list-title {\n        margin-bottom: 5px;\n    }\n\n    .candidate-list-details ul {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n        margin-bottom: 0px;\n    }\n\n    .candidate-list-details ul li {\n        margin: 5px 10px 5px 0px;\n        font-size: 13px;\n    }\n\n    .candidate-list .candidate-list-favourite-time {\n        margin-left: auto;\n        text-align: center;\n        font-size: 13px;\n        -webkit-box-flex: 0;\n        -ms-flex: 0 0 90px;\n        flex: 0 0 90px;\n    }\n\n    .candidate-list .candidate-list-favourite-time span {\n        display: block;\n        margin: 0 auto;\n    }\n\n    .candidate-list .candidate-list-favourite-time .candidate-list-favourite {\n        display: inline-block;\n        position: relative;\n        height: 40px;\n        width: 40px;\n        line-height: 40px;\n        border: 1px solid #eeeeee;\n        border-radius: 100%;\n        text-align: center;\n        -webkit-transition: all 0.3s ease-in-out;\n        transition: all 0.3s ease-in-out;\n        margin-bottom: 20px;\n        font-size: 16px;\n        color: #646f79;\n    }\n\n    .candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {\n        background: #ffffff;\n        color: #e74c3c;\n    }\n\n    .candidate-banner .candidate-list:hover {\n        position: inherit;\n        -webkit-box-shadow: inherit;\n        box-shadow: inherit;\n        z-index: inherit;\n    }\n\n    .bg-white {\n        background-color: #ffffff !important;\n    }\n\n    .p-4 {\n        padding: 1.5rem !important;\n    }\n\n    .mb-0,\n    .my-0 {\n        margin-bottom: 0 !important;\n    }\n\n    .shadow-sm {\n        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;\n    }\n\n    .user-dashboard-info-box .candidates-list .thumb {\n        margin-right: 20px;\n    }\n</style>\n\n<div class=\"container mt-3 mb-4\">\n    <div class=\"mt-4 mt-lg-0\">\n        <div class=\"row\">\n            <div class=\"col-md-12\">\n                <div class=\"user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm\">\n                    <table class=\"table manage-candidates-top mb-0\">\n                        <thead>\n                            <tr>\n                                <th>Name</th>\n                                <th class=\"text-center\">Role</th>\n                                <th class=\"action text-right\">Action</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            ")
+    ; __line = 206
+    ;  partecipants.forEach(p => { 
+    ; __append("\n                            <tr class=\"candidates-list\">\n                                <td class=\"title\">\n                                    <div class=\"thumb\">\n                                        <img class=\"img-fluid\" src=\"https://bootdey.com/img/Content/avatar/avatar7.png\"\n                                            alt=\"\">\n                                    </div>\n                                    <div class=\"candidate-list-details\">\n                                        <div class=\"candidate-list-info\">\n                                            <div class=\"candidate-list-title\">\n                                                <h5 class=\"mb-0\"><a href=\"#\">")
+    ; __line = 216
+    ; __append(escapeFn( p.name))
+    ; __append(" ")
+    ; __append(escapeFn( p.surname ))
+    ; __append("</a></h5>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </td>\n                                <td class=\"candidate-list-favourite-time text-center\">\n                                    <span class=\"candidate-list-time order-1\">")
+    ; __line = 222
+    ; __append(escapeFn( p.role === 2 ? "Student" : "TA"))
+    ; __append("\n                                    </span>\n                                </td>\n                                <td>\n                                    <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\n                                        <li><a href=\"#\" class=\"text-info\" data-toggle=\"modal\"\n                                                data-target=\"#edit-user-modal\" title=\"\" data-original-title=\"Edit\"><i\n                                                    class=\"fas fa-pencil-alt\"></i></a></li>\n                                    </ul>\n                                </td>\n                            </tr>\n                            ")
+    ; __line = 233
+    ;  }) 
+    ; __append("\n                        </tbody>\n                    </table>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\n    aria-hidden=\"true\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\n            </div>\n            <div class=\"modal-body\">\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Remove from Classroom\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Make as TA\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n                    Make as Prof\n                </button>\n            </div>\n        </div>\n    </div>\n</div>")
+    ; __line = 262
   }
   return __output;
 } catch (e) {
@@ -572,7 +496,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
+  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n            <button type=\"button\" onClick=\"render_user_modal()\" class=\"btn btn-primary\" data-toggle=\"modal\"\n                data-target=\"#user-modal\">\n                Show User List\n            </button>\n\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n\n        <!-- User list modal -->\n        <div class=\"modal fade\" id=\"user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-modal-label\"\n            aria-hidden=\"true\">\n            <div class=\"modal-dialog modal-xl\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-header\">\n                        <h5 class=\"modal-title\" id=\"user-modal-label\">User list</h5>\n                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                            <span aria-hidden=\"true\">&times;</span>\n                        </button>\n                    </div>\n                    <div id=\"user-modal-body\" class=\"modal-body\">\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -581,8 +505,8 @@ try {
     ; __append("<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    ")
     ; __line = 7
     ; __append( include("../../partials/navigation", {active: 'manager'}) )
-    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
-    ; __line = 34
+    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n            <button type=\"button\" onClick=\"render_user_modal()\" class=\"btn btn-primary\" data-toggle=\"modal\"\n                data-target=\"#user-modal\">\n                Show User List\n            </button>\n\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n\n        <!-- User list modal -->\n        <div class=\"modal fade\" id=\"user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-modal-label\"\n            aria-hidden=\"true\">\n            <div class=\"modal-dialog modal-xl\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-header\">\n                        <h5 class=\"modal-title\" id=\"user-modal-label\">User list</h5>\n                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                            <span aria-hidden=\"true\">&times;</span>\n                        </button>\n                    </div>\n                    <div id=\"user-modal-body\" class=\"modal-body\">\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
+    ; __line = 56
   }
   return __output;
 } catch (e) {
@@ -866,7 +790,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
+  , __lines = "<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    <%- include(\"../../partials/navigation\", {active: 'manager'}) %>\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n            <button type=\"button\" onClick=\"render_user_modal()\" class=\"btn btn-primary\" data-toggle=\"modal\"\n                data-target=\"#user-modal\">\n                Show User List\n            </button>\n\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n\n        <!-- User list modal -->\n        <div class=\"modal fade\" id=\"user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-modal-label\"\n            aria-hidden=\"true\">\n            <div class=\"modal-dialog modal-xl\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-header\">\n                        <h5 class=\"modal-title\" id=\"user-modal-label\">User list</h5>\n                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                            <span aria-hidden=\"true\">&times;</span>\n                        </button>\n                    </div>\n                    <div id=\"user-modal-body\" class=\"modal-body\">\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -875,8 +799,8 @@ try {
     ; __append("<link rel=\"stylesheet\" href=\"/stylesheets/css/flash.min.css\">\n<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\"\n    integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n\n\n<div class=\"wrapper\">\n    ")
     ; __line = 7
     ; __append( include("../../partials/navigation", {active: 'manager'}) )
-    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_ta_form()\">Assign a TA</button>\n            <button onclick=\"toggle_show_prof_form()\">Add a professor</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n        <section id=\"ta_form\"></section>\n        <section id=\"prof_form\"></section>\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
-    ; __line = 34
+    ; __append("\n    <main>\n        <h1>Classroom Manager</h1>\n        <section id=\"class_options\">\n            <button onclick=\"add()\" id=\"add_btn\" type=\"button\" class=\"btn btn-primary\">Add Mastery Check</button>\n            <button onclick=\"toggle_show_topic_form()\">Add Topic</button>\n            <button type=\"button\" onClick=\"render_user_modal()\" class=\"btn btn-primary\" data-toggle=\"modal\"\n                data-target=\"#user-modal\">\n                Show User List\n            </button>\n\n        </section>\n        <div id=\"add\" class=\"container\"></div>\n\n        <!-- User list modal -->\n        <div class=\"modal fade\" id=\"user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-modal-label\"\n            aria-hidden=\"true\">\n            <div class=\"modal-dialog modal-xl\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-header\">\n                        <h5 class=\"modal-title\" id=\"user-modal-label\">User list</h5>\n                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                            <span aria-hidden=\"true\">&times;</span>\n                        </button>\n                    </div>\n                    <div id=\"user-modal-body\" class=\"modal-body\">\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <section id=\"topic_form\"></section>\n        <section id=\"class_info\"></section>\n        <div id=\"list\" class=\"container\"></div>\n\n    </main>\n</div>\n\n<script src=\"/js/ajax_mastery.js\"></script>\n<script src=\"/js/flash.min.js\"></script>\n<script src=\"/js/ajax_classroom_manager.js\"></script>\n<script src=\"/js/ajax_topic.js\"></script>\n<script src=\"/js/ejs.min.js\"></script>\n<script src=\"/js/views.js\"></script>\n<script>\n    window.onload = init;\n</script>")
+    ; __line = 56
   }
   return __output;
 } catch (e) {

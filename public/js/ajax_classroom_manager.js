@@ -10,36 +10,16 @@ function init() {
     API.class_obj = res[0];
     console.log(API.class_obj)
     display_class_info(res);
+    render_user_modal(res);
   })
+}
+
+function render_user_modal(classroom) {
+  document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(classroom[0]);
 }
 
 function display_class_info(classroom) {
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
-}
-
-function toggle_show_ta_form() {
-  let section = document.getElementById("ta_form");
-  if (section.innerHTML == "") {
-
-    section.innerHTML = ejs.views_manager_partial_class_add_ta(API.class_obj);
-    document.getElementById("partecipants_list").onchange = show_new_selected
-  }
-  else {
-    section.innerHTML = "";
-  }
-}
-
-// Show/Hide professor assignment form
-function toggle_show_prof_form() {
-  let section = document.getElementById("prof_form");
-  if (section.innerHTML == "") {
-
-    section.innerHTML = ejs.views_manager_partial_class_add_prof(API.class_obj);
-    document.getElementById("partecipants_list").onchange = show_new_selected
-  }
-  else {
-    section.innerHTML = "";
-  }
 }
 
 function toggle_show_topic_form() {
