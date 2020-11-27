@@ -5,11 +5,11 @@ function display(clicked) {
 
     document.querySelector(`#${clicked}-button > div`).classList.add("active");
 
-    document.querySelectorAll(".wrapper > div:not(.secondary-nav)").forEach((element) => {
+    document.querySelectorAll(".wrapper > .content > div:not(.secondary-nav)").forEach((element) => {
         element.hidden = true;
     })
 
-    document.querySelector(`.wrapper > div#${clicked}`).hidden = false;
+    document.querySelector(`.wrapper > .content > div#${clicked}`).hidden = false;
 }
 
 function update_user(event) {

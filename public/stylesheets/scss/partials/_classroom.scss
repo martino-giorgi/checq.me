@@ -51,6 +51,7 @@ table {
 
         p {
           margin: 0px;
+          width: max-content;
         }
 
         p:not(.class-name) {
@@ -74,6 +75,10 @@ table {
             width: 24px;
           }
         }
+
+        &:nth-of-type(2) {
+          width: 60%
+        }  
       }
 
       .class-detail-td {

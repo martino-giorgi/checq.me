@@ -1,75 +1,88 @@
-<head>
-  <title>checq.me - Profile</title>
-</head>
+<div class="wrapper">
 
-<body>
-  <div class="wrapper">
+  <%- include("../partials/navigation", { active: "profile" }) %>
 
-    <%- include("../partials/navigation", { active: "profile" }) %>
+  <div class="secondary-nav">
+    <a id="edit-button" onclick="display('edit')">
+      <div class="settings active">
+        <img src="/assets/icons/nav/edit.svg" alt="edit profile icon" />
+        <p class="normal gray"> Edit Profile </p>
+      </div>
+    </a>
 
-    <div class="secondary-nav">
-      <a id="edit-button" onclick="display('edit')">
-        <div class="settings active">
-          <img src="/assets/icons/nav/edit.svg" alt="edit profile icon" />
-          <p class="normal gray"> Edit Profile </p>
-        </div>
-      </a>
+    <a id="github-button" onclick="display('github')">
+      <div class="settings">
+        <img src="/assets/icons/nav/github.svg" alt="edit profile icon" />
+        <p class="normal gray"> GitHub Integration </p>
+      </div>
+    </a>
 
-      <a id="github-button" onclick="display('github')">
-        <div class="settings">
-          <img src="/assets/icons/nav/github.svg" alt="edit profile icon" />
-          <p class="normal gray"> GitHub Integration </p>
-        </div>
-      </a>
+    <a id="notifications-button" onclick="display('notifications')">
+      <div class="settings">
+        <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
+        <p class="normal gray"> Notifications </p>
+      </div>
+    </a>
 
-      <a id="notifications-button" onclick="display('notifications')">
-        <div class="settings">
-          <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
-          <p class="normal gray"> Notifications </p>
-        </div>
-      </a>
+    <a id="security-button" onclick="display('security')">
+      <div class="settings">
+        <img src="/assets/icons/nav/security.svg" alt="edit profile icon" />
+        <p class="normal gray"> Password & Security </p>
+      </div>
+    </a>
 
-      <a id="security-button" onclick="display('security')">
-        <div class="settings">
-          <img src="/assets/icons/nav/security.svg" alt="edit profile icon" />
-          <p class="normal gray"> Password & Security </p>
-        </div>
-      </a>
-    </div>
+    <a id="logout" onclick="logout()">
+      <div class="settings">
+        <img src="/assets/icons/buttons/logout.svg" alt="edit profile icon" />
+        <p class="normal red"> Logout </p>
+      </div>
+    </a>
+  </div>
 
+  <div class="content">
     <div id="edit">
-      <h1>My Profile</h1>
-      <h1><%= user.name %> <%= user.surname %></h1>
-      <h4>Email: <%= user.email %> </h4>
+      <h2>Edit Profile</h2>
 
       <form id="update_details">
         <div class="form-group">
           <label for="input_name">Name</label>
-          <input type="text" class="form-control" id="input_name" placeholder="Name">
+          <input type="text" class="form-control" id="input_name" placeholder="Name" value="<%= user.name %>">
         </div>
         <div class="form-group">
           <label for="input_surname">Surname</label>
-          <input type="text" class="form-control" id="input_surname" placeholder="Surname">
+          <input type="text" class="form-control" id="input_surname" placeholder="Surname" value="<%= user.surname %>">
         </div>
         <button type="submit" class="btn btn-primary">Update Information</button>
       </form>
     </div>
 
     <div hidden id="github">
+      <h2>Github Integration</h2>
+
       <% if (user.githubId == "") { %> 
-        <a class="btn btn-block btn-social btn-github" href="/github">
-          <span class="fa fa-github"></span> Sign in with GitHub
+        <a class="btn btn-social btn-github" href="/github">
+          <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
         </a>
       <% } else { %>
-        Connected to GitHub!
-      <% } %> 
+        <span class="github-connected">
+          <a class="btn btn-social btn-github disabled">
+            <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+          </a>
+
+          <img src="/assets/icons/misc/check.svg" alt="connected icon">
+        </span>
+      <% } %>
+      
     </div>
 
     <div hidden id="notifications">
+      <h2>Notifications</h2>
       // TODO: Add notification manager
     </div>
 
     <div hidden id="security">
+      <h2>Password & Security</h2>
+
       <form id="update_password_form">
         <div class="form-group">
           <label for="input_password">New Password</label>
@@ -83,8 +96,8 @@
       </form>
     </div>
   </div>
+</div>
 
-  <script src="/js/ajax_profile.js"></script>
-  <script src="/js/ejs.min.js"></script>
-  <script src="/js/views.js"></script>
-</body>
+<script src="/js/ajax_profile.js"></script>
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>

@@ -10,18 +10,22 @@ module.exports = router;
 
 router.post('/', (req, res) => {
   let user = req.body.sender
-  let commit = req.body.commits[0];
   let repo = req.body.repository;
+  let commit;
 
-  if (commit.message == 'final commit') {
-    let Model = {
-      user_id: user.id,
-      commit_id: commit.url,
-      repo: repo.url
+  if (typeof req.body.commits !== undefined) {
+    commit = req.body.commits[0];
+
+    if (commit.message == 'final commit') {
+      let Model = {
+        user_id: user.id,
+        commit_id: commit.url,
+        repo: repo.url
+      }
+  
+      console.log("\nreceived model:\n", Model);
     }
-
-    console.log("\nreceived model:\n", Model);
   }
-
+  
   res.status(200).end()
 });

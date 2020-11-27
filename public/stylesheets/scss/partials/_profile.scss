@@ -10,24 +10,55 @@
     filter: brightness(0);
   }
 
-  .settings {
-    display: flex;
-    flex-direction: row;
-  
-    align-items: center;
+  a {
+    .settings {
+      display: flex;
+      flex-direction: row;
+    
+      align-items: center;
 
-    margin-bottom: 20px;
-    margin-right: 10px;
-  
-    p {
-      margin: 0 16px 0 16px;
+      margin-bottom: 20px;
+      margin-right: 10px;
+
+      p {
+        margin: 0 16px 0 16px;
+      }
     }
+  }
+
+  a:not(#logout) {
+    .settings {
+      &:hover {
+        filter: brightness(0);
+        text-decoration: none;
+
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.content {
+  margin-top: 26px;
+  margin-left: 5px;
+
+  a.disabled {
+    color: #8c8c8c;
+    
+    pointer-events: none;
+    cursor: default;
 
     &:hover {
-      filter: brightness(0);
-      text-decoration: none;
+      background-color: #444444;
+    }
+  }
 
-      cursor: pointer;
+  .github-connected {
+    display: flex;
+    flex-flow: row;
+
+    .disabled {
+      margin-right: 16px;
     }
   }
 }

@@ -32,6 +32,6 @@ module.exports = {
     if(req.user.githubToken == '') {
       return next();
     }
-    res.redirect("/dashboard");
+    res.redirect("/profile");
   }
 };

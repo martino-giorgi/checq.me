@@ -45,20 +45,20 @@ router.get('/oauth-callback', ensureAuthenticated, ensureHasNoGithubToken, (req,
           User.findById(req.user.id, (err, user) => {
             if (err) throw err;
 
-            User.findOne({ githubId: response.data.id }).then((user) => {
-              if (user) {
-                errors.push({ msg: "This github account is used" });
+            User.findOne({ githubId: response.data.id }).then((user_f) => {
+              if (user_f) {
+                res.redirect('/profile');
               } else {
                 user.githubToken = token;
-              user.githubId = response.data.id;
+                user.githubId = response.data.id;
 
-              user.save((err) => {
-                if (err) {
-                  res.status(500).end();
-                } else {
-                  res.redirect('/dashboard');
-                }
-              });
+                user.save((err) => {
+                  if (err) {
+                    res.status(500).end();
+                  } else {
+                    res.redirect('/profile');
+                  }
+                });
               }
             });
           });
