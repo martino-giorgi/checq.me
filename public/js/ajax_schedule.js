@@ -1,97 +1,106 @@
+// document.addEventListener('DOMContentLoaded', function() {
+//   var calendarEl = document.getElementById('calendar');
+
+//   var calendar = new FullCalendar.Calendar(calendarEl, {
+//     plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list', 'moment', 'bootstrap' ],
+//     themeSystem: 'bootstrap',
+
+//     headerToolbar: {
+//       left: 'prev,next today',
+//       center: 'title',
+//       right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+//     },
+//     defaultView: 'timeGridWeek',
+//     navLinks: true, // can click day/week names to navigate views
+//     businessHours: true, // display business hours
+//     editable: true,
+//     selectable: true,
+//     dayMaxEvents: true, // allow "more" link when too many events
+//     // events: 'https://fullcalendar.io/demo-events.json'
+//   });
+
+//   calendar.render();
+// });
+
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
-
   var calendar = new FullCalendar.Calendar(calendarEl, {
-    plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list', 'moment', 'bootstrap' ],
-    themeSystem: 'bootstrap',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      right: 'dayGridMonth,timeGridWeek,listMonth'
     },
+    initialView: 'timeGridWeek',
+    initialDate: '2020-09-12',
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
     editable: true,
     selectable: true,
-    dayMaxEvents: true, // allow "more" link when too many events
-    events: 'https://fullcalendar.io/demo-events.json'
+    events: [
+      {
+        title: 'Business Lunch',
+        start: '2020-09-03T13:00:00',
+        constraint: 'businessHours'
+      },
+      {
+        title: 'Meeting',
+        start: '2020-09-13T11:00:00',
+        constraint: 'availableForMeeting', // defined below
+        color: '#257e4a'
+      },
+      {
+        title: 'Conference',
+        start: '2020-09-18',
+        end: '2020-09-20'
+      },
+      {
+        _id:'ciao',
+        title: 'Party',
+        start: '2020-09-29T20:00:00'
+      },
+
+      // areas where "Meeting" must be dropped
+      {
+        groupId: 'availableForMeeting',
+        start: '2020-09-11T10:00:00',
+        end: '2020-09-11T16:00:00',
+        display: 'background'
+      },
+      {
+        groupId: 'availableForMeeting',
+        start: '2020-09-13T10:00:00',
+        end: '2020-09-13T16:00:00',
+        display: 'background'
+      },
+
+      // red areas where no events can be dropped
+      {
+        start: '2020-09-24',
+        end: '2020-09-28',
+        overlap: false,
+        display: 'background',
+        color: '#ff9f89'
+      },
+      {
+        start: '2020-09-06',
+        end: '2020-09-08',
+        overlap: false,
+        display: 'background',
+        color: '#ff9f89'
+      }
+    ]
   });
 
   calendar.render();
 });
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   let calendarEl = document.getElementById('calendar');
-//   console.log("DIO MERDA");
-//   let calendar = new FullCalendar(calendarEl, {
-//     // plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, momentPlugin ],
-//     headerToolbar: {
-//       left: 'prev,next today',
-//       center: 'title',
-//       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-//     },
-//     initialDate: '2018-01-12',
-//     titleFormat: 'MMMM [!!!] YYYY', // a moment format string
-//     navLinks: true, // can click day/week names to navigate views
-//     editable: true,
-//     dayMaxEvents: true, // allow "more" link when too many events
-//     events: [
-//       {
-//         title: 'All Day Event',
-//         start: '2018-01-01',
-//       },
-//       {
-//         title: 'Long Event',
-//         start: '2018-01-07',
-//         end: '2018-01-10'
-//       },
-//       {
-//         groupId: '999',
-//         title: 'Repeating Event',
-//         start: '2018-01-09T16:00:00'
-//       },
-//       {
-//         groupId: '999',
-//         title: 'Repeating Event',
-//         start: '2018-01-16T16:00:00'
-//       },
-//       {
-//         title: 'Conference',
-//         start: '2018-01-11',
-//         end: '2018-01-13'
-//       },
-//       {
-//         title: 'Meeting',
-//         start: '2018-01-12T10:30:00',
-//         end: '2018-01-12T12:30:00'
-//       },
-//       {
-//         title: 'Lunch',
-//         start: '2018-01-12T12:00:00'
-//       },
-//       {
-//         title: 'Meeting',
-//         start: '2018-01-12T14:30:00'
-//       },
-//       {
-//         title: 'Happy Hour',
-//         start: '2018-01-12T17:30:00'
-//       },
-//       {
-//         title: 'Dinner',
-//         start: '2018-01-12T20:00:00'
-//       },
-//       {
-//         title: 'Birthday Party',
-//         start: '2018-01-13T07:00:00'
-//       },
-//       {
-//         title: 'Click for Google',
-//         url: 'http://google.com/',
-//         start: '2018-01-28'
-//       }
-//     ]
-//   });
 
-//   calendar.render();
-// });
+
+
+
+
+
+
+let API = function() {
+
+}
