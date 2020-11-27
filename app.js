@@ -93,7 +93,7 @@ app.use("/dashboard", routers.dashboard);
 app.use("/manager", routers.manager);
 
 // Route for Scheduler
-app.use("/scheduler", routers.scheduler);
+app.use("/schedule", routers.schedule);
 
 // Route for Classrooms
 app.use("/classroom", routers.classroom);

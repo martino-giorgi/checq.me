@@ -1,0 +1,28 @@
+<head>
+  <link href='https://unpkg.com/@fullcalendar/core@4.4.1/main.min.css' rel='stylesheet' />
+  <link href='https://unpkg.com/@fullcalendar/daygrid@4.4.1/main.min.css' rel='stylesheet' />
+  <link href='https://unpkg.com/@fullcalendar/timegrid@4.4.1/main.min.css' rel='stylesheet' />
+  <script src='https://unpkg.com/@fullcalendar/core@4.4.1/main.min.js'></script>
+  <script src='https://unpkg.com/@fullcalendar/interaction@4.4.0/main.min.js'></script>
+  <script src='https://unpkg.com/@fullcalendar/daygrid@4.4.1/main.min.js'></script>
+  <script src='https://unpkg.com/@fullcalendar/timegrid@4.4.1/main.min.js'></script>
+
+  <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
+
+<link href='/stylesheets/css/main.min.css' rel='stylesheet' />
+</head>
+
+<div class="wrapper">
+  <%- include("./partials/navigation", {active: "scheduler"}) %>
+ <style>
+   #calendar {
+  max-width: 900px;
+  margin: 0 auto;
+}
+ </style>
+  <main>
+    <div id="calendar"></div>
+  </main>
+</div>
+<script src="/js/ajax_schedule.js"></script>
