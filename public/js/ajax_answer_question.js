@@ -105,31 +105,44 @@ function handle_check_button() {
             // After getting the result, show it to the user in the view
             show_answer(res.result);
 
-            if (res.result) {
-                let button = document.getElementById("next_question");
-                let clickEvent = new Event('click');
-                button.dispatchEvent(clickEvent);
-            }
+            // if (res.result) {
+            //     let button = document.getElementById("next_question");
+            //     let clickEvent = new Event('click');
+            //     button.dispatchEvent(clickEvent);
+            // }
         })
     })
 }
  
 /**
    * Shows on the browser whether the given answer was correct.
+   * If the answers is correct it will also send a click event to 
+   * move to the new question after 1sec.
    *
    * @param {Boolean} res The result of the given answer
    */
 function show_answer(res) {
     let result_section = document.getElementById("answer_result");
             if(res) {
-                result_section.innerHTML = "CORRECT!"
-                result_section.style.color = "green"
+                result_section.innerHTML = "CORRECT!";
+                result_section.style.color = "green";
+
+                let button = document.getElementById("next_question");
+                let clickEvent = new Event('click');
+                
+                setTimeout(function(){ 
+                    result_section.innerHTML="";
+                    button.dispatchEvent(clickEvent); 
+                }, 1000);
+                
             } else {
                 result_section.innerHTML = "WRONG!"
                 result_section.style.color = "red"
-            }
-            // make it disappear after 1 second
-            setTimeout(function(){ result_section.innerHTML=""; }, 1000);
+
+                setTimeout(function(){ 
+                    result_section.innerHTML="";
+                }, 1000);
+            }        
 }
 
 /**
