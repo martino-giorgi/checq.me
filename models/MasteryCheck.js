@@ -29,6 +29,10 @@ const MasteryCheckSchema = new mongoose.Schema({
       ref: "Topic",
     },
   ],
+  appointment_duration:{
+    type: Number,
+    required: false
+  }
 });
 
 const MasteryCheck = mongoose.model("MasteryCheck", MasteryCheckSchema);
