@@ -13,6 +13,7 @@ function init() {
     API.class_obj = res[0];
     console.log(API.class_obj)
     display_class_info(res);
+    render_user_modal(res);
   })
 }
 
@@ -22,6 +23,10 @@ function init() {
  */
 function display_class_info(classroom) {
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
+}
+
+function render_user_modal(classroom) {
+  document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(classroom[0]);
 }
 
 /**

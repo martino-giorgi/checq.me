@@ -1,9 +1,0 @@
-<div>
-    <h3>Select the Professor</h3>
-    <select name="partecipants" id="partecipants_list">
-        <% partecipants.forEach(p => { %>
-        <option value="<%=p._id%>"><%= p.name%> <%= p.surname%></option>
-        <% }); %>
-    </select>
-    <label id="selected_user">Select a user:</label>
-</div>
