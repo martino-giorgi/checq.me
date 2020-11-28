@@ -120,7 +120,6 @@ router.get(
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
         } else {
           Classroom.findById(req.params.classroom_id).then((c) => {
-            // console.log(c.lecturer.toString() == req.user._id.toString());
             if (c && c.lecturer.toString() == req.user._id.toString()) {
               let token = new TokenClassroom({
                 _classroomId: c._id,
@@ -147,6 +146,7 @@ router.get(
   }
 );
 
+//(((move to a new route?)))
 //add a mastery day for this classroom, id of the classromm is expected in the body
 router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
   let start = moment(req.body.start, "YYYY-MM-DDTHH:mm", true);
