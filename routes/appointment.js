@@ -13,9 +13,16 @@ const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Availability = require("../models/Availability");
 
+module.exports = router;
+
 
 router.post("/", ensureAuthenticated, (req, res) => {
-    
-})
-
-module.exports = router;
+    MasteryCheck.findById(req.body.mastery_id).populate('classroom').select({topics: 0, __v:0, author: 0}).then(r => {
+        if(r.available && r.classroom.partecipants.includes(req.user._id)){
+            res.json(r);
+        } else {
+            res.status(400).end();
+        }
+        
+    })
+});

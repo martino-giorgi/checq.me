@@ -16,6 +16,8 @@ const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -107,6 +109,34 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
       res.json({});
     });
 });
+
+
+async function mapTAs(classroom_id){
+  return new Promise((resolve, rejects) => {
+    let mapped = {};
+    let ta_ids;
+    let current = 0;
+  
+    function increaseTa(){
+      if(current == ta_ids.length - 1){
+        current == 0
+      }
+      else {
+        current++;
+      }
+    }
+  
+    Classroom.findById(classroom_id).select({teaching_assistants: 1, lecturer: 1, partecipants: 1}).then(r => {
+      ta_ids = r.teaching_assistants.push(r.lecturer);
+      let stud_ids = r.partecipants;
+      stud_ids.forEach(s_id => {
+        mapped[s_id] = ta_ids[current];
+        increaseTa();
+      })
+      resolve(mapped);
+    })
+  })
+}
 
 //create a new invite link
 router.get(
@@ -206,6 +236,8 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
   }
 });
+
+
 
 /*
 STUDENT ROUTES

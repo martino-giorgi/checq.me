@@ -1,6 +1,7 @@
 /*
  * AvailabilitySchema schema
  */
+const mongoose = require("mongoose");
 
 const AvailabilitySchema = new mongoose.Schema({
   _userId: {

@@ -1,56 +1,78 @@
 /**
  * Classroom schema
-*/
+ */
 
-const mongoose =  require('mongoose');
+const mongoose = require("mongoose");
 const User = require("./User");
 const Topic = require("./Topic");
 const MasteryCheck = require("./MasteryCheck");
 
 const ClassroomSchema = new mongoose.Schema({
-    name: { 
-        type: String,
-        required: true
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: false,
+  },
+  lecturer: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
+  teaching_assistants: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
-    description: {
-        type: String,
-        required: false
+  ],
+  partecipants: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
-    lecturer: {
-        type: mongoose.Schema.ObjectId, 
-        ref: 'User'
+  ],
+  is_ordered_mastery: {
+    type: Boolean,
+    required: true,
+  },
+  mastery_checks: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "MasteryCheck",
     },
-    teaching_assistants: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'User'
-    }],
-    partecipants: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'User'
-    }],
-    is_ordered_mastery: {
-        type: Boolean,
-        required: true
-    }, 
-    mastery_checks: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'MasteryCheck'
-    }],
-    mastery_days: [{
-        type: mongoose.Schema.ObjectId, 
-        ref: 'ClassroomMasteryDays'
-    }],
-    color: {
-        type: String,
-        required: true
+  ],
+  mastery_days: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "ClassroomMasteryDays",
     },
-    university_domain: {
-        type: String,
-        required: false
-    }
+  ],
+  color: {
+    type: String,
+    required: true,
+  },
+  //domain of the university (ex @usi.ch)
+  university_domain: {
+    type: String,
+    required: true,
+  },
+  //start and end date of the classroom
+  start_date: {
+    type: Date,
+    required: true,
+  },
+  end_date: {
+    type: Date,
+    required: true,
+  },
+  ta_mapping:{
+    type: Map,
+    required: true,
+    default: {}
+  }
 });
 
-const Classroom = mongoose.model('Classroom', ClassroomSchema);
+const Classroom = mongoose.model("Classroom", ClassroomSchema);
 
 module.exports = Classroom;
-

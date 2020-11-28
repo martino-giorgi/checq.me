@@ -106,7 +106,7 @@ app.use("/topic", routers.topic);
 app.use("/availability", routers.availability);
 
 // Route for Appoinment
-app.use("/appoinment", routers.appoinment);
+app.use("/appointment", routers.appointment);
 
 // Route for MasteryCheck
 app.use("/masterycheck", routers.masterycheck);
