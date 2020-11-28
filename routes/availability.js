@@ -13,8 +13,9 @@ const Availability = require("../models/Availability");
 
 module.exports = router;
 
+//get availability for the current user
 router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  Availability.findOne({ _userId: req.user._id })
+  Availability.findOne({ _userId: req.user._id }).select({busy: 1, _id: 1, _userId: 1})
     .then((r) => {
       res.json(r);
     })
@@ -24,6 +25,7 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
 });
 
+//update availability, duplicates, past dates, invalid dates are all ignored 
 router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   //input check
   let ok = true;
@@ -63,9 +65,3 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     res.status(400);
   }
 });
-
-// router.post("/availability", ensureAuthenticated, ensureProfessor, (req, res) => {
-//     User.findByIdAndUpdate(req.user.id, {$set:{'availability':req.body.availability}}, {new: true}).then(r => {
-//       res.json(r.availability);
-//     })
-//   })
