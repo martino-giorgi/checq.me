@@ -109,7 +109,6 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 //create a new invite link
-//TODO: if token for class already exists return the existing one.
 router.get(
   "/invite/:classroom_id",
   ensureAuthenticated,
