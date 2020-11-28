@@ -63,6 +63,7 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
+//TODO add start date, end date
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   if (!req.body.name || !req.body.description) {
@@ -77,6 +78,8 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     color: randomColor(),
     is_ordered_mastery: req.body.is_ordered,
     university_domain: "@" + req.user.email.split("@")[1],
+    start_date: req.body.start_date,
+    end_date: req.body.end_date
   });
 
   new_class.save().then((new_element) => {
@@ -110,7 +113,7 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
 });
 
-
+//generates the new map for students and tas.
 async function mapTAs(classroom_id){
   return new Promise((resolve, rejects) => {
     let mapped = {};
@@ -119,7 +122,7 @@ async function mapTAs(classroom_id){
   
     function increaseTa(){
       if(current == ta_ids.length - 1){
-        current == 0
+        current = 0
       }
       else {
         current++;
@@ -127,7 +130,8 @@ async function mapTAs(classroom_id){
     }
   
     Classroom.findById(classroom_id).select({teaching_assistants: 1, lecturer: 1, partecipants: 1}).then(r => {
-      ta_ids = r.teaching_assistants.push(r.lecturer);
+      ta_ids = r.teaching_assistants;
+      ta_ids.push(r.lecturer);
       let stud_ids = r.partecipants;
       stud_ids.forEach(s_id => {
         mapped[s_id] = ta_ids[current];
@@ -137,6 +141,13 @@ async function mapTAs(classroom_id){
     })
   })
 }
+
+router.post("/testmapping", ensureAuthenticated, (req, res) => {
+  mapTAs(req.body.classroom_id).then(map => {
+    console.log(map)
+    res.json(map);
+  })
+})
 
 //create a new invite link
 router.get(
