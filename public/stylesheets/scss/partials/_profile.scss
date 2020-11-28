@@ -24,6 +24,11 @@
         margin: 0 16px 0 16px;
       }
     }
+
+    &:hover {
+      text-decoration: none;
+      cursor: pointer;
+    }
   }
 
   a:not(#logout) {
@@ -59,6 +64,18 @@
 
     .disabled {
       margin-right: 16px;
+    }
+  }
+
+  h2 {
+    margin-bottom: 30px;
+  }
+
+  #github {
+    p {
+      width: 500px;
+      max-width: 500px;
+      font-weight: 400;
     }
   }
 }

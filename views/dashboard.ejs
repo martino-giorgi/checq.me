@@ -24,7 +24,7 @@
               <h3 class="primary"> Schedule </h3>
             </div>
 
-            <!-- Content -->
+            <!-- Content of scheduler -->
 
           </div>
 
@@ -34,19 +34,21 @@
               <h3 class="primary"> Classrooms </h3>
             </div>
 
-            <div class="classroom-list">
-              <% model.classrooms.forEach((classroom) => { %>
-                <a>
-                  <div class="classroom-box" style="background-color: #<%= classroom.color %>">
-                    <span class="circle">
-                      <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
-                    </span>
+            <% if (model.user.classrooms.length > 0) { %>
+              <div class="classroom-list">
+                <% model.classrooms.forEach((classroom) => { %>
+                  <a>
+                    <div class="classroom-box" style="background-color: #<%= classroom.color %>">
+                      <span class="circle">
+                        <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
+                      </span>
 
-                    <p class="classroom-name"> <%= classroom.name %> </p>
-                  </div>
-                </a>
-              <% }); %>
-            </div>
+                      <p class="classroom-name"> <%= classroom.name %> </p>
+                    </div>
+                  </a>
+                <% }); %>
+              </div>
+            <% } %>
           </div>
         </div>
 

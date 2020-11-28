@@ -31,7 +31,7 @@
       </div>
     </a>
 
-    <a id="logout" onclick="logout()">
+    <a id="logout" href="/user/logout">
       <div class="settings">
         <img src="/assets/icons/buttons/logout.svg" alt="edit profile icon" />
         <p class="normal red"> Logout </p>
@@ -52,12 +52,23 @@
           <label for="input_surname">Surname</label>
           <input type="text" class="form-control" id="input_surname" placeholder="Surname" value="<%= user.surname %>">
         </div>
-        <button type="submit" class="btn btn-primary">Update Information</button>
+        <button type="submit" class="button">Update Information</button>
       </form>
     </div>
 
     <div hidden id="github">
       <h2>Github Integration</h2>
+
+      <p class="normal">
+        By connecting your GitHub account to checq.me, you will be able to reserve your mastery checks.
+        Every time you push a commit to GitHub using a certain phrase (determined by the professor of
+        your course), a mastery check will be automatically reserved.
+        <br><br>
+        For more information on how checq.me does this, check out our repo on
+        <a href="https://github.com/martino-giorgio/checq.me">GitHub</a>.
+
+        <br><br>
+      </p>
 
       <% if (user.githubId == "") { %> 
         <a class="btn btn-social btn-github" href="/github">
@@ -92,7 +103,7 @@
           <label for="input_confpassword">Confirm New Password</label>
           <input type="password" class="form-control" id="input_confnewpassword" placeholder="Confirm New Password">
         </div>
-        <button type="submit" class="btn btn-primary">Update Password</button>
+        <button type="submit" class="button">Update Password</button>
       </form>
     </div>
   </div>
