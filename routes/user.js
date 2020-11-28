@@ -257,9 +257,3 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
     .catch((err) => res.status(404).json({}))
 })
 
-
-router.post("/availability", ensureAuthenticated, ensureProfessor, (req, res) => {
-  User.findByIdAndUpdate(req.user.id, {$set:{'availability':req.body.availability}}, {new: true}).then(r => {
-    res.json(r.availability);
-  })
-})

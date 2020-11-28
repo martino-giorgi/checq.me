@@ -156,52 +156,55 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
     !(
       (end.isoWeekday() == req.body.iso_day_n) &&
       start.weekday() == req.body.iso_day_n
-    )
+    ) ||
+    (end.diff(start)<=0)
   ) {
-    res.status(400);
+    res.status(400).end();
   }
-  ClassroomMasteryDay.findOne({
-    classroom: req.body._id,
-    iso_day_n: req.body.iso_day_n,
-  }).then(r => {
-    console.log(r);
-    if (r) {
-      res.status(400).end();
-    } else {
-      const new_mastery_day = new ClassroomMasteryDay({
-        classroom: req.body._id,
-        iso_day_n: req.body.iso_day_n,
-        start_time: start.valueOf(),
-        end_time: end.valueOf(),
-      });
-      new_mastery_day
-        .save()
-        .then((new_element) => {
-          Classroom.findByIdAndUpdate(
-            req.body._id,
-            { $set: { mastery_days: new_element._id } },
-            { new: true }
-          )
-            .select({ mastery_days: 1, _id: 0 })
-            .then((ms) => {
-              ClassroomMasteryDay.find()
-                .where("_id")
-                .in(ms.mastery_days)
-                .then((x) => {
-                  res.json(x);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  res.status(400).end();
-                });
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).end();
+  else {
+    ClassroomMasteryDay.findOne({
+      classroom: req.body._id,
+      iso_day_n: req.body.iso_day_n,
+    }).then(r => {
+      console.log(r);
+      if (r) {
+        res.status(400).end();
+      } else {
+        const new_mastery_day = new ClassroomMasteryDay({
+          classroom: req.body._id,
+          iso_day_n: req.body.iso_day_n,
+          start_time: start.valueOf(),
+          end_time: end.valueOf(),
         });
-    }
-  });
+        new_mastery_day
+          .save()
+          .then((new_element) => {
+            Classroom.findByIdAndUpdate(
+              req.body._id,
+              { $set: { mastery_days: new_element._id } },
+              { new: true }
+            )
+              .select({ mastery_days: 1, _id: 0 })
+              .then((ms) => {
+                ClassroomMasteryDay.find()
+                  .where("_id")
+                  .in(ms.mastery_days)
+                  .then((x) => {
+                    res.json(x);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    res.status(400).end();
+                  });
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).end();
+          });
+      }
+    });
+  }
 });
 
 /*

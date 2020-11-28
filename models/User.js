@@ -35,11 +35,10 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: false
     },
-    availability:{
-        type:Map,
-        of:{type: Array},
-        required: false
-    }
+    availability:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Availability'
+    }]
 })
 
 const User = mongoose.model('User', UserSchema);
