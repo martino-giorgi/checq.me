@@ -1,5 +1,8 @@
 var c_id = undefined;
 
+/**
+ * Initialize the view by getting the right class and display it's informations
+ */
 function init() {
   init_mastery();
   let url = new URL(window.location.href)
@@ -13,10 +16,17 @@ function init() {
   })
 }
 
+/**
+ * Display the classroom informations
+ * @param {Object} classroom the classroom object
+ */
 function display_class_info(classroom) {
   document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(classroom[0]);
 }
 
+/**
+ * Toggle between showing and hiding the form used to add TA
+ */
 function toggle_show_ta_form() {
   let section = document.getElementById("ta_form");
   if (section.innerHTML == "") {
@@ -29,7 +39,9 @@ function toggle_show_ta_form() {
   }
 }
 
-// Show/Hide professor assignment form
+/**
+ * Toggle between showing and hiding the form to add a professor
+ */
 function toggle_show_prof_form() {
   let section = document.getElementById("prof_form");
   if (section.innerHTML == "") {
@@ -42,6 +54,9 @@ function toggle_show_prof_form() {
   }
 }
 
+/**
+ * Toggle between showing and hiding the topic form
+ */
 function toggle_show_topic_form() {
   let model = {
     id: API.class_obj._id,
@@ -49,6 +64,7 @@ function toggle_show_topic_form() {
   }
   document.getElementById("topic_form").innerHTML = ejs.views_manager_classrooms_new_topic(model)
 }
+
 
 function show_new_selected() {
   let list = document.getElementById("partecipants_list");
@@ -72,6 +88,11 @@ function show_new_selected() {
 API = (function () {
   let class_obj = undefined;
 
+  /**
+   * Get the classroom object corresponding to the given id
+   * @param {Number} id the id of the classroom 
+   * @returns {Promise} the promise that will give the classroom object
+   */
   function get_class_info(id) {
     return fetch("/classroom/" + id).then(res => {
       return res.json();
@@ -87,6 +108,7 @@ API = (function () {
     });
   }
 
+  
   function show_topic(topic_id) {
     fetch(`/topic/${topic_id}`)
       .then((res) => {

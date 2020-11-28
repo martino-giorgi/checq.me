@@ -104,10 +104,16 @@ function handle_check_button() {
         check_question(body).then( res=> {
             // After getting the result, show it to the user in the view
             show_answer(res.result);
+
+            if (res.result) {
+                let button = document.getElementById("next_question");
+                let clickEvent = new Event('click');
+                button.dispatchEvent(clickEvent);
+            }
         })
     })
 }
-
+ 
 /**
    * Shows on the browser whether the given answer was correct.
    *
