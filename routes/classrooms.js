@@ -18,6 +18,10 @@ const { response } = require("express");
 
 module.exports = router;
 
+// 
+// This view is used to properly render /classrooms, not for direct interaction with the database.
+// 
+
 router.get("/", ensureAuthenticated, (req, res) => {
 		User.findOne({ _id: req.user._id })
 			.select({

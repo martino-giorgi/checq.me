@@ -16,6 +16,8 @@ const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -61,6 +63,7 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
+//TODO add start date, end date
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   if (!req.body.name || !req.body.description) {
@@ -75,6 +78,8 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     color: randomColor(),
     is_ordered_mastery: req.body.is_ordered,
     university_domain: "@" + req.user.email.split("@")[1],
+    start_date: req.body.start_date,
+    end_date: req.body.end_date
   });
 
   new_class.save().then((new_element) => {
@@ -108,8 +113,17 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
 });
 
+//generates the new map for students and tas.
+
+
+router.post("/testmapping", ensureAuthenticated, (req, res) => {
+  mapTAs(req.body.classroom_id).then(updated_classroom => {
+    console.log(updated_classroom);
+    res.json(updated_classroom);
+  })
+})
+
 //create a new invite link
-//TODO: if token for class already exists return the existing one.
 router.get(
   "/invite/:classroom_id",
   ensureAuthenticated,
@@ -121,7 +135,6 @@ router.get(
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
         } else {
           Classroom.findById(req.params.classroom_id).then((c) => {
-            // console.log(c.lecturer.toString() == req.user._id.toString());
             if (c && c.lecturer.toString() == req.user._id.toString()) {
               let token = new TokenClassroom({
                 _classroomId: c._id,
@@ -148,50 +161,70 @@ router.get(
   }
 );
 
+//(((move to a new route?)))
 //add a mastery day for this classroom, id of the classromm is expected in the body
-//TODO
-//check if there already is an entry with the same dates before adding
 router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
   let start = moment(req.body.start, "YYYY-MM-DDTHH:mm", true);
   let end = moment(req.body.end, "YYYY-MM-DDTHH:mm", true);
-  console.log(start, end);
-  if (start.isValid && end.isValid) {
-    const new_mastery_day = new ClassroomMasteryDay({
-      classroom: req.body._id,
-      start_time: start.valueOf(),
-      end_time: end.valueOf(),
-    });
-
-    new_mastery_day
-      .save()
-      .then((new_element) => {
-        Classroom.findByIdAndUpdate(
-          req.body._id,
-          { $set: { mastery_days: new_element._id } },
-          { new: true }
-        )
-          .select({ mastery_days: 1, _id: 0 })
-          .then((ms) => {
-            ClassroomMasteryDay.find()
-              .where("_id")
-              .in(ms.mastery_days)
-              .then((x) => {
-                res.json(x);
-              })
-              .catch((err) => {
-                console.log(err);
-                res.json({});
+  if (
+    !(start.isValid && end.isValid) ||
+    // !(
+    //   (end.isoWeekday() == req.body.iso_day_n) &&
+    //   start.weekday() == req.body.iso_day_n
+    // ) ||
+    (end.diff(start)<=0)
+  ) {
+    console.log("invalid date")
+    res.status(400).end();
+  }
+  else {
+    ClassroomMasteryDay.findOne({
+      classroom: req.body._classroomId,
+      iso_day_n: req.body.iso_day_n,
+    }).then(r => {
+      console.log(r);
+      if (r) {
+        res.status(400).end();
+      } else {
+        const new_mastery_day = new ClassroomMasteryDay({
+          classroom: req.body._classroomId,
+          iso_day_n: req.body.iso_day_n,
+          start_time: start.valueOf(),
+          end_time: end.valueOf(),
+        });
+        new_mastery_day
+          .save()
+          .then((new_element) => {
+            Classroom.findByIdAndUpdate(
+              req.body._classroomId,
+              { $set: { mastery_days: new_element._id } },
+              { new: true }
+            )
+              .select({ mastery_days: 1})
+              .then((ms) => {
+                ClassroomMasteryDay.find()
+                  .where("_id")
+                  .in(ms.mastery_days)
+                  .then((x) => {
+                    res.json(x);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    res.status(400).end();
+                  });
               });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).end();
           });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({});
-      });
-  } else {
-    res.json({});
+      }
+    });
   }
 });
+
+
+
 /*
 STUDENT ROUTES
 */

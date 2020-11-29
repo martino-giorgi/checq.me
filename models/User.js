@@ -35,7 +35,16 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: false
     },
-<<<<<<< HEAD
+
+    availability:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Availability'
+    }],
+    classrooms_grades:{
+        type: Map,
+        required: true,
+        default: {}
+
     githubToken: {
         type: String,
         required: false
@@ -47,12 +56,12 @@ const UserSchema = new mongoose.Schema({
     gravatar: {
         type: String,
         required: false,
-=======
+
     availability:{
         type:Map,
         of:{type: Array},
         required: false
->>>>>>> scheduler-testing
+
     }
 })
 

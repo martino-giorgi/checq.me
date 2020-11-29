@@ -103,6 +103,12 @@ app.use("/classrooms", routers.classrooms);
 // Route for Topic
 app.use("/topic", routers.topic);
 
+// Route for Availability
+app.use("/availability", routers.availability);
+
+// Route for Appoinment
+app.use("/appointment", routers.appointment);
+
 // Route for MasteryCheck
 app.use("/masterycheck", routers.masterycheck);
 
