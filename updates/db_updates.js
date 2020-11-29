@@ -2,7 +2,11 @@ const { rejects } = require("assert");
 const mongoose = require("mongoose");
 const { resolve } = require("path");
 
-async function mapTAs(classroom_id) {
+/*===========================
+CLASSROOM FUNCTIONS
+============================*/
+
+async function re_mapTAs(classroom_id) {
   return new Promise((resolve, rejects) => {
     let mapped = {};
     let ta_ids;
@@ -41,8 +45,12 @@ async function mapTAs(classroom_id) {
   });
 }
 
-async function updateUser(user_id, classroom_id) {
-  console.log("ciao");
+//TODO
+// async function delete_student_from_classroom(classroom_id, user_id){
+//   return new Promise((resolve, rejects) => {})
+// }
+
+function updateUser(user_id, classroom_id) {
   const User = require("../models/User");
   const ClassroomGrades = require("../models/ClassroomGrades");
   let classroom_grade = new ClassroomGrades({
@@ -53,18 +61,21 @@ async function updateUser(user_id, classroom_id) {
     User.findById(user_id)
       .then((u) => {
         console.log("user found");
-        let m = u.classroom_grade;
-        m[classroom_id] = classroom_grade._id;
-        u.classroom_grade = m;
+        u.classrooms_grades.set(classroom_id.toString(), classroom_grade._id);
         u.save()
-          .then(() => resolve(classroom_grade))
-          .catch((err) => rejects(err));
-      })
-      .catch((err) => rejects(err));
+          .then(() => {return classroom_grade})
+          .catch((err) => console.log(err));
+      }).catch((err) => console.log(err));
   });
 }
 
+/*===========================
+USER FUNCTIONS
+============================*/
+
 module.exports = {
-  mapTAs,
+  re_mapTAs,
   updateUser,
 };
+
+

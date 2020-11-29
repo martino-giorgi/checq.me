@@ -105,6 +105,7 @@ var filter_stud_ar_remove = [
   },
 ];
 
+//added new TA or removed TA
 var filter_ta_ar_update = [
   {
     $match: {
@@ -123,18 +124,18 @@ var filter_ta_ar_update = [
 Classroom.watch(filter_stud_ar_insert).on("change", (data) => {
   let user_id = data.updateDescription.updatedFields.partecipants.pop();
 
-  mapTAs(data.documentKey._id);
+  re_mapTAs(data.documentKey._id);
   updateUser(user_id, data.documentKey._id);
 });
 
 //just for safety, should never happen.
 //if a TA or Professor kicks a user from the class the update should be made ON THE USER which would than trigger the update on the classroom
 Classroom.watch(filter_stud_ar_remove).on("change", (data) => {
-  mapTAs(data.documentKey._id);
+  // mapTAs(data.documentKey._id);
 });
 
 Classroom.watch(filter_ta_ar_update).on("change", (data) => {
-  mapTAs(data.documentKey._id);
+  re_mapTAs(data.documentKey._id);
 });
 
 // TODO:
