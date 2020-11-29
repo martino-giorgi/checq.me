@@ -32,6 +32,11 @@ const MasteryCheckSchema = new mongoose.Schema({
   appointment_duration:{
     type: Number,
     required: false
+  },
+  locked_by:{
+    type:mongoose.Schema.ObjectId,
+    ref: 'MasteryCheck',
+    required:false
   }
 });
 

@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const Topic = require("./Topic");
 const MasteryCheck = require("./MasteryCheck");
-const mapTAs = require("../updates/db_updates")
+const {mapTAs, updateUser} = require('../updates/db_updates');
 
 const ClassroomSchema = new mongoose.Schema({
   name: {
@@ -82,14 +82,30 @@ module.exports = Classroom;
 
 var filter_ar_update_partecipants = [{
   $match: {
-    "updateDescription.updatedFields.partecipants": { $exists: true },
+    $or: [
+      { 'updateDescription.updatedFields.teaching_assistants': { $exists: true } },
+      { $and: [
+          { 'updateDescription.updatedFields.partecipants': { $exists: true } },
+          { operationType: 'insert' }
+      ]},
+    ],
   }
 }];
 
 // var options = { fullDocument: 'updateLookup' };
 
+//updated partecipants field
+//TODO add update on ta list.
 Classroom.watch(filter_ar_update_partecipants).on('change',  data => {
-  // console.log(data.documentKey._id);
-   mapTAs(data.documentKey._id);
+  let user_id = data.updateDescription.updatedFields.partecipants.pop();
+  
+  mapTAs(data.documentKey._id);
+  updateUser(user_id, data.documentKey._id)
 })
 
+// TODO:
+// mapTAs must be called on every update of the field participants
+
+// updateUser must be called when a user is added to the participants field, not if deleted
+// When a user is added to the participants field, the user should be updated by adding
+// the classroom to their classrooms field

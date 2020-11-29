@@ -38,7 +38,12 @@ const UserSchema = new mongoose.Schema({
     availability:[{
         type: mongoose.Schema.ObjectId,
         ref: 'Availability'
-    }]
+    }],
+    classrooms_grades:{
+        type: Map,
+        required: true,
+        default: {}
+    }
 })
 
 const User = mongoose.model('User', UserSchema);

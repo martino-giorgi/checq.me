@@ -16,11 +16,13 @@ const ClassroomGradesSchema = new mongoose.Schema({
   },
   mastery_grades:{
     type:Map,
-    required:true
+    required:true,
+    default: {}
   },
   mastery_topics:{
     type:Map,
-    required:true
+    required:true,
+    default: {}
   }
 });
 
