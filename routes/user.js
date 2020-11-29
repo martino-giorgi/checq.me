@@ -13,10 +13,24 @@ const Token = require("../models/Token");
 
 module.exports = router;
 
+/**
+ * Route serving the signup page.
+ * @name get/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/signup", (req, res) => {
   res.render("signup", {});
 });
 
+/**
+ * Route serving the login page.
+ * @name get/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/login", (req, res) => {
   if (req.isUnauthenticated()) {
     res.render("login", {});
@@ -25,6 +39,13 @@ router.get("/login", (req, res) => {
   }
 });
 
+/**
+ * Route serving the POST request for signup
+ * @name post/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/signup", (req, res) => {
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
