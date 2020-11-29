@@ -1,6 +1,7 @@
 var questions = undefined;
 var i = 0;
 var editor = undefined;
+var options = undefined;
 
 /**
  * Initializes the view by showing the first question and adding event listeners.
@@ -22,6 +23,9 @@ function init_answer_question() {
             init_editor(questions[0]);
             handle_check_button();
         }
+        else {
+            document.getElementById("question_area").innerHTML = "<h1> No questions found";
+        }
 
     })
 }
@@ -32,7 +36,7 @@ function init_answer_question() {
  * @param {Object} q The question to be set
  */
 function set_question(q) {
-    
+    options = [];
     let section = document.getElementById("options_section");
     section.innerHTML = "";
 
@@ -49,6 +53,7 @@ function set_question(q) {
         new_checkbox.value = j;
         section.appendChild(new_input);
         section.appendChild(new_checkbox);
+        options.push(new_checkbox);
     }
 
     let hidden = document.createElement("input");
@@ -104,12 +109,6 @@ function handle_check_button() {
         check_question(body).then( res=> {
             // After getting the result, show it to the user in the view
             show_answer(res.result);
-
-            // if (res.result) {
-            //     let button = document.getElementById("next_question");
-            //     let clickEvent = new Event('click');
-            //     button.dispatchEvent(clickEvent);
-            // }
         })
     })
 }
@@ -138,6 +137,8 @@ function show_answer(res) {
             } else {
                 result_section.innerHTML = "WRONG!"
                 result_section.style.color = "red"
+
+                uncheck_all_options(options);
 
                 setTimeout(function(){ 
                     result_section.innerHTML="";
@@ -203,4 +204,14 @@ function check_question(body) {
     .then( res => {
         return res.json();
     })
+}
+
+/**
+ * Uncheck all selected options
+ * @param {Array} opts array of options to uncheck
+ */
+function uncheck_all_options(opts) {
+    opts.forEach(o => {
+        o.checked = false;
+    });
 }

@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+var ObjectID = require("mongodb").ObjectID;
+
 const {
   ensureAuthenticated,
   ensureProfessor,
@@ -58,6 +60,11 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 // If the request comes from a student, the answers are filtered out so that they are not sent.
 router.get("/:id/questions", ensureAuthenticated, (req, res) => {
   
+  if (!ObjectID.isValid(req.params.id)) {
+   res.json({}).end(); 
+   return;
+  } 
+
   Topic.findById(req.params.id).populate("questions").then(result => {
     // if professor or TA
     if (req.user.role < 2) {
