@@ -1,5 +1,11 @@
 @import "./vars";
 
+
+// ===============================
+//              TABLE
+// ===============================
+
+
 #classroom_table {
   width: 100%;
 
@@ -10,11 +16,21 @@
   border-collapse: separate; 
   border-spacing: 16px;
 
+
+  // ===============================
+  //          TABLE HEADER
+  // ===============================
+
   thead {
     .class-color-header {
       transform: translateX(-16px);
     }
   }
+
+
+  // ===============================
+  //           TABLE BODY
+  // ===============================
   
   tbody {
     tr {
@@ -36,6 +52,7 @@
 
         p {
           margin: 0px;
+          width: max-content;
         }
 
         p:not(.class-name) {
@@ -52,7 +69,33 @@
             cursor: help;
           }
         }
+
+        .circle {
+          img {
+            height: 24px;
+            width: 24px;
+          }
+        }
+
+        &:nth-of-type(2) {
+          width: 60%
+        }  
+      }
+
+      .class-detail-td {
+        width: 24px;
       }
     }
   }
+}
+
+// ===============================
+//          NO CLASSROOMS
+// ===============================
+
+#no-classrooms {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 }

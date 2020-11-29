@@ -1,0 +1,81 @@
+@import "./vars";
+
+.secondary-nav {
+  margin: 26px 26px 26px 26px;
+  padding-right: 2px;
+
+  border-right: 1px solid $gray;
+
+  .active {
+    filter: brightness(0);
+  }
+
+  a {
+    .settings {
+      display: flex;
+      flex-direction: row;
+    
+      align-items: center;
+
+      margin-bottom: 20px;
+      margin-right: 10px;
+
+      p {
+        margin: 0 16px 0 16px;
+      }
+    }
+
+    &:hover {
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+
+  a:not(#logout) {
+    .settings {
+      &:hover {
+        filter: brightness(0);
+        text-decoration: none;
+
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.content {
+  margin-top: 26px;
+  margin-left: 5px;
+
+  a.disabled {
+    color: #8c8c8c;
+    
+    pointer-events: none;
+    cursor: default;
+
+    &:hover {
+      background-color: #444444;
+    }
+  }
+
+  .github-connected {
+    display: flex;
+    flex-flow: row;
+
+    .disabled {
+      margin-right: 16px;
+    }
+  }
+
+  h2 {
+    margin-bottom: 30px;
+  }
+
+  #github {
+    p {
+      width: 500px;
+      max-width: 500px;
+      font-weight: 400;
+    }
+  }
+}

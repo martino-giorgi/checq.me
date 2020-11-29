@@ -13,6 +13,7 @@ const routers = require("./routes");
 const router = require("./routes/profile");
 
 const app = express();
+const SmeeClient = require('smee-client')
 
 const PORT = process.env.PORT || 3000;
 
@@ -114,6 +115,23 @@ app.use("/masterycheck", routers.masterycheck);
 app.use("/profile", routers.profile);
 
 app.use("/question", routers.question);
+
+// Route for GitHub login
+app.use("/github", routers.github);
+
+// Route to intercept webhooks from GitHub
+app.use("/hook", routers.hook);
+
+
+// Webhook
+const smee = new SmeeClient({
+  source: 'https://smee.io/UMN2a46A0lROwbE',
+  target: 'http://localhost:3000/hook',
+  // logger: console
+})
+
+smee.start()
+
 
 // Route for 404 error
 app.get("*", function (req, res) {
