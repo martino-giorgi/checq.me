@@ -13,6 +13,8 @@ const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Availability = require("../models/Availability");
 const Appointment = require("../models/Appointment");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -79,6 +81,32 @@ module.exports = router;
 //     });
 //   });
 // }
+
+async function can_mastery(mastery_id, user_id){
+  return new Promise((resolve, rejects) => {
+    MasteryCheck.findById(mastery_id).populate({path: 'classroom', select: ['is_ordered_mastery']}).then(ordered => {
+      if(!ordered.classroom.is_ordered_mastery || ordered.locked_by == undefined){
+        resolve(true);
+      }
+      else {
+        User.findById(user_id).select({classrooms_grades: 1}).exec((err, c_grades) => {
+          if(err){
+            console.log("error getting grades of user: "+ user_id);
+            rejects(false);
+          }
+          else {
+            if(c_grades[ordered.classroom].includes(ordered.locked_by)){
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          }
+        })
+      }
+    })
+  })
+
+}
 
 // TODO: Cambia nome prima di committare!!
 router.post("/sgrang", (req, res) => {
