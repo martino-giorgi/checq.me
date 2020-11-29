@@ -10,10 +10,8 @@ function init_answer_question() {
     
     let url = new URL(window.location.href)
     topic_id = url.searchParams.get('topic')
-    console.log(topic_id)
 
     get_questions(topic_id).then( res => {
-        console.log(res);
         questions = res;
 
         if (questions && questions.length > 0) {
@@ -37,10 +35,8 @@ function init_answer_question() {
  */
 function update_bar() {
     let bar = document.getElementById("questions_bar");
-    console.log("len:", questions.length)
     let val = (( i % questions.length) / questions.length)*100 ;
     val = val == 0? 100 : val;
-    console.log("this:", val);
     bar.style.width = `${val}%`;
 }
 
@@ -56,9 +52,8 @@ function set_question(q) {
 
     // Show input buttons
     for (let j=0; j < q.answer.length; ++j) {
-        console.log(q.answer[j]);
         new_input = document.createElement("label");
-        
+        new_input.id = "label"+j;
         new_input.innerHTML = q.answer[j][0];
 
         new_checkbox = document.createElement("input");
@@ -90,7 +85,6 @@ function set_question(q) {
 function handle_next_button() {
     let button = document.getElementById("next_question");
     button.addEventListener("click", (e)=> {
-        console.log(i);
         let value = button.value;
         set_question(questions[value]);
         update_editor(questions[value]);
@@ -109,12 +103,12 @@ function handle_check_button() {
     btn.addEventListener("click", (e) => {
         let checkboxes = document.getElementsByClassName("option_checkbox");
         let hidden = document.getElementById("question_id");
-        console.log(hidden);
-        let checked_answers = []
+        let checked_answers = [];
+        let selected = [];
         for (const c of checkboxes) {
             if (c.checked) {
                 checked_answers.push(c.value);
-                //console.log(c);
+                selected.push(document.getElementById("label"+ c.value)); 
             }
         }
         let body = JSON.stringify({
@@ -123,7 +117,7 @@ function handle_check_button() {
         })
         check_question(body).then( res=> {
             // After getting the result, show it to the user in the view
-            show_answer(res.result);
+            show_answer(res.result, selected);
         })
     })
 }
@@ -135,7 +129,7 @@ function handle_check_button() {
    *
    * @param {Boolean} res The result of the given answer
    */
-function show_answer(res) {
+function show_answer(res, selected_labels) {
     let result_section = document.getElementById("answer_result");
             if(res) {
                 result_section.innerHTML = "CORRECT!";
@@ -146,11 +140,16 @@ function show_answer(res) {
 
                 let bar = document.getElementById("progress_bar");
                 bar.classList.add("progress_bar_animated");
-
+                selected_labels.forEach(l => {
+                    l.classList.add("big_green_label")
+                });
                 setTimeout(function(){ 
                     result_section.innerHTML="";
                     button.dispatchEvent(clickEvent); 
                     bar.classList.remove("progress_bar_animated");
+                    selected_labels.forEach(l=>{
+                        l.classList.remove("big_green_label");
+                    })
                 }, 1000);
                 
             } else {
@@ -173,7 +172,6 @@ function show_answer(res) {
 function init_editor(first_q) {
     let txt_area = document.getElementById("text_area");
     let lang = first_q.lang;
-    console.log(lang);
 
     editor = CodeMirror.fromTextArea(txt_area, {
         lineNumbers: true,
@@ -214,7 +212,6 @@ function get_questions(id) {
  * @returns {Promise} The promise containing the asnwer from the server (true/false)
  */
 function check_question(body) {
-    console.log(body);
     return fetch("/question/check", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
