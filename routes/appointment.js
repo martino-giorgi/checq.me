@@ -105,7 +105,6 @@ async function can_mastery(mastery_id, user_id){
       }
     })
   })
-
 }
 
 // TODO: Cambia nome prima di committare!!
