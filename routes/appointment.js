@@ -71,14 +71,14 @@ module.exports = router;
 // });
 
 
-async function getAvailableTa(student_id, tas) {
-  Appointment.find({ ta: { $in: tas } }).then((app) => {
-    var counts = {};
-    app.forEach(function (x) {
-      counts[x] = (counts[x] || 0) + 1;
-    });
-  });
-}
+// async function getAvailableTa(student_id, tas) {
+//   Appointment.find({ ta: { $in: tas } }).then((app) => {
+//     var counts = {};
+//     app.forEach(function (x) {
+//       counts[x] = (counts[x] || 0) + 1;
+//     });
+//   });
+// }
 
 // TODO: Cambia nome prima di committare!!
 router.post("/sgrang", (req, res) => {

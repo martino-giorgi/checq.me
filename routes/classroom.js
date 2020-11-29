@@ -152,11 +152,10 @@ async function mapTAs(classroom_id){
 }
 
 router.post("/testmapping", ensureAuthenticated, (req, res) => {
-  // mapTAs(req.body.classroom_id).then(updated_classroom => {
-  //   console.log(updated_classroom);
-  //   res.json(updated_classroom);
-  // })
-  res.json(req.user);
+  mapTAs(req.body.classroom_id).then(updated_classroom => {
+    console.log(updated_classroom);
+    res.json(updated_classroom);
+  })
 })
 
 //create a new invite link
