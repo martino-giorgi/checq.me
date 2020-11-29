@@ -137,16 +137,26 @@ async function mapTAs(classroom_id){
         mapped[s_id] = ta_ids[current];
         increaseTa();
       })
-      resolve(mapped);
+
+      r.ta_mapping = mapped;
+
+      r.save((err) => {
+        if (err) {
+          res.status(500).end();
+        }
+      })
+
+      resolve(r);
     })
   })
 }
 
 router.post("/testmapping", ensureAuthenticated, (req, res) => {
-  mapTAs(req.body.classroom_id).then(map => {
-    console.log(map)
-    res.json(map);
-  })
+  // mapTAs(req.body.classroom_id).then(updated_classroom => {
+  //   console.log(updated_classroom);
+  //   res.json(updated_classroom);
+  // })
+  res.json(req.user);
 })
 
 //create a new invite link
@@ -194,17 +204,18 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
   let end = moment(req.body.end, "YYYY-MM-DDTHH:mm", true);
   if (
     !(start.isValid && end.isValid) ||
-    !(
-      (end.isoWeekday() == req.body.iso_day_n) &&
-      start.weekday() == req.body.iso_day_n
-    ) ||
+    // !(
+    //   (end.isoWeekday() == req.body.iso_day_n) &&
+    //   start.weekday() == req.body.iso_day_n
+    // ) ||
     (end.diff(start)<=0)
   ) {
+    console.log("invalid date")
     res.status(400).end();
   }
   else {
     ClassroomMasteryDay.findOne({
-      classroom: req.body._id,
+      classroom: req.body._classroomId,
       iso_day_n: req.body.iso_day_n,
     }).then(r => {
       console.log(r);
@@ -212,7 +223,7 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
         res.status(400).end();
       } else {
         const new_mastery_day = new ClassroomMasteryDay({
-          classroom: req.body._id,
+          classroom: req.body._classroomId,
           iso_day_n: req.body.iso_day_n,
           start_time: start.valueOf(),
           end_time: end.valueOf(),
@@ -221,11 +232,11 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
           .save()
           .then((new_element) => {
             Classroom.findByIdAndUpdate(
-              req.body._id,
+              req.body._classroomId,
               { $set: { mastery_days: new_element._id } },
               { new: true }
             )
-              .select({ mastery_days: 1, _id: 0 })
+              .select({ mastery_days: 1})
               .then((ms) => {
                 ClassroomMasteryDay.find()
                   .where("_id")

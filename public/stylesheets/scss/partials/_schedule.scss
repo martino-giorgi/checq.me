@@ -1,9 +1,19 @@
-#calendar-main {
-    display: flex;
-    align-items: center;
-}
+@import './vars';
 
 .calendar-container {
-    width: 90%;
-    margin-top: 100px;
+    margin: 26px;
+}
+
+.btn-primary {
+   background-color: $primary !important;
+   border-color: $primary_dark !important;
+}
+
+.btn-primary:focus {
+    box-shadow: none !important;
+    background-color: $primary_dark !important;
+}
+
+.btn-primary:hover {
+    background-color: $primary_dark !important;
 }

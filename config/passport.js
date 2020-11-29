@@ -42,9 +42,17 @@ module.exports = (passport) => {
     done(null, user.id);
   });
 
+  // passport.deserializeUser((id, done) => {
+  //   User.findById(id, (err, user) => {
+  //     done(err, user);
+  //   });
+  // });
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
+    // User.findById(id, (err, user) => {
+    //   done(err, user);
+    // });
+    User.findById(id).select({password: 0}).exec((err, user)=>{
       done(err, user);
-    });
+    })
   });
 };
