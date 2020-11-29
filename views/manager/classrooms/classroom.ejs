@@ -4,9 +4,12 @@
 
 
 <div class="wrapper">
+
     <%- include("../../partials/navigation", {active: 'manager'}) %>
     <main>
         <h1>Classroom Manager</h1>
+        <div id="sub_navbar">
+            </div>
         <section id="class_options">
             <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
             <button onclick="toggle_show_ta_form()">Assign a TA</button>
@@ -28,5 +31,5 @@
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
 <script>
-    window.onload = init;
+    window.onload = init_manager;
 </script>

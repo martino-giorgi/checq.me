@@ -27,11 +27,7 @@ const AppointmentSchema = new mongoose.Schema({
     grade:{
         type: String,
         required: false
-    },
-    attempt:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'MasteryAttempt',
-    },
+    }
 })
 
 const Answer = mongoose.model('Appointment', AppointmentSchema);

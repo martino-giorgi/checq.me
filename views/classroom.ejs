@@ -4,10 +4,10 @@
   <p hidden id="class-n"> <%= model.classrooms.length %> </p>
   
   <% if (model.user.classrooms.length > 0) { %>
-    <table>
+    <table id="classroom_table">
       <thead>
         <!-- Table Header -->
-
+        
         <tr>
           <td class="class-color-header"></td>
           <td class="small gray"> Name </td>

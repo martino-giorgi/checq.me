@@ -17,19 +17,25 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
-
-
 router.get("/classroom", ensureAuthenticated, ensureProfessor, (req, res) => {
-  
   let data = {
     user: req.user,
-    classroom: req.query.id
-  }
+    classroom: req.query.id,
+  };
   res.render("manager/classrooms/classroom", data);
-})
+});
 
-
-
+router.get(
+  "/classroom/students",
+  ensureAuthenticated,
+  ensureProfessor,
+  (req, res) => {
+    res.render("manager/classrooms/students", {
+      user: req.user,
+      classroom: req.query.id,
+    });
+  }
+);
 
 //old routes:
 

@@ -12,6 +12,6 @@ const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
-router.get("/", ensureAuthenticated, ensureStudent, (req, res) => {
-  res.render("scheduler/scheduler", { user: req.user });
+router.get("/", ensureAuthenticated, (req, res) => {
+  res.render("schedule", { user: req.user });
 });

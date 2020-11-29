@@ -48,6 +48,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
@@ -93,7 +94,7 @@ app.use("/dashboard", routers.dashboard);
 app.use("/manager", routers.manager);
 
 // Route for Scheduler
-app.use("/scheduler", routers.scheduler);
+app.use("/schedule", routers.schedule);
 
 // Route for Classrooms
 app.use("/classroom", routers.classroom);

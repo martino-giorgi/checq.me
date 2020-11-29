@@ -35,6 +35,7 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: false
     },
+<<<<<<< HEAD
     githubToken: {
         type: String,
         required: false
@@ -46,6 +47,12 @@ const UserSchema = new mongoose.Schema({
     gravatar: {
         type: String,
         required: false,
+=======
+    availability:{
+        type:Map,
+        of:{type: Array},
+        required: false
+>>>>>>> scheduler-testing
     }
 })
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
+const moment = require("moment");
 const router = express.Router();
 const {
   ensureAuthenticated,
@@ -10,11 +11,11 @@ const {
 const path = require("path");
 
 const MasteryCheck = require("../models/MasteryCheck");
+const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
 
 module.exports = router;
 
@@ -73,35 +74,39 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     topics: [],
     color: randomColor(),
     is_ordered_mastery: req.body.is_ordered,
-    university_domain: '@' + req.user.email.split('@')[1]
+    university_domain: "@" + req.user.email.split("@")[1],
   });
 
   new_class.save().then((new_element) => {
     // res.redirect("/classroom");
-    res.json(new_element)
+    res.json(new_element);
   });
-  User.findById(req.user._id).then(professor => {
+  User.findById(req.user._id).then((professor) => {
     professor.classrooms.addToSet(new_class._id);
     professor.save();
-  })
+  });
 });
 
 router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.find({ _id: req.params.id })
-      .populate("teaching_assistants")
-      .populate("mastery_checks")
-      .populate("lecturer")
-      .populate("partecipants")
-      .then((result) => {
-        // 
-        res.json(result);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({});
-      });
-        
-})
+    .populate("teaching_assistants")
+    .populate("mastery_checks")
+    .populate({
+      path: "lecturer",
+      select: ["email", "name", "surname", "classrooms", "role"],
+    })
+    .populate({
+      path: "partecipants",
+      select: ["email", "name", "surname", "classrooms", "role"],
+    })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({});
+    });
+});
 
 //create a new invite link
 //TODO: if token for class already exists return the existing one.
@@ -110,37 +115,83 @@ router.get(
   ensureAuthenticated,
   ensureProfessor,
   (req, res) => {
-    TokenClassroom.findOne({_classroomId: req.params.classroom_id}).then(c_t => {
-      if(c_t){
-        res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`)
-      } else {
-        Classroom.findById(req.params.classroom_id).then((c) => {
-          // console.log(c.lecturer.toString() == req.user._id.toString());
-          if (c && c.lecturer.toString() == req.user._id.toString()) {
-            let token = new TokenClassroom({
-              _classroomId: c._id,
-              token: crypto.randomBytes(20).toString("hex"),
-            });
-            token
-              .save()
-              .then(() => {
-                res.json(
-                  `http://${req.headers.host}/classroom/join/${token.token}`
-                );
-              })
-              .catch((err) => {
-                console.log(err);
-                res.status(400).end();
+    TokenClassroom.findOne({ _classroomId: req.params.classroom_id }).then(
+      (c_t) => {
+        if (c_t) {
+          res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
+        } else {
+          Classroom.findById(req.params.classroom_id).then((c) => {
+            // console.log(c.lecturer.toString() == req.user._id.toString());
+            if (c && c.lecturer.toString() == req.user._id.toString()) {
+              let token = new TokenClassroom({
+                _classroomId: c._id,
+                token: crypto.randomBytes(20).toString("hex"),
               });
-          } else {
-            res.status(400).end();
-          }
-        });
+              token
+                .save()
+                .then(() => {
+                  res.json(
+                    `http://${req.headers.host}/classroom/join/${token.token}`
+                  );
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(400).end();
+                });
+            } else {
+              res.status(400).end();
+            }
+          });
+        }
       }
-    })
+    );
   }
 );
 
+//add a mastery day for this classroom, id of the classromm is expected in the body
+//TODO
+//check if there already is an entry with the same dates before adding
+router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
+  let start = moment(req.body.start, "YYYY-MM-DDTHH:mm", true);
+  let end = moment(req.body.end, "YYYY-MM-DDTHH:mm", true);
+  console.log(start, end);
+  if (start.isValid && end.isValid) {
+    const new_mastery_day = new ClassroomMasteryDay({
+      classroom: req.body._id,
+      start_time: start.valueOf(),
+      end_time: end.valueOf(),
+    });
+
+    new_mastery_day
+      .save()
+      .then((new_element) => {
+        Classroom.findByIdAndUpdate(
+          req.body._id,
+          { $set: { mastery_days: new_element._id } },
+          { new: true }
+        )
+          .select({ mastery_days: 1, _id: 0 })
+          .then((ms) => {
+            ClassroomMasteryDay.find()
+              .where("_id")
+              .in(ms.mastery_days)
+              .then((x) => {
+                res.json(x);
+              })
+              .catch((err) => {
+                console.log(err);
+                res.json({});
+              });
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json({});
+      });
+  } else {
+    res.json({});
+  }
+});
 /*
 STUDENT ROUTES
 */
@@ -151,36 +202,37 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
-
       let p1 = Classroom.findById(t._classroomId);
       let p2 = User.findById(req.user._id);
 
       // Get classroom and user ( wait to have them both )
-      Promise.all([p1, p2]).then( values => {
-        let classroom = values[0];
-        let user = values[1];
+      Promise.all([p1, p2])
+        .then((values) => {
+          let classroom = values[0];
+          let user = values[1];
 
-        user.classrooms.addToSet(t._classroomId);
-        classroom.partecipants.addToSet(req.user._id);
+          user.classrooms.addToSet(t._classroomId);
+          classroom.partecipants.addToSet(req.user._id);
 
-        let p3 = classroom.save();
-        let p4 = user.save();
+          let p3 = classroom.save();
+          let p4 = user.save();
 
-        // Wait for both user and classroom to be saved
-        Promise.all([p3,p4]).then( results => {
-          if(results[0] && results[1]) {
-            res.redirect("/dashboard");
-          }
+          // Wait for both user and classroom to be saved
+          Promise.all([p3, p4])
+            .then((results) => {
+              if (results[0] && results[1]) {
+                res.redirect("/dashboard");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              res.send("error joining class, retry").end();
+            });
         })
-        .catch( (err) => {
+        .catch((err) => {
           console.log(err);
           res.send("error joining class, retry").end();
-        })
-      }) 
-      .catch( (err) => {
-        console.log(err);
-        res.send("error joining class, retry").end();
-      })
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -188,12 +240,23 @@ router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
     });
 });
 
-
 // Random color chooser
 function randomColor() {
-  let colors = ['e53935', 'd81b60', '8e24aa', '5e35b1', '3949ab',
-                '1e88e5', '039be5', '00acc1', '00897b', '43a047',
-                'f4511e', '795548', '546e7a'];
+  let colors = [
+    "e53935",
+    "d81b60",
+    "8e24aa",
+    "5e35b1",
+    "3949ab",
+    "1e88e5",
+    "039be5",
+    "00acc1",
+    "00897b",
+    "43a047",
+    "f4511e",
+    "795548",
+    "546e7a",
+  ];
 
   color = colors[Math.floor(Math.random() * colors.length)];
   return color;
