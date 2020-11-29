@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="/stylesheets/css/flash.min.css" />
+<link rel="stylesheet" href="/stylesheets/css/style.css" />
+<link
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  rel="stylesheet"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+  crossorigin="anonymous"
+/>
+
+<div class="wrapper">
+  <%- include("../../partials/navigation", {active: 'manager'}) %>
+  <main>
+    <h1>Classroom Manager</h1>
+    <div id="sub_navbar"></div>
+
+    <h3>Student List:</h3>
+    <div id="student_list">
+
+    </div>
+  </main>
+</div>
+
+<script src="/js/ajax_mastery.js"></script>
+<script src="/js/flash.min.js"></script>
+<script src="/js/ajax_classroom_manager.js"></script>
+<script src="/js/ajax_topic.js"></script>
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>
+<script>
+  window.onload = init_students;
+</script>

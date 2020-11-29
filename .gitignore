@@ -103,5 +103,7 @@ dist
 # TernJS port file
 .tern-port
 
-# Rendered CSS file
+# Rendered CSS and HTML files
 public/stylesheets/css/style.css
+public/js/views.js
+config/checq-me.2020-11-24.private-key.pem

@@ -3,52 +3,73 @@
 
   <p hidden id="class-n"> <%= model.classrooms.length %> </p>
   
-  <table>
-    <thead>
-      <!-- Header -->
-
-      <tr>
-        <td class="class-color-header"></td>
-        <td class="small gray"> Name </td>
-        <td class="small gray"> Description </td>
-        <td class="small gray"> Lecturer </td>
-        <td class="small gray"> Teaching Assistants </td>
-      </tr>
-    </thead>
-
-    <tbody>
-      <!-- Body -->
-
-      <% model.classrooms.forEach((classroom, index) => { %>
+  <% if (model.user.classrooms.length > 0) { %>
+    <table id="classroom_table">
+      <thead>
+        <!-- Table Header -->
+        
         <tr>
-          <td class="class-color" style="background-color: #<%= classroom.color %>"></div>
-
-          <td class="normal class-name"> <%= classroom.name %> </td>
-          
-          <td>
-            <p class="normal hover-text" id="hover-<%= index %>"> Hover Here </p>
-            <p hidden id="hover-content-<%= index %>"> <%= classroom.description %> </p>
-          </td>
-
-          <td>
-            <p class="normal"> <%= classroom.lecturer.name %> <%= classroom.lecturer.surname %> </p>
-          </td>
-
-          <% if (classroom.teaching_assistants.length > 0) { %>
-            <td>
-              <% for (let i = 0; i < classroom.teaching_assist; i++) { %> 
-                  <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
-              <% } %>
-            </td>
-          <% } else { %>
-            <td>
-              <p class="normal"> N.D. </p>
-            </td>
-          <% } %>
+          <td class="class-color-header"></td>
+          <td class="small gray"> Name </td>
+          <td class="small gray"> Description </td>
+          <td class="small gray"> Lecturer </td>
+          <td class="small gray"> Teaching Assistants </td>
+          <td class="small gray"> Grades </td>
+          <td class=""></td>
         </tr>
-      <% }); %>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <!-- Table Body -->
+
+        <% model.classrooms.forEach((classroom, index) => { %>
+          <tr>
+            <td class="class-color" style="background-color: #<%= classroom.color %>"></div>
+
+            <td class="normal class-name"> <%= classroom.name %> </td>
+            
+            <td style="width: 160px">
+              <p class="normal hover-text" id="hover-<%= index %>"> Hover Here </p>
+              <p hidden id="hover-content-<%= index %>"> <%= classroom.description %> </p>
+            </td>
+
+            <td>
+              <p class="normal"> <%= classroom.lecturer.name %> <%= classroom.lecturer.surname %> </p>
+            </td>
+
+            <% if (classroom.teaching_assistants.length > 0) { %>
+              <td>
+                <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
+                    <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
+                <% } %>
+              </td>
+            <% } else { %>
+              <td>
+                <p class="normal"> N.D. </p>
+              </td>
+            <% } %>
+
+            <td>
+              <!-- TODO: Add grades -->
+              90/100
+            </td>
+
+            <td class="class-detail-td">
+              <a href="">
+                <span class="circle" style="background-color: #<%= classroom.color %>">
+                  <img src="/assets/icons/misc/chevron-right.svg" alt="chevron-right"></img>
+                </span>
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %> 
+    <span id="no-classrooms">
+      <img src="/assets/icons/misc/no_classroom.svg" alt="">
+    </span>  
+  <% } %> 
 </div>
 
 <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -62,8 +83,7 @@
 
     tippy(`#hover-${i}`, {
       content: content,
-      placement: 'right-end',
-      offset: [5, -230]
+      placement: 'right-end'
     });
   }
 </script>

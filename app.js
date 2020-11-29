@@ -13,6 +13,7 @@ const routers = require("./routes");
 const router = require("./routes/profile");
 
 const app = express();
+const SmeeClient = require('smee-client')
 
 const PORT = process.env.PORT || 3000;
 
@@ -47,6 +48,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
@@ -92,7 +94,7 @@ app.use("/dashboard", routers.dashboard);
 app.use("/manager", routers.manager);
 
 // Route for Scheduler
-app.use("/scheduler", routers.scheduler);
+app.use("/schedule", routers.schedule);
 
 // Route for Classrooms
 app.use("/classroom", routers.classroom);
@@ -101,12 +103,35 @@ app.use("/classrooms", routers.classrooms);
 // Route for Topic
 app.use("/topic", routers.topic);
 
+// Route for Availability
+app.use("/availability", routers.availability);
+
+// Route for Appoinment
+app.use("/appointment", routers.appointment);
+
 // Route for MasteryCheck
 app.use("/masterycheck", routers.masterycheck);
 
 app.use("/profile", routers.profile);
 
 app.use("/question", routers.question);
+
+// Route for GitHub login
+app.use("/github", routers.github);
+
+// Route to intercept webhooks from GitHub
+app.use("/hook", routers.hook);
+
+
+// Webhook
+const smee = new SmeeClient({
+  source: 'https://smee.io/UMN2a46A0lROwbE',
+  target: 'http://localhost:3000/hook',
+  // logger: console
+})
+
+smee.start()
+
 
 // Route for 404 error
 app.get("*", function (req, res) {
