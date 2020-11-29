@@ -22,12 +22,26 @@ function init_answer_question() {
             handle_next_button()
             init_editor(questions[0]);
             handle_check_button();
+            update_bar()
         }
         else {
             document.getElementById("question_area").innerHTML = "<h1> No questions found";
         }
 
     })
+}
+
+/**
+ * Updates the width of the progrss bar depending on the current rendered question
+ * Hence depending on the value of i in relationship to the number of questions
+ */
+function update_bar() {
+    let bar = document.getElementById("questions_bar");
+    console.log("len:", questions.length)
+    let val = (( i % questions.length) / questions.length)*100 ;
+    val = val == 0? 100 : val;
+    console.log("this:", val);
+    bar.style.width = `${val}%`;
 }
 
 /**
@@ -76,10 +90,11 @@ function set_question(q) {
 function handle_next_button() {
     let button = document.getElementById("next_question");
     button.addEventListener("click", (e)=> {
-        
+        console.log(i);
         let value = button.value;
         set_question(questions[value]);
         update_editor(questions[value]);
+        update_bar();
     })
 }
 
@@ -128,10 +143,14 @@ function show_answer(res) {
 
                 let button = document.getElementById("next_question");
                 let clickEvent = new Event('click');
-                
+
+                let bar = document.getElementById("progress_bar");
+                bar.classList.add("progress_bar_animated");
+
                 setTimeout(function(){ 
                     result_section.innerHTML="";
                     button.dispatchEvent(clickEvent); 
+                    bar.classList.remove("progress_bar_animated");
                 }, 1000);
                 
             } else {
