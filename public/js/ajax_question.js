@@ -7,18 +7,21 @@ var code_div;
 var text_div;
 var editor;
 var code_or_text = "text";
+var lang = "text";
 
+/**
+ * Initializes the view with the editor and event listeners.
+ */
 function init_question() {
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
 }
-/*
-    Appends a new input of type text to the form used to create multiple choice questions
-    everytime the button to add a field is clicked
-    The inputs have id=i and name=i for i in [0,1,2...]
-*/
 
+/**
+ * Adds a new inut field for a new option when the button is clicked.
+ * @listens click
+ */
 function handle_dynamic_fields() {
     document.getElementById('new_field').addEventListener( "click", (e) => {
 
@@ -63,7 +66,9 @@ function handle_dynamic_fields() {
     })
 }
 
-// Toggle between showing the text area of the code area
+/**
+ * Toggle between the code editor and the text area.
+ */
 function toggle_code_to_text() {
     let btn = document.getElementById("question_type");
     // this input tells if the question if of type text or code
@@ -76,6 +81,7 @@ function toggle_code_to_text() {
         btn.innerHTML = "Code question"
         hidden_input.value = "text";
         code_or_text = "text";
+        lang = "text";
     } 
     // switching from text -> code
     else {
@@ -84,10 +90,13 @@ function toggle_code_to_text() {
         btn.innerHTML = "Text question"
         hidden_input.value = "code";
         code_or_text = "code";
+        lang = editor.getOption("mode");
     }   
 }
 
-// Set up the code area, initially being hidden
+/**
+ * Set up the default text editor, with default values, initially being empty
+ */
 function handle_code() {    
     let edit_area = document.getElementById("code_area")
 
@@ -102,27 +111,39 @@ function handle_code() {
     code_div.classList.add("hidden");
     // when a new language is selected, call the function to set the new syntax highlight of CodeMirror
     document.getElementById("lang_select").onchange = change_language;
+    lang = editor.getOption("mode");
 }
 
-// Get the value inside the editor area
+/**
+ * Get the value of the code editor
+ * @returns the content of the code editor.
+ */
 function get_code() {
     return editor.getValue();
 }
 
+/**
+ * Get the content of the textarea
+ * @returns the content of the textarea
+ */
 function get_text() {
     return document.getElementById("text_area").value;
 }
 
-// Get the value of the selected option element and apply that mode to the editor
+/**
+ * Change the language of the code editor depending on the selected option
+ */
 function change_language() {
     let list = document.getElementById("lang_select");
     let selected_lang = list.options[list.selectedIndex].value;
     console.log(selected_lang);
+    lang = selected_lang;
     editor.setOption("mode", selected_lang);
 }
 
-// Remove the last input field that was added. 
-// By default there must be at least one field (option)
+/**
+ * Removes the last input field added, if there's more than one input.
+ */
 function remove_last_field() {
     let tos = input_elements.pop();
     // if there was still an element
@@ -140,15 +161,25 @@ function remove_last_field() {
     }
 }
 
-// Add listeners to remove input fields
+/**
+ * Add a listeners for the button to add option fields
+ * @listens click
+ */
 function handle_remove_field() {
     document.getElementById("delete_field").addEventListener("click", (e) =>{
         remove_last_field();
     })
 }
 
+/**
+ * Create the body containing the text and options for the new question
+ * to be posted
+ */
 function post_question() {
-    console.log("posted")
+
+    let url = new URL(window.location.href)
+    topic_id = url.searchParams.get('topic')
+
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
     let curr_checkbox;
@@ -162,13 +193,40 @@ function post_question() {
     }
     // get question text:
     let question_text = (code_or_text == "code") ? get_code() : get_text();
+   
+    let body = JSON.stringify({
+        answer: options,
+        topic: topic_id,
+        text: question_text,
+        lang: lang
+    });
+
+    
+    API_question.post_question((body));
 }
 
 API_question = (function() {
 
+    /**
+     * Post the given new question
+     * @param {Object} body The body of the question
+     */
+    function post_question(body) {
+
+        console.log(body)
+        console.log("posted from api");
+        fetch("/question/new", { 
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        })
+        .then((res) => {
+            return res.json();
+        });
+    }
+
     return {
-        code_area,
-        text_area
+        post_question
     }
     
 })()
