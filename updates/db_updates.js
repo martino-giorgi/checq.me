@@ -42,6 +42,7 @@ async function mapTAs(classroom_id) {
 }
 
 async function updateUser(user_id, classroom_id) {
+  console.log("ciao");
   const User = require("../models/User");
   const ClassroomGrades = require("../models/ClassroomGrades");
   let classroom_grade = new ClassroomGrades({
@@ -55,14 +56,15 @@ async function updateUser(user_id, classroom_id) {
         let m = u.classroom_grade;
         m[classroom_id] = classroom_grade._id;
         u.classroom_grade = m;
-        u.save().then(() => resolve());
+        u.save()
+          .then(() => resolve(classroom_grade))
+          .catch((err) => rejects(err));
       })
       .catch((err) => rejects(err));
   });
 }
 
-
 module.exports = {
-    mapTAs,
-    updateUser,
-}
+  mapTAs,
+  updateUser,
+};

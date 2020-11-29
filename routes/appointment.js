@@ -103,7 +103,7 @@ async function can_mastery(mastery_id, user_id){
           }
         })
       }
-    })
+    }).catch(err => rejects(err));
   })
 }
 
