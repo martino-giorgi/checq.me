@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const Topic = require("./Topic");
 const MasteryCheck = require("./MasteryCheck");
+const mapTAs = require("../updates/db_updates")
 
 const ClassroomSchema = new mongoose.Schema({
   name: {
@@ -76,3 +77,19 @@ const ClassroomSchema = new mongoose.Schema({
 const Classroom = mongoose.model("Classroom", ClassroomSchema);
 
 module.exports = Classroom;
+
+// Observer Pattern
+
+var filter_ar_update_partecipants = [{
+  $match: {
+    "updateDescription.updatedFields.partecipants": { $exists: true },
+  }
+}];
+
+// var options = { fullDocument: 'updateLookup' };
+
+Classroom.watch(filter_ar_update_partecipants).on('change',  data => {
+  // console.log(data.documentKey._id);
+   mapTAs(data.documentKey._id);
+})
+
