@@ -1,0 +1,73 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css" rel="stylesheet">
+<style>
+.outer_bar {
+    height: 10px;
+    width: 100%;
+    background-color: grey;
+}
+.progress_bar {
+    width: 0%;
+    height: 100%;
+    background-color: rgb(232, 100, 100);
+}
+.progress_bar_animated {
+    -webkit-transition: width 1s ease-in-out;
+    -moz-transition: width 1s ease-in-out;
+    -o-transition: width 1s ease-in-out;
+    transition: width 1s ease-in-out;
+
+    width:100%;
+}
+
+#questions_bar {
+    height: 100%;
+    width: 0%;
+    background-color: rgb(69, 191, 69);
+    border-radius: 0px 10px 10px 0px
+}
+
+.big_green_label {
+    color: green;
+    font-size: large;
+}
+
+</style>
+<div class="wrapper">
+    <%- include("../partials/navigation", {active: 'manager'}) %>
+    <div id="question_area">
+        <h1>Get prepared by answering those questions!</h1>
+
+        <div class="outer_bar">
+            <div id="progress_bar" class="progress_bar">
+            </div>
+        </div>
+        <div class="outer_bar">
+            <div id="questions_bar">
+            </div>
+        </div>
+
+        <textarea id="text_area"></textarea>
+        <section id="options_section">
+
+        </section>
+        <button id="next_question">Next Question</button>
+        <button id="check_answer">Check Answer</button>
+        <section id="answer_result"></section>
+    </div>
+</div>
+
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>
+<script src="/js/ajax_answer_question.js"></script>
+<script>
+    window.onload = init_answer_question;
+</script>
+

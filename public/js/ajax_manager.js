@@ -1,3 +1,7 @@
+/**
+ * Initialize the page by displaying the list of classrooms
+ * and adding event listeners to the buttons
+ */
 function init() {
     API.get_classrooms().then((response) => {
         document.getElementById(
@@ -22,9 +26,9 @@ function init() {
     });
 }
 
-/*
-   Toggle between showing the list of classes and the form to add a new class
-*/
+/**
+ * Toggle between showing and hiding the form to add a new class
+ */
 function toggle_show_form() {
     let form = document.getElementById("form");
     let classroom_list = document.getElementById("classroom_list");
@@ -41,6 +45,9 @@ function toggle_show_form() {
     }
 }
 
+/**
+ * Submit the values for the new class from the form
+ */
 function submit_form() {
     let body = JSON.stringify({
         name: document.getElementById("input_name").value,
@@ -59,6 +66,11 @@ function submit_form() {
     });
 }
 
+/**
+ * Generate an invite link to join a class and when available
+ * copy it to the clipboard
+ * @param {ObjectId} id the id of the classroom
+ */
 function generate_invite_link(id) {
     console.log(id);
     let textarea = document.createElement("textarea");
@@ -91,6 +103,11 @@ let API = function () {
     // when loading the class list for the first time
     let user = undefined;
 
+    /**
+     * Add a new classroom to the DB.
+     * @param {Object} content the body with the info for the new classroom
+     * @returns {Promise} the promise that will contain the new class.
+     */
     function post_classroom(content) {
         return fetch("/classroom/new", {
             method: "POST",
@@ -101,18 +118,32 @@ let API = function () {
         });
     }
 
+    /**
+     * Get the classrooms where the user is a lecturer.
+     * @returns {Promise} the promise that will contain the list of classrooms
+     */
     function get_classrooms() {
         return fetch("/classroom").then((res) => {
             return res.json();
         });
     }
 
+    /**
+     * Get an invitation link for the class specified by the id.
+     * @param {ObjectId} id the id of the classroom. 
+     * @returns {Promise} the promise that will contain the invite link
+     */
     function get_invite_link(id) {
         return fetch("/classroom/invite/" + id).then((res) => {
             return res.json();
         });
     }
 
+    /**
+     * Get the classroom specified by the id.
+     * @param {ObjectId} id the id of the classroom. 
+     * @returns {Promise} the promise that will contain the classroom
+     */
     function get_class(id) {
         return fetch("/classroom/" + id).then((res) => {
             return res.json();

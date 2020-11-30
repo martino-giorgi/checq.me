@@ -1,7 +1,6 @@
 {
     "files": [
-        "views/manager/classrooms/classroom.ejs",
-        "views/profile/update_form.ejs"
+        "views/manager/classrooms/classroom.ejs"
     ],
     "dirs": [
         "views/manager/partial/",
