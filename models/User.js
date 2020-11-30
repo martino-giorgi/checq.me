@@ -35,11 +35,10 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: false
     },
-
-    availability:[{
+    availability:{
         type: mongoose.Schema.ObjectId,
         ref: 'Availability'
-    }],
+    },
     classrooms_grades:{
         type: Map,
         required: true,
@@ -56,11 +55,6 @@ const UserSchema = new mongoose.Schema({
     gravatar: {
         type: String,
         required: false,
-    },
-    availability: {
-        type: Map,
-        of: { type: Array },
-        required: false
     }
 })
 

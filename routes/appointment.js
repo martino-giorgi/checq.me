@@ -62,7 +62,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
                   minute: moment(m_day.end_time).get("minute"),
                   second: 0,
                 });
-
+                console.log("Start: "+moment(m_day_start).toDate()+", End:"+ moment(m_day_end).toDate());
                 get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
               });
             }
@@ -81,13 +81,14 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
 // Waiting for better name
 function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
   let available_slots = [];
-    console.log("TA ID: "+ta_id);
+  console.log("TA ID: "+ta_id);
+  
   Availability.findOne({ _userId: ta_id }).then((avail) => {
     console.log("AVAILABILITY: "+avail);
     console.log("BUSY: "+avail.busy);
-    avail.busy.forEach((slot) => {
-      let start = moment(slot[0]);
-      let end = moment(slot[1]);
+    for (let i = 0; i < avail.busy.length; i++) {
+      let start = moment(avail.busy[i][0]);
+      let end = moment(avail.busy[i][1]);
 
       if (start.isoWeekday() == m_iso_day && end.isoWeekday() == m_iso_day) {
         if(start.isBefore(m_day_start) && end.isBefore(m_day_end)){
@@ -99,14 +100,22 @@ function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
         } else if(start.isAfter(m_day_start) && end.isAfter(m_day_end)){
           // possible slot @ start
           available_slots.push([m_day_start, start]);
+        } else if(start.isBefore(m_day_start) && end.isAfter(m_day_end)) {
+          // no possible slots
+          available_slots.splice(0, available_slots.length);
+          break;
         }
       } else if (start.isoWeekday() != m_iso_day && end.isoWeekday() == m_iso_day) {
         if (end.isBefore(m_day_start)) {
-          // possible slot from m_day_begin
+          // possible slot from m_day_begin to m_day_end
           available_slots.push([m_day_start, m_day_end]);
         } else if (end.isAfter(m_day_start) && end.isBefore(m_day_end)) {
           // possible slot from end
           available_slots.push([end, m_day_end]);
+        } else if (end.isAfter(m_day_end)) {
+          // no possible slots
+          available_slots.splice(0, available_slots.length);
+          break;
         }
       } else if (start.isoWeekday() == m_iso_day && end.isoWeekday() != m_iso_day) {
         if (start.isAfter(m_day_start) && start.isBefore(m_day_end)) {
@@ -115,17 +124,24 @@ function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
         } else if (start.isAfter(m_day_end)) {
           // possible slot from m_day_start to m_day_end
           available_slots.push([m_day_start, m_day_end]);
+        } else if (start.isBefore(m_day_start)) {
+          // no possible slots
+          available_slots.splice(0, available_slots.length);
+          break;
         }
+      } else if (start.isoWeekday() != m_iso_day && end.isoWeekday() != m_iso_day) {
+        // all possible slot
+        available_slots.push([m_day_start, m_day_end]);
       }
-    });
+    }
   }).then(() => {
-    console.log("AVAILABLE SLOTS: "+available_slots);
+    console.log("\nAVAILABLE SLOTS: "+available_slots);
   });
 }
 
-async function is_available(ta_id) {
-  return new Promise((resolve, rejects) => {});
-}
+// async function is_available(ta_id) {
+//   return new Promise((resolve, rejects) => {});
+// }
 
 async function can_mastery(mastery_id, user_id) {
   return new Promise((resolve, rejects) => {

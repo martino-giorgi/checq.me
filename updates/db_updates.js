@@ -65,7 +65,7 @@ function updateUser(user_id, classroom_id) {
 }
 
 /*===========================
-  USER FUNCTIONS
+        USER FUNCTIONS
 ============================*/
 
 
