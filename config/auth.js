@@ -8,28 +8,35 @@ module.exports = {
   },
 
   ensureProfessor: (req, res, next) => {
-    if(req.user.role == 0){
+    if (req.user.role == 0) {
       return next();
     }
     res.status(403).send("You don't have permission to view this page");
   },
 
   ensureStudent: (req, res, next) => {
-    if(req.user.role == 2){
+    if (req.user.role == 2) {
       return next();
     }
     res.status(403).send("You don't have permission to view this page");
   },
 
   ensureTa: (req, res, next) => {
-    if(req.user.role == 1){
+    if (req.user.role == 1) {
+      return next();
+    }
+    res.status(403).send("You don't have permission to view this page");
+  },
+
+  ensureProfOrTA: (req, res, next) => {
+    if (req.user.role == 1 || req.user.role == 0) {
       return next();
     }
     res.status(403).send("You don't have permission to view this page");
   },
 
   ensureHasNoGithubToken: (req, res, next) => {
-    if(req.user.githubToken == '') {
+    if (req.user.githubToken == '') {
       return next();
     }
     res.redirect("/profile");

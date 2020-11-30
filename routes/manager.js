@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
+const { ensureAuthenticated, ensureProfessor, ensureTa, ensureProfOrTA } = require("../config/auth");
 const path = require("path");
 
 const MasteryCheck = require("../models/MasteryCheck");
@@ -11,7 +11,7 @@ const Topic = require("../models/Topic");
 module.exports = router;
 
 // Mastery Manager
-router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Classroom.find({ lecturer: req.user._id }).then((classrooms) => {
     res.render("manager/manager", { user: req.user, classrooms: classrooms });
   });
@@ -52,9 +52,9 @@ router.get("/classrooms", ensureAuthenticated, ensureProfessor, (req, res) => {
 /*
   Render the form to add a new classroom
 */
-router.get( "/classroom/new", ensureAuthenticated, ensureProfessor, (req, res) => {
-    res.render("manager/new_classroom");
-  }
+router.get("/classroom/new", ensureAuthenticated, ensureProfessor, (req, res) => {
+  res.render("manager/new_classroom");
+}
 );
 
 /*

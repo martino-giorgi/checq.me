@@ -296,7 +296,7 @@ STUDENT ROUTES
 
 //this link will be given to the new students, once clicked it will automatically join the classroom
 //this route CANNOT be used as an API to interact with the database from ajax.
-router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
+router.get("/join/:token", ensureAuthenticated, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
