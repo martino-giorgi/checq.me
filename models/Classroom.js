@@ -86,8 +86,8 @@ var filter_stud_ar_insert = [
     $match: {
       $and: [
         { "updateDescription.updatedFields.partecipants": { $exists: true } },
-        // { "updateDescription.updatedFields.__v": { $exists: true } },
-        // { operationType: "update" },
+        { "updateDescription.updatedFields.__v": { $exists: true } },
+        { operationType: "update" },
       ],
     },
   },
