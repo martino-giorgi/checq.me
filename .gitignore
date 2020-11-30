@@ -105,4 +105,4 @@ dist
 
 # Rendered CSS and HTML files
 public/stylesheets/css/style.css
-public/js/views.js
+#public/js/views.js
