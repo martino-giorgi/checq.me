@@ -113,6 +113,71 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
 });
 
+// Add a TA
+
+router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  let classroom = Classroom.findById(req.body.classroom_id);
+  let new_ta = User.findById(req.body.user_id);
+
+  Promise.all([classroom, new_ta]).then(result => {
+    let this_classroom = result[0];
+    let this_user = result[1];
+
+    // Add classroom id to the ta_for_list field of User
+    this_user.role = 1;
+    this_user.ta_for_list.addToSet(this_classroom._id);
+    // Add user id to teaching_assistant of Classroom and remove from participants
+    this_classroom.partecipants.remove({ _id: this_user._id });
+    this_classroom.teaching_assistants.addToSet(this_user._id);
+
+    let p1 = this_user.save();
+    let p2 = this_classroom.save();
+
+    Promise.all([p1, p2]).then(() => {
+      res.status(200).end();
+    })
+
+  })
+    .catch(err => {
+      console.log(err);
+    })
+
+})
+
+// Remove a TA
+router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  let classroom = Classroom.findById(req.body.classroom_id);
+  let old_ta = User.findById(req.body.user_id);
+
+  Promise.all([classroom, old_ta]).then(result => {
+    let this_classroom = result[0];
+    let this_old_ta = result[1];
+
+    // Remove classroom id from ta_for_list
+    this_old_ta.ta_for_list.remove({ _id: this_classroom._id });
+    // Check if has classrooms where user is TA
+    if (this_old_ta.ta_for_list.length == 0) {
+      this_old_ta.role = 2;
+    }
+    // Remove from teaching_assistant and add to participants
+    this_classroom.teaching_assistants.remove({ _id: this_old_ta._id });
+    this_classroom.partecipants.addToSet(this_old_ta._id);
+
+    let p1 = this_classroom.save();
+    let p2 = this_old_ta.save();
+
+    Promise.all([p1, p2]).then(() => {
+      res.status(200).end();
+    })
+  })
+    .catch(err => {
+      console.log(err);
+      res.status(400).end();
+    })
+});
+
 //generates the new map for students and tas.
 
 
@@ -172,7 +237,7 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
     //   (end.isoWeekday() == req.body.iso_day_n) &&
     //   start.weekday() == req.body.iso_day_n
     // ) ||
-    (end.diff(start)<=0)
+    (end.diff(start) <= 0)
   ) {
     console.log("invalid date")
     res.status(400).end();
@@ -200,7 +265,7 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
               { $set: { mastery_days: new_element._id } },
               { new: true }
             )
-              .select({ mastery_days: 1})
+              .select({ mastery_days: 1 })
               .then((ms) => {
                 ClassroomMasteryDay.find()
                   .where("_id")

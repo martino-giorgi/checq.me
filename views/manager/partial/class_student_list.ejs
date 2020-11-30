@@ -203,7 +203,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% partecipants.forEach(p => { %>
+                            <% partecipants.concat(teaching_assistants).forEach(p => { %>
+                            <% let curr = p._id %>
                             <tr class="candidates-list">
                                 <td class="title">
                                     <div class="thumb">
@@ -219,14 +220,15 @@
                                     </div>
                                 </td>
                                 <td class="candidate-list-favourite-time text-center">
-                                    <span class="candidate-list-time order-1"><%= p.role === 2 ? "Student" : "TA"%>
+                                    <span
+                                        class="candidate-list-time order-1"><%=p.role == 0 ?  "Professor" : (p.role == 1 ? "TA" : "Student")%>
                                     </span>
                                 </td>
                                 <td>
                                     <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                                        <li><a href="#" class="text-info" data-toggle="modal"
-                                                data-target="#edit-user-modal" title="" data-original-title="Edit"><i
-                                                    class="fas fa-pencil-alt"></i></a></li>
+                                        <li><a onclick="setUser('<%= curr%>')" href="#" class="text-info"
+                                                data-toggle="modal" data-target="#edit-user-modal" title=""
+                                                data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -247,13 +249,14 @@
                 <h5 class="modal-title" id="edit-user-modal-label">Edit User</h5>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">
                     Remove from Classroom
                 </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Make as TA
+                <button type="button" id="toggleTA_btn" onclick="toggleTA(getUser())" class="btn btn-primary"
+                    data-toggle="modal" data-target="#edit-user-modal">
+                    Value
                 </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">
                     Make as Prof
                 </button>
             </div>

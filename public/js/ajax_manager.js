@@ -3,6 +3,7 @@
  * and adding event listeners to the buttons
  */
 function init() {
+
     API.get_classrooms().then((response) => {
         document.getElementById(
             "classroom_list"
@@ -49,11 +50,15 @@ function toggle_show_form() {
  * Submit the values for the new class from the form
  */
 function submit_form() {
+
     let body = JSON.stringify({
         name: document.getElementById("input_name").value,
         description: document.getElementById("input_desc").value,
         is_ordered: document.getElementById("input_is_ordered").checked,
+        start_date: moment(document.getElementById("datepicker_start").value),
+        end_date: moment(document.getElementById("datepicker_end").value),
     });
+
 
     API.post_classroom(body).then((new_classroom) => {
         document.getElementById(

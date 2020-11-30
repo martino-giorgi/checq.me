@@ -3,8 +3,20 @@
 <form id="new_class_form">
     <input id="input_name" required type="text" name="name" placeholder="Classroom name">
     <textarea id="input_desc" required name="description" placeholder="Classroom description"></textarea>
-    <label > <%= domain%></label>
-    <input id="input_is_ordered" type="checkbox" name="is_ordered" checked/>
+    <label> <%= domain%></label>
+
+    <input id="datepicker_start" type="text" autocomplete="off" name="datepicker_start" value="11/11/2021"></input>
+    <label for="datepicker_start"> First day for Mastery Check</label>
+
+    <input id="datepicker_end" type="text" autocomplete="off" name="datepicker_end" value="11/12/2021"></input>
+    <label for="datepicker_end"> Last day for Mastery Check</label>
+
+    <input id="input_is_ordered" type="checkbox" name="is_ordered" checked />
+
+
+
     <label for="is_ordered">Sequential completion of masterychecks</label>
-    <input type="submit"/>
+
+
+    <input type="submit" />
 </form>

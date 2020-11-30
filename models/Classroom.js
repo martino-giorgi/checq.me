@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const Topic = require("./Topic");
 const MasteryCheck = require("./MasteryCheck");
-const {mapTAs, updateUser} = require('../updates/db_updates');
+const { mapTAs, updateUser } = require('../updates/db_updates');
 
 const ClassroomSchema = new mongoose.Schema({
   name: {
@@ -63,11 +63,11 @@ const ClassroomSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  end_date: {
+  end_date: { // last day that the user can book the mastery check
     type: Date,
     required: true,
   },
-  ta_mapping:{
+  ta_mapping: {
     type: Map,
     required: true,
     default: {}
@@ -84,10 +84,12 @@ var filter_ar_update_partecipants = [{
   $match: {
     $or: [
       { 'updateDescription.updatedFields.teaching_assistants': { $exists: true } },
-      { $and: [
+      {
+        $and: [
           { 'updateDescription.updatedFields.partecipants': { $exists: true } },
           { operationType: 'insert' }
-      ]},
+        ]
+      },
     ],
   }
 }];
@@ -96,12 +98,12 @@ var filter_ar_update_partecipants = [{
 
 //updated partecipants field
 //TODO add update on ta list.
-Classroom.watch(filter_ar_update_partecipants).on('change',  data => {
-  let user_id = data.updateDescription.updatedFields.partecipants.pop();
-  
-  mapTAs(data.documentKey._id);
-  updateUser(user_id, data.documentKey._id)
-})
+// Classroom.watch(filter_ar_update_partecipants).on('change', data => {
+//   let user_id = data.updateDescription.updatedFields.partecipants.pop();
+
+//   mapTAs(data.documentKey._id);
+//   updateUser(user_id, data.documentKey._id)
+// })
 
 // TODO:
 // mapTAs must be called on every update of the field participants
