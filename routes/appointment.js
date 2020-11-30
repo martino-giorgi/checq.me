@@ -1,5 +1,6 @@
 const express = require("express");
 const moment = require("moment");
+require("twix");
 const router = express.Router();
 const {
   ensureAuthenticated,
@@ -63,7 +64,13 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
                   second: 0,
                 });
                 console.log("Start: "+moment(m_day_start).toDate()+", End:"+ moment(m_day_end).toDate());
-                get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
+                let available_slots = get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
+                if(available_slots.length > 0){
+                  //go to the next check ==> get all the appointments of the TA and check if he has time ;) winkyface
+                }
+                else {
+                  //increase TA and test again
+                }
               });
             }
           );
@@ -81,11 +88,11 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
 // Waiting for better name
 function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
   let available_slots = [];
-  console.log("TA ID: "+ta_id);
+  // console.log("TA ID: "+ta_id);
   
   Availability.findOne({ _userId: ta_id }).then((avail) => {
-    console.log("AVAILABILITY: "+avail);
-    console.log("BUSY: "+avail.busy);
+    // console.log("AVAILABILITY: "+avail);
+    // console.log("BUSY: "+avail.busy);
     for (let i = 0; i < avail.busy.length; i++) {
       let start = moment(avail.busy[i][0]);
       let end = moment(avail.busy[i][1]);
@@ -135,13 +142,12 @@ function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
       }
     }
   }).then(() => {
-    console.log("\nAVAILABLE SLOTS: "+available_slots);
+    // available_slots.forEach(el => {console.log(el[0],el[1])});
+    return available_slots;
   });
 }
 
-// async function is_available(ta_id) {
-//   return new Promise((resolve, rejects) => {});
-// }
+
 
 async function can_mastery(mastery_id, user_id) {
   return new Promise((resolve, rejects) => {
