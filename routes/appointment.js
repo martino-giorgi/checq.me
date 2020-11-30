@@ -21,7 +21,7 @@ module.exports = router;
 router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
-    console.log(user_id);
+  
   can_mastery(mastery_id, user_id).then((b) => {
     if (b) {
       MasteryCheck.findById(mastery_id)
@@ -30,10 +30,10 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
         .then((mastery) => {
           ClassroomMasteryDay.find({ classroom: mastery.classroom._id }).then(
             (mastery_days) => {
-              console.log(mastery_days);
-              let assigned_ta = mastery.classroom.ta_mapping[user_id];
-                console.log(mastery.classroom.ta_mapping);
-              mastery_days.forEach((m_day) => {
+
+              let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
+
+                mastery_days.forEach((m_day) => {
                 let m_day_start;
                 let m_day_end;
 
@@ -81,9 +81,10 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
 // Waiting for better name
 function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
   let available_slots = [];
-    console.log(ta_id);
-  Availability.find({ _userId: ta_id }).then((avail) => {
-      console.log(avail);
+    console.log("TA ID: "+ta_id);
+  Availability.findOne({ _userId: ta_id }).then((avail) => {
+    console.log("AVAILABILITY: "+avail);
+    console.log("BUSY: "+avail.busy);
     avail.busy.forEach((slot) => {
       let start = moment(slot[0]);
       let end = moment(slot[1]);
@@ -117,9 +118,9 @@ function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
         }
       }
     });
+  }).then(() => {
+    console.log("AVAILABLE SLOTS: "+available_slots);
   });
-
-  console.log(available_slots);
 }
 
 async function is_available(ta_id) {

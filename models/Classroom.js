@@ -124,8 +124,6 @@ var filter_ta_ar_update = [
 Classroom.watch(filter_stud_ar_insert).on("change", (data) => {
   let user_id = data.updateDescription.updatedFields.partecipants.pop();
 
-  console.log(data);
-
   re_mapTAs(data.documentKey._id);
   updateUser(user_id, data.documentKey._id);
 });
