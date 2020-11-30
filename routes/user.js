@@ -4,12 +4,13 @@ const router = express.Router();
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
 
 require("dotenv").config();
 
 const User = require("../models/User");
 const Token = require("../models/Token");
+const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
+const { json } = require("express");
 
 module.exports = router;
 
@@ -55,6 +56,9 @@ router.post("/signup", (req, res) => {
           surname,
           email,
           password,
+          githubToken: "",
+          githubId: "",
+          gravatar: ""
         });
 
         // Generate an hash from the password
@@ -248,7 +252,7 @@ router.put("/update", ensureAuthenticated, async (req, res) => {
 })
 
 // Get user info
-router.get('/:id', (req, res) => {
+router.get('/:id', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
 
   User.findOne({ _id: id })
@@ -256,4 +260,3 @@ router.get('/:id', (req, res) => {
     .catch((err) => res.status(404).json({}))
 })
 
-module.exports = router;

@@ -29,6 +29,15 @@ const MasteryCheckSchema = new mongoose.Schema({
       ref: "Topic",
     },
   ],
+  appointment_duration:{
+    type: Number,
+    required: false
+  },
+  locked_by:{ //if masterys are ORDERED than this field indicates which mastery check needs to have a PASS/EXCEED in order to be available for booking
+    type:mongoose.Schema.ObjectId,
+    ref: 'MasteryCheck',
+    required:false
+  }
 });
 
 const MasteryCheck = mongoose.model("MasteryCheck", MasteryCheckSchema);

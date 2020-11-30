@@ -27,13 +27,9 @@ const AppointmentSchema = new mongoose.Schema({
     grade:{
         type: String,
         required: false
-    },
-    attempt:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'MasteryAttempt',
-    },
+    }
 })
 
-const Answer = mongoose.model('Appointment', AppointmentSchema);
+const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
-module.exports = Answer;
+module.exports = Appointment;
