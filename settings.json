@@ -1,6 +1,6 @@
 {
     "files": [
-        "views/manager/classrooms/classroom.ejs",
+        "views/manager/classrooms/classroom.ejs"
     ],
     "dirs": [
         "views/manager/partial/",

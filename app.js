@@ -1,4 +1,5 @@
 const express = require("express");
+const enforce = require("express-sslify");
 const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -14,6 +15,9 @@ const router = require("./routes/profile");
 
 const app = express();
 const SmeeClient = require('smee-client')
+
+// Uncomment when SSL certificate is available
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 const PORT = process.env.PORT || 3000;
 
