@@ -25,5 +25,5 @@ The following is a table containing all of the milestones last commits and Googl
 [1-presentation]: https://docs.google.com/presentation/d/1Ok_0_xCFdj2_HZViIVU45V3DoHg7GLhr2kIlExP6dF8/edit?usp=sharing
 
 [2-commit]: https://github.com/martino-giorgi/checq.me/commit/8262256a25a15997593f0163d6d54485347670c8
-[2-presentation]: https://github.com/martino-giorgi/checq.me/commit/8262256a25a15997593f0163d6d54485347670c8
+[2-presentation]: https://docs.google.com/presentation/d/1ToW-zk9Pz34Yu5m6GzMlDdunKSyOJ-VWfJo2heDFPFs/edit?usp=sharing
 [2-github]: https://github.com/martino-giorgi/checq.me/milestone/1
