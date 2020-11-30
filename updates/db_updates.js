@@ -1,6 +1,4 @@
-const { rejects } = require("assert");
 const mongoose = require("mongoose");
-const { resolve } = require("path");
 
 /*===========================
 CLASSROOM FUNCTIONS
@@ -9,7 +7,7 @@ CLASSROOM FUNCTIONS
 async function re_mapTAs(classroom_id) {
   return new Promise((resolve, rejects) => {
     let mapped = {};
-    let ta_ids;
+    let ta_ids = [];
     let current = 0;
 
     function increaseTa() {
@@ -23,7 +21,9 @@ async function re_mapTAs(classroom_id) {
     Classroom.findById(classroom_id)
       .select({ teaching_assistants: 1, lecturer: 1, partecipants: 1 })
       .then((r) => {
-        ta_ids = r.teaching_assistants;
+        r.teaching_assistants.forEach(e => {
+          ta_ids.push(e);
+        })
         ta_ids.push(r.lecturer);
         let stud_ids = r.partecipants;
         stud_ids.forEach((s_id) => {
@@ -45,11 +45,6 @@ async function re_mapTAs(classroom_id) {
   });
 }
 
-//TODO
-// async function delete_student_from_classroom(classroom_id, user_id){
-//   return new Promise((resolve, rejects) => {})
-// }
-
 function updateUser(user_id, classroom_id) {
   const User = require("../models/User");
   const ClassroomGrades = require("../models/ClassroomGrades");
@@ -70,8 +65,9 @@ function updateUser(user_id, classroom_id) {
 }
 
 /*===========================
-USER FUNCTIONS
+  USER FUNCTIONS
 ============================*/
+
 
 module.exports = {
   re_mapTAs,

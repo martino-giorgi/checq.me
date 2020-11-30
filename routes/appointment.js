@@ -13,98 +13,151 @@ const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Availability = require("../models/Availability");
 const Appointment = require("../models/Appointment");
-const { resolve } = require("path");
-const { rejects } = require("assert");
+const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
-// router.post("/", ensureAuthenticated, (req, res) => {
-//   MasteryCheck.findById(req.body.mastery_id)
-//     .populate({
-//       path: "classroom",
-//       select: [
-//         "teaching_assistants",
-//         "partecipants",
-//         "lecturer",
-//         "mastery_days",
-//         "ta_mapping",
-//         "end_date",
-//       ],
-//     })
-//     .select({ topics: 0, __v: 0, author: 0, description: 0 })
-//     .then((r) => {
-//       if (r.available && r.classroom.partecipants.includes(req.user._id)) {
-//         let temp_tas = r.classroom.teaching_assistants;
-//         temp_tas.push(r.classroom.lecturer);
-//         Appointment.find({ ta: { $in: temp_tas  }, time:  }).then((appointments) => {
+//TODO check if user is in classroooooooooom
+router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
+  let user_id = req.user._id;
+  let mastery_id = req.body.mastery_id;
+    console.log(user_id);
+  can_mastery(mastery_id, user_id).then((b) => {
+    if (b) {
+      MasteryCheck.findById(mastery_id)
+        .select({ classroom: 1 })
+        .populate({ path: "classroom" })
+        .then((mastery) => {
+          ClassroomMasteryDay.find({ classroom: mastery.classroom._id }).then(
+            (mastery_days) => {
+              console.log(mastery_days);
+              let assigned_ta = mastery.classroom.ta_mapping[user_id];
+                console.log(mastery.classroom.ta_mapping);
+              mastery_days.forEach((m_day) => {
+                let m_day_start;
+                let m_day_end;
 
-//           let count = {};
-//           appointments.forEach(a => {
-//             count[a.ta] = (count[a.ta] || 0)+1;
-//           })
-//           temp_tas.forEach(el => {
-//             if(!count[el]){
-//               count[el] = 0;
-//             }
-//           });
+                if (moment().isoWeekday() <= m_day.iso_day_n) {
+                  // then just give me this week's instance of that day
+                  m_day_start = moment().isoWeekday(m_day.iso_day_n);
+                  m_day_end = moment().isoWeekday(m_day.iso_day_n);
+                } else {
+                  // otherwise, give me *next week's* instance of that same day
+                  m_day_start = moment()
+                    .add(1, "weeks")
+                    .isoWeekday(m_day.iso_day_n);
+                  m_day_end = moment()
+                    .add(1, "weeks")
+                    .isoWeekday(m_day.iso_day_n);
+                }
 
-//           let avg_app;
-//           appointments.forEach(a => {
-//             avg_app += count[a.ta];
-//           })
-//           avg_app = avg_app / temp_tas.length;
+                m_day_start = m_day_start.set({
+                  hour: moment(m_day.start_time).get("hour"),
+                  minute: moment(m_day.start_time).get("minute"),
+                  second: 0,
+                });
 
-//           let choosen_ta; //the choosen one OMG
-//           if(count[r.ta_mapping[req.body.id]] > avg_app){
-            
-//           }
-//           else {
-//             choosen_ta = r.ta_mapping[req.body._id];
-//             //TODO INCREASE TA IN MAPPING
-//           }
-          
-//           console.log(count);
-//           res.status(400).end();
-//         });
-//       } else {
-//         res.status(400).end();
-//       }
-//     });
-// });
+                m_day_end = m_day_end.set({
+                  hour: moment(m_day.end_time).get("hour"),
+                  minute: moment(m_day.end_time).get("minute"),
+                  second: 0,
+                });
 
-
-// async function getAvailableTa(student_id, tas) {
-//   Appointment.find({ ta: { $in: tas } }).then((app) => {
-//     var counts = {};
-//     app.forEach(function (x) {
-//       counts[x] = (counts[x] || 0) + 1;
-//     });
-//   });
-// }
-
-async function can_mastery(mastery_id, user_id){
-  return new Promise((resolve, rejects) => {
-    MasteryCheck.findById(mastery_id).populate({path: 'classroom', select: ['is_ordered_mastery']}).then(ordered => {
-      if(!ordered.classroom.is_ordered_mastery || ordered.locked_by == undefined){
-        resolve(true);
-      }
-      else {
-        User.findById(user_id).select({classrooms_grades: 1}).exec((err, c_grades) => {
-          if(err){
-            console.log("error getting grades of user: "+ user_id);
-            rejects(false);
-          }
-          else {
-            if(c_grades[ordered.classroom].includes(ordered.locked_by)){
-              resolve(true);
-            } else {
-              resolve(false);
+                get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
+              });
             }
-          }
+          );
         })
+        .catch((err) => {
+          console.log(err);
+          res.send("error");
+        });
+    } else {
+      res.send("cannot book this mastery").end();
+    }
+  });
+});
+
+// Waiting for better name
+function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {
+  let available_slots = [];
+    console.log(ta_id);
+  Availability.find({ _userId: ta_id }).then((avail) => {
+      console.log(avail);
+    avail.busy.forEach((slot) => {
+      let start = moment(slot[0]);
+      let end = moment(slot[1]);
+
+      if (start.isoWeekday() == m_iso_day && end.isoWeekday() == m_iso_day) {
+        if(start.isBefore(m_day_start) && end.isBefore(m_day_end)){
+          // possible slot @ end
+          available_slots.push([end, m_day_end]);
+        } else if(start.isAfter(m_day_start) && end.isBefore(m_day_end)){
+          // possible slot @ beginning and @ end
+          available_slots.push([m_day_start, start, end, m_day_end]);
+        } else if(start.isAfter(m_day_start) && end.isAfter(m_day_end)){
+          // possible slot @ start
+          available_slots.push([m_day_start, start]);
+        }
+      } else if (start.isoWeekday() != m_iso_day && end.isoWeekday() == m_iso_day) {
+        if (end.isBefore(m_day_start)) {
+          // possible slot from m_day_begin
+          available_slots.push([m_day_start, m_day_end]);
+        } else if (end.isAfter(m_day_start) && end.isBefore(m_day_end)) {
+          // possible slot from end
+          available_slots.push([end, m_day_end]);
+        }
+      } else if (start.isoWeekday() == m_iso_day && end.isoWeekday() != m_iso_day) {
+        if (start.isAfter(m_day_start) && start.isBefore(m_day_end)) {
+          // possible slot form m_day_start to start
+          available_slots.push([mm_day_start, start]);
+        } else if (start.isAfter(m_day_end)) {
+          // possible slot from m_day_start to m_day_end
+          available_slots.push([m_day_start, m_day_end]);
+        }
       }
-    }).catch(err => rejects(err));
-  })
+    });
+  });
+
+  console.log(available_slots);
+}
+
+async function is_available(ta_id) {
+  return new Promise((resolve, rejects) => {});
+}
+
+async function can_mastery(mastery_id, user_id) {
+  return new Promise((resolve, rejects) => {
+    MasteryCheck.findById(mastery_id)
+      .populate({ path: "classroom", select: ["is_ordered_mastery"] })
+      .then((ordered) => {
+        if (ordered != null) {
+          //   console.log("ORDERED:" + ordered);
+          if (
+            !ordered.classroom.is_ordered_mastery ||
+            ordered.locked_by == undefined
+          ) {
+            resolve(true);
+          } else {
+            User.findById(user_id)
+              .select({ classrooms_grades: 1 })
+              .exec((err, c_grades) => {
+                if (err) {
+                  console.log("error getting grades of user: " + user_id);
+                  rejects(false);
+                } else {
+                  if (c_grades[ordered.classroom].includes(ordered.locked_by)) {
+                    resolve(true);
+                  } else {
+                    resolve(false);
+                  }
+                }
+              });
+          }
+        }
+      })
+      .catch((err) => rejects(err));
+  });
 }
 
 // TODO: Cambia nome prima di committare!!
