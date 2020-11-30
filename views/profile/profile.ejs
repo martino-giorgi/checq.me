@@ -1,24 +1,114 @@
-<head>
-    <title>checq.me - Profile</title>
-</head>
+<div class="wrapper">
 
-<body">
-    <div class="wrapper">
+  <%- include("../partials/navigation", { active: "profile" }) %>
 
-        <%- include("../partials/navigation", { active: "profile" }) %>
+  <div class="secondary-nav">
+    <a id="edit-button" onclick="display('edit')">
+      <div class="settings active">
+        <img src="/assets/icons/nav/edit.svg" alt="edit profile icon" />
+        <p class="normal gray"> Edit Profile </p>
+      </div>
+    </a>
 
-        <main>
-            <div class="container">
-                <h1>My Profile</h1>
-                <h1><%= user.name %> <%= user.surname %></h1>
-                <h4>Email: <%= user.email %> </h4>
-                <button type="button" class="btn btn-primary" id="btn_profile" onclick="toggle_form()">Show
-                    Editor</button>
-                <div id="update_form"></div>
-            </div>
-        </main>
+    <a id="github-button" onclick="display('github')">
+      <div class="settings">
+        <img src="/assets/icons/nav/github.svg" alt="edit profile icon" />
+        <p class="normal gray"> GitHub Integration </p>
+      </div>
+    </a>
+
+    <a id="notifications-button" onclick="display('notifications')">
+      <div class="settings">
+        <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
+        <p class="normal gray"> Notifications </p>
+      </div>
+    </a>
+
+    <a id="security-button" onclick="display('security')">
+      <div class="settings">
+        <img src="/assets/icons/nav/security.svg" alt="edit profile icon" />
+        <p class="normal gray"> Password & Security </p>
+      </div>
+    </a>
+
+    <a id="logout" href="/user/logout">
+      <div class="settings">
+        <img src="/assets/icons/buttons/logout.svg" alt="edit profile icon" />
+        <p class="normal red"> Logout </p>
+      </div>
+    </a>
+  </div>
+
+  <div class="content">
+    <div id="edit">
+      <h2>Edit Profile</h2>
+
+      <form id="update_details">
+        <div class="form-group">
+          <label for="input_name">Name</label>
+          <input type="text" class="form-control" id="input_name" placeholder="Name" value="<%= user.name %>">
+        </div>
+        <div class="form-group">
+          <label for="input_surname">Surname</label>
+          <input type="text" class="form-control" id="input_surname" placeholder="Surname" value="<%= user.surname %>">
+        </div>
+        <button type="submit" class="button">Update Information</button>
+      </form>
     </div>
-    <script src="/js/ajax_profile.js"></script>
-    <script src="/js/ejs.min.js"></script>
-    <script src="/js/views.js"></script>
-    </body>
+
+    <div hidden id="github">
+      <h2>Github Integration</h2>
+
+      <p class="normal">
+        By connecting your GitHub account to checq.me, you will be able to reserve your mastery checks.
+        Every time you push a commit to GitHub using a certain phrase (determined by the professor of
+        your course), a mastery check will be automatically reserved.
+        <br><br>
+        For more information on how checq.me does this, check out our repo on
+        <a href="https://github.com/martino-giorgio/checq.me">GitHub</a>.
+
+        <br><br>
+      </p>
+
+      <% if (user.githubId == "") { %> 
+        <a class="btn btn-social btn-github" href="/github">
+          <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+        </a>
+      <% } else { %>
+        <span class="github-connected">
+          <a class="btn btn-social btn-github disabled">
+            <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+          </a>
+
+          <img src="/assets/icons/misc/check.svg" alt="connected icon">
+        </span>
+      <% } %>
+      
+    </div>
+
+    <div hidden id="notifications">
+      <h2>Notifications</h2>
+      // TODO: Add notification manager
+    </div>
+
+    <div hidden id="security">
+      <h2>Password & Security</h2>
+
+      <form id="update_password_form">
+        <div class="form-group">
+          <label for="input_password">New Password</label>
+          <input type="password" class="form-control" id="input_newpassword" placeholder="New Password">
+        </div>
+        <div class="form-group">
+          <label for="input_confpassword">Confirm New Password</label>
+          <input type="password" class="form-control" id="input_confnewpassword" placeholder="Confirm New Password">
+        </div>
+        <button type="submit" class="button">Update Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/ajax_profile.js"></script>
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>

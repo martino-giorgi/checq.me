@@ -17,19 +17,25 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
-
-
 router.get("/classroom", ensureAuthenticated, ensureProfessor, (req, res) => {
-  
   let data = {
     user: req.user,
-    classroom: req.query.id
-  }
+    classroom: req.query.id,
+  };
   res.render("manager/classrooms/classroom", data);
-})
+});
 
-
-
+router.get(
+  "/classroom/students",
+  ensureAuthenticated,
+  ensureProfessor,
+  (req, res) => {
+    res.render("manager/classrooms/students", {
+      user: req.user,
+      classroom: req.query.id,
+    });
+  }
+);
 
 //old routes:
 
@@ -46,11 +52,7 @@ router.get("/classrooms", ensureAuthenticated, ensureProfessor, (req, res) => {
 /*
   Render the form to add a new classroom
 */
-router.get(
-  "/classroom/new",
-  ensureAuthenticated,
-  ensureProfessor,
-  (req, res) => {
+router.get( "/classroom/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     res.render("manager/new_classroom");
   }
 );

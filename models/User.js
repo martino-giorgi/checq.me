@@ -17,11 +17,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password:{ 
+    password: { 
         type: String,
         required: true
     },
-    role:{ 
+    role: { 
         type: Number, // 0 = Professor, 1 = TA, 2 = Student
         required: true,
         default: 2
@@ -30,10 +30,37 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId, 
         ref: 'Classroom'
     }],
-    isConfirmed:{
+    isConfirmed: {
         type: Boolean,
         required: false,
         default: false
+    },
+
+    availability:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Availability'
+    }],
+    classrooms_grades:{
+        type: Map,
+        required: true,
+        default: {}
+    },
+    githubToken: {
+        type: String,
+        required: false
+    },
+    githubId: {
+        type: String,
+        required: false
+    },
+    gravatar: {
+        type: String,
+        required: false,
+    },
+    availability: {
+        type: Map,
+        of: { type: Array },
+        required: false
     }
 })
 
