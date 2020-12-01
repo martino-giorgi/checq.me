@@ -159,9 +159,7 @@ main {
 
       align-items: center;
 
-      padding-top: 27px;
-      padding-bottom: 27px;
-      padding-left: 40px;
+      margin: 27px 27px 27px 40px;
 
       .info {
         display: flex;
@@ -188,6 +186,9 @@ main {
 
           p {
             margin: 2px 0 0 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
       }

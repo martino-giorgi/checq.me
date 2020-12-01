@@ -139,6 +139,32 @@ h3 {
 
 
 // ===============================
+//       BOOTSTRAP OVERRIDES
+// ===============================
+
+.btn-primary {
+  background-color: $primary !important;
+  border-color: $primary_dark !important;
+
+  font-family: "Roboto", sans-serif;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+}
+
+.btn-primary:focus {
+   box-shadow: none !important;
+   background-color: $primary_dark !important;
+}
+
+.btn-primary:hover {
+   background-color: $primary_dark !important;
+}
+
+
+// ===============================
 //               MISC
 // ===============================
 
