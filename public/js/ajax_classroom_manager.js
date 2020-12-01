@@ -28,7 +28,7 @@ function render_user_modal() {
 
 // function render_mastery_modal() {
 //   document.getElementById("mastery-modal-body").innerHTML = 
-// } mikiskate 
+// }
 
 function setUser(user_id) {
   selected_user = user_id;
@@ -37,6 +37,8 @@ function setUser(user_id) {
       ? "Remove as TA" : "Add as TA";
 }
 
+
+// get selected user id
 function getUser() {
   return selected_user;
 }
