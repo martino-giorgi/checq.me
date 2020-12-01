@@ -9,7 +9,9 @@
     <div>
         <section id="classroom_list"></section>
 
+        <% if(user.role == 0) { %>
         <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
+        <% } %>
 
         <section id="form" class="hidden"></section>
     </div>

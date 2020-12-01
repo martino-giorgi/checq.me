@@ -5,7 +5,7 @@ var selected_user = undefined;
 function init_manager() {
   init_mastery();
   let url = new URL(window.location.href)
-  c_id = url.searchParams.get('id')
+  c_id = url.searchParams.get('classroom_id')
 
   API.get_class_info(c_id).then(res => {
     API.class_obj = res[0];
@@ -148,7 +148,7 @@ API = (function () {
    * @returns {Promise} the promise that will give the classroom object
    */
   function get_class_info(id) {
-    return fetch("/classroom/" + id).then(res => {
+    return fetch("/classroom/class?classroom_id=" + id).then(res => {
       return res.json();
     })
 

@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Mon Nov 30 2020 22:12:21 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Tue Dec 01 2020 17:29:43 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -186,7 +186,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<% classrooms.forEach(c => { %>\n<div id=\"<%=c._id%>\">\n    <h2>Class: <%= c.name %></h2>\n    <button class=\"class_edit_button\" value=\"<%=c._id%>\"><a href=\"/manager/classroom?id=<%=c._id%>\">Manage</a></button>\n    <button id=\"generate_invite\" value=\"<%=c._id%>\" onclick=\"generate_invite_link('<%=c._id%>')\">Generate invite\n        link</button>\n</div>\n<% }); %>"
+  , __lines = "<% classrooms.forEach(c => { %>\n<div id=\"<%=c._id%>\">\n        <h2>Class: <%= c.name %></h2>\n        <button class=\"class_edit_button\" value=\"<%=c._id%>\"><a\n                        href=\"/manager/classroom?classroom_id=<%=c._id%>\">Manage</a></button>\n        <button id=\"generate_invite\" value=\"<%=c._id%>\" onclick=\"generate_invite_link('<%=c._id%>')\">Generate invite\n                link</button>\n</div>\n<% }); %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -196,21 +196,22 @@ try {
     ; __append("\n<div id=\"")
     ; __line = 2
     ; __append(escapeFn(c._id))
-    ; __append("\">\n    <h2>Class: ")
+    ; __append("\">\n        <h2>Class: ")
     ; __line = 3
     ; __append(escapeFn( c.name ))
-    ; __append("</h2>\n    <button class=\"class_edit_button\" value=\"")
+    ; __append("</h2>\n        <button class=\"class_edit_button\" value=\"")
     ; __line = 4
     ; __append(escapeFn(c._id))
-    ; __append("\"><a href=\"/manager/classroom?id=")
-    ; __append(escapeFn(c._id))
-    ; __append("\">Manage</a></button>\n    <button id=\"generate_invite\" value=\"")
+    ; __append("\"><a\n                        href=\"/manager/classroom?classroom_id=")
     ; __line = 5
+    ; __append(escapeFn(c._id))
+    ; __append("\">Manage</a></button>\n        <button id=\"generate_invite\" value=\"")
+    ; __line = 6
     ; __append(escapeFn(c._id))
     ; __append("\" onclick=\"generate_invite_link('")
     ; __append(escapeFn(c._id))
-    ; __append("')\">Generate invite\n        link</button>\n</div>\n")
-    ; __line = 8
+    ; __append("')\">Generate invite\n                link</button>\n</div>\n")
+    ; __line = 9
     ;  }); 
   }
   return __output;
@@ -789,24 +790,24 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<h1>Add a new topic for class</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        <%masterychecks.forEach(mastery => { %>\n            <option value=\"<%=mastery._id%>\"><%=mastery.name%></option>\n        <%});%>\n        </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"<%=id%>\">\n    <input type=\"submit\">\n</form>"
+  , __lines = "<h1>Add a new topic for MasteryCheck:</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        <%masterychecks.forEach(mastery => { %>\n        <option value=\"<%=mastery._id%>\" required><%=mastery.name%></option>\n        <%});%>\n    </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"<%=id%>\">\n    <input type=\"submit\">\n</form>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<h1>Add a new topic for class</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        ")
+    ; __append("<h1>Add a new topic for MasteryCheck:</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        ")
     ; __line = 4
     ; masterychecks.forEach(mastery => { 
-    ; __append("\n            <option value=\"")
+    ; __append("\n        <option value=\"")
     ; __line = 5
     ; __append(escapeFn(mastery._id))
-    ; __append("\">")
+    ; __append("\" required>")
     ; __append(escapeFn(mastery.name))
     ; __append("</option>\n        ")
     ; __line = 6
     ; });
-    ; __append("\n        </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"")
+    ; __append("\n    </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"")
     ; __line = 10
     ; __append(escapeFn(id))
     ; __append("\">\n    <input type=\"submit\">\n</form>")

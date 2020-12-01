@@ -139,7 +139,7 @@ let API = function () {
      * @returns {Promise} the promise that will contain the invite link
      */
     function get_invite_link(id) {
-        return fetch("/classroom/invite/" + id).then((res) => {
+        return fetch(`/classroom/invite?classroom_id=${id}`).then((res) => {
             return res.json();
         });
     }

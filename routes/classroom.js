@@ -5,8 +5,7 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
 const path = require("path");
 
@@ -25,7 +24,9 @@ module.exports = router;
 // if STUDENT = returns all classes in which the student is enrolled
 
 router.get("/", ensureAuthenticated, (req, res) => {
-  if (req.user.role == 1 || req.user.role == 0) {
+
+  // User is a Professor
+  if (req.user.role == 0) {
     Classroom.find({ lecturer: req.user })
       .populate("topics")
       .then((result) => {
@@ -35,7 +36,30 @@ router.get("/", ensureAuthenticated, (req, res) => {
         console.log(err);
         res.json({});
       });
-  } else if (req.user.role == 2) {
+
+  }
+
+  // User is a TA
+  else if (req.user.role == 1) {
+    let classrooms = req.user.ta_for_list;
+    let promises = [];
+
+    // get all classrooms in which the user is a ta ( as promises )
+    for (let i = 0; i < classrooms.length; ++i) {
+      promises.push(Classroom.findById(classrooms[i]));
+    }
+    let results = [];
+    // wait for all classrooms to be found 
+    Promise.all(promises).then(result => {
+      result.forEach(prom_res => {
+        results.push(prom_res);
+      })
+      res.json({ classrooms: results, user: req.user })
+    }).catch(err => { console.log(err) });
+  }
+
+  // User is a Student
+  else if (req.user.role == 2) {
     User.findOne({ _id: req.user._id })
       .then((user) => {
         if (user) {
@@ -63,7 +87,6 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
-//TODO add start date, end date
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   if (!req.body.name || !req.body.description) {
@@ -73,6 +96,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     lecturer: req.user._id,
+    professors: [req.user._id],
     teaching_assistants: [],
     topics: [],
     color: randomColor(),
@@ -92,8 +116,8 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
-router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  Classroom.find({ _id: req.params.id })
+router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  Classroom.find({ _id: req.query.classroom_id })
     .populate("teaching_assistants")
     .populate("mastery_checks")
     .populate({
@@ -190,11 +214,11 @@ router.post("/testmapping", ensureAuthenticated, (req, res) => {
 
 //create a new invite link
 router.get(
-  "/invite/:classroom_id",
+  "/invite",
   ensureAuthenticated,
-  ensureProfessor,
+  ensureProfOrTA,
   (req, res) => {
-    TokenClassroom.findOne({ _classroomId: req.params.classroom_id }).then(
+    TokenClassroom.findOne({ _classroomId: req.query.classroom_id }).then(
       (c_t) => {
         if (c_t) {
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);

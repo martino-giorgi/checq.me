@@ -71,7 +71,12 @@ const ClassroomSchema = new mongoose.Schema({
     type: Map,
     required: true,
     default: {}
-  }
+  },
+  professors: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true
+  }]
 });
 
 const Classroom = mongoose.model("Classroom", ClassroomSchema);
