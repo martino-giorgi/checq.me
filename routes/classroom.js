@@ -107,7 +107,6 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 
   new_class.save().then((new_element) => {
-    // res.redirect("/classroom");
     res.json(new_element);
   });
   User.findById(req.user._id).then((professor) => {

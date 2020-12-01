@@ -11,11 +11,13 @@
         <div id="sub_navbar">
         </div>
         <section id="class_options">
-            <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
-            <button onclick="toggle_show_topic_form()">Add Topic</button>
             <button type="button" onClick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
                 data-target="#user-modal">
                 Show User List
+            </button>
+            <button type="button" onClick="render_mastery_modal" class="btn btn-primary" data-toggle="modal"
+                data-target="#mastery-modal">
+                Show Mastery Check List
             </button>
 
         </section>
@@ -33,6 +35,26 @@
                         </button>
                     </div>
                     <div id="user-modal-body" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mastery Check list modal -->
+        <div class="modal fade" id="mastery-modal" tabindex="-1" role="dialog" aria-labelledby="mastery-modal-label"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="user-modal-label">Mastery Check list</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="mastery-modal-body" class="modal-body">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

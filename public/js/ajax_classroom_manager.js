@@ -26,10 +26,15 @@ function render_user_modal() {
   document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(API.class_obj);
 }
 
+// function render_mastery_modal() {
+//   document.getElementById("mastery-modal-body").innerHTML = 
+// }
+
 function setUser(user_id) {
   selected_user = user_id;
   document.getElementById("toggleTA_btn")
-    .innerHTML = API.class_obj.teaching_assistants.map(e => e._id).includes(user_id) ? "Remove as TA" : "Add as TA";
+    .innerHTML = API.class_obj.teaching_assistants.map(e => e._id).includes(user_id)
+      ? "Remove as TA" : "Add as TA";
 }
 
 function getUser() {
@@ -78,49 +83,6 @@ function toggle_show_topic_form() {
   document.getElementById("topic_form").innerHTML = ejs.views_manager_classrooms_new_topic(model)
 }
 
-
-function show_new_selected() {
-  let list = document.getElementById("partecipants_list");
-  let form = document.getElementById("ta_form");
-  var selected_name = list.options[list.selectedIndex].text;
-  let role = list.options[list.selectedIndex].id;
-  if (role == 2) {
-    // bugged, keeps adding elements
-    // let s1 = document.createElement("select");
-    // form.appendChild(s1);
-    // let o1 = document.createElement("option");
-    //   o1.innerHTML = "TA";
-    // s1.appendChild(o1)
-    let str = `Are you sure you want <b>${selected_name} </b>to be TA?`
-    document.getElementById("selected_user").innerHTML = str;
-
-  }
-}
-
-//CLASSROOM MANAGER -- SECTION: Students
-// function init_students() {
-//   let url = new URL(window.location.href);
-//   c_id = url.searchParams.get('id');
-//   document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({ c_id });
-//   set_navbar_active("a_nav_students");
-//   API.get_class_info(c_id).then(classroom => {
-//     document.getElementById("student_list").innerHTML = ejs.views_manager_partial_students_list({ partecipants: classroom[0].partecipants });
-//     var coll = document.getElementsByClassName("swag_collapsible");
-//     let i;
-//     for (i = 0; i < coll.length; i++) {
-//       coll[i].addEventListener("click", function () {
-//         this.classList.toggle("active_collapsable");
-//         var content = this.nextElementSibling;
-//         if (content.style.maxHeight) {
-//           content.style.maxHeight = null;
-//         } else {
-//           content.style.maxHeight = content.scrollHeight + "px";
-//         }
-//       });
-//     }
-
-//   })
-// }
 
 function set_navbar_active(element_id) {
   let navbar = document.getElementById("sub_navbar").querySelectorAll("a");
@@ -192,15 +154,6 @@ API = (function () {
         handle_dynamic_fields();
         handle_remove_field();
       });
-  }
-
-
-  // Reset initial html and show list of classes
-  // this function is called when the view is replaced completely
-  // for example when displaying a topic, we need to reset the view "classrooms" to have
-  // the tags necessary for show_classes()
-  function show_start_view() {
-
   }
 
   return {
