@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const moment = require("moment");
 require("twix");
@@ -15,6 +16,8 @@ const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Availability = require("../models/Availability");
 const Appointment = require("../models/Appointment");
 const Classroom = require("../models/Classroom");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -33,45 +36,45 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
             (mastery_days) => {
 
               let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
-
-                mastery_days.forEach((m_day) => {
-                let m_day_start;
-                let m_day_end;
-
-                if (moment().isoWeekday() <= m_day.iso_day_n) {
-                  // then just give me this week's instance of that day
-                  m_day_start = moment().isoWeekday(m_day.iso_day_n);
-                  m_day_end = moment().isoWeekday(m_day.iso_day_n);
-                } else {
-                  // otherwise, give me *next week's* instance of that same day
-                  m_day_start = moment()
-                    .add(1, "weeks")
-                    .isoWeekday(m_day.iso_day_n);
-                  m_day_end = moment()
-                    .add(1, "weeks")
-                    .isoWeekday(m_day.iso_day_n);
+                for (let i = 0; i < mastery_days.length; i++){
+                  m_day = mastery_days[i];
+                  let m_day_start;
+                  let m_day_end;
+  
+                  if (moment().isoWeekday() <= m_day.iso_day_n) {
+                    // then just give me this week's instance of that day
+                    m_day_start = moment().isoWeekday(m_day.iso_day_n);
+                    m_day_end = moment().isoWeekday(m_day.iso_day_n);
+                  } else {
+                    // otherwise, give me *next week's* instance of that same day
+                    m_day_start = moment()
+                      .add(1, "weeks")
+                      .isoWeekday(m_day.iso_day_n);
+                    m_day_end = moment()
+                      .add(1, "weeks")
+                      .isoWeekday(m_day.iso_day_n);
+                  }
+  
+                  m_day_start = m_day_start.set({
+                    hour: moment(m_day.start_time).get("hour"),
+                    minute: moment(m_day.start_time).get("minute"),
+                    second: 0,
+                  });
+  
+                  m_day_end = m_day_end.set({
+                    hour: moment(m_day.end_time).get("hour"),
+                    minute: moment(m_day.end_time).get("minute"),
+                    second: 0,
+                  });
+                  console.log("Start: "+moment(m_day_start).toDate()+", End:"+ moment(m_day_end).toDate());
+                  let available_slots = get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
+                  if(available_slots.length > 0){
+                    //go to the next check ==> get all the appointments of the TA and check if he has time ;) winkyface
+                  }
+                  else {
+                    //increase TA and test again
+                  }
                 }
-
-                m_day_start = m_day_start.set({
-                  hour: moment(m_day.start_time).get("hour"),
-                  minute: moment(m_day.start_time).get("minute"),
-                  second: 0,
-                });
-
-                m_day_end = m_day_end.set({
-                  hour: moment(m_day.end_time).get("hour"),
-                  minute: moment(m_day.end_time).get("minute"),
-                  second: 0,
-                });
-                console.log("Start: "+moment(m_day_start).toDate()+", End:"+ moment(m_day_end).toDate());
-                let available_slots = get_avail_slots(assigned_ta, m_day_start, m_day_end, m_day.iso_day_n);
-                if(available_slots.length > 0){
-                  //go to the next check ==> get all the appointments of the TA and check if he has time ;) winkyface
-                }
-                else {
-                  //increase TA and test again
-                }
-              });
             }
           );
         })
@@ -84,6 +87,29 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
     }
   });
 });
+
+router.get("/taqueue",(req, res) => {
+  console.log("ciao")
+  get_TA_queue(moment("2020-12-02"), [ mongoose.Types.ObjectId("5fbbbd26278c90520deec26c"), mongoose.Types.ObjectId("5fb435501cf7e5fab846ca0b"), mongoose.Types.ObjectId("5fb4351a1cf7e5fab846ca09")],mongoose.Types.ObjectId("5fb4351a1cf7e5fab846ca09"));
+  res.end();
+})
+
+
+function get_TA_queue(date, classroom_tas, exclude){ //tas MUST NOT INCLUDE the assigned Ta in ta_mapping
+  return new Promise((resolve, rejects) => {
+    
+    const date_start = moment(date).startOf('day');
+
+    Appointment.aggregate().match({ $and: [{_taId:{$in: classroom_tas}}, {_taId:{$ne: exclude}}] ,
+                                    time: {$gte: date_start.toDate(), 
+                                    $lte: moment(date_start).endOf('day').toDate()}})
+                            .group({_id: "$_taId", count: {$sum: 1}})
+                            .sort("count")
+                            // .project({count:0})
+                            .exec((err, result)=>{console.log(result);resolve(result);rejects(err)});
+                            
+  });
+}
 
 // Waiting for better name
 function get_avail_slots(ta_id, m_day_start, m_day_end, m_iso_day) {

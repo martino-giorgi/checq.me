@@ -5,17 +5,17 @@
 const mongoose =  require('mongoose');
 
 const AppointmentSchema = new mongoose.Schema({
-    mastery: {
+    _masteryId: {
         type: mongoose.Schema.ObjectId,
         ref: 'MasteryCheck',
         required: true
     },
-    ta:{
+    _taId:{
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
     },
-    student:{
+    _studentId:{
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
