@@ -27,6 +27,17 @@ module.exports = router;
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 1 || req.user.role == 0) {
     Classroom.find({ lecturer: req.user })
+      .select({
+        teaching_assistants: 1,
+        name: 1,
+        _id: 1,
+        color: 1,
+        description: 1
+      })
+      .populate({
+        path: "teaching_assistants",
+        select: ["email", "name", "surname"],
+      })
       .populate("topics")
       .then((result) => {
         res.json({ classrooms: result, user: req.user });
@@ -63,7 +74,7 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
-//TODO add start date, end date
+//TODO: add start date, end date
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   if (!req.body.name || !req.body.description) {
@@ -94,6 +105,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
 
 router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.find({ _id: req.params.id })
+    .select({ name: 1, description: 1, classrooms: 1, color: 1})
     .populate("teaching_assistants")
     .populate("mastery_checks")
     .populate({

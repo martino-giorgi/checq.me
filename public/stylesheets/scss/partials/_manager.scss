@@ -1,5 +1,25 @@
-//edo non mi uccidere, modificalo come vuoi è solo per provarlo
-// /manager/classroom/students
+@import "./vars";
+
+#classroom-table {
+  tbody {
+    td {
+      .invite-link {
+        display: flex;
+        flex-flow: row;
+
+        align-items: center;
+
+        img {
+          margin-right: 12px;
+        }
+      }
+
+      &:nth-of-type(2) {
+        width: 80% !important;
+      }
+    }
+  }
+}
 
 .swag_collapsible {
   background-color: #777;

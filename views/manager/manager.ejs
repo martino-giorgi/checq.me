@@ -1,15 +1,74 @@
 <link rel="stylesheet" href="/stylesheets/css/flash.min.css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous">
 
 <div class="wrapper">
-    <%- include("../partials/navigation", {active: 'manager'}) %>
-    <div>
-        <section id="classroom_list"></section>
+  <%- include("../partials/navigation", {active: 'manager'}) %>
 
-        <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
+  <% if (classrooms.length > 0) { %>
+    <table id="classroom-table">
+      <thead>
+        <!-- Table Header -->
+      
+        <tr>
+            <td class="class-color-header"></td>
+            <td class="small gray"> Name </td>
+            <td class="small gray"> Teaching Assistants </td>
+            <td class=""></td>
+            <td class=""></td>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <!-- Table Body -->
+  
+        <% classrooms.forEach((classroom, index) => { %>
+          <% console.log(classroom) %> 
+          
+          <tr>
+            <td class="class-color" style="background-color: #<%= classroom.color %>"></div>
+  
+            <td class="normal class-name"> <%= classroom.name %> </td>
+  
+            <% if (classroom.teaching_assistants.length > 0) { %>
+              <td>
+              <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
+                  <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
+              <% } %>
+                </td>
+            <% } else { %>
+              <td>
+              <p class="normal"> N.D. </p>
+              </td>
+            <% } %>
 
-        <section id="form" class="hidden"></section>
-    </div>
+            <td>
+              <span class="invite-link" style="cursor: pointer;" onclick="generate_invite_link('<%= classroom._id %>')">
+                <img src="/assets/icons/misc/clip.svg" alt="generate invite link">
+                <p>Invite Link</p>
+              </span>
+            </td>
+  
+            <td class="class-detail-td">
+                <a href="/manager/classroom?id=<%= classroom._id %>">
+                  <span class="circle" style="background-color: #<%= classroom.color %>">
+                      <img src="/assets/icons/misc/chevron-right.svg" alt="chevron-right"></img>
+                  </span>
+                </a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %> 
+    <span id="no-classrooms">
+        <img src="/assets/icons/misc/no_classroom.svg" alt="">
+    </span>  
+  <% } %>
+
+  <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
+  <section id="form" class="hidden"></section>
 </div>
 
 <script src="/js/flash.min.js"></script>
@@ -17,5 +76,5 @@
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
 <script>
-    window.onload = init;
+  window.onload = init;
 </script>

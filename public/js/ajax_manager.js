@@ -4,11 +4,6 @@
  */
 function init() {
     API.get_classrooms().then((response) => {
-        document.getElementById(
-            "classroom_list"
-        ).innerHTML = ejs.views_manager_partial_class_list({
-            classrooms: response.classrooms,
-        });
         // store the current user
         API.user = response["user"];
         document.getElementById(
@@ -31,16 +26,13 @@ function init() {
  */
 function toggle_show_form() {
     let form = document.getElementById("form");
-    let classroom_list = document.getElementById("classroom_list");
     let button = document.getElementById("show_or_back");
 
     if (form.classList.contains("hidden")) {
-        classroom_list.classList.add("hidden");
         form.classList.remove("hidden");
         button.innerHTML = "Back to list";
     } else {
         form.classList.add("hidden");
-        classroom_list.classList.remove("hidden");
         button.innerHTML = "Add Class";
     }
 }
