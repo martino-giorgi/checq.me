@@ -2,21 +2,17 @@ const express = require("express");
 const crypto = require("crypto");
 const moment = require("moment");
 const router = express.Router();
+var ObjectID = require("mongodb").ObjectID;
 const {
   ensureAuthenticated,
   ensureProfessor,
   ensureProfOrTA
 } = require("../config/auth");
-const path = require("path");
 
-const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
-const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
-const { resolve } = require("path");
-const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -27,8 +23,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
 
   // User is a Professor
   if (req.user.role == 0) {
-    Classroom.find({ lecturer: req.user })
-      .populate("topics")
+    Classroom.find({ professors: { $in: [req.user] } })
       .then((result) => {
         res.json({ classrooms: result, user: req.user });
       })
@@ -118,6 +113,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
 router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Classroom.find({ _id: req.query.classroom_id })
     .populate("teaching_assistants")
+    .populate("professors")
     .populate("mastery_checks")
     .populate({
       path: "lecturer",
@@ -200,6 +196,59 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
       res.status(400).end();
     })
 });
+
+// Add professor
+router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  console.log(req.query.classroom_id);
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+
+    // If the User is a TA, remove him from class list and adjust their schema
+    if (classroom.teaching_assistants.includes(req.body.professor_id)) {
+      classroom.teaching_assistants.remove(req.body.professor_id);
+      classroom.save();
+      User.findById(req.body.professor_id).then(user => {
+        user.ta_for_list.remove(req.query.classroom_id);
+        user.role = 0;
+        user.save();
+      });
+    }
+
+    classroom.professors.addToSet(req.body.professor_id);
+    classroom.partecipants.remove(req.body.professor_id);
+    classroom.save().then(() => res.status(200).end());
+  }).catch((err) => { console.log(err); res.status(400).end() })
+});
+
+// Remove professor
+router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+  if (!ObjectID.isValid(req.query.classroom_id)) {
+    res.status(400).end();
+    return;
+  }
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.professors.remove(req.body.professor_id);
+    classroom.partecipants.addToSet(req.body.professor_id);
+    classroom.save().then(() => {
+      res.status(200).end();
+    })
+  })
+    .catch(err => console.log(err));
+})
+
+// Remove student from class
+router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.partecipants.remove(req.body.student_id);
+    User.findById(req.body.student_id).then(student => {
+      student.classrooms.remove(req.query.classroom_id);
+      student.save();
+    })
+    classroom.save().then(() => {
+      res.status(200).end();
+    })
+  })
+})
 
 //generates the new map for students and tas.
 

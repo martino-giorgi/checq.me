@@ -203,7 +203,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% partecipants.concat(teaching_assistants).forEach(p => { %>
+                            <% partecipants.concat(teaching_assistants.concat(professors)).forEach(p => { %>
                             <% let curr = p._id %>
                             <tr class="candidates-list">
                                 <td class="title">
@@ -221,7 +221,7 @@
                                 </td>
                                 <td class="candidate-list-favourite-time text-center">
                                     <span
-                                        class="candidate-list-time order-1"><%=p.role == 0 ?  "Professor" : (p.role == 1 ? "TA" : "Student")%>
+                                        class="candidate-list-time order-1"><%= professors.map(e => e._id).includes(p._id) ?  "Professor" : (teaching_assistants.map(e => e._id).includes(p._id)) ? "TA" : "Student"%>
                                     </span>
                                 </td>
                                 <td>
@@ -249,15 +249,17 @@
                 <h5 class="modal-title" id="edit-user-modal-label">Edit User</h5>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">
+                <button type="button" class="btn btn-primary" onclick="removeFromClass(getUser())" data-toggle="modal"
+                    data-target="#edit-user-modal">
                     Remove from Classroom
                 </button>
                 <button type="button" id="toggleTA_btn" onclick="toggleTA(getUser())" class="btn btn-primary"
                     data-toggle="modal" data-target="#edit-user-modal">
                     Value
                 </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">
-                    Make as Prof
+                <button type="button" id="toggleProf_btn" onclick="toggleProf(getUser())" class="btn btn-primary"
+                    data-toggle="modal" data-target="#edit-user-modal">
+                    Value
                 </button>
             </div>
         </div>

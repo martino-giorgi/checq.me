@@ -26,10 +26,6 @@ function render_user_modal() {
   document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(API.class_obj);
 }
 
-// function render_mastery_modal() {
-//   document.getElementById("mastery-modal-body").innerHTML = 
-// }
-
 function setUser(user_id) {
   selected_user = user_id;
   document.getElementById("toggleTA_btn")
@@ -73,6 +69,57 @@ function toggleTA(user_id) {
 
 }
 
+function toggleProf(user_id) {
+  let body = {
+    professor_id: user_id
+  }
+  // if is a professor, remove
+  if (API.class_obj.professors.map(e => e._id).includes(user_id)) {
+    API.removeProf(JSON.stringify(body)).then(() => {
+
+      API.get_class_info(c_id).then(res => {
+        API.class_obj = res[0];
+        render_user_modal();
+        display_class_info();
+
+      })
+    })
+  }
+  else {
+    API.makeProf(JSON.stringify(body)).then(() => {
+      API.get_class_info(c_id).then(res => {
+        API.class_obj = res[0];
+        render_user_modal();
+        display_class_info();
+
+      })
+    })
+  }
+}
+
+function removeFromClass(user_id) {
+  let body = {
+    student_id: user_id
+  }
+  if (API.class_obj.partecipants.map(e => e._id).includes(user_id) && API.class_obj.lecturer != user_id) {
+    API.removeFromClass(JSON.stringify(body)).then(() => {
+      API.get_class_info(c_id).then(res => {
+        API.class_obj = res[0];
+        render_user_modal();
+        display_class_info();
+
+      })
+    })
+  } else {
+    if (API.class_obj.lecturer._id == selected_user) {
+      window.FlashMessage.error("Can not remove owner!");
+    }
+    else {
+      window.FlashMessage.error("Can only remove students, change role of this user!");
+    }
+  }
+}
+
 
 /**
  * Toggle between showing and hiding the topic form
@@ -83,23 +130,6 @@ function toggle_show_topic_form() {
     masterychecks: API.class_obj.mastery_checks
   }
   document.getElementById("topic_form").innerHTML = ejs.views_manager_classrooms_new_topic(model)
-}
-
-
-function set_navbar_active(element_id) {
-  let navbar = document.getElementById("sub_navbar").querySelectorAll("a");
-  navbar.forEach(element => {
-    element.classList.remove("active")
-  });
-  document.getElementById(element_id).classList.add("active");
-}
-
-//CLASSROOM MANAGER -- SECTION: TAs
-function init_tas() {
-  let url = new URL(window.location.href);
-  c_id = url.searchParams.get('id');
-  document.getElementById("sub_navbar").innerHTML = ejs.views_manager_partial_class_navbar({ c_id });
-  set_navbar_active("a_nav_tas");
 }
 
 
@@ -127,7 +157,7 @@ API = (function () {
   }
 
   function makeTa(body) {
-    return fetch("/classroom/ta", {
+    return fetch("/classroom/ta?classroom_id=" + c_id, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body
@@ -135,7 +165,31 @@ API = (function () {
   }
 
   function removeTa(body) {
-    return fetch("/classroom/ta", {
+    return fetch("/classroom/ta?classroom_id=" + c_id, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  function makeProf(body) {
+    return fetch("/classroom/professor?classroom_id=" + c_id, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  function removeProf(body) {
+    return fetch("/classroom/professor?classroom_id=" + c_id, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  function removeFromClass(body) {
+    return fetch("/classroom/student?classroom_id=" + c_id, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body
@@ -163,7 +217,9 @@ API = (function () {
     removeTa,
     class_obj,
     show_topic,
-    show_start_view,
+    removeProf,
+    makeProf,
+    removeFromClass,
     get_class_info
   };
 })();
