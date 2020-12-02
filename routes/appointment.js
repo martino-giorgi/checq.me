@@ -155,36 +155,28 @@ async function get_day_busy(user_id, date) {
 
 function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, available_slots) {
   // return new Promise((resolve, rejects) => {
-    console.log(m_day_start,m_day_end);
-    // Appointment.find({_taId: ta,
-    //                  $and: [{$gte: ["$start_time",m_day_start.toDate()]},
-    //                   {$lte: ["$end_time",m_day_end.toDate()]}]
-    //                 })
-    //             .exec((err, appointments) => {
-    //               if (err) {
-    //                 console.log(err);
-    //                 // rejects(err);
-    //                 return;
-    //               } else {
-    //                 console.log(appointments);
-    //                 if(appointments.length == 0){ //no appointments during mastery hours ==> can book
-                      
-    //                 } else {
-    //                   let test = appointments.map((el) => {return [el.start_time, el.end_time]})
-    //                   let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
-    //                   console.log("booked", test, available)
-    //                 }
-    //               }
-    //             })
+  console.log(m_day_start,m_day_end);
   Appointment.aggregate().match(
     {_taId: ta,
       start_time: {$lte: m_day_end.toDate()}, 
-      end_time: {$gt: m_day_start.toDate()}
-            }
-  )
-   .exec((err, result)=> {
-    console.log(result);
-   })
+      end_time: {$gt: m_day_start.toDate()}})
+    .exec((err, appointments)=> {
+      if (err) {
+        console.log(err);
+        // rejects(err);
+        return;
+      } else {
+        // console.log(appointments);
+        if(appointments.length == 0){ //no appointments during mastery hours ==> can book
+          
+        } else {
+          let test = appointments.map((el) => {return [el.start_time, el.end_time]})
+          console.log(test);
+          let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
+          // console.log("booked", available)
+        }
+      }
+    })
   // })
 }
 
@@ -220,6 +212,8 @@ function get_avail_slots(m_day_start, m_day_end, m_iso_day, ranges) {
     // console.log("BUSY: "+avail.busy);
       let start = moment(ranges[i][0]);
       let end = moment(ranges[i][1]);
+
+      // console.log(start, end)
 
       if (start.isoWeekday() == m_iso_day && end.isoWeekday() == m_iso_day) {
         if(start.isBefore(m_day_start) && end.isBefore(m_day_end)){
