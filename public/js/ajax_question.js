@@ -16,6 +16,7 @@ function init_question() {
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
+    lang = code_or_text == "text" ? "text" : lang;
 }
 
 /**
