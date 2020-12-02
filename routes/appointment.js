@@ -10,6 +10,8 @@ const {
   ensureTa,
 } = require("../config/auth");
 
+const {get_available_time} = require("../updates/available_time")
+
 const User = require("../models/User");
 const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
@@ -18,6 +20,7 @@ const Appointment = require("../models/Appointment");
 const Classroom = require("../models/Classroom");
 const { resolve } = require("path");
 const { rejects } = require("assert");
+const { route } = require("./availability");
 
 module.exports = router;
 
@@ -81,7 +84,8 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
                     console.log("Available slots:",available_slots)
                     if(available_slots.length > 0){
                       //trybooking with assigned TA
-                      trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
+                      // trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
+                      trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, avail[0].busy);
                     }
 
                     let staff = [mastery.classroom.lecturer]
@@ -153,7 +157,7 @@ async function get_day_busy(user_id, date) {
   })
 }
 
-function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, available_slots) {
+function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
   // return new Promise((resolve, rejects) => {
   console.log(m_day_start,m_day_end);
   Appointment.aggregate().match(
@@ -170,10 +174,20 @@ function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_
         if(appointments.length == 0){ //no appointments during mastery hours ==> can book
           
         } else {
-          let test = appointments.map((el) => {return [el.start_time, el.end_time]})
-          console.log(test);
-          let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
-          // console.log("booked", available)
+          let busy_total = busy;
+          // console.log(busy);
+          // console.log(appointments);
+          appointments.forEach((el)=>{busy_total.push([el.start_time, el.end_time])});
+          console.log(m_day_start, m_day_end, busy_total);
+          get_available_time(m_day_start, m_day_end, busy_total);
+          // console.log(appointments.map((el) => {return [el.start_time, el.end_time]}))
+
+          // console.log(test);
+          // let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
+          // console.log("booked", available);
+          
+          // console.log(m_range);
+          // console.log(r1,r2,r3)
         }
       }
     })
@@ -206,14 +220,12 @@ async function get_TA_queue(date, classroom_tas, exclude) {
 
 function get_avail_slots(m_day_start, m_day_end, m_iso_day, ranges) {
   let available_slots = [];
-
+  
   for (let i = 0; i < ranges.length; i++) {
     // console.log("AVAILABILITY: "+avail);
     // console.log("BUSY: "+avail.busy);
       let start = moment(ranges[i][0]);
       let end = moment(ranges[i][1]);
-
-      // console.log(start, end)
 
       if (start.isoWeekday() == m_iso_day && end.isoWeekday() == m_iso_day) {
         if(start.isBefore(m_day_start) && end.isBefore(m_day_end)){
@@ -259,7 +271,6 @@ function get_avail_slots(m_day_start, m_day_end, m_iso_day, ranges) {
         available_slots.push([m_day_start, m_day_end]);
       }
     }
-    // available_slots.forEach(el => {console.log(el[0],el[1])});
     return available_slots;
 }
 
@@ -297,6 +308,10 @@ async function can_mastery(mastery_id, user_id) {
       .catch((err) => rejects(err));
   });
 }
+
+router.get("/aaa",(req,res) => {
+  get_available_time("2020-12-03T10:30","2020-12-03T14:30",[["2020-12-03T12:31","2020-12-03T13:29"],["2020-12-03T09:30","2020-12-03T10:30"]]);
+})
 
 // TODO: Cambia nome prima di committare!!
 router.post("/sgrang", (req, res) => {
