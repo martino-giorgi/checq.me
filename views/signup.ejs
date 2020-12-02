@@ -7,7 +7,7 @@
 
       <%- include("./partials/messages") %>
 
-      <form action="/user/signup" method="POST">
+      <form id="form" action="/user/signup" method="POST">
         <div class="form-group">
           <label for="name">Name</label>
           <input required type="text" id="name" name="name" class="form-control" placeholder="Enter Name"
@@ -47,3 +47,10 @@
     </div>
   </div>
 </div>
+
+<script>
+  let code = new URLSearchParams(window.location.search).get("code");
+  if (code) {
+    document.getElementById("form").action = `/user/signup?code=${code}`
+  }
+</script>

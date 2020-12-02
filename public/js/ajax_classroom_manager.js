@@ -3,7 +3,6 @@ var selected_user = undefined;
 
 //CLASSROOM MANAGER -- SECTION: Mastery Checks
 function init_manager() {
-  init_mastery();
   let url = new URL(window.location.href)
   c_id = url.searchParams.get('classroom_id')
 
@@ -27,6 +26,10 @@ function display_class_info() {
  */
 function render_user_modal() {
   document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(API.class_obj);
+}
+
+function render_add_mastery_modal() {
+  document.getElementById("add-mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_add();
 }
 
 /**

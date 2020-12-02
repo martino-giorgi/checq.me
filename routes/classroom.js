@@ -23,7 +23,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
 
   // User is a Professor
   if (req.user.role == 0) {
-    Classroom.find({ professors: { $in: [req.user] } })
+    Classroom.find({ $or: [{ professors: { $in: [req.user] } }, { teaching_assistants: { $in: [req.user] } }] })
       .then((result) => {
         res.json({ classrooms: result, user: req.user });
       })
@@ -139,12 +139,14 @@ router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
   let classroom = Classroom.findById(req.body.classroom_id);
   let new_ta = User.findById(req.body.user_id);
 
+  let role;
+  role = new_ta.role == 0 ? 0 : 1;
   Promise.all([classroom, new_ta]).then(result => {
     let this_classroom = result[0];
     let this_user = result[1];
 
     // Add classroom id to the ta_for_list field of User
-    this_user.role = 1;
+    this_user.role = role;
     this_user.ta_for_list.addToSet(this_classroom._id);
     // Add user id to teaching_assistant of Classroom and remove from participants
     this_classroom.partecipants.remove({ _id: this_user._id });
@@ -271,8 +273,8 @@ router.get(
         if (c_t) {
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
         } else {
-          Classroom.findById(req.params.classroom_id).then((c) => {
-            if (c && c.lecturer.toString() == req.user._id.toString()) {
+          Classroom.findById(req.query.classroom_id).then((c) => {
+            if (c) { // ensure ProfOrTA ensures that the TA or Prof accessing is part of this class
               let token = new TokenClassroom({
                 _classroomId: c._id,
                 token: crypto.randomBytes(20).toString("hex"),
@@ -286,10 +288,10 @@ router.get(
                 })
                 .catch((err) => {
                   console.log(err);
-                  res.status(400).end();
+                  res.status(400).send(err).end();
                 });
             } else {
-              res.status(400).end();
+              res.status(400).send("secondo errore").end();
             }
           });
         }

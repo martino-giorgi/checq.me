@@ -1,10 +1,5 @@
 const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
 
-function init_mastery() {
-  print_list();
-  add_delete_event();
-}
-
 function add_delete_event() {
   document.querySelectorAll(".delete_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -16,63 +11,61 @@ function add_delete_event() {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       }).then(() => {
-        print_list();
+        render_mastery_modal();
       });
     })
   });
 }
 
-function print_list() {
-  let classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
-  fetch(`/masterycheck?classroom_id=${classroom_id}`)
-    .then((res) => {
-      return res.json();
-    })
-    .then((list) => {
-      if (list.length > 0) {
-        document.getElementById("list").innerHTML = ejs.views_manager_mastery_mastery_list({
-          result: list,
-        });
-        add_delete_event();
-      } else {
-        document.getElementById("list").innerHTML = "";
+
+function render_mastery_modal() {
+  API_mastery.get_masteries().then(res => {
+    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res })
+    add_delete_event();
+  });
+}
+
+function create_mastery() {
+  let body = {
+    name: document.getElementById("input_name").value,
+    description: document.getElementById("input_description").value,
+    available: document.getElementById("check_available") == "checked" ? true : false
+  }
+
+  if (body.name != "" && body.description != "") {
+
+    API_mastery.post_mastery(JSON.stringify(body)).then(res => {
+      if (res.status == 200) {
+        window.FlashMessage.success("New mastery added!");
+        $("#add-mastery-modal").modal('hide');
       }
-    });
-}
-
-function empty_field() {
-  document.getElementById("input_name").value = "";
-  document.getElementById("input_description").value = "";
-  document.getElementById("check_available").checked = false;
-}
-
-function add() {
-  let dom = document.getElementById("add");
-  let btn = document.getElementById("add_btn");
-  fetch("/classroom")
-    .then((res) => {
-      return res.json();
+      else {
+        window.FlashMessage.error("Could not add new masterycheck, try again later");
+      }
     })
-    .then((classroom_list) => {
-      dom.innerHTML = ejs.views_manager_mastery_mastery_add({ classroom_list });
-      btn.style.display = "none";
-      // Client side POST for creating Mastery Check
-      let form = document.getElementById("create_form");
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        fetch(`/masterycheck?classroom_id?${classroom_id}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: document.getElementById("input_name").value,
-            description: document.getElementById("input_description").value,
-            available: document.getElementById("check_available").checked,
-            classroom: classroom_id
-          }),
-        }).then(() => {
-          empty_field();
-          print_list();
-        });
-      });
-    });
+  } else {
+    window.FlashMessage.error("Please fill all the fields!");
+  }
 }
+
+API_mastery = (function () {
+
+  function post_mastery(body) {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  function get_masteries() {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}`).then(res => {
+      return res.json();
+    }).then(result => { return result })
+  }
+
+  return {
+    post_mastery,
+    get_masteries
+  };
+})();
