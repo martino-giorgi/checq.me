@@ -7,7 +7,7 @@
   "author": "Martino Giorgi, Edoardo Riggio, Michele Cattaneo, Jacopo Di Ventura",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node ejs-compile.js && nodemon app.js",
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {

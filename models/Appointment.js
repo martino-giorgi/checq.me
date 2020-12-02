@@ -20,8 +20,16 @@ const AppointmentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    time:{
+    start_time:{
         type: Date,
+        required: true
+    },
+    end_time:{
+        type: Date,
+        required: true
+    },
+    duration:{ //minutes
+        type: Number,
         required: true
     },
     grade:{
