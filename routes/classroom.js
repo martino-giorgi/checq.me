@@ -26,18 +26,7 @@ module.exports = router;
 
 router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 1 || req.user.role == 0) {
-    Classroom.find({ lecturer: req.user })
-      .select({
-        teaching_assistants: 1,
-        name: 1,
-        _id: 1,
-        color: 1,
-        description: 1
-      })
-      .populate({
-        path: "teaching_assistants",
-        select: ["email", "name", "surname"],
-      })
+    Classroom.find({ lecturer: req.user }) 
       .populate("topics")
       .then((result) => {
         res.json({ classrooms: result, user: req.user });

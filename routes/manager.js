@@ -12,9 +12,14 @@ module.exports = router;
 
 // Mastery Manager
 router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  Classroom.find({ lecturer: req.user._id }).then((classrooms) => {
-    res.render("manager/manager", { user: req.user, classrooms: classrooms });
-  });
+  Classroom.find({ lecturer: req.user._id })
+    .populate({
+      path: "teaching_assistants",
+      select: ["name", "surname"],
+    })
+    .then((classrooms) => {
+      res.render("manager/manager", { user: req.user, classrooms: classrooms });
+    });
 });
 
 router.get("/classroom", ensureAuthenticated, ensureProfessor, (req, res) => {

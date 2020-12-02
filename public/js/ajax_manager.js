@@ -25,15 +25,21 @@ function init() {
  * Toggle between showing and hiding the form to add a new class
  */
 function toggle_show_form() {
+    let table = document.getElementById("classroom-table")
     let form = document.getElementById("form");
-    let button = document.getElementById("show_or_back");
+    let btn1 = document.getElementById("show_or_back");
+    let btn2 = document.getElementById("show_or_back_1");
 
     if (form.classList.contains("hidden")) {
+        table.classList.add("hidden");
         form.classList.remove("hidden");
-        button.innerHTML = "Back to list";
+        btn1.classList.add("hidden");
+        btn2.classList.remove("hidden");
     } else {
+        table.classList.remove("hidden");
         form.classList.add("hidden");
-        button.innerHTML = "Add Class";
+        btn1.classList.remove("hidden");
+        btn2.classList.add("hidden");
     }
 }
 

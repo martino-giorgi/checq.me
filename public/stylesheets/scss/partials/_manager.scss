@@ -3,20 +3,60 @@
 #classroom-table {
   tbody {
     td {
-      .invite-link {
-        display: flex;
-        flex-flow: row;
-
-        align-items: center;
-
-        img {
-          margin-right: 12px;
-        }
+      .btn-with-icn {
+        background-color: $white;
       }
 
       &:nth-of-type(2) {
-        width: 80% !important;
+        width: 75% !important;
       }
+    }
+
+    .add-class {
+      box-shadow: none;
+
+      .btn-with-icn {
+        padding: 12px 14px 12px 12px;
+        border-radius: 8px;
+        
+        color: $white;
+        background-color: $primary;
+        cursor: pointer;
+
+        img {
+          filter: invert(1);
+        }
+
+        p {
+          transform: translateY(1.5px);
+        }
+
+        &:hover, &:focus {
+          background-color: $primary_dark;
+        }
+      }
+    }
+  }
+}
+
+#form {
+  margin: 26px;
+
+  .btn-with-icn {
+    margin-bottom: 26px;
+    padding: 12px 14px 12px 12px;
+    border-radius: 8px;
+    
+    background-color: $gray;
+    color: $white;
+    cursor: pointer;
+
+    p {
+      margin: 0;
+    }
+
+    &:hover, &:focus {
+      background-color: $primary_dark;
     }
   }
 }

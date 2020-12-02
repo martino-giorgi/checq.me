@@ -1,10 +1,26 @@
-<h1>Add a new Class</h1>
-<% let domain = '@' + (user.email.split('@')[1]) %>
-<form id="new_class_form">
-    <input id="input_name" required type="text" name="name" placeholder="Classroom name">
-    <textarea id="input_desc" required name="description" placeholder="Classroom description"></textarea>
-    <label > <%= domain%></label>
-    <input id="input_is_ordered" type="checkbox" name="is_ordered" checked/>
-    <label for="is_ordered">Sequential completion of masterychecks</label>
-    <input type="submit"/>
-</form>
+<div>
+  <span class="btn-with-icn" style="cursor: pointer;" onclick="toggle_show_form()" id="show_or_back_1">
+    <p class="bold">Back</p>
+  </span>
+
+  <h1>Add a new Class</h1>
+
+  <form id="new_class_form">
+    <div class="form-group">
+      <label for="input_name">Class Name</label>
+      <input type="text" required class="form-control" id="input_name" placeholder="Class name">
+    </div>
+
+    <div class="form-group">
+      <label for="input_name">Class Description</label>
+      <textarea required class="form-control" id="input_desc" rows="3" placeholder="Classroom description"></textarea>
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="input_is_ordered" name="is_ordered" checked>
+      <label class="form-check-label" for="is_ordered">Sequential completion of Mastery Checks</label>
+    </div>
+    
+    <input type="submit">
+  </form>
+</div>

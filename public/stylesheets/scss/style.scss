@@ -71,6 +71,15 @@ h3 {
   letter-spacing: 0em;
 }
 
+.bold {
+  font-family: "Roboto", sans-serif;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700 !important;
+  line-height: 20px;
+  letter-spacing: 0em;
+}
+
 .small {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
@@ -138,6 +147,19 @@ h3 {
   border-radius: 50%;
 }
 
+.btn-with-icn {
+  display: flex;
+  flex-flow: row;
+
+  align-items: center;
+
+  width: min-content;
+
+  img {
+    margin-right: 12px;
+  }
+}
+
 
 // ===============================
 //       BOOTSTRAP OVERRIDES
@@ -147,21 +169,30 @@ h3 {
   background-color: $primary !important;
   border-color: $primary_dark !important;
 
+  &:focus, &:hover {
+    background-color: $primary_dark !important;
+  }
+}
+
+.form-control {
+  border-color: $gray !important;
+
+  &:focus, &:hover {
+    border-color: $primary_dark !important;
+  }
+}
+
+.btn-primary, .form-control {
   font-family: "Roboto", sans-serif;
   font-size: 17px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0em;
-}
 
-.btn-primary:focus {
-   box-shadow: none !important;
-   background-color: $primary_dark !important;
-}
-
-.btn-primary:hover {
-   background-color: $primary_dark !important;
+  &:focus, &:hover {
+    box-shadow: none !important;
+  }
 }
 
 
