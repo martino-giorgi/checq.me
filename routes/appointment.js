@@ -74,40 +74,32 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
 
                   console.log(assigned_ta);
 
-                  get_day_busy(assigned_ta, m_day_end).exec((err, avail) => {
-                    if(err){
-                      console.log(err);
+                  get_day_busy(assigned_ta, m_day_end).then((avail) => {
+                    // console.log(avail[0].busy);
+                    let available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail[0].busy);
+                    console.log("Busy slots:",avail)
+                    console.log("Available slots:",available_slots)
+                    if(available_slots.length > 0){
+                      //trybooking with assigned TA
+                      trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
                     }
-                    else{
-                      let available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail[0].busy);
-                      console.log("Busy slots:",avail)
-                      console.log("Available slots:",available_slots)
-                      if(available_slots.length > 0){
-                        console.log("here")
-                        //trybooking with assigned TA
-                        trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
+
+                    let staff = [mastery.classroom.lecturer]
+                    mastery.classroom.teaching_assistants.forEach(el => staff.push(mongoose.Types.ObjectId(el)));
+                    
+                    get_TA_queue(m_day_start, staff, assigned_ta).then(queue => {
+                      for(let j = 0; j < queue.length; j++){
+
+                        get_day_busy(queue[j]._id, m_day_end).then((avail2) => {
+                          available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail2);
+
+                          if (available_slots.length > 0) {
+                            //trybook with current TA
+                          }
+                        }).catch(err=>{console.log(err)});
                       }
-
-                      let staff = [mastery.classroom.lecturer]
-                      mastery.classroom.teaching_assistants.forEach(el => staff.push(mongoose.Types.ObjectId(el)));
-                      
-                      get_TA_queue(m_day_start, staff, assigned_ta).then(queue => {
-                        for(let j = 0; j < queue.length; j++){
-
-                          get_day_busy(queue[j]._id, m_day_end).exec((err, avail)=> {
-                            if(err){
-                              console.log(err);
-                            }
-                            available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail2);
-
-                            if (available_slots.length > 0) {
-                              //trybook with current TA
-                            }
-                          })
-                        }
-                      });
-                    }
-                  })
+                    });
+                  }).catch((err)=>{console.log(err)});
                   booked = true;
                   break;
                 }
@@ -134,18 +126,19 @@ router.get("/canbook", (req, res) => {
                                                           {"busy.1": {$gte: moment('2020-12-03').startOf('day').toDate()}}
                                                         ]})
                                           .group({ _id: "$_userId", busy : {$addToSet: "$busy"}})
-.exec((err , result)=> {
-    console.log(result);
-  })
-  res.end();
+  .exec((err , result)=> {
+      console.log(result);
+    })
+    res.end();
 })
 
-async function get_day_busy(user_id, date){
+async function get_day_busy(user_id, date) {
   return new Promise((resolve, rejects)=> {
+    let d = moment(date);
     Availability.aggregate().unwind('$busy')
                 .match({_userId: user_id,
-                        $and: [ {"busy.0": {$lte: date.endOf('day').toDate()}}, 
-                                {"busy.1": {$gte: date.startOf('day').toDate()}}
+                        $and: [ {"busy.0": {$lte: d.endOf('day').toDate()}}, 
+                                {"busy.1": {$gte: d.startOf('day').toDate()}}
                               ]})
                 .group({ _id: "$_userId", busy : {$addToSet: "$busy"}})
     .exec((err, avail) => {
@@ -161,25 +154,37 @@ async function get_day_busy(user_id, date){
 }
 
 function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, available_slots) {
-  console.log("ciao");
   // return new Promise((resolve, rejects) => {
-    console.log("GVNG");
-    Appointment.find({_taId: ta, 
-                      time: {$gte: m_day_start.toDate(), 
-                              $lte: m_day_end.toDate()}})
-                .exec((err, appointments) => {
-                  if (err) {
-                    console.log(err);
-                    // rejects(err);
-                    return;
-                  } else {
-                    console.log(appointments);
-                    let test = appointments.map((el) => {return [el.start_time, el.end_time]})
-                    let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
-
-                    console.log("booked", test, available)
-                  }
-                })
+    console.log(m_day_start,m_day_end);
+    // Appointment.find({_taId: ta,
+    //                  $and: [{$gte: ["$start_time",m_day_start.toDate()]},
+    //                   {$lte: ["$end_time",m_day_end.toDate()]}]
+    //                 })
+    //             .exec((err, appointments) => {
+    //               if (err) {
+    //                 console.log(err);
+    //                 // rejects(err);
+    //                 return;
+    //               } else {
+    //                 console.log(appointments);
+    //                 if(appointments.length == 0){ //no appointments during mastery hours ==> can book
+                      
+    //                 } else {
+    //                   let test = appointments.map((el) => {return [el.start_time, el.end_time]})
+    //                   let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
+    //                   console.log("booked", test, available)
+    //                 }
+    //               }
+    //             })
+  Appointment.aggregate().match(
+    {_taId: ta,
+      start_time: {$lte: m_day_end.toDate()}, 
+      end_time: {$gt: m_day_start.toDate()}
+            }
+  )
+   .exec((err, result)=> {
+    console.log(result);
+   })
   // })
 }
 
@@ -209,13 +214,13 @@ async function get_TA_queue(date, classroom_tas, exclude) {
 
 function get_avail_slots(m_day_start, m_day_end, m_iso_day, ranges) {
   let available_slots = [];
-  // console.log(ranges);
+
   for (let i = 0; i < ranges.length; i++) {
     // console.log("AVAILABILITY: "+avail);
     // console.log("BUSY: "+avail.busy);
       let start = moment(ranges[i][0]);
       let end = moment(ranges[i][1]);
-      
+
       if (start.isoWeekday() == m_iso_day && end.isoWeekday() == m_iso_day) {
         if(start.isBefore(m_day_start) && end.isBefore(m_day_end)){
           // possible slot @ end
@@ -301,6 +306,7 @@ async function can_mastery(mastery_id, user_id) {
 
 // TODO: Cambia nome prima di committare!!
 router.post("/sgrang", (req, res) => {
+  console.log(req.body);
   let date_start = moment(req.body.start_time, "YYYY-MM-DDTHH:mm", true);
   let date_end = moment(req.body.end_time, "YYYY-MM-DDTHH:mm", true);
   let now = moment();
