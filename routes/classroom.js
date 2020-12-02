@@ -63,12 +63,13 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
-//TODO: add start date, end date
 router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
+  
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
+
   const new_class = new Classroom({
     name: req.body.name,
     description: req.body.description,
@@ -76,19 +77,19 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     teaching_assistants: [],
     topics: [],
     color: randomColor(),
-    is_ordered_mastery: req.body.is_ordered,
+    is_ordered_mastery: req.body.is_ordered == 'on' ? true : false,
     university_domain: "@" + req.user.email.split("@")[1],
-    start_date: req.body.start_date,
-    end_date: req.body.end_date
+    start_date: toMoment(req.body.start_date),
+    end_date: toMoment(req.body.end_date)
   });
 
-  new_class.save().then((new_element) => {
-    // res.redirect("/classroom");
-    res.json(new_element);
-  });
-  User.findById(req.user._id).then((professor) => {
-    professor.classrooms.addToSet(new_class._id);
-    professor.save();
+  new_class.save().then(() => {
+    User.findById(req.user._id).then((professor) => {
+      professor.classrooms.addToSet(new_class._id);
+      professor.save();
+
+      res.redirect("/manager");
+    });
   });
 });
 
@@ -294,4 +295,12 @@ function randomColor() {
 
   color = colors[Math.floor(Math.random() * colors.length)];
   return color;
+}
+
+// Convert date to iso
+function toMoment(date) {
+  let base_date = date.replace(/\//g, "-").split('-');
+  let iso = base_date.reverse().join('-') + 'T00:00:00.000';
+  
+  return moment(iso);
 }

@@ -1,5 +1,5 @@
-@import "./partials/dashboard";
 @import "./partials/vars";
+@import "./partials/dashboard";
 @import "./partials/classroom";
 @import "./partials/profile";
 @import "./partials/schedule";
@@ -182,7 +182,15 @@ h3 {
   }
 }
 
-.btn-primary, .form-control {
+.btn-link {
+  color: $black !important;
+
+  &:focus, &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.btn-primary, .form-control, .btn-link {
   font-family: "Roboto", sans-serif;
   font-size: 17px;
   font-style: normal;
@@ -227,3 +235,7 @@ a {
   line-height: 20px;
   letter-spacing: 0em;
 }
+
+// body {
+//   min-width: 1129px;
+// }

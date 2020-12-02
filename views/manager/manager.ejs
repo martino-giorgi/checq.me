@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
 <link rel="stylesheet" href="/stylesheets/css/flash.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
@@ -76,13 +77,51 @@
     </span>  
   <% } %>
 
-  <section id="form" class="hidden"></section>
+  <section id="form" class="hidden">
+    <div>
+      <span class="btn-with-icn" style="cursor: pointer;" onclick="toggle_show_form()" id="show_or_back_1">
+        <p class="bold">Back</p>
+      </span>
+    
+      <form id="new_class_form" action="/classroom/new" method="POST">
+        <div class="form-group">
+          <label for="input_name">Class Name</label>
+          <input autocomplete="off" type="text" required class="form-control" name="name" id="input_name" placeholder="Class name">
+        </div>
+    
+        <div class="form-group">
+          <label for="input_name">Class Description</label>
+          <textarea required class="form-control" name="description" id="input_desc" rows="3" placeholder="Classroom description"></textarea>
+        </div>
+
+        <div class="row" id="picker">
+          <div class="col">
+            <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
+          </div>
+
+          <button type="button" class="btn btn-link">to</button>
+
+          <div class="col">
+            <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+          </div>
+        </div>
+    
+        <div style="margin-top: 16px" class="form-check">
+          <input type="checkbox" class="form-check-input" id="input_is_ordered" name="is_ordered" checked>
+          <label class="form-check-label" for="is_ordered">Sequential completion of Mastery Checks</label>
+        </div>
+        
+        <input id="submit-btn" style="margin-top: 16px" type="submit" class="button">
+      </form>
+    </div>
+  </section>
 </div>
 
+<script src="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/js/datepicker-full.js"></script>
 <script src="/js/flash.min.js"></script>
 <script src="js/ajax_manager.js"></script>
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
 <script>
-  window.onload = init;
+  // window.onload = init;
 </script>

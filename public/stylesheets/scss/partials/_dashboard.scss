@@ -201,11 +201,37 @@ main {
   // ===============================
 
   .classrooms {
-    .classroom-list {
+    min-width: 492px;
+
+    .header {
+      a:hover {
+        color: $gray;
+      }
+    }
+
+    .icn-and-title {
       display: flex;
       flex-flow: row;
 
-      margin: 26px;
+      align-items: center;
+
+      margin: 0 0 0 24px;
+
+      h3 {
+        margin: 0 0 0 17px;
+      }
+
+    }
+    
+    .classroom-list {
+      display: flex;
+      flex-flow: row wrap;
+
+      margin: 0 26px 26px 26px;
+
+      a:hover {
+        text-decoration: none;
+      }
 
       .classroom-box {
         display: flex;
@@ -217,6 +243,7 @@ main {
         height: 191px;
 
         margin-right: 26px;
+        margin-top: 20px;
 
         border-radius: 8px;
 
@@ -260,11 +287,16 @@ main {
           
           color: $white;
         }
-      }
 
-      .classroom-box:hover {
-        box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.171);
-        cursor: pointer;
+        a:last-of-type {
+          margin-right: 0;
+        }
+
+        &:hover {
+          box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.171);
+
+          cursor: pointer;
+        }
       }
     }
   }
