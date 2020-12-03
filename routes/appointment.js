@@ -79,14 +79,16 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
 
                   get_day_busy(assigned_ta, m_day_end).then((avail) => {
                     // console.log(avail[0].busy);
-                    let available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail[0].busy);
+                    // let available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail[0].busy);
                     console.log("Busy slots:",avail)
-                    console.log("Available slots:",available_slots)
-                    if(available_slots.length > 0){
+                    // if(available_slots.length > 0){
                       //trybooking with assigned TA
                       // trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
-                      trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, avail[0].busy);
+                    let r = trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, avail[0].busy);
+                    if(r != false){
+                      //booking completed.
                     }
+                    //booking failed, try again                    
 
                     let staff = [mastery.classroom.lecturer]
                     mastery.classroom.teaching_assistants.forEach(el => staff.push(mongoose.Types.ObjectId(el)));
@@ -158,7 +160,6 @@ async function get_day_busy(user_id, date) {
 }
 
 function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
-  // return new Promise((resolve, rejects) => {
   console.log(m_day_start,m_day_end);
   Appointment.aggregate().match(
     {_taId: ta,
@@ -167,7 +168,6 @@ function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_
     .exec((err, appointments)=> {
       if (err) {
         console.log(err);
-        // rejects(err);
         return false;
       } else {
 
@@ -195,7 +195,6 @@ function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_
                           return false})
       }
     })
-  // })
 }
 
 
