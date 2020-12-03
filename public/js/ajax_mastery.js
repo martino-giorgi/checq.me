@@ -71,6 +71,7 @@ function render_mastery_modal() {
     add_edit_event();
     add_new_event();
     add_edit_topic_event();
+    show_question_form();
   });
 }
 
@@ -162,6 +163,21 @@ function create_mastery() {
   } else {
     window.FlashMessage.error("Please fill all the fields!");
   }
+}
+
+function show_question_form() {
+  let section = document.getElementById("topics_list");
+  
+  section.querySelectorAll("#a_add_question").forEach( link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      section.innerHTML = ejs.views_manager_classrooms_new_question();
+      init_question();
+      topic_id = link.dataset.topic_id;
+      console.log(topic_id);
+     
+    })
+  })
 }
 
 API_mastery = (function () {

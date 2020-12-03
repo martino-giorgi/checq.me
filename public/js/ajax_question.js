@@ -9,12 +9,14 @@ var editor;
 var code_or_text = "text";
 var lang = "text";
 
-const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
-const topic_id = new URLSearchParams(window.location.search).get("topic_id");
+//const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
+//const topic_id = new URLSearchParams(window.location.search).get("topic_id");
+
 /**
  * Initializes the view with the editor and event listeners.
  */
 function init_question() {
+    console.log("initttt");
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
@@ -179,7 +181,7 @@ function handle_remove_field() {
  * to be posted
  */
 function post_question() {
-
+    console.log("posted");
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
     let curr_checkbox;
@@ -200,11 +202,12 @@ function post_question() {
         text: question_text,
         lang: lang
     });
-
+    
 
     API_question.post_question(body).then(res => { return res.json() }).then(new_question => {
         console.log(new_question);
         window.FlashMessage.success("New Question added!");
+        render_mastery_modal();
     })
         .catch(err => {
             console.log(err);

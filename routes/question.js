@@ -43,6 +43,8 @@ router.post("/new", ensureAuthenticated, ensureProfOrTA,
         answer: req.body.answer,
         lang: req.body.lang
       })
+      console.log(req.query.topic_id);
+      console.log("aaa");
       let p1 = Topic.findById(req.query.topic_id);
       let p2 = new_q.save();
 
