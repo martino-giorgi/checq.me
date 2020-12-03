@@ -18,6 +18,7 @@ const Classroom = require("../models/Classroom");
 const { resolve } = require("path");
 const { rejects, deepStrictEqual } = require("assert");
 const { route } = require("./availability");
+const { captureRejectionSymbol } = require("events");
 
 module.exports = router;
 
@@ -132,7 +133,7 @@ module.exports = router;
 //                     console.log(err);
 //                   });
 //               }
-              
+//               break;
 //               weeks++;
 //             }
 //           });
@@ -154,7 +155,8 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
   let mastery_id = req.body.mastery_id;
 
   try {
-    if (!await can_mastery(mastery_id, user_id)) {
+
+    if (await can_mastery(mastery_id, user_id) == false) {
       res.end();
       return;
     }
@@ -163,20 +165,23 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
       .select({ classroom: 1, appointment_duration: 1 })
       .populate({ path: "classroom" });
 
+    let current_iso_weekday = moment().isoWeekday();
+    
     let mastery_days = await ClassroomMasteryDay.find({ classroom: mastery.classroom._id });
+    //should be sorted by the closest weekday to today.
 
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
     let weeks = 0;
 
-    while (!booked) {
+    // while (!booked) {
       for (let i = 0; i < mastery_days.length && !booked; i++){
         // console.log(i);
         m_day = mastery_days[i];
         let m_day_start;
         let m_day_end;
 
-        if (moment().isoWeekday() <= m_day.iso_day_n) {
+        if (current_iso_weekday <= m_day.iso_day_n) {
           // then just give me this week's instance of that day
           m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
           m_day_end = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
@@ -201,10 +206,13 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
           minute: moment(m_day.end_time).get("minute"),
           second: 0,
         });
-        console.log(m_day_start);
+
+        // console.log(m_day_start, m_day_end);
+
+    //     console.log(m_day_start);
         // if(m_day_start.isAfter(moment())){
           let avail = await get_day_busy(assigned_ta, m_day_end);
-          console.log(avail);
+          // console.log(avail);
           let r = await trybooking(
             assigned_ta,
             mastery_id,
@@ -220,13 +228,15 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
             booked = true;
             increaseTa(req.user._id, mastery.classroom._id);
             res.json(r);
-          } else {
+          }
+          else {
             let staff = [mastery.classroom.lecturer];
             mastery.classroom.teaching_assistants.forEach((el) => {
               staff.push(mongoose.Types.ObjectId(el))
             });
   
             let queue = await get_TA_queue(m_day_start, staff, assigned_ta);
+
   
             for (let j = 0; j < queue.length && !booked; j++) {
               let avail2 = await get_day_busy(queue[j]._id, m_day_end);
@@ -247,12 +257,12 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
               }
             }
           }
-        // }
-      }
+        }
+    //   }
 
-      break;
-      weeks++;
-    }
+    //   // break;
+    //   weeks++;
+    // }
     res.send().end();
   } catch(err) {
     console.log(err);
@@ -304,6 +314,7 @@ async function get_day_busy(user_id, date) {
 
 async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
   // console.log(m_duration);
+  console.log("Attempting to book "+ student_id+ " for "+ mastery_id+ " with: "+ ta)
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
       .match({
@@ -315,6 +326,7 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
         if (err) {
           console.log(err);
           rejects(err);
+          return;
         } else {
           let busy_total = busy;
           appointments.forEach((el) => {
@@ -322,10 +334,15 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
           });
           // console.log(m_day_start, m_day_end, busy_total);
           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
-          console.log(busy_total, availability);
+          console.log("Busy slots: ")
+          console.log(busy_total);
+          console.log("Availability: ");
+          console.log(availability);
 
           if (availability.length == 0) {
             resolve(false);
+            console.log("Booking failed!")
+            return;
           } else {
             end_time_appointment = availability[0].start.clone();
             end_time_appointment.add(m_duration, "minutes");
@@ -341,10 +358,13 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
               .save()
               .then(() => {
                 resolve(new_appointment);
+                console.log("Booking successful!");
+                return;
               })
               .catch((err) => {
                 console.log(err);
                 rejects(err);
+                return;
               });
           }
         }
@@ -368,7 +388,7 @@ router.get("/taqueue", (req, res) => {
 async function get_TA_queue(date, classroom_tas, exclude) {
   return new Promise((resolve, rejects) => {
     const date_start = moment(date).startOf("day");
-    console.log(classroom_tas, exclude);
+    // console.log(classroom_tas, exclude);
     Appointment.aggregate()
       .match({
         $and: [{ _taId: { $in: classroom_tas } }, { _taId: { $ne: exclude } }],
@@ -392,9 +412,22 @@ async function get_TA_queue(date, classroom_tas, exclude) {
       })
       .sort("count")
       .exec((err, result) => {
-        console.log(result);
-        resolve(result);
-        rejects(err);
+        if(err){
+          rejects(err);
+          return;
+        }
+        if(result.length != classroom_tas.length - 1){
+          new_res = []
+          classroom_tas.forEach(ta => {
+            if(ta != exclude && !result.some(e => e._id == ta)){
+              new_res.push({_id:ta,count:0});
+            }
+          })
+          result.forEach(e => new_res.push(e));
+        }
+        console.log("Queue: ");
+        console.log(new_res);
+        resolve(new_res);
       });
   });
 }
@@ -404,14 +437,19 @@ async function can_mastery(mastery_id, user_id) {
     Appointment.find({ _masteryId: mastery_id, _studentId: user_id }).then((ap) => {
       if (ap.length > 0) {
         resolve(false);
+        return;
       } else {
         MasteryCheck.findById(mastery_id)
           .populate({ path: "classroom", select: ["is_ordered_mastery"] })
           .then((ordered) => {
             if (ordered != null) {
-              //   console.log("ORDERED:" + ordered);
-              if (!ordered.classroom.is_ordered_mastery || ordered.locked_by == undefined) {
+              if(ordered.avalable == false){
+                resolve(false)
+                return;
+              }
+              if (ordered.classroom.is_ordered_mastery == false || ordered.locked_by == undefined) {
                 resolve(true);
+                return;
               } else {
                 User.findById(user_id)
                   .select({ classrooms_grades: 1 })
@@ -419,11 +457,14 @@ async function can_mastery(mastery_id, user_id) {
                     if (err) {
                       console.log("error getting grades of user: " + user_id);
                       rejects(false);
+                      return;
                     } else {
                       if (c_grades[ordered.classroom].includes(ordered.locked_by)) {
                         resolve(true);
+                        return;
                       } else {
                         resolve(false);
+                        return;
                       }
                     }
                   });

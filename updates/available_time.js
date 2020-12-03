@@ -75,12 +75,13 @@ const moment = require("moment");
 
 //threshold is IN MINUTES
 function get_available_time2(start_moment, end_moment, ar, minutes_threshold = 0) {
+  if(ar.length == 0){
+    return [{start: start_moment, end:end_moment}]
+  }
   const timeRange = ar.map(a => {
     return [moment(a[0], "YYYY-MM-DDTHH:mm", true).isBefore(start_moment)? start_moment : moment(a[0], "YYYY-MM-DDTHH:mm", true),
     moment(a[1], "YYYY-MM-DDTHH:mm", true).isAfter(end_moment)? end_moment : moment(a[1], "YYYY-MM-DDTHH:mm", true)]
   })
-
-  
 
   // console.log(timeRange);
 
@@ -103,7 +104,7 @@ function get_available_time2(start_moment, end_moment, ar, minutes_threshold = 0
     // console.log(element, index);
     let currentEndTime = element[1];
     const currentStartTime = element[0];
-    console.log(index, currentStartTime, currentEndTime);
+    // console.log(index, currentStartTime, currentEndTime);
     if (currentStartTime.isBefore(startTimeMinimum)) {
       startTimeMinimum = currentStartTime;
     }

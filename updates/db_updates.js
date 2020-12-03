@@ -76,8 +76,9 @@ async function increaseTa(user_id, classroom_id){
         ta_ids.push(e);
       })
       ta_ids.push(classroom.lecturer);
-
-      let current_ta = classroom.ta_mapping.get(user_id);
+      // console.log(ta_ids);
+      let current_ta = classroom.ta_mapping.get(user_id.toString());
+      // console.log(classroom.ta_mapping);
       let next_ta_index;
       for(let i =0; i<ta_ids.length;i++){
         if(ta_ids[i].toString()==current_ta.toString()){
@@ -89,7 +90,7 @@ async function increaseTa(user_id, classroom_id){
         }
       }
 
-      classroom.ta_mapping.set(user_id, ta_ids[next_ta_index]);
+      classroom.ta_mapping.set(user_id.toString(), ta_ids[next_ta_index]);
       
       classroom.save()
         .then(() => resolve())
