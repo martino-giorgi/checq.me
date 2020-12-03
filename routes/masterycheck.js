@@ -3,8 +3,7 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
 const path = require("path");
 
@@ -18,7 +17,7 @@ module.exports = router;
 /*
 PROFESSOR ROUTES
 */
-router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
@@ -45,19 +44,19 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     })
 });
 
-router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.deleteOne({ _id: req.body.id })
+router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  MasteryCheck.deleteOne({ _id: req.query.mastery_id })
     .then(() => {
       res.status(200).end();
     })
     .catch((err) => console.log(err));
 });
 
-// GET mastery check list created by the current user
-router.get("/list/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.find({ author: req.user._id, classroom: req.params.id })
+// GET mastery check list of the classroom
+router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  MasteryCheck.find({ classroom: req.query.classroom_id })
     .populate("topics")
     .then((result) =>
       res.json(result)
-  );
+    );
 });

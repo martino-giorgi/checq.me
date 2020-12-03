@@ -5,8 +5,7 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
 const path = require("path");
 
@@ -25,8 +24,10 @@ module.exports = router;
 // if STUDENT = returns all classes in which the student is enrolled
 
 router.get("/", ensureAuthenticated, (req, res) => {
-  if (req.user.role == 1 || req.user.role == 0) {
-    Classroom.find({ lecturer: req.user }) 
+
+  // User is a Professor
+  if (req.user.role == 0) {
+    Classroom.find({ lecturer: req.user })
       .populate("topics")
       .then((result) => {
         res.json({ classrooms: result, user: req.user });
@@ -35,7 +36,30 @@ router.get("/", ensureAuthenticated, (req, res) => {
         console.log(err);
         res.json({});
       });
-  } else if (req.user.role == 2) {
+
+  }
+
+  // User is a TA
+  else if (req.user.role == 1) {
+    let classrooms = req.user.ta_for_list;
+    let promises = [];
+
+    // get all classrooms in which the user is a ta ( as promises )
+    for (let i = 0; i < classrooms.length; ++i) {
+      promises.push(Classroom.findById(classrooms[i]));
+    }
+    let results = [];
+    // wait for all classrooms to be found 
+    Promise.all(promises).then(result => {
+      result.forEach(prom_res => {
+        results.push(prom_res);
+      })
+      res.json({ classrooms: results, user: req.user })
+    }).catch(err => { console.log(err) });
+  }
+
+  // User is a Student
+  else if (req.user.role == 2) {
     User.findOne({ _id: req.user._id })
       .then((user) => {
         if (user) {
@@ -74,6 +98,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     lecturer: req.user._id,
+    professors: [req.user._id],
     teaching_assistants: [],
     topics: [],
     color: randomColor(),
@@ -93,9 +118,8 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
-router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  Classroom.find({ _id: req.params.id })
-    .select({ name: 1, description: 1, classrooms: 1, color: 1})
+router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  Classroom.find({ _id: req.query.classroom_id })
     .populate("teaching_assistants")
     .populate("mastery_checks")
     .populate({
@@ -115,6 +139,71 @@ router.get("/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
     });
 });
 
+// Add a TA
+
+router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  let classroom = Classroom.findById(req.body.classroom_id);
+  let new_ta = User.findById(req.body.user_id);
+
+  Promise.all([classroom, new_ta]).then(result => {
+    let this_classroom = result[0];
+    let this_user = result[1];
+
+    // Add classroom id to the ta_for_list field of User
+    this_user.role = 1;
+    this_user.ta_for_list.addToSet(this_classroom._id);
+    // Add user id to teaching_assistant of Classroom and remove from participants
+    this_classroom.partecipants.remove({ _id: this_user._id });
+    this_classroom.teaching_assistants.addToSet(this_user._id);
+
+    let p1 = this_user.save();
+    let p2 = this_classroom.save();
+
+    Promise.all([p1, p2]).then(() => {
+      res.status(200).end();
+    })
+
+  })
+    .catch(err => {
+      console.log(err);
+    })
+
+})
+
+// Remove a TA
+router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  let classroom = Classroom.findById(req.body.classroom_id);
+  let old_ta = User.findById(req.body.user_id);
+
+  Promise.all([classroom, old_ta]).then(result => {
+    let this_classroom = result[0];
+    let this_old_ta = result[1];
+
+    // Remove classroom id from ta_for_list
+    this_old_ta.ta_for_list.remove({ _id: this_classroom._id });
+    // Check if has classrooms where user is TA
+    if (this_old_ta.ta_for_list.length == 0) {
+      this_old_ta.role = 2;
+    }
+    // Remove from teaching_assistant and add to participants
+    this_classroom.teaching_assistants.remove({ _id: this_old_ta._id });
+    this_classroom.partecipants.addToSet(this_old_ta._id);
+
+    let p1 = this_classroom.save();
+    let p2 = this_old_ta.save();
+
+    Promise.all([p1, p2]).then(() => {
+      res.status(200).end();
+    })
+  })
+    .catch(err => {
+      console.log(err);
+      res.status(400).end();
+    })
+});
+
 //generates the new map for students and tas.
 
 
@@ -127,11 +216,11 @@ router.post("/testmapping", ensureAuthenticated, (req, res) => {
 
 //create a new invite link
 router.get(
-  "/invite/:classroom_id",
+  "/invite",
   ensureAuthenticated,
-  ensureProfessor,
+  ensureProfOrTA,
   (req, res) => {
-    TokenClassroom.findOne({ _classroomId: req.params.classroom_id }).then(
+    TokenClassroom.findOne({ _classroomId: req.query.classroom_id }).then(
       (c_t) => {
         if (c_t) {
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
@@ -174,7 +263,7 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
     //   (end.isoWeekday() == req.body.iso_day_n) &&
     //   start.weekday() == req.body.iso_day_n
     // ) ||
-    (end.diff(start)<=0)
+    (end.diff(start) <= 0)
   ) {
     console.log("invalid date")
     res.status(400).end();
@@ -202,7 +291,7 @@ router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
               { $set: { mastery_days: new_element._id } },
               { new: true }
             )
-              .select({ mastery_days: 1})
+              .select({ mastery_days: 1 })
               .then((ms) => {
                 ClassroomMasteryDay.find()
                   .where("_id")
@@ -233,7 +322,7 @@ STUDENT ROUTES
 
 //this link will be given to the new students, once clicked it will automatically join the classroom
 //this route CANNOT be used as an API to interact with the database from ajax.
-router.get("/join/:token", ensureAuthenticated, ensureStudent, (req, res) => {
+router.get("/join/:token", ensureAuthenticated, (req, res) => {
   // console.log("here")
   TokenClassroom.findOne({ token: req.params.token })
     .then((t) => {
