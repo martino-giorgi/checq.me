@@ -17,10 +17,19 @@ var lang = "text";
  */
 function init_question() {
     console.log("initttt");
+    number_of_fields = 1;
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
     lang = code_or_text == "text" ? "text" : lang;
+}
+
+function reset_values() {
+    number_of_fields = 1;
+    input_elements = [];
+    document.getElementById("input_counter").value = 1;
+    lang = "text";
+    code_or_text = "text";
 }
 
 /**
@@ -159,6 +168,7 @@ function remove_last_field() {
         tos["checkbox_node"].remove();
         tos["label_node"].remove();
         number_of_fields--;
+        document.getElementById("input_counter").value = number_of_fields;
     }
     // hide the button to delete fields if only one field is left 
     if (input_elements.length == 0) {
@@ -207,6 +217,8 @@ function post_question() {
     API_question.post_question(body).then(res => { return res.json() }).then(new_question => {
         console.log(new_question);
         window.FlashMessage.success("New Question added!");
+
+        reset_values()
         render_mastery_modal();
     })
         .catch(err => {
