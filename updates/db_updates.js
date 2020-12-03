@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { use } = require("passport");
 
 /*===========================
 CLASSROOM FUNCTIONS
@@ -64,6 +65,39 @@ function updateUser(user_id, classroom_id) {
   });
 }
 
+async function increaseTa(user_id, classroom_id){
+  const Classroom = require("../models/Classroom");
+
+  return new Promise((resolve, rejects) => {
+    Classroom.findById(classroom_id).then(classroom => {
+      let ta_ids = [];
+
+      classroom.teaching_assistants.forEach(e => {
+        ta_ids.push(e);
+      })
+      ta_ids.push(classroom.lecturer);
+
+      let current_ta = classroom.ta_mapping.get(user_id);
+      let next_ta_index;
+      for(let i =0; i<ta_ids.length;i++){
+        if(ta_ids[i].toString()==current_ta.toString()){
+          if (i == ta_ids.length - 1) {
+            next_ta_index = 0;
+          } else {
+            next_ta_index = i + 1;
+          }
+        }
+      }
+
+      classroom.ta_mapping.set(user_id, ta_ids[next_ta_index]);
+      
+      classroom.save()
+        .then(() => resolve())
+        .catch(err => rejects(err));
+    });
+  });
+}
+
 /*===========================
         USER FUNCTIONS
 ============================*/
@@ -72,6 +106,7 @@ function updateUser(user_id, classroom_id) {
 module.exports = {
   re_mapTAs,
   updateUser,
+  increaseTa
 };
 
 
