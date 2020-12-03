@@ -1,12 +1,27 @@
-<h1>Add a new topic for MasteryCheck:</h1>
-<form id="new_topic_form" action="/topic" method="POST">
-    <select id="classroom_selection" name="mastery">
-        <%masterychecks.forEach(mastery => { %>
-        <option value="<%=mastery._id%>" required><%=mastery.name%></option>
-        <%});%>
-    </select>
-    <input id="topic_name" required type="text" name="name" placeholder="Topic name">
-    <input id="topic_description" required type="text" name="description" placeholder="Topic descrition">
-    <input id="classroom_id" type="hidden" name="classroom" value="<%=id%>">
-    <input type="submit">
-</form>
+<div class="container">
+    <div class=" container mt-5">
+        <form id="create_form">
+            <div class="form-group">
+                <label for="input_name">Topic name</label>
+                <input type="text" placeholder="Topic Name" name="input_name" class="form-control" id="input_name"
+                    value="<%= current.name ? current.name : ""%>" required />
+            </div>
+            <div class="form-group">
+                <label for="input_description">Topic description</label>
+                <input type="text" placeholder="Topic Description" name="input_description" class="form-control"
+                    id="input_description" value="<%= current.description ? current.description : ""%>" required />
+            </div>
+        </form>
+        <% if(current.name) {%>
+        <button onclick="edit_topic()" class="btn btn-primary">
+            Edit
+            Topic
+        </button>
+        <% } else {%>
+        <button onclick="create_topic()" class="btn btn-primary">
+            Create
+            Topic
+        </button>
+        <% }%>
+    </div>
+    <script src="/js/ajax_mastery.js"></script>

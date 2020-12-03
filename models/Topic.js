@@ -14,7 +14,11 @@ const TopicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  questions: [{ type: mongoose.Schema.ObjectId, ref: "Question" }],
+  questions: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "Question",
+    default: []
+  }],
   mastery_id: {
     type: mongoose.Schema.ObjectId,
     ref: "Masterycheck",

@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Wed Dec 02 2020 23:38:03 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Thu Dec 03 2020 16:06:01 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -414,14 +414,32 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Mastery Check name</label>\n                <input type=\"text\" placeholder=\"Mastery Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Mastery Check description</label>\n                <input type=\"text\" placeholder=\"Mastery Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" required />\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\" />\n                <label class=\"form-check-label\" for=\"check_available\">\n                    Available\n                </label>\n            </div>\n        </form>\n        <button onclick=\"create_mastery()\" class=\"btn btn-primary\">Create\n            Mastery Check\n        </button>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>"
+  , __lines = "<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Mastery Check name</label>\n                <input type=\"text\" placeholder=\"Mastery Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    value=\"<%= current.name ? current.name : \"\"%>\" required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Mastery Check description</label>\n                <input type=\"text\" placeholder=\"Mastery Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" value=\"<%= current.description ? current.description : \"\"%>\" required />\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\"\n                    <% current.checked ? \"checked\" : \"\"%> />\n                <label class=\"form-check-label\" for=\"check_available\">\n                    Available\n                </label>\n            </div>\n        </form>\n        <% if(current.name) {%>\n        <button onclick=\"edit_mastery()\" class=\"btn btn-primary\">\n            Edit\n            Mastery Check\n        </button>\n        <% } else {%>\n        <button onclick=\"create_mastery()\" class=\"btn btn-primary\">\n            Create\n            Mastery Check\n        </button>\n        <% }%>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Mastery Check name</label>\n                <input type=\"text\" placeholder=\"Mastery Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Mastery Check description</label>\n                <input type=\"text\" placeholder=\"Mastery Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" required />\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\" />\n                <label class=\"form-check-label\" for=\"check_available\">\n                    Available\n                </label>\n            </div>\n        </form>\n        <button onclick=\"create_mastery()\" class=\"btn btn-primary\">Create\n            Mastery Check\n        </button>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>")
-    ; __line = 25
+    ; __append("<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Mastery Check name</label>\n                <input type=\"text\" placeholder=\"Mastery Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    value=\"")
+    ; __line = 7
+    ; __append(escapeFn( current.name ? current.name : ""))
+    ; __append("\" required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Mastery Check description</label>\n                <input type=\"text\" placeholder=\"Mastery Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" value=\"")
+    ; __line = 12
+    ; __append(escapeFn( current.description ? current.description : ""))
+    ; __append("\" required />\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" name=\"check_available\" type=\"checkbox\" id=\"check_available\"\n                    ")
+    ; __line = 16
+    ;  current.checked ? "checked" : ""
+    ; __append(" />\n                <label class=\"form-check-label\" for=\"check_available\">\n                    Available\n                </label>\n            </div>\n        </form>\n        ")
+    ; __line = 22
+    ;  if(current.name) {
+    ; __append("\n        <button onclick=\"edit_mastery()\" class=\"btn btn-primary\">\n            Edit\n            Mastery Check\n        </button>\n        ")
+    ; __line = 27
+    ;  } else {
+    ; __append("\n        <button onclick=\"create_mastery()\" class=\"btn btn-primary\">\n            Create\n            Mastery Check\n        </button>\n        ")
+    ; __line = 32
+    ;  }
+    ; __append("\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>")
+    ; __line = 34
   }
   return __output;
 } catch (e) {
@@ -474,7 +492,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> \n            <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p class=\"card-text\"><%= element.description %></p>\n            <p class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p> \n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                    <span>\n                        <a href=\"/question/new?topic=<%=topic._id %>\">\n                            <%=topic.name%>\n                        </a> |\n                    </span>\n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>"
+  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary new_topic_btn\">Create a Topic\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary edit_btn\">Edit Mastery Check\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary delete_btn\">Delete\n            </button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p id=\"element_desc\" class=\"card-text\"><%= element.description %></p>\n            <p id=\"element_available\" class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p>\n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                <span>\n                    <a href=\"/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>\">\n                        <%=topic.name%>\n                    </a>\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"<%= topic.mastery_id %>\" data-id=\"<%= topic._id%>\"\n                        data-name=\"<%= topic.name%>\" data-description=\"<%= topic.description%>\"\n                        class=\"edit_topic_btn\"><i class=\"fas fa-pencil-alt\"></i></a> |\n                </span>\n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -483,43 +501,55 @@ try {
     ; __append("<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    ")
     ; __line = 3
     ;  result.forEach(element => { 
-    ; __append("\n    <div class=\"card mt-5\">\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span> \n            <button style=\"float: right;\" type=\"button\"\n                class=\"btn btn-primary delete_btn\">Delete</button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: ")
-    ; __line = 11
+    ; __append("\n    <div class=\"card mt-5\">\n\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary new_topic_btn\">Create a Topic\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary edit_btn\">Edit Mastery Check\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary delete_btn\">Delete\n            </button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: ")
+    ; __line = 16
     ; __append(escapeFn( element.classroom))
     ; __append("</h4>\n            <h5 class=\"card-title\">")
-    ; __line = 12
+    ; __line = 17
     ; __append(escapeFn( element.name ))
     ; __append("</h5>\n            <small id=\"id_container\" data-id=\"")
-    ; __line = 13
+    ; __line = 18
     ; __append(escapeFn( element._id))
     ; __append("\">Mastery ID: ")
     ; __append(escapeFn( element._id))
-    ; __append("</small>\n            <p class=\"card-text\">")
-    ; __line = 14
+    ; __append("</small>\n            <p id=\"element_desc\" class=\"card-text\">")
+    ; __line = 19
     ; __append(escapeFn( element.description ))
-    ; __append("</p>\n            <p class=\"card-text\">")
-    ; __line = 15
+    ; __append("</p>\n            <p id=\"element_available\" class=\"card-text\">")
+    ; __line = 20
     ; __append(escapeFn( element.available  ? "Available" : "Not Available" ))
-    ; __append("</p>\n            <p> \n                <span>")
-    ; __line = 17
+    ; __append("</p>\n            <p>\n                <span>")
+    ; __line = 22
     ; __append(escapeFn( element.topics.length == 0 ? "No Topics" : "Topics:"))
     ; __append("</span>\n                ")
-    ; __line = 18
+    ; __line = 23
     ;  element.topics.forEach(topic => { 
-    ; __append("\n                    <span>\n                        <a href=\"/question/new?topic=")
-    ; __line = 20
+    ; __append("\n                <span>\n                    <a href=\"/question/new?topic_id=")
+    ; __line = 25
     ; __append(escapeFn(topic._id ))
-    ; __append("\">\n                            ")
-    ; __line = 21
+    ; __append("&classroom_id=")
+    ; __append(escapeFn(element.classroom))
+    ; __append("\">\n                        ")
+    ; __line = 26
     ; __append(escapeFn(topic.name))
-    ; __append("\n                        </a> |\n                    </span>\n                ")
-    ; __line = 24
+    ; __append("\n                    </a>\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"")
+    ; __line = 28
+    ; __append(escapeFn( topic.mastery_id ))
+    ; __append("\" data-id=\"")
+    ; __append(escapeFn( topic._id))
+    ; __append("\"\n                        data-name=\"")
+    ; __line = 29
+    ; __append(escapeFn( topic.name))
+    ; __append("\" data-description=\"")
+    ; __append(escapeFn( topic.description))
+    ; __append("\"\n                        class=\"edit_topic_btn\"><i class=\"fas fa-pencil-alt\"></i></a> |\n                </span>\n                ")
+    ; __line = 32
     ;  }); 
     ; __append("\n            </p>\n        </div>\n    </div>\n    ")
-    ; __line = 28
+    ; __line = 36
     ;  }); 
     ; __append("\n</div>")
-    ; __line = 29
+    ; __line = 37
   }
   return __output;
 } catch (e) {
@@ -721,28 +751,29 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<h1>Add a new topic for MasteryCheck:</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        <%masterychecks.forEach(mastery => { %>\n        <option value=\"<%=mastery._id%>\" required><%=mastery.name%></option>\n        <%});%>\n    </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"<%=id%>\">\n    <input type=\"submit\">\n</form>"
+  , __lines = "<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Topic name</label>\n                <input type=\"text\" placeholder=\"Topic Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    value=\"<%= current.name ? current.name : \"\"%>\" required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Topic description</label>\n                <input type=\"text\" placeholder=\"Topic Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" value=\"<%= current.description ? current.description : \"\"%>\" required />\n            </div>\n        </form>\n        <% if(current.name) {%>\n        <button onclick=\"edit_topic()\" class=\"btn btn-primary\">\n            Edit\n            Topic\n        </button>\n        <% } else {%>\n        <button onclick=\"create_topic()\" class=\"btn btn-primary\">\n            Create\n            Topic\n        </button>\n        <% }%>\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
-    ; __append("<h1>Add a new topic for MasteryCheck:</h1>\n<form id=\"new_topic_form\" action=\"/topic\" method=\"POST\">\n    <select id=\"classroom_selection\" name=\"mastery\">\n        ")
-    ; __line = 4
-    ; masterychecks.forEach(mastery => { 
-    ; __append("\n        <option value=\"")
-    ; __line = 5
-    ; __append(escapeFn(mastery._id))
-    ; __append("\" required>")
-    ; __append(escapeFn(mastery.name))
-    ; __append("</option>\n        ")
-    ; __line = 6
-    ; });
-    ; __append("\n    </select>\n    <input id=\"topic_name\" required type=\"text\" name=\"name\" placeholder=\"Topic name\">\n    <input id=\"topic_description\" required type=\"text\" name=\"description\" placeholder=\"Topic descrition\">\n    <input id=\"classroom_id\" type=\"hidden\" name=\"classroom\" value=\"")
-    ; __line = 10
-    ; __append(escapeFn(id))
-    ; __append("\">\n    <input type=\"submit\">\n</form>")
+    ; __append("<div class=\"container\">\n    <div class=\" container mt-5\">\n        <form id=\"create_form\">\n            <div class=\"form-group\">\n                <label for=\"input_name\">Topic name</label>\n                <input type=\"text\" placeholder=\"Topic Name\" name=\"input_name\" class=\"form-control\" id=\"input_name\"\n                    value=\"")
+    ; __line = 7
+    ; __append(escapeFn( current.name ? current.name : ""))
+    ; __append("\" required />\n            </div>\n            <div class=\"form-group\">\n                <label for=\"input_description\">Topic description</label>\n                <input type=\"text\" placeholder=\"Topic Description\" name=\"input_description\" class=\"form-control\"\n                    id=\"input_description\" value=\"")
     ; __line = 12
+    ; __append(escapeFn( current.description ? current.description : ""))
+    ; __append("\" required />\n            </div>\n        </form>\n        ")
+    ; __line = 15
+    ;  if(current.name) {
+    ; __append("\n        <button onclick=\"edit_topic()\" class=\"btn btn-primary\">\n            Edit\n            Topic\n        </button>\n        ")
+    ; __line = 20
+    ;  } else {
+    ; __append("\n        <button onclick=\"create_topic()\" class=\"btn btn-primary\">\n            Create\n            Topic\n        </button>\n        ")
+    ; __line = 25
+    ;  }
+    ; __append("\n    </div>\n    <script src=\"/js/ajax_mastery.js\"></script>")
+    ; __line = 27
   }
   return __output;
 } catch (e) {

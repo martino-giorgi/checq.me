@@ -29,7 +29,7 @@ function render_user_modal() {
 }
 
 function render_add_mastery_modal() {
-  document.getElementById("add-mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_add();
+  document.getElementById("add-mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_add({ current: {} });
 }
 
 /**
