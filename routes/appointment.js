@@ -10,7 +10,7 @@ const {
   ensureTa,
 } = require("../config/auth");
 
-const {get_available_time} = require("../updates/available_time")
+const {get_available_time, get_available_time2} = require("../updates/available_time")
 
 const User = require("../models/User");
 const MasteryCheck = require("../models/MasteryCheck");
@@ -168,27 +168,31 @@ function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_
       if (err) {
         console.log(err);
         // rejects(err);
-        return;
+        return false;
       } else {
-        // console.log(appointments);
-        if(appointments.length == 0){ //no appointments during mastery hours ==> can book
-          
-        } else {
-          let busy_total = busy;
-          // console.log(busy);
-          // console.log(appointments);
-          appointments.forEach((el)=>{busy_total.push([el.start_time, el.end_time])});
-          console.log(m_day_start, m_day_end, busy_total);
-          get_available_time(m_day_start, m_day_end, busy_total);
-          // console.log(appointments.map((el) => {return [el.start_time, el.end_time]}))
 
-          // console.log(test);
-          // let available = get_avail_slots(m_day_start, m_day_end, m_day_start.isoWeekday(), test)
-          // console.log("booked", available);
-          
-          // console.log(m_range);
-          // console.log(r1,r2,r3)
+        let busy_total = busy;
+        appointments.forEach((el)=>{busy_total.push([el.start_time, el.end_time])});
+        console.log(m_day_start, m_day_end, busy_total);
+        let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
+
+        if(availability.length == 0){
+          return false;
         }
+        end_time_appointment = availability[0].clone();
+        end_time_appointment.add(m_duration, 'minutes');
+        const new_appointment = new Appointment({
+          _masteryId: mastery_id,
+          _taId: ta,
+          _studentId: student_id,
+          start_time: availability[0].start,
+          end_time: end_time_appointment,
+          duration: m_duration,
+        })
+        new_appointment.save().then(()=>{
+          return new_appointment;
+        }).catch((err)=>{console.log(err);
+                          return false})
       }
     })
   // })
