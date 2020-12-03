@@ -2,21 +2,17 @@ const express = require("express");
 const crypto = require("crypto");
 const moment = require("moment");
 const router = express.Router();
+var ObjectID = require("mongodb").ObjectID;
 const {
   ensureAuthenticated,
   ensureProfessor,
   ensureProfOrTA
 } = require("../config/auth");
-const path = require("path");
 
-const MasteryCheck = require("../models/MasteryCheck");
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
-const Topic = require("../models/Topic");
 const TokenClassroom = require("../models/TokenClassroom");
-const { resolve } = require("path");
-const { rejects } = require("assert");
 
 module.exports = router;
 
@@ -27,8 +23,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
 
   // User is a Professor
   if (req.user.role == 0) {
-    Classroom.find({ lecturer: req.user })
-      .populate("topics")
+    Classroom.find({ $or: [{ professors: { $in: [req.user] } }, { teaching_assistants: { $in: [req.user] } }] })
       .then((result) => {
         res.json({ classrooms: result, user: req.user });
       })
@@ -121,6 +116,7 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
 router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Classroom.find({ _id: req.query.classroom_id })
     .populate("teaching_assistants")
+    .populate("professors")
     .populate("mastery_checks")
     .populate({
       path: "lecturer",
@@ -146,12 +142,14 @@ router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
   let classroom = Classroom.findById(req.body.classroom_id);
   let new_ta = User.findById(req.body.user_id);
 
+  let role;
+  role = new_ta.role == 0 ? 0 : 1;
   Promise.all([classroom, new_ta]).then(result => {
     let this_classroom = result[0];
     let this_user = result[1];
 
     // Add classroom id to the ta_for_list field of User
-    this_user.role = 1;
+    this_user.role = role;
     this_user.ta_for_list.addToSet(this_classroom._id);
     // Add user id to teaching_assistant of Classroom and remove from participants
     this_classroom.partecipants.remove({ _id: this_user._id });
@@ -204,6 +202,59 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
     })
 });
 
+// Add professor
+router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+  console.log(req.body);
+  console.log(req.query.classroom_id);
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+
+    // If the User is a TA, remove him from class list and adjust their schema
+    if (classroom.teaching_assistants.includes(req.body.professor_id)) {
+      classroom.teaching_assistants.remove(req.body.professor_id);
+      classroom.save();
+      User.findById(req.body.professor_id).then(user => {
+        user.ta_for_list.remove(req.query.classroom_id);
+        user.role = 0;
+        user.save();
+      });
+    }
+
+    classroom.professors.addToSet(req.body.professor_id);
+    classroom.partecipants.remove(req.body.professor_id);
+    classroom.save().then(() => res.status(200).end());
+  }).catch((err) => { console.log(err); res.status(400).end() })
+});
+
+// Remove professor
+router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+  if (!ObjectID.isValid(req.query.classroom_id)) {
+    res.status(400).end();
+    return;
+  }
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.professors.remove(req.body.professor_id);
+    classroom.partecipants.addToSet(req.body.professor_id);
+    classroom.save().then(() => {
+      res.status(200).end();
+    })
+  })
+    .catch(err => console.log(err));
+})
+
+// Remove student from class
+router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.partecipants.remove(req.body.student_id);
+    User.findById(req.body.student_id).then(student => {
+      student.classrooms.remove(req.query.classroom_id);
+      student.save();
+    })
+    classroom.save().then(() => {
+      res.status(200).end();
+    })
+  })
+})
+
 //generates the new map for students and tas.
 
 
@@ -225,8 +276,8 @@ router.get(
         if (c_t) {
           res.json(`http://${req.headers.host}/classroom/join/${c_t.token}`);
         } else {
-          Classroom.findById(req.params.classroom_id).then((c) => {
-            if (c && c.lecturer.toString() == req.user._id.toString()) {
+          Classroom.findById(req.query.classroom_id).then((c) => {
+            if (c) { // ensure ProfOrTA ensures that the TA or Prof accessing is part of this class
               let token = new TokenClassroom({
                 _classroomId: c._id,
                 token: crypto.randomBytes(20).toString("hex"),
@@ -240,10 +291,10 @@ router.get(
                 })
                 .catch((err) => {
                   console.log(err);
-                  res.status(400).end();
+                  res.status(400).send(err).end();
                 });
             } else {
-              res.status(400).end();
+              res.status(400).send("secondo errore").end();
             }
           });
         }

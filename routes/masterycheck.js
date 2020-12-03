@@ -25,11 +25,11 @@ router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     available: req.body.available,
-    classroom: req.body.classroom,
+    classroom: req.query.classroom_id,
     author: req.user._id,
   });
   mc.save().then(mastery => {
-    Classroom.findById(req.body.classroom).then(classroom => {
+    Classroom.findById(req.query.classroom_id).then(classroom => {
       classroom.mastery_checks.addToSet(mastery._id);
       classroom.save().then(() => res.status(200).end());
     })
@@ -56,7 +56,11 @@ router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   MasteryCheck.find({ classroom: req.query.classroom_id })
     .populate("topics")
-    .then((result) =>
-      res.json(result)
-    );
+    .then((result) => {
+      if (result) {
+        res.json(result)
+      } else {
+        res.status(400).end();
+      }
+    })
 });

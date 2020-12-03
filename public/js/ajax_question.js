@@ -16,6 +16,7 @@ function init_question() {
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
+    lang = code_or_text == "text" ? "text" : lang;
 }
 
 /**
@@ -23,13 +24,13 @@ function init_question() {
  * @listens click
  */
 function handle_dynamic_fields() {
-    document.getElementById('new_field').addEventListener( "click", (e) => {
+    document.getElementById('new_field').addEventListener("click", (e) => {
 
-        if(number_of_fields >= max_fields) {
+        if (number_of_fields >= max_fields) {
             document.getElementById("fields_label").innerHTML = "Maximal number of options";
             return;
         }
-        document.getElementById("fields_label").innerHTML = "Options: " + (number_of_fields+1);
+        document.getElementById("fields_label").innerHTML = "Options: " + (number_of_fields + 1);
         document.getElementById("delete_field").style.visibility = "visible";
 
         console.log("new field request")
@@ -39,29 +40,29 @@ function handle_dynamic_fields() {
         input_node.name = number_of_fields;
         input_node.placeholder = "Option " + (number_of_fields + 1);
         input_node.required = true;
-        
+
 
         var checkbox_node = document.createElement("input");
         checkbox_node.type = "checkbox";
-        checkbox_node.id = "check_"+number_of_fields
+        checkbox_node.id = "check_" + number_of_fields
         checkbox_node.checked = true;
 
-        number_of_fields ++;
-        
+        number_of_fields++;
+
         var label_node = document.createElement("label");
         label_node.innerHTML = "Correct answer";
         label_node.for = number_of_fields; // not correct
 
         // Add the elements to the stack
-        input_elements.push({input_node, checkbox_node, label_node});
-        
+        input_elements.push({ input_node, checkbox_node, label_node });
+
         document.querySelector('form')
-        .appendChild(input_node);
+            .appendChild(input_node);
         document.querySelector('form')
-        .appendChild(checkbox_node);
+            .appendChild(checkbox_node);
         document.querySelector('form')
-        .appendChild(label_node);
-        
+            .appendChild(label_node);
+
         document.getElementById("input_counter").value = number_of_fields;
     })
 }
@@ -82,7 +83,7 @@ function toggle_code_to_text() {
         hidden_input.value = "text";
         code_or_text = "text";
         lang = "text";
-    } 
+    }
     // switching from text -> code
     else {
         text_div.classList.add("hidden");
@@ -91,13 +92,13 @@ function toggle_code_to_text() {
         hidden_input.value = "code";
         code_or_text = "code";
         lang = editor.getOption("mode");
-    }   
+    }
 }
 
 /**
  * Set up the default text editor, with default values, initially being empty
  */
-function handle_code() {    
+function handle_code() {
     let edit_area = document.getElementById("code_area")
 
     editor = CodeMirror.fromTextArea(edit_area, {
@@ -147,14 +148,14 @@ function change_language() {
 function remove_last_field() {
     let tos = input_elements.pop();
     // if there was still an element
-    if(tos) {
+    if (tos) {
         // tos is an object made by an input, a checkbox and a label
         // all three needs to be removed
         tos["input_node"].remove();
         tos["checkbox_node"].remove();
         tos["label_node"].remove();
         number_of_fields--;
-    } 
+    }
     // hide the button to delete fields if only one field is left 
     if (input_elements.length == 0) {
         document.getElementById("delete_field").style.visibility = "hidden";
@@ -166,7 +167,7 @@ function remove_last_field() {
  * @listens click
  */
 function handle_remove_field() {
-    document.getElementById("delete_field").addEventListener("click", (e) =>{
+    document.getElementById("delete_field").addEventListener("click", (e) => {
         remove_last_field();
     })
 }
@@ -185,15 +186,15 @@ function post_question() {
     let curr_checkbox;
     let options = [];
     // populate the array of options:
-    for(let i=0; i<n_inputs; ++i) {
-       curr = document.getElementById(`${i}`);
-       curr_checkbox = document.getElementById("check_"+i);
-       // the array will contain tuples of the kind: ["option text", "true/false"]
-       options.push([curr.value, curr_checkbox.checked]);
+    for (let i = 0; i < n_inputs; ++i) {
+        curr = document.getElementById(`${i}`);
+        curr_checkbox = document.getElementById("check_" + i);
+        // the array will contain tuples of the kind: ["option text", "true/false"]
+        options.push([curr.value, curr_checkbox.checked]);
     }
     // get question text:
     let question_text = (code_or_text == "code") ? get_code() : get_text();
-   
+
     let body = JSON.stringify({
         answer: options,
         topic: topic_id,
@@ -201,32 +202,32 @@ function post_question() {
         lang: lang
     });
 
-    
-    API_question.post_question((body));
+
+    API_question.post_question((body)).then(new_question => {
+        console.log(new_question);
+        window.FlashMessage.success("New Question added!");
+    })
+        .catch(err => {
+            window.FlashMessage.error("Could not add question, try again later.");
+        })
 }
 
-API_question = (function() {
+API_question = (function () {
 
     /**
      * Post the given new question
      * @param {Object} body The body of the question
      */
     function post_question(body) {
-
-        console.log(body)
-        console.log("posted from api");
-        fetch("/question/new", { 
+        return fetch("/question/new", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: body
         })
-        .then((res) => {
-            return res.json();
-        });
     }
 
     return {
         post_question
     }
-    
+
 })()

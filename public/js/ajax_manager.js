@@ -58,13 +58,13 @@ function generate_invite_link(id) {
                 document.execCommand("copy");
                 window.FlashMessage.success("Invite link copied to clipboard");
             } catch (err) {
-                window.FlashMessage.faliure("Oops, unable to copy");
+                window.FlashMessage.error("Oops, unable to copy");
             }
             document.body.removeChild(textarea);
         })
         .catch((err) => {
             console.log(err);
-            window.FlashMessage.faliure("Error generating link");
+            window.FlashMessage.error("Error generating link");
             document.body.removeChild(textarea);
         });
 }
