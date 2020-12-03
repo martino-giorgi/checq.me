@@ -27,6 +27,7 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
+  
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
 
@@ -65,7 +66,9 @@ router.post("/signup", (req, res) => {
           password,
           githubToken: "",
           githubId: "",
-          gravatar: ""
+          gravatar: "",
+          domain: (req.body.confirmed_domain == 'on' && req.body.domain != "" ) ? req.body.domain : "",
+          university: (req.body.confirmed_domain == 'on' && req.body.uni_name != "") ? req.body.uni_name : ""
         });
 
         // Generate an hash from the password

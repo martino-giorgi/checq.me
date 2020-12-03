@@ -12,6 +12,8 @@ function init_uni_guesser() {
 
     email_field.addEventListener("focusout", e => {
         let domain = email_field.value.split('@')[1];
+        let domain_field = document.getElementById("domain");
+        let uni_name_field = document.getElementById("uni_name");
         if(domain) {
             API_signup.try_get_university(email_field.value.split('@')[1]).then( uni => {
                 let section = document.getElementById("guessed_uni");
@@ -19,16 +21,21 @@ function init_uni_guesser() {
                     section.innerHTML = "Seems like you are from " + uni[0].name;
                     let checkbox = document.createElement("input");
                     checkbox.checked = true;
+                    checkbox.name = "confirmed_domain";
                     checkbox.type = "checkbox";
                     let label = document.createElement("label");
                     label.innerHTML = "Confirm?"
                     section.appendChild(document.createElement("br"));
                     section.appendChild(checkbox);
                     section.appendChild(label);
+                    domain_field.value = domain;
+                    uni_name_field.value = uni[0].name;
                 } else {
                     section.innerHTML = `Could not find any University linked to that email.
                                          It is still possible to signup with a personal email,
-                                         but we suggest using your University one.`
+                                         but we suggest using your University one.`;
+                    domain_field.value = "";
+                    uni_name_field.value = "";
                 }
             }).catch(err => {
                 console.log(err);
