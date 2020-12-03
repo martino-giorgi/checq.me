@@ -27,6 +27,10 @@
         </div>
 
         <div class="form-group">
+          <p id="guessed_uni"></p>
+        </div>
+
+        <div class="form-group">
           <label for="password">Password</label>
           <input required type="password" id="password" name="password" class="form-control"
             placeholder="Create Password" value="<%= typeof password != 'undefined' ? password : '' %>" />
@@ -48,6 +52,10 @@
   </div>
 </div>
 
+<script src="/js/ajax_signup.js"></script>
+<script>
+  window.onload = init_signup;
+</script>
 <script>
   let code = new URLSearchParams(window.location.search).get("code");
   if (code) {

@@ -16,6 +16,7 @@ var lang = "text";
  * Initializes the view with the editor and event listeners.
  */
 function init_question() {
+    test();
     console.log("initttt");
     number_of_fields = 1;
     handle_dynamic_fields();
@@ -225,6 +226,14 @@ function post_question() {
             console.log(err);
             window.FlashMessage.error("Could not add question, try again later.");
         })
+}
+
+function test() {
+    fetch("http://universities.hipolabs.com/search?name=italiana").then( res => {
+        return res.json();
+    }).then( uni => {
+        console.log(uni);
+    })
 }
 
 API_question = (function () {
