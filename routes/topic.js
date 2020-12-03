@@ -27,9 +27,14 @@ router.get("/:id", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   })
 })
 
+router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  Topic.updateOne({ _id: req.query.topic_id }, { $set: { name: req.body.name, description: req.body.description } })
+    .then(() => res.status(200).end())
+    .catch((err) => { console.log(err), res.status(400).end() })
+})
+
 router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
-  console.log(req.body);
-  MasteryCheck.findById(req.body.mastery).then(this_mastery => {
+  MasteryCheck.findById(req.query.mastery_id).then(this_mastery => {
     if (!this_mastery) {
       res.status(400).end();
     }
@@ -37,13 +42,14 @@ router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
       const new_topic = new Topic({
         name: req.body.name,
         description: req.body.description,
-        questions: [],
-        mastery_id: req.body.mastery
+        mastery_id: req.query.mastery_id
       });
       new_topic.save().then(() => {
         this_mastery.topics.push(new_topic);
         this_mastery.save().then(() => {
-          res.redirect(`/manager/classroom?classroom_id=${req.body.classroom}`);
+          // res.redirect(`/manager/classroom?classroom_id=${req.body.classroom}`);
+          res.status(200).end();
+          return;
         })
       })
         .catch((err) => {

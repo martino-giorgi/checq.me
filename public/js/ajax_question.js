@@ -9,6 +9,8 @@ var editor;
 var code_or_text = "text";
 var lang = "text";
 
+const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
+const topic_id = new URLSearchParams(window.location.search).get("topic_id");
 /**
  * Initializes the view with the editor and event listeners.
  */
@@ -178,9 +180,6 @@ function handle_remove_field() {
  */
 function post_question() {
 
-    let url = new URL(window.location.href)
-    topic_id = url.searchParams.get('topic')
-
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
     let curr_checkbox;
@@ -203,11 +202,12 @@ function post_question() {
     });
 
 
-    API_question.post_question((body)).then(new_question => {
+    API_question.post_question(body).then(res => { return res.json() }).then(new_question => {
         console.log(new_question);
         window.FlashMessage.success("New Question added!");
     })
         .catch(err => {
+            console.log(err);
             window.FlashMessage.error("Could not add question, try again later.");
         })
 }
@@ -219,7 +219,7 @@ API_question = (function () {
      * @param {Object} body The body of the question
      */
     function post_question(body) {
-        return fetch("/question/new", {
+        return fetch(`/question/new?topic_id=${topic_id}&classroom_id=${classroom_id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: body

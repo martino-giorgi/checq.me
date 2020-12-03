@@ -45,12 +45,32 @@ router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 });
 
 router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  // remove mastery from the classroom
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.mastery_checks.remove(req.query.mastery_id);
+    classroom.save();
+  })
+
+  // remove masterycheck from the db
   MasteryCheck.deleteOne({ _id: req.query.mastery_id })
     .then(() => {
       res.status(200).end();
     })
     .catch((err) => console.log(err));
 });
+
+// EDIT mastery check
+router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  console.log(req.body);
+  MasteryCheck.updateOne({ _id: req.query.mastery_id }, { $set: { name: req.body.name, description: req.body.description, available: req.body.available } })
+    .then(() => {
+      res.status(200).end()
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500)
+    })
+})
 
 // GET mastery check list of the classroom
 router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
