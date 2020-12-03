@@ -11,18 +11,29 @@ let datepicker = new DateRangePicker(elem, {
  * Toggle between showing and hiding the form to add a new class
  */
 function toggle_show_form() {
-    let table = document.getElementById("classroom-table")
+    let table = document.getElementById("classroom-table");
+    let no_classroom = document.getElementById("no-classrooms");
+
     let form = document.getElementById("form");
     let btn1 = document.getElementById("show_or_back");
     let btn2 = document.getElementById("show_or_back_1");
+    
+    if (form.classList.contains("hidden") ) {
+        if (document.body.contains(table)) {
+            table.classList.add("hidden");
+        } else {
+            no_classroom.hidden = true;
+        }
 
-    if (form.classList.contains("hidden")) {
-        table.classList.add("hidden");
         form.classList.remove("hidden");
         btn1.classList.add("hidden");
         btn2.classList.remove("hidden");
     } else {
-        table.classList.remove("hidden");
+        if (document.body.contains(table)) {
+            table.classList.remove("hidden");
+        } else {
+            no_classroom.hidden = false;
+        }
         form.classList.add("hidden");
         btn1.classList.remove("hidden");
         btn2.classList.add("hidden");

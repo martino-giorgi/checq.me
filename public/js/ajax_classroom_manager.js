@@ -14,7 +14,7 @@ function init_manager() {
 }
 
 /**
- * Display the classroom informations
+ * Display the classroom information
  * @param {Object} classroom the classroom object
  */
 function display_class_info() {
@@ -34,7 +34,7 @@ function render_add_mastery_modal() {
 
 /**
  * Set the value of the id of the selected user when clicking on the actions on the user list modal
- * @param {Number} user_id the id of the selected partecipant
+ * @param {Number} user_id the id of the selected participant
  */
 function setUser(user_id) {
   selected_user = user_id;
@@ -54,10 +54,10 @@ function getUser() {
 
 /**
  * Make the user with the given id a TA if it's a student, or make it a student if it is a TA.
- * If it's a student, change the role from 2 to 1, move it from the list of partecipants to the list of teaching assistants
+ * If it's a student, change the role from 2 to 1, move it from the list of participants to the list of teaching assistants
  * and finally add this classroom in the list of the classrooms for which the user is a TA.
  * If it's a TA, change the role from 1 to 2 only if it is not TA for another class and move it from the list of teaching assistants
- * to the list of partecipants. Finally remove the class from the list of the classrooms for which the user is a TA.
+ * to the list of participants. Finally remove the class from the list of the classrooms for which the user is a TA.
  * @param {ObjectID} user_id The id of the user to be made TA or made back to student
  */
 function toggleTA(user_id) {
@@ -124,11 +124,11 @@ function toggleProf(user_id) {
 }
 
 /**
- * Try to remove a partecipant from the classroom. The owner of the classroom can not be removed.
+ * Try to remove a participant from the classroom. The owner of the classroom can not be removed.
  * Only students can be directly removed. To remove TAs and Professors ( non-owner ) one must first change their role
  * to student.
- * On failuer a flash is shown on the client, stating the error.
- * @param {OnjectID} user_id the selected user.
+ * On failure a flash is shown on the client, stating the error.
+ * @param {ObjectID} user_id the selected user.
  */
 function removeFromClass(user_id) {
   let body = {
@@ -217,7 +217,7 @@ API = (function () {
 
   /**
    * Ask the server to make the user a Professor for this classroom.
-   * @param {Objedt} body the body containing the ID of the user.
+   * @param {Object} body the body containing the ID of the user.
    * @returns {Promise} the promise with the status code of the request
    */
   function makeProf(body) {
@@ -230,7 +230,7 @@ API = (function () {
 
   /**
    * Ask the server to remove the professor role of the user for this classroom.
-   * @param {Onject} body the body containing the ID of the user.
+   * @param {Object} body the body containing the ID of the user.
    * @returns {Promise} the promise with the status code of the request
    */
   function removeProf(body) {

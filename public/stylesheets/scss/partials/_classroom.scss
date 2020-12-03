@@ -78,7 +78,7 @@
         }
 
         &:nth-of-type(2) {
-          width: 60%
+          width: 60% !important;
         }  
       }
 
@@ -94,8 +94,21 @@
 // ===============================
 
 #no-classrooms {
+  display: flex;
+  flex-flow: column;
+  
+  justify-content: center;
+  align-items: center;
+  
   width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center;
+
+  .btn-with-icn {
+    margin-top: 18px;
+    width: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

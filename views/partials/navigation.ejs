@@ -8,7 +8,7 @@
   </span>
 
   <% if (active == 'dashboard' || active == 'classroom') { %>
-    <% if (model.user.role > 1) { %>
+    <% if (model.user.role > 0) { %>
       <span class="nav-button">
         <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
           <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
@@ -16,7 +16,7 @@
       </span>
     <% } %> 
   <% } else { %>
-    <% if (user.role > 1) { %>
+    <% if (user.role > 0) { %>
       <span class="nav-button">
         <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
           <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />

@@ -42,7 +42,7 @@
             <% if (model.user.classrooms.length > 0) { %>
               <div class="classroom-list">
                 <% model.classrooms.forEach((classroom) => { %>
-                  <a href="/manager/classroom?id=<%= classroom._id %>">
+                  <a href="/manager/classroom?classroom_id=<%= classroom._id %>">
                     <div class="classroom-box" style="background-color: #<%= classroom.color %>">
                       <span class="circle">
                         <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
@@ -76,7 +76,7 @@
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
-                  <p class="small gray"> university placeholder  </p>
+                  <p class="small gray"> university placeholder </p>
                 </span>
               </div>
             </div>
