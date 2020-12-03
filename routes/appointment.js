@@ -82,8 +82,8 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
                     // let available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail[0].busy);
                     console.log("Busy slots:",avail)
                     // if(available_slots.length > 0){
-                      //trybooking with assigned TA
-                      // trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
+                    //trybooking with assigned TA
+                    // trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, available_slots);
                     let r = trybooking(assigned_ta, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, avail[0].busy);
                     if(r != false){
                       //booking completed.
@@ -97,11 +97,12 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, (req, res) => {
                       for(let j = 0; j < queue.length; j++){
 
                         get_day_busy(queue[j]._id, m_day_end).then((avail2) => {
-                          available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail2);
-
-                          if (available_slots.length > 0) {
-                            //trybook with current TA
+                          // available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail2);
+                          let x = trybooking(queue[j]._id, mastery_id, m_day_start, m_day_end, mastery.duration, req.user._id, avail2[0].busy);
+                          if(x != false){
+                            // booking completed
                           }
+                          // failed
                         }).catch(err=>{console.log(err)});
                       }
                     });
