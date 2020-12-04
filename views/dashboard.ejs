@@ -74,7 +74,7 @@
                   <p class="small gray"> <%= model.user.email %> </p>
                 </span>
 
-                <% if (typeof model.user.university != 'undefined') { %> 
+                <% if (typeof model.user.university != 'undefined' && model.user.university != "") { %> 
                   <span class="icon-text">
                     <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
                     <p class="small gray"> <%= model.user.university %> </p>
