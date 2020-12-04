@@ -4,6 +4,7 @@
 @import "./partials/profile";
 @import "./partials/schedule";
 @import "./partials/manager";
+@import "./partials/404";
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
@@ -155,6 +156,8 @@ h3 {
 
   width: min-content;
 
+  cursor: pointer;
+
   img {
     margin-right: 12px;
   }
@@ -187,6 +190,14 @@ h3 {
 
   &:focus, &:hover {
     text-decoration: none !important;
+  }
+}
+
+.btn {
+  font-family: "Roboto", sans-serif;
+  
+  &:focus, &:hover {
+    box-shadow: none !important;
   }
 }
 
@@ -235,7 +246,3 @@ a {
   line-height: 20px;
   letter-spacing: 0em;
 }
-
-// body {
-//   min-width: 1129px;
-// }

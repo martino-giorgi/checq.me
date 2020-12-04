@@ -36,7 +36,7 @@
               </span>
 
               <% let href = model.user.role == 0 ? '/manager' : '/classrooms'%> 
-              <a class="button-text small gray" href="<%- href %>">See more</a>
+              <a class="button-text small gray" href="<%= href %>">See more</a>
             </div>
 
             <% if (model.user.classrooms.length > 0) { %>
@@ -71,13 +71,15 @@
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
-                  <p class="small gray"> <%= model.user.email %>  </p>
+                  <p class="small gray"> <%= model.user.email %> </p>
                 </span>
 
-                <span class="icon-text">
-                  <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
-                  <p class="small gray"> university placeholder </p>
-                </span>
+                <% if (typeof model.user.university != 'undefined') { %> 
+                  <span class="icon-text">
+                    <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
+                    <p class="small gray"> <%= model.user.university %> </p>
+                  </span>
+                <% } %>
               </div>
             </div>
           </div>
