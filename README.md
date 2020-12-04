@@ -14,7 +14,7 @@ The idea of this project is to create a web app that manages mastery checks and 
 
 ## Project Progress
 
-The following is a table containing all of the milestones last commits, the GitHub milestones and Google Slides presentation links.
+The following is a table containing all of the milestones' last commits codes, the GitHub milestones and Google Slides presentation links.
 
 |    | Date       | GitHub Milestone      | Final Commit         | Presentation Link              |
 | -- | :--------- | :-------------------- | :------------------- | :----------------------------- |
