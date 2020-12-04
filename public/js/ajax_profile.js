@@ -1,3 +1,7 @@
+function init() {
+    add_button_listeners();
+}
+
 function display(clicked) {
     document.querySelectorAll(".secondary-nav > a > div").forEach((element) => {
         element.classList.remove("active");
@@ -10,6 +14,16 @@ function display(clicked) {
     })
 
     document.querySelector(`.wrapper > .content > div#${clicked}`).hidden = false;
+}
+
+function add_button_listeners() {
+    let forms = document.querySelectorAll("FORM");
+    forms.forEach((e) => {
+        e.addEventListener("submit", (event) => {
+            event.preventDefault();
+            update_user(event);
+        });
+    });
 }
 
 function update_user(event) {
@@ -27,6 +41,7 @@ function update_user(event) {
                 console.log("Details Updated");
                 window.location.reload(false);
                 // Todo: Add client side Flash
+                window.FlashMessage.success("New name applied!");
             }
         });
     } else {
@@ -46,11 +61,13 @@ function update_user(event) {
                     console.log("Password Updated");
                     window.location.reload(false);
                     // Todo: Add client side Flash
+                    window.FlashMessage.success("Password changed!");
                 }
             });
         } else {
             // Passwords do not match
             // Todo: Add Client side flash
+            window.FlashMessage.error("Password do not match");
         }
     }
 }
