@@ -138,16 +138,25 @@ router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 // Add a TA
 
 router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
-  console.log(req.body);
   let classroom = Classroom.findById(req.body.classroom_id);
   let new_ta = User.findById(req.body.user_id);
 
   let role;
-  role = new_ta.role == 0 ? 0 : 1;
+
   Promise.all([classroom, new_ta]).then(result => {
     let this_classroom = result[0];
     let this_user = result[1];
 
+    role = this_user.role == 0 ? 0 : 1;
+
+    if (this_classroom.lecturer._id.equals(this_user._id)) {
+      res.status(400).end();
+      return;
+    }
+
+    if (this_classroom.professors.includes(this_user._id)) {
+      this_classroom.professors.remove({ _id: this_user._id })
+    }
     // Add classroom id to the ta_for_list field of User
     this_user.role = role;
     this_user.ta_for_list.addToSet(this_classroom._id);
@@ -181,8 +190,8 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
 
     // Remove classroom id from ta_for_list
     this_old_ta.ta_for_list.remove({ _id: this_classroom._id });
-    // Check if has classrooms where user is TA
-    if (this_old_ta.ta_for_list.length == 0) {
+    // Check if has classrooms where user is TA and makes sure it's not a professor
+    if (this_old_ta.ta_for_list.length == 0 && this_old_ta.role == 1) {
       this_old_ta.role = 2;
     }
     // Remove from teaching_assistant and add to participants
@@ -208,20 +217,26 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.query.classroom_id);
   Classroom.findById(req.query.classroom_id).then(classroom => {
 
+    User.findById(req.body.professor_id).then(usr => {
+      if (usr.role != 0) {
+        res.status(400).end();
+        return;
+      }
+    })
+
     // If the User is a TA, remove him from class list and adjust their schema
     if (classroom.teaching_assistants.includes(req.body.professor_id)) {
       classroom.teaching_assistants.remove(req.body.professor_id);
-      classroom.save();
       User.findById(req.body.professor_id).then(user => {
         user.ta_for_list.remove(req.query.classroom_id);
-        user.role = 0;
-        user.save();
       });
     }
 
     classroom.professors.addToSet(req.body.professor_id);
-    classroom.partecipants.remove(req.body.professor_id);
-    classroom.save().then(() => res.status(200).end());
+    classroom.save().then(() => {
+      classroom.partecipants.remove(req.body.professor_id)
+      classroom.save().then(() => res.status(200).end())
+    });
   }).catch((err) => { console.log(err); res.status(400).end() })
 });
 
@@ -231,12 +246,24 @@ router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => 
     res.status(400).end();
     return;
   }
+
+
+
   Classroom.findById(req.query.classroom_id).then(classroom => {
-    classroom.professors.remove(req.body.professor_id);
-    classroom.partecipants.addToSet(req.body.professor_id);
-    classroom.save().then(() => {
-      res.status(200).end();
-    })
+
+    User.findById(req.body.professor_id).then(prof => {
+      // should not be possible to remove prof role from owner
+      if (prof._id.equals(classroom.lecturer)) {
+        res.status(400).end();
+        console.log("here");
+        return;
+      }
+      classroom.professors.remove(req.body.professor_id);
+      classroom.partecipants.addToSet(req.body.professor_id);
+      classroom.save().then(() => {
+        res.status(200).end();
+      })
+    });
   })
     .catch(err => console.log(err));
 })

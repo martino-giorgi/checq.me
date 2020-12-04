@@ -76,8 +76,11 @@ function toggleTA(user_id) {
     })
     );
   } else {
-    API.makeTa(JSON.stringify(body)).then(updated_classroom => {
-      API.class_obj = updated_classroom;
+    API.makeTa(JSON.stringify(body)).then(res => {
+      console.log(res.status);
+      if (res.status == 400) {
+        window.FlashMessage.error("Lecturer role can't be changed");
+      }
 
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
@@ -101,8 +104,10 @@ function toggleProf(user_id) {
   }
   // if is a professor, remove
   if (API.class_obj.professors.map(e => e._id).includes(user_id)) {
-    API.removeProf(JSON.stringify(body)).then(() => {
-
+    API.removeProf(JSON.stringify(body)).then(res => {
+      if (res.status == 400) {
+        window.FlashMessage.error("Owner can't be changed");
+      }
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
         render_user_modal();
