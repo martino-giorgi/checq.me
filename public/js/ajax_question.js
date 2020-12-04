@@ -9,16 +9,28 @@ var editor;
 var code_or_text = "text";
 var lang = "text";
 
-const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
-const topic_id = new URLSearchParams(window.location.search).get("topic_id");
+//const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
+//const topic_id = new URLSearchParams(window.location.search).get("topic_id");
+
 /**
  * Initializes the view with the editor and event listeners.
  */
 function init_question() {
+    test();
+    console.log("initttt");
+    number_of_fields = 1;
     handle_dynamic_fields();
     handle_remove_field();
     handle_code();
     lang = code_or_text == "text" ? "text" : lang;
+}
+
+function reset_values() {
+    number_of_fields = 1;
+    input_elements = [];
+    document.getElementById("input_counter").value = 1;
+    lang = "text";
+    code_or_text = "text";
 }
 
 /**
@@ -157,6 +169,7 @@ function remove_last_field() {
         tos["checkbox_node"].remove();
         tos["label_node"].remove();
         number_of_fields--;
+        document.getElementById("input_counter").value = number_of_fields;
     }
     // hide the button to delete fields if only one field is left 
     if (input_elements.length == 0) {
@@ -179,7 +192,7 @@ function handle_remove_field() {
  * to be posted
  */
 function post_question() {
-
+    console.log("posted");
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
     let curr_checkbox;
@@ -200,16 +213,27 @@ function post_question() {
         text: question_text,
         lang: lang
     });
-
+    
 
     API_question.post_question(body).then(res => { return res.json() }).then(new_question => {
         console.log(new_question);
         window.FlashMessage.success("New Question added!");
+
+        reset_values()
+        render_mastery_modal();
     })
         .catch(err => {
             console.log(err);
             window.FlashMessage.error("Could not add question, try again later.");
         })
+}
+
+function test() {
+    fetch("http://universities.hipolabs.com/search?name=italiana").then( res => {
+        return res.json();
+    }).then( uni => {
+        console.log(uni);
+    })
 }
 
 API_question = (function () {

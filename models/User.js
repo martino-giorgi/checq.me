@@ -57,6 +57,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    domain: {
+        type: String,
+        required: false
+    },
+    university: {
+        type: String,
+        required: false
+    },
     availability: {
         type: Map,
         of: { type: Array },

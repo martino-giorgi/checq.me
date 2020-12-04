@@ -18,20 +18,25 @@
             <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
             <p id="element_desc" class="card-text"><%= element.description %></p>
             <p id="element_available" class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
-            <p>
+            <p id="topics_list">
                 <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
                 <% element.topics.forEach(topic => { %>
                 <span>
-                    <a href="/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>">
-                        <%=topic.name%>
+                    <br>
+                    <%=topic.name%> 
+                    <a id="a_add_question" data-topic_id="<%= topic._id %>" href="/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>">
+                        Add questions (<%= topic.questions.length %>)
                     </a>
+                    ,
                     <a style="cursor: pointer;" data-mastery_id="<%= topic.mastery_id %>" data-id="<%= topic._id%>"
                         data-name="<%= topic.name%>" data-description="<%= topic.description%>"
-                        class="edit_topic_btn"><i class="fas fa-pencil-alt"></i></a> |
+                        class="edit_topic_btn">Edit <i class="fas fa-pencil-alt"></i></a> |
                 </span>
+                
                 <% }); %>
             </p>
         </div>
     </div>
     <% }); %>
 </div>
+<script src="/js/ajax_question.js"></script>
