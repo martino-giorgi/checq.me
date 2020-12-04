@@ -23,14 +23,14 @@ module.exports = {
           if (this_class && (this_class.professors.includes(req.user._id))) {
             return next();
           } else {
-            res.status(403).send("You don't have permission to view this page");
+            res.status(403).render('page403');
           }
         });
       } else {
         return next();
       }
     } else {
-      res.status(403).send("You don't have permission to view this page");
+      res.status(403).render('page403');
     }
   },
 
@@ -38,7 +38,7 @@ module.exports = {
     if (req.user.role == 2) {
       return next();
     }
-    res.status(403).send("You don't have permission to view this page");
+    res.status(403).render('page403');
   },
 
   ensureProfOrTA: (req, res, next) => {
@@ -54,7 +54,7 @@ module.exports = {
           if (this_class && (this_class.teaching_assistants.includes(req.user._id) || this_class.professors.includes(req.user._id))) {
             return next();
           } else {
-            res.status(403).send("You don't have permission to view this page");
+            res.status(403).render('page403');
           }
         });
       } else {
@@ -62,7 +62,7 @@ module.exports = {
       }
 
     } else {
-      res.status(403).send("You don't have permission to view this page");
+      res.status(403).render('page403');
     }
   },
 
