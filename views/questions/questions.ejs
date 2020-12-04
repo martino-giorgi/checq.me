@@ -44,7 +44,9 @@
     <%- include("../partials/navigation", {active: 'manager'}) %>
     <div id="question_area">
         <h1>Get prepared by answering those questions!</h1>
-
+        <% if(classroom.professors.includes(user._id) || classroom.teaching_assistants.includes(user._id)){ %>
+            <button id="delete_question_btn">DELETE</button>
+        <% }%>
         <div class="outer_bar">
             <div id="progress_bar" class="progress_bar">
             </div>
@@ -53,7 +55,11 @@
             <div id="questions_bar">
             </div>
         </div>
-
+        <input id="user_id" type="hidden" value="<%= user._id%>">
+        <input id="classroom_id" type="hidden" value="<%= classroom._id%>">
+        <input id="topic_id" type="hidden" value="<%= topic._id%>">
+        
+           
         <textarea id="text_area"></textarea>
         <section id="options_section">
 
