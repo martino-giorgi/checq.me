@@ -228,6 +228,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
             booked = true;
             increaseTa(req.user._id, mastery.classroom._id);
             res.json(r);
+            return;
           }
           else {
             let staff = [mastery.classroom.lecturer];
@@ -253,7 +254,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
                 // booking completed
                 res.json(x);
                 booked = true;
-                break;
+                return;
               }
             }
           }
