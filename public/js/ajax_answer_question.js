@@ -255,10 +255,11 @@ function delete_question(body, classroom_id) {
     .then( res => {
         if(res.status == 204) {
             window.FlashMessage.success("Question deleted");
-            console.log(questions);
-            i--;
+            i = (i-1) % questions.length;
+            console.log("prima", questions, i);
             console.log("----------------");
             questions.splice(i,1);
+            console.log("dopo", questions);
             if (questions && questions.length > 0) {
                 i = 0;
                 set_question(questions[0])
