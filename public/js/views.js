@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Fri Dec 04 2020 22:44:43 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Sat Dec 05 2020 09:19:32 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -492,7 +492,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary new_topic_btn\">Create a Topic\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary edit_btn\">Edit Mastery Check\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary delete_btn\">Delete\n            </button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p id=\"element_desc\" class=\"card-text\"><%= element.description %></p>\n            <p id=\"element_available\" class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p id=\"topics_list\">\n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                <span>\n                    <br>\n                    <%=topic.name%> \n                    <a id=\"a_add_question\" data-topic_id=\"<%= topic._id %>\" href=\"/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>\">\n                        Add questions (<%= topic.questions.length %>)\n                    </a>\n                    ,\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"<%= topic.mastery_id %>\" data-id=\"<%= topic._id%>\"\n                        data-name=\"<%= topic.name%>\" data-description=\"<%= topic.description%>\"\n                        class=\"edit_topic_btn\">Edit <i class=\"fas fa-pencil-alt\"></i></a> |\n                </span>\n                \n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>\n<script src=\"/js/ajax_question.js\"></script>"
+  , __lines = "<div class=\"container mt-3\">\n    <h3>Mastery Check List</h3>\n    <% result.forEach(element => { %>\n    <div class=\"card mt-5\">\n\n        <div style=\"display:flex;align-items: center;justify-content: space-between;\" class=\"card-header\">\n            <span>Mastery Check</span>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary new_topic_btn\">Create a Topic\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary edit_btn\">Edit Mastery Check\n            </button>\n            <button style=\"float: right;\" type=\"button\" class=\"btn btn-primary delete_btn\">Delete\n            </button>\n        </div>\n        <div class=\"card-body\">\n            <h4>Classroom ID: <%= element.classroom%></h4>\n            <h5 class=\"card-title\"><%= element.name %></h5>\n            <small id=\"id_container\" data-id=\"<%= element._id%>\">Mastery ID: <%= element._id%></small>\n            <p id=\"element_desc\" class=\"card-text\"><%= element.description %></p>\n            <p id=\"element_available\" class=\"card-text\"><%= element.available  ? \"Available\" : \"Not Available\" %></p>\n            <p id=\"topics_list\">\n                <span><%= element.topics.length == 0 ? \"No Topics\" : \"Topics:\"%></span>\n                <% element.topics.forEach(topic => { %>\n                <span>\n                    <br>\n                    <%=topic.name%> \n                    <a id=\"a_add_question\" data-topic_id=\"<%= topic._id %>\" href=\"/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>\">\n                        Add questions\n                    </a>\n                    |\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"<%= topic.mastery_id %>\" data-id=\"<%= topic._id%>\"\n                        data-name=\"<%= topic.name%>\" data-description=\"<%= topic.description%>\"\n                        class=\"edit_topic_btn\">Edit <i class=\"fas fa-pencil-alt\"></i></a> \n                    |\n                    <a href=\"/topic/questions/answer?topic=<%= topic._id%>&classroom_id=<%= element.classroom%>\">\n                        View questions  (<%= topic.questions.length %>)\n                    </a>\n                </span>\n                \n                <% }); %>\n            </p>\n        </div>\n    </div>\n    <% }); %>\n</div>\n<script src=\"/js/ajax_question.js\"></script>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -534,10 +534,7 @@ try {
     ; __append(escapeFn(topic._id ))
     ; __append("&classroom_id=")
     ; __append(escapeFn(element.classroom))
-    ; __append("\">\n                        Add questions (")
-    ; __line = 28
-    ; __append(escapeFn( topic.questions.length ))
-    ; __append(")\n                    </a>\n                    ,\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"")
+    ; __append("\">\n                        Add questions\n                    </a>\n                    |\n                    <a style=\"cursor: pointer;\" data-mastery_id=\"")
     ; __line = 31
     ; __append(escapeFn( topic.mastery_id ))
     ; __append("\" data-id=\"")
@@ -547,14 +544,22 @@ try {
     ; __append(escapeFn( topic.name))
     ; __append("\" data-description=\"")
     ; __append(escapeFn( topic.description))
-    ; __append("\"\n                        class=\"edit_topic_btn\">Edit <i class=\"fas fa-pencil-alt\"></i></a> |\n                </span>\n                \n                ")
+    ; __append("\"\n                        class=\"edit_topic_btn\">Edit <i class=\"fas fa-pencil-alt\"></i></a> \n                    |\n                    <a href=\"/topic/questions/answer?topic=")
+    ; __line = 35
+    ; __append(escapeFn( topic._id))
+    ; __append("&classroom_id=")
+    ; __append(escapeFn( element.classroom))
+    ; __append("\">\n                        View questions  (")
     ; __line = 36
-    ;  }); 
-    ; __append("\n            </p>\n        </div>\n    </div>\n    ")
+    ; __append(escapeFn( topic.questions.length ))
+    ; __append(")\n                    </a>\n                </span>\n                \n                ")
     ; __line = 40
     ;  }); 
+    ; __append("\n            </p>\n        </div>\n    </div>\n    ")
+    ; __line = 44
+    ;  }); 
     ; __append("\n</div>\n<script src=\"/js/ajax_question.js\"></script>")
-    ; __line = 42
+    ; __line = 46
   }
   return __output;
 } catch (e) {

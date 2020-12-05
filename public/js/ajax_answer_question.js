@@ -131,13 +131,15 @@ function handle_delete_button() {
             let url = new URL(window.location.href)
             let topic = url.searchParams.get('topic')
             let classroom = url.searchParams.get('classroom_id');
-            
+           
+            let j = (i-1) % questions.length;
+             
             let body = {
-                question_id: questions[i-1]._id,
+                question_id: questions[j]._id,
                 topic_id: topic,
                 classroom_id: classroom
             }
-            console.log("try deleted")
+            console.log("try deleted", questions[j]);
             delete_question(JSON.stringify(body), classroom);
             
         })

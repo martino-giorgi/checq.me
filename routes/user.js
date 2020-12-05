@@ -55,7 +55,7 @@ router.post("/signup", (req, res) => {
         let role = 2;
         console.log(req.query.code)
         console.log(process.env.PROF_CODE);
-        if (req.query.code == process.env.PROF_CODE) {
+        if (req.query.code == process.env.PROF_CODE && process.env.PROF_CODE != undefined) {
           role = 0;
         }
         const new_user = new User({
