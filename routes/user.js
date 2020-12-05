@@ -27,6 +27,7 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
+
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
 
@@ -51,14 +52,23 @@ router.post("/signup", (req, res) => {
         errors.push({ msg: "A user with this email already exists" });
         res.render("signup", { errors, name, surname, email });
       } else {
+        let role = 2;
+        console.log(req.query.code)
+        console.log(process.env.PROF_CODE);
+        if (req.query.code == process.env.PROF_CODE) {
+          role = 0;
+        }
         const new_user = new User({
           name,
           surname,
           email,
+          role,
           password,
           githubToken: "",
           githubId: "",
-          gravatar: ""
+          gravatar: "",
+          domain: (req.body.confirmed_domain == 'on' && req.body.domain != "") ? req.body.domain : "",
+          university: (req.body.confirmed_domain == 'on' && req.body.uni_name != "") ? req.body.uni_name : ""
         });
 
         // Generate an hash from the password
@@ -220,7 +230,9 @@ router.get("/logout", (req, res) => {
   res.redirect("/user/login");
 });
 
+// Edit the user
 router.put("/update", ensureAuthenticated, async (req, res) => {
+  console.log(req.body);
   if (req.body.password == undefined) {
     // Update details
     req.user.name = req.body.name;

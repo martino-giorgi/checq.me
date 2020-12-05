@@ -23,39 +23,39 @@ module.exports = router;
 // 
 
 router.get("/", ensureAuthenticated, (req, res) => {
-		User.findOne({ _id: req.user._id })
-			.select({
-				_id: 1,
-				role: 1,
-				classrooms: 1,
-			})
-			.then((user) => {
-				if (user) {
-					Classroom.find({ _id: { $in: user.classrooms } })
-						.select({
-							teaching_assistants: 1,
-							lecturer: 1,
-							name: 1,
-							_id: 1,
-							color: 1,
-							description: 1
-						})
-						.populate({
-							path: "teaching_assistants",
-							select: ["email", "name", "surname"],
-						})
-						.populate({
-							path: "lecturer",
-							select: ["email", "name", "surname"],
-						})
-						.then((re) => {
-							let Model = {
-								user: user,
-								classrooms: re
-							}
+  User.findOne({ _id: req.user._id })
+    .select({
+      _id: 1,
+      role: 1,
+      classrooms: 1,
+    })
+    .then((user) => {
+      if (user) {
+        Classroom.find({ _id: { $in: user.classrooms } })
+          .select({
+            teaching_assistants: 1,
+            lecturer: 1,
+            name: 1,
+            _id: 1,
+            color: 1,
+            description: 1
+          })
+          .populate({
+            path: "teaching_assistants",
+            select: ["email", "name", "surname"],
+          })
+          .populate({
+            path: "lecturer",
+            select: ["email", "name", "surname"],
+          })
+          .then((re) => {
+            let Model = {
+              user: user,
+              classrooms: re
+            }
 
-							res.render('classroom', { model: Model });
-						});
-				}
-		});
+            res.render('classroom', { model: Model });
+          });
+      }
+  });
 })

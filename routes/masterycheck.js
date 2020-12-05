@@ -3,8 +3,7 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
 const path = require("path");
 
@@ -18,7 +17,7 @@ module.exports = router;
 /*
 PROFESSOR ROUTES
 */
-router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
@@ -26,11 +25,11 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     available: req.body.available,
-    classroom: req.body.classroom,
+    classroom: req.query.classroom_id,
     author: req.user._id,
   });
   mc.save().then(mastery => {
-    Classroom.findById(req.body.classroom).then(classroom => {
+    Classroom.findById(req.query.classroom_id).then(classroom => {
       classroom.mastery_checks.addToSet(mastery._id);
       classroom.save().then(() => res.status(200).end());
     })
@@ -45,19 +44,43 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
     })
 });
 
-router.delete("/", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.deleteOne({ _id: req.body.id })
+router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  // remove mastery from the classroom
+  Classroom.findById(req.query.classroom_id).then(classroom => {
+    classroom.mastery_checks.remove(req.query.mastery_id);
+    classroom.save();
+  })
+
+  // remove masterycheck from the db
+  MasteryCheck.deleteOne({ _id: req.query.mastery_id })
     .then(() => {
       res.status(200).end();
     })
     .catch((err) => console.log(err));
 });
 
-// GET mastery check list created by the current user
-router.get("/list/:id", ensureAuthenticated, ensureProfessor, (req, res) => {
-  MasteryCheck.find({ author: req.user._id, classroom: req.params.id })
+// EDIT mastery check
+router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  console.log(req.body);
+  MasteryCheck.updateOne({ _id: req.query.mastery_id }, { $set: { name: req.body.name, description: req.body.description, available: req.body.available } })
+    .then(() => {
+      res.status(200).end()
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500)
+    })
+})
+
+// GET mastery check list of the classroom
+router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  MasteryCheck.find({ classroom: req.query.classroom_id })
     .populate("topics")
-    .then((result) =>
-      res.json(result)
-  );
+    .then((result) => {
+      if (result) {
+        res.json(result)
+      } else {
+        res.status(400).end();
+      }
+    })
 });

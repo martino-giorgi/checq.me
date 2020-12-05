@@ -29,15 +29,20 @@
           </div>
 
           <div class="classrooms box">
-            <div class="header-box">
-              <img class="icon-s" src="/assets/icons/sections/classroom.svg" alt="classroom icon" />
-              <h3 class="primary"> Classrooms </h3>
+            <div class="header">
+              <span class="icn-and-title">
+                <img class="icon-s" src="/assets/icons/sections/classroom.svg" alt="classroom icon" />
+                <h3 class="primary"> Classrooms </h3>
+              </span>
+
+              <% let href = model.user.role == 0 ? '/manager' : '/classrooms'%> 
+              <a class="button-text small gray" href="<%= href %>">See more</a>
             </div>
 
             <% if (model.user.classrooms.length > 0) { %>
               <div class="classroom-list">
                 <% model.classrooms.forEach((classroom) => { %>
-                  <a>
+                  <a href="/manager/classroom?classroom_id=<%= classroom._id %>">
                     <div class="classroom-box" style="background-color: #<%= classroom.color %>">
                       <span class="circle">
                         <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
@@ -66,13 +71,15 @@
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
-                  <p class="small gray"> <%= model.user.email %>  </p>
+                  <p class="small gray"> <%= model.user.email %> </p>
                 </span>
 
-                <span class="icon-text">
-                  <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
-                  <p class="small gray"> university placeholder  </p>
-                </span>
+                <% if (typeof model.user.university != 'undefined' && model.user.university != "") { %> 
+                  <span class="icon-text">
+                    <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
+                    <p class="small gray"> <%= model.user.university %> </p>
+                  </span>
+                <% } %>
               </div>
             </div>
           </div>

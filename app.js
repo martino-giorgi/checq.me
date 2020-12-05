@@ -141,6 +141,11 @@ app.get("*", function (req, res) {
   res.status(404).render("page404");
 });
 
+// Route to 403 error
+app.get('*', function (req, res) {
+  res.status(403).render('page403');
+});
+
 app.set("port", PORT);
 
 const server = app.listen(app.get("port"), () => {

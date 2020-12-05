@@ -5,17 +5,11 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
-const path = require("path");
 
-const MasteryCheck = require("../models/MasteryCheck");
-const Classroom = require("../models/Classroom");
-const User = require("../models/User");
+
 const Topic = require("../models/Topic");
-const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
 const Question = require("../models/Question");
 
 module.exports = router;
@@ -27,12 +21,12 @@ module.exports = router;
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/new", 
-            ensureAuthenticated, 
-            ensureProfessor || ensureTa,
-            (req, res) => {
-    res.render("manager/classrooms/new_question", {user: req.user})
-})
+router.get("/new",
+  ensureAuthenticated,
+  ensureProfOrTA,
+  (req, res) => {
+    res.render("manager/classrooms/new_question", { user: req.user })
+  })
 
 /**
  * Route serving the posting of new questions.
@@ -41,33 +35,40 @@ router.get("/new",
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
-            (req, res) => {
-              //console.log(req.body);
-              const new_q = new Question ({
-                text: req.body.text,
-                answer: req.body.answer,
-                lang: req.body.lang
-              })
-              let p1 = Topic.findById(req.body.topic);
-              let p2 = new_q.save();
+router.post("/new", ensureAuthenticated, ensureProfOrTA,
+  (req, res) => {
+    if (req.query.classroom_id) {
+      const new_q = new Question({
+        text: req.body.text,
+        answer: req.body.answer,
+        lang: req.body.lang
+      })
+      console.log(req.query.topic_id);
+      console.log("aaa");
+      let p1 = Topic.findById(req.query.topic_id);
+      let p2 = new_q.save();
 
-              Promise.all([p1, p2]).then( results => {
-                let topic = results[0];
-                let question = results[1]
-                
-                topic.questions.addToSet(question._id);
+      Promise.all([p1, p2]).then(results => {
+        let topic = results[0];
+        let question = results[1]
 
-                topic.save().then( () => {
-                  res.json(question);
-                })
-                
-              })
-              .catch((err)=> {
-                console.log(err);
-              })
+        topic.questions.addToSet(question._id);
 
-})
+        topic.save().then(() => {
+          res.json(topic.questions);
+        })
+          .catch(err => {
+            console.log(err);
+          })
+
+      })
+        .catch((err) => {
+          console.log(err);
+        })
+    } else {
+      res.status(400).end();
+    }
+  })
 
 /**
  * Route serving the posting of answers to questions to be checked.
@@ -77,12 +78,12 @@ router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
  * @param {callback} middleware - Express middleware.
  */
 router.post("/check", ensureAuthenticated, (req, res) => {
-  
-  Question.findById(req.body.question).then( q => {
+
+  Question.findById(req.body.question).then(q => {
     let given_answers = req.body.answers;
     let flag = false;
-    for(let i=0; i < given_answers.length; ++i) {
-      
+    for (let i = 0; i < given_answers.length; ++i) {
+
       if (!q.answer[given_answers[i]][1]) {
         flag = false;
         break;
@@ -92,21 +93,21 @@ router.post("/check", ensureAuthenticated, (req, res) => {
     }
     // if all given answers are wrong, check that also the expected ones are
     if (given_answers.length == 0) {
-     
+
       let all_wrong = true;
-      for(let j=0; j < q.answer.length; ++j) {
+      for (let j = 0; j < q.answer.length; ++j) {
         if (q.answer[j][1]) {
           all_wrong = false;
         }
       }
-      if(all_wrong) {
+      if (all_wrong) {
         flag = true;
       }
     }
-    res.json({result: flag});
-  }) 
-  .catch(err => { 
-    console.log(err);
+    res.json({ result: flag });
   })
+    .catch(err => {
+      console.log(err);
+    })
 })
 

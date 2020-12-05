@@ -48,11 +48,13 @@
           <label for="input_name">Name</label>
           <input type="text" class="form-control" id="input_name" placeholder="Name" value="<%= user.name %>">
         </div>
+
         <div class="form-group">
           <label for="input_surname">Surname</label>
           <input type="text" class="form-control" id="input_surname" placeholder="Surname" value="<%= user.surname %>">
         </div>
-        <button type="submit" class="button">Update Information</button>
+        
+        <button type="submit" class="btn btn-primary">Update Information</button>
       </form>
     </div>
 
@@ -65,25 +67,25 @@
         your course), a mastery check will be automatically reserved.
         <br><br>
         For more information on how checq.me does this, check out our repo on
-        <a href="https://github.com/martino-giorgio/checq.me">GitHub</a>.
+        <a href="https://github.com/martino-giorgi/checq.me">GitHub</a>.
 
         <br><br>
       </p>
 
-      <% if (user.githubId == "") { %> 
-        <a class="btn btn-social btn-github" href="/github">
+      <% if (user.githubId == "") { %>
+      <a class="btn btn-social btn-github" href="/github">
+        <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+      </a>
+      <% } else { %>
+      <span class="github-connected">
+        <a class="btn btn-social btn-github disabled">
           <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
         </a>
-      <% } else { %>
-        <span class="github-connected">
-          <a class="btn btn-social btn-github disabled">
-            <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
-          </a>
 
-          <img src="/assets/icons/misc/check.svg" alt="connected icon">
-        </span>
+        <img src="/assets/icons/misc/check.svg" alt="connected icon">
+      </span>
       <% } %>
-      
+
     </div>
 
     <div hidden id="notifications">
@@ -103,12 +105,17 @@
           <label for="input_confpassword">Confirm New Password</label>
           <input type="password" class="form-control" id="input_confnewpassword" placeholder="Confirm New Password">
         </div>
-        <button type="submit" class="button">Update Password</button>
+        <button type="submit" class="btn btn-primary">Update Password</button>
       </form>
     </div>
   </div>
 </div>
 
+
 <script src="/js/ajax_profile.js"></script>
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
+
+<script>
+  window.onload = init();
+</script>

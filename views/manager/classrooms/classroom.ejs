@@ -11,11 +11,18 @@
         <div id="sub_navbar">
         </div>
         <section id="class_options">
-            <button onclick="add()" id="add_btn" type="button" class="btn btn-primary">Add Mastery Check</button>
-            <button onclick="toggle_show_topic_form()">Add Topic</button>
             <button type="button" onClick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
                 data-target="#user-modal">
                 Show User List
+            </button>
+            <button type="button" class="btn btn-primary" onclick="render_mastery_modal()" data-toggle="modal"
+                data-target="#mastery-modal">
+                Show Mastery Check List
+            </button>
+
+            <button type="button" class="btn btn-primary" onclick="render_add_mastery_modal()" data-toggle="modal"
+                data-target="#add-mastery-modal">
+                Add a Mastery Check
             </button>
 
         </section>
@@ -41,9 +48,47 @@
             </div>
         </div>
 
-        <section id="topic_form"></section>
+        <!-- Mastery Check list modal -->
+        <div class="modal fade" id="mastery-modal" tabindex="-1" role="dialog" aria-labelledby="mastery-modal-label"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mastery-modal-label">Mastery Check list</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="mastery-modal-body" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Mastery Check modal -->
+        <div class="modal fade" id="add-mastery-modal" tabindex="-1" role="dialog"
+            aria-labelledby="add-mastery-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="user-modal-label">Add a Mastery Check</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="add-mastery-modal-body" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section id="class_info"></section>
-        <div id="list" class="container"></div>
 
     </main>
 </div>
@@ -51,9 +96,18 @@
 <script src="/js/ajax_mastery.js"></script>
 <script src="/js/flash.min.js"></script>
 <script src="/js/ajax_classroom_manager.js"></script>
-<script src="/js/ajax_topic.js"></script>
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
+<script src="/js/ajax_question.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+<!-- CodeMirror CDNs -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css" rel="stylesheet">
 <script>
     window.onload = init_manager;
 </script>

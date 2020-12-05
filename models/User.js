@@ -2,14 +2,14 @@
  * User schema
  */
 
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    name: { 
+    name: {
         type: String,
         required: true
     },
-    surname: { 
+    surname: {
         type: String,
         required: true
     },
@@ -17,17 +17,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: { 
+    password: {
         type: String,
         required: true
     },
-    role: { 
+    role: {
         type: Number, // 0 = Professor, 1 = TA, 2 = Student
         required: true,
         default: 2
     },
     classrooms: [{
-        type: mongoose.Schema.ObjectId, 
+        type: mongoose.Schema.ObjectId,
         ref: 'Classroom'
     }],
     isConfirmed: {
@@ -55,7 +55,20 @@ const UserSchema = new mongoose.Schema({
     gravatar: {
         type: String,
         required: false,
-    }
+    },
+    domain: {
+        type: String,
+        required: false
+    },
+    university: {
+        type: String,
+        required: false
+    },
+    ta_for_list: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Classroom',
+        default: []
+    }]
 })
 
 const User = mongoose.model('User', UserSchema);

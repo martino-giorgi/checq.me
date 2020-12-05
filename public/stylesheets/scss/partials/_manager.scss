@@ -1,5 +1,79 @@
-//edo non mi uccidere, modificalo come vuoi è solo per provarlo
-// /manager/classroom/students
+@import "./vars";
+
+#classroom-table {
+  tbody {
+    td {
+      .btn-with-icn {
+        background-color: $white;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+    }
+
+    #manager-name {
+      width: 75% !important;
+    }
+    
+    .add-class {
+      box-shadow: none;
+
+      .btn-with-icn {
+        padding: 12px 14px 12px 12px;
+        border-radius: 8px;
+        
+        color: $white;
+        background-color: $primary;
+        cursor: pointer;
+
+        img {
+          filter: invert(1);
+        }
+
+        p {
+          transform: translateY(1.5px);
+        }
+
+        &:hover, &:focus {
+          text-decoration: none;
+          background-color: $primary_dark;
+        }
+      }
+    }
+  }
+}
+
+#form {
+  margin: 26px;
+
+  .btn-with-icn {
+    margin-bottom: 26px;
+    padding: 10px;
+    border-radius: 8px;
+    
+    background-color: $gray;
+    color: $white;
+    cursor: pointer;
+
+    p {
+      margin: 0;
+    }
+
+    &:hover, &:focus {
+      background-color: $gray_dark;
+    }
+  }
+}
+
+.datepicker-cell.selected {
+  background-color: $primary !important;
+
+  &:hover {
+    background-color: $primary_dark !important;
+  }
+}
 
 .swag_collapsible {
   background-color: #777;
