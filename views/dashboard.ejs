@@ -42,7 +42,9 @@
             <% if (model.user.classrooms.length > 0) { %>
               <div class="classroom-list">
                 <% model.classrooms.forEach((classroom) => { %>
-                  <a href="/manager/classroom?classroom_id=<%= classroom._id %>">
+                  
+                  <% let href2 = model.user.role == 0 ? `/manager/classroom?classroom_id=${classroom._id}` : `/classrooms/classroom?classroom_id=${classroom._id}`%>
+                  <a href="<%= href2 %>">
                     <div class="classroom-box" style="background-color: #<%= classroom.color %>">
                       <span class="circle">
                         <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
