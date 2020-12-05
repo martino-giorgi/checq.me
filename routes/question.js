@@ -11,6 +11,7 @@ const {
 
 const Topic = require("../models/Topic");
 const Question = require("../models/Question");
+const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
@@ -41,8 +42,11 @@ router.post("/new", ensureAuthenticated, ensureProfOrTA,
       const new_q = new Question({
         text: req.body.text,
         answer: req.body.answer,
-        lang: req.body.lang
+        lang: req.body.lang,
+        topic: req.query.topic_id,
+        classroom: req.query.classroom_id
       })
+      console.log(new_q);
       console.log(req.query.topic_id);
       console.log("aaa");
       let p1 = Topic.findById(req.query.topic_id);
@@ -109,5 +113,33 @@ router.post("/check", ensureAuthenticated, (req, res) => {
     .catch(err => {
       console.log(err);
     })
+})
+
+
+router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  console.log(req.body);
+  Topic.findById(req.body.topic_id).then( topic => {
+    if(topic){
+      topic.questions.remove(req.body.question_id);
+      topic.save().then( () => {
+
+        Question.deleteOne({ _id: req.body.question_id }).then( () => {
+          res.status(204).end();
+        })
+      })
+      .catch(err => {
+        res.status(400).end();
+      })
+
+    }else {
+      res.status(404).end();
+      return;
+    }
+  })
+  .catch(err=> {
+    console.log(err);
+    res.status(400).end();
+  })
+  // res.status(200).end()
 })
 

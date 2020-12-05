@@ -16,7 +16,6 @@ var lang = "text";
  * Initializes the view with the editor and event listeners.
  */
 function init_question() {
-    test();
     console.log("initttt");
     number_of_fields = 1;
     handle_dynamic_fields();
@@ -170,6 +169,7 @@ function remove_last_field() {
         tos["label_node"].remove();
         number_of_fields--;
         document.getElementById("input_counter").value = number_of_fields;
+        document.getElementById("fields_label").innerHTML = "Options: " + number_of_fields;
     }
     // hide the button to delete fields if only one field is left 
     if (input_elements.length == 0) {
@@ -192,6 +192,12 @@ function handle_remove_field() {
  * to be posted
  */
 function post_question() {
+    // get question text:
+    let question_text = (code_or_text == "code") ? get_code() : get_text();
+    if(question_text == "") {
+        window.FlashMessage.error("Please fill the question field.");
+        return;
+    }
     console.log("posted");
     let n_inputs = document.getElementById("input_counter").value;
     let curr;
@@ -204,8 +210,7 @@ function post_question() {
         // the array will contain tuples of the kind: ["option text", "true/false"]
         options.push([curr.value, curr_checkbox.checked]);
     }
-    // get question text:
-    let question_text = (code_or_text == "code") ? get_code() : get_text();
+    
 
     let body = JSON.stringify({
         answer: options,
@@ -226,14 +231,6 @@ function post_question() {
             console.log(err);
             window.FlashMessage.error("Could not add question, try again later.");
         })
-}
-
-function test() {
-    fetch("http://universities.hipolabs.com/search?name=italiana").then( res => {
-        return res.json();
-    }).then( uni => {
-        console.log(uni);
-    })
 }
 
 API_question = (function () {

@@ -101,5 +101,20 @@ router.get("/:id/questions", ensureAuthenticated, (req, res) => {
 })
 
 router.get("/questions/answer", ensureAuthenticated, (req, res) => {
-  res.render("questions/questions", { user: req.user });
+  if(req.query.topic) {
+    if(req.query.classroom_id) {
+      let p1 = Topic.findById(req.query.topic);
+      let p2 = Classroom.findById(req.query.classroom_id);
+
+      Promise.all([p1,p2]).then( results => {
+        let this_topic = results[0];
+        let this_class = results[1];
+        res.render("questions/questions", { user: req.user, classroom: this_class, topic: this_topic });
+      })
+    }else {
+      res.render("page404");
+    }
+  }else {
+    res.render("page404");
+  }
 })
