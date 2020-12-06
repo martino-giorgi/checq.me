@@ -41,6 +41,10 @@ function setUser(user_id) {
   document.getElementById("toggleTA_btn")
     .innerHTML = API.class_obj.teaching_assistants.map(e => e._id).includes(user_id)
       ? "Remove as TA" : "Add as TA";
+
+  document.getElementById("toggleProf_btn")
+    .innerHTML = API.class_obj.professors.map(e => e._id).includes(user_id)
+      ? "Remove Professor" : "Make Professor";
 }
 
 
