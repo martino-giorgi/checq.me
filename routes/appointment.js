@@ -179,23 +179,6 @@ function sort_mastery_days(mastery_days) {
   return sorted;
 }
 
-router.get("/canbook", (req, res) => {
-  Availability.aggregate()
-    .unwind("$busy")
-    .match({
-      _userId: mongoose.Types.ObjectId("5fb4351a1cf7e5fab846ca09"),
-      $and: [
-        { "busy.0": { $lte: moment("2020-12-03").endOf("day").toDate() } },
-        { "busy.1": { $gte: moment("2020-12-03").startOf("day").toDate() } },
-      ],
-    })
-    .group({ _id: "$_userId", busy: { $addToSet: "$busy" } })
-    .exec((err, result) => {
-      console.log(result);
-    });
-  res.end();
-});
-
 async function get_day_busy(user_id, date) {
   return new Promise((resolve, rejects) => {
     let d = moment(date);
@@ -279,19 +262,6 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
       });
   });
 }
-
-router.get("/taqueue", (req, res) => {
-  get_TA_queue(
-    moment("2020-12-02"),
-    [
-      mongoose.Types.ObjectId("5fbbbd26278c90520deec26c"),
-      mongoose.Types.ObjectId("5fb435501cf7e5fab846ca0b"),
-      mongoose.Types.ObjectId("5fb4351a1cf7e5fab846ca09"),
-    ],
-    [mongoose.Types.ObjectId("5fb4351a1cf7e5fab846ca09")]
-  );
-  res.end();
-});
 
 async function get_TA_queue(date, classroom_tas, exclude) {
   return new Promise((resolve, rejects) => {
