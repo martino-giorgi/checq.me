@@ -35,19 +35,19 @@
             </div>
 
             <% if (model.user.classrooms.length > 0) { %>
-              <div class="classroom-list">
-                <% model.classrooms.forEach((classroom) => { %>
-                  <a>
-                    <div class="classroom-box" style="background-color: #<%= classroom.color %>">
-                      <span class="circle">
-                        <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
-                      </span>
+            <div class="classroom-list">
+              <% model.classrooms.forEach((classroom) => { %>
+              <a href="<%= `/classroom/class?classroom_id=${classroom._id}`%>">
+                <div class="classroom-box" style="background-color: #<%= classroom.color %>">
+                  <span class="circle">
+                    <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
+                  </span>
 
-                      <p class="classroom-name"> <%= classroom.name %> </p>
-                    </div>
-                  </a>
-                <% }); %>
-              </div>
+                  <p class="classroom-name"> <%= classroom.name %> </p>
+                </div>
+              </a>
+              <% }); %>
+            </div>
             <% } %>
           </div>
         </div>
@@ -56,22 +56,22 @@
           <div class="profile box">
             <div>
               <% if (model.user.gravatar == "") { %>
-                <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
               <% } else { %>
-                <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
-              <% } %> 
+              <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
+              <% } %>
 
               <div class="info">
                 <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
-                  <p class="small gray"> <%= model.user.email %>  </p>
+                  <p class="small gray"> <%= model.user.email %> </p>
                 </span>
 
                 <span class="icon-text">
                   <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
-                  <p class="small gray"> university placeholder  </p>
+                  <p class="small gray"><%=model.user.university || "University: N/A" %></p>
                 </span>
               </div>
             </div>

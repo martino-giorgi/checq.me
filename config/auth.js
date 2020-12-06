@@ -66,6 +66,26 @@ module.exports = {
     }
   },
 
+  ensureMemberOfClass: (req, res, next) => {
+    if (req.query.classroom_id) {
+      if (!ObjectID.isValid(req.query.classroom_id)) {
+        res.status(400).send("Classroom id is not in valid format");
+      } else {
+        // Check if user is member of classroom
+        Classroom.findById(req.query.classroom_id).then(this_class => {
+          if (this_class && (this_class.teaching_assistants.includes(req.user._id) || this_class.professors.includes(req.user._id) || this_class.partecipants.includes(req.user._id))) {
+            return next();
+          } else {
+            res.status(403).send("You don't have permission to view this page");
+          }
+        });
+      }
+
+    } else {
+      res.status(400).send("Classroom id is not specified");
+    }
+  },
+
   ensureHasNoGithubToken: (req, res, next) => {
     if (req.user.githubToken == '') {
       return next();

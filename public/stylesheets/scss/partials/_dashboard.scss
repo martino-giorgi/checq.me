@@ -1,43 +1,43 @@
-@import "./vars";
+@import './vars';
 
 // Dashboard components wrapper
 .wrapper {
-  display: flex;
-  flex-flow: row;
+	display: flex;
+	flex-flow: row;
 }
 
 section {
-  display: flex;
-  flex-flow: row;
+	display: flex;
+	flex-flow: row;
 }
 
 .box {
-  display: flexbox;
-  flex-flow: column;
+	display: flexbox;
+	flex-flow: column;
 
-  background: #FFFFFF;
-  box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
-  -webkit-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
-  -moz-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+	background: #ffffff;
+	box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+	-webkit-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
+	-moz-box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.07);
 
-  border-radius: 10px;
+	border-radius: 10px;
 }
 
 .header-box {
-  display: flex;
-  flex-flow: row;
+	display: flex;
+	flex-flow: row;
 
-  align-items: center;
-  justify-content: left;
+	align-items: center;
+	justify-content: left;
 
-  padding-top: 24px;
-  padding-left: 24px;
-  padding-bottom: 24px;
+	padding-top: 24px;
+	padding-left: 24px;
+	padding-bottom: 24px;
 
-  h3 {
-    margin: 0;
-    padding-left: 17px;
-  }
+	h3 {
+		margin: 0;
+		padding-left: 17px;
+	}
 }
 
 // Dashboard components
@@ -47,43 +47,43 @@ section {
 // ===============================
 
 nav {
-  position: sticky;
-  display: flex;
-  flex-flow: column;
-  
-  top: 0;
-  bottom: 0;
-  
-  width: auto;
+	position: sticky;
+	display: flex;
+	flex-flow: column;
 
-  height: 100vh;
-  background-color: $primary;
+	top: 0;
+	bottom: 0;
 
-  font-family: "Roboto", sans-serif;
+	width: auto;
 
-  .nav-button {
-    display: flex;
-    flex-flow: row;
+	height: 100vh;
+	background-color: $primary;
 
-    padding-left: 26px;
-    padding-right: 26px;
-    padding-bottom: 11px;
+	font-family: 'Roboto', sans-serif;
 
-    a:hover,
-    .active {
-      background-color: $white;
-      border-radius: 5px;
-    }
+	.nav-button {
+		display: flex;
+		flex-flow: row;
 
-    .not_active:not(:hover) {
-      filter: brightness(100);
-      -webkit-filter: brightness(100);
-    }
+		padding-left: 26px;
+		padding-right: 26px;
+		padding-bottom: 11px;
 
-    a:hover {
-      cursor: pointer;
-    }
-  }
+		a:hover,
+		.active {
+			background-color: $white;
+			border-radius: 5px;
+		}
+
+		.not_active:not(:hover) {
+			filter: brightness(100);
+			-webkit-filter: brightness(100);
+		}
+
+		a:hover {
+			cursor: pointer;
+		}
+	}
 }
 
 // ===============================
@@ -91,180 +91,182 @@ nav {
 // ===============================
 
 main {
-  display: flex;
-  flex-flow: column;
+	display: flex;
+	flex-flow: column;
 
-  justify-content: stretch;
+	justify-content: stretch;
 
-  width: 100vw;
+	width: 100vw;
 
-  font-family: "Roboto", sans-serif;
+	font-family: 'Roboto', sans-serif;
 
+	// ===============================
+	//             HEADER
+	// ===============================
 
-  // ===============================
-  //             HEADER
-  // ===============================
+	.header {
+		display: flex;
+		flex-flow: row;
 
-  .header {
-    display: flex;
-    flex-flow: row;
+		align-items: center;
+		justify-content: space-between;
 
-    align-items: center;
-    justify-content: space-between;
+		.main-header {
+			padding-top: 27px;
+			padding-bottom: 27px;
+			padding-left: 27px;
+		}
 
-    .main-header {
-      padding-top: 27px;
-      padding-bottom: 27px;
-      padding-left: 27px;
-    }
+		.button-text {
+			padding-top: 27px;
+			padding-bottom: 27px;
+			padding-right: 32px;
 
-    .button-text {
-      padding-top: 27px;
-      padding-bottom: 27px;
-      padding-right: 32px;
+			.icon-s {
+				margin-bottom: 2px;
+				margin-right: 6px;
+			}
+		}
+	}
 
-      .icon-s {
-        margin-bottom: 2px;
-        margin-right: 6px;
-      }
-    }
-  }
+	.column:nth-of-type(1) {
+		flex: 5;
 
-  .column:nth-of-type(1) {
-    flex: 5;
+		padding-left: 26px;
+		padding-right: 26px;
+	}
 
-    padding-left: 26px;
-    padding-right: 26px;
-  }
+	.column:nth-of-type(2) {
+		flex: 2;
 
-  .column:nth-of-type(2) {
-    flex: 2;
+		padding-right: 26px;
+	}
 
-    padding-right: 26px;
-  }
+	.classrooms,
+	.grades {
+		margin-top: 26px;
+	}
 
-  .classrooms, .grades {
-    margin-top: 26px;
-  }
+	// ===============================
+	//            PROFILE
+	// ===============================
 
+	.profile {
+		div {
+			display: flex;
+			flex-flow: row;
 
-  // ===============================
-  //            PROFILE
-  // ===============================
+			align-items: center;
 
-  .profile {
-    div {
-      display: flex;
-      flex-flow: row;
+			padding-top: 27px;
+			padding-bottom: 27px;
+			padding-left: 40px;
 
-      align-items: center;
+			.info {
+				display: flex;
+				flex-flow: column;
 
-      padding-top: 27px;
-      padding-bottom: 27px;
-      padding-left: 40px;
+				align-items: start;
+				justify-content: center;
 
-      .info {
-        display: flex;
-        flex-flow: column;
+				p {
+					margin-bottom: 10px;
+				}
 
-        align-items: start;
-        justify-content: center;
+				.icon-text {
+					display: flex;
+					flex-flow: row;
 
-        p {
-          margin-bottom: 10px
-        }
+					justify-content: center;
 
-        .icon-text {
-          display: flex;
-          flex-flow: row;
+					margin-bottom: 6px;
 
-          justify-content: center;
+					img {
+						margin-right: 10px;
+					}
 
-          margin-bottom: 6px;
+					p {
+						margin: 2px 0 0 0;
+					}
+				}
+			}
+		}
+	}
 
-          img {
-            margin-right: 10px;
-          }
+	// ===============================
+	//           CLASSROOMS
+	// ===============================
 
-          p {
-            margin: 2px 0 0 0;
-          }
-        }
-      }
-    }
-  }
+	.classrooms {
+		.classroom-list {
+			display: flex;
+			flex-flow: row;
 
+			margin: 26px;
 
-  // ===============================
-  //           CLASSROOMS
-  // ===============================
+			a {
+				text-decoration: none;
+			}
 
-  .classrooms {
-    .classroom-list {
-      display: flex;
-      flex-flow: row;
+			.classroom-box {
+				display: flex;
+				flex-flow: column;
 
-      margin: 26px;
+				align-items: center;
 
-      .classroom-box {
-        display: flex;
-        flex-flow: column;
+				width: 120px;
+				height: 191px;
 
-        align-items: center;
+				margin-right: 26px;
 
-        width: 120px;
-        height: 191px;
+				border-radius: 8px;
 
-        margin-right: 26px;
+				.circle {
+					display: block;
 
-        border-radius: 8px;
+					width: 74px;
+					height: 74px;
 
-        .circle {
-          display: block;
+					margin-top: 26px;
 
-          width: 74px;
-          height: 74px;
+					border-radius: 50%;
+					background-color: $white;
 
-          margin-top: 26px;
+					p {
+						top: 0;
+						bottom: 0;
 
-          border-radius: 50%;
-          background-color: $white;
+						margin-top: 22px;
 
-          p {
-            top: 0;
-            bottom: 0;
+						font-family: Roboto, sans-serif;
+						font-size: 26px;
+						font-style: normal;
+						font-weight: 700;
+						line-height: 30px;
+						letter-spacing: 0em;
+						text-align: center;
+					}
+				}
 
-            margin-top: 22px;
+				.classroom-name {
+					margin-top: 22px;
+					margin-right: 15px;
+					margin-left: 15px;
 
-            font-family: Roboto, sans-serif;
-            font-size: 26px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 30px;
-            letter-spacing: 0em;
-            text-align: center;
-          }
-        }
-        
-        .classroom-name {
-          margin-top: 22px;
-          margin-right: 15px;
-          margin-left: 15px;
+					font-style: normal;
+					font-weight: 500;
+					font-size: 14px;
+					line-height: 17px;
+					text-align: center;
 
-          font-style: normal;
-          font-weight: 500;
-          font-size: 14px;
-          line-height: 17px;
-          text-align: center;
-          
-          color: $white;
-        }
-      }
+					color: $white;
+				}
+			}
 
-      .classroom-box:hover {
-        box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.171);
-        cursor: pointer;
-      }
-    }
-  }
+			.classroom-box:hover {
+				box-shadow: 0px 2px 17px 4px rgba(0, 0, 0, 0.171);
+				cursor: pointer;
+			}
+		}
+	}
 }
