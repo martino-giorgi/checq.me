@@ -178,3 +178,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
   calendar.render();
 });
+
+
+API = (function () {
+
+  function get_appointments(type) {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  return {
+
+  };
+})();

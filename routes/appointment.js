@@ -350,12 +350,24 @@ async function can_mastery(mastery_id, user_id) {
   });
 }
 
-router.get("/aaa", (req, res) => {
-  get_available_time("2020-12-03T10:30", "2020-12-03T14:30", [
-    ["2020-12-03T12:31", "2020-12-03T13:29"],
-    ["2020-12-03T09:30", "2020-12-03T10:30"],
-  ]);
-});
+router.get("/",ensureAuthenticated ,(req,res)=> {
+  if(req.query.type == 'student'){
+    Appointment.find({_id: req.user._id}).then(ap => {
+      res.json(ap);
+    })
+  }
+  else if (req.query.type == 'ta'){
+    let total = {};
+    Appointment.find({_taId: req.user._id}).then(ap => {
+      ap.set(appointments, ap);
+      Availability.findOne({_id: req.user._id}).then(avail => {
+        total.set('busy', avail);
+      })
+    })
+  }else {
+    res.status(400).end();
+  }
+})
 
 
 router.post("/sgrang", (req, res) => {
