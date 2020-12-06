@@ -4,9 +4,9 @@ require("twix");
 const router = express.Router();
 const {
   ensureAuthenticated,
-  ensureProfessor,
+  ensureProfessorUser,
   ensureStudent,
-  ensureTa,
+  ensureProfOrTAUser,
 } = require("../config/auth");
 
 const User = require("../models/User");
@@ -16,7 +16,7 @@ const { twix } = require("moment");
 module.exports = router;
 
 //get availability for the current user
-router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Availability.findOne({ _userId: req.user._id })
     .select({ busy: 1, _id: 1, _userId: 1 })
     .then((r) => {
@@ -29,8 +29,9 @@ router.get("/", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 //update availability, duplicates, past dates, invalid dates are all ignored
-router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   //input check
+  console.log(req.body);
   let ok = true;
   let new_range;
   let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm", true);
@@ -45,7 +46,6 @@ router.post("/", ensureAuthenticated, ensureProfessor, (req, res) => {
   } else {
     new_range = start.twix(end);
   }
-
   if (ok) {
     Availability.findOne({ _userId: req.user._id }).then((avail) => {
       if(avail){

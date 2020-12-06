@@ -180,20 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
           // Display modal
           document.querySelector('.fc-addEventButton-button').setAttribute('data-toggle', 'modal');
           document.querySelector('.fc-addEventButton-button').setAttribute('data-target', '#newEvent');
-
-          // var start_time = new Date()
-
-          // var date = new Date(dateStr + 'T00:00:00'); // will be in local time
-
-          // if (!isNaN(date.valueOf())) {
-          //   calendar.addEvent({
-          //     title: 'dynamic event',
-          //     start: date,
-          //     allDay: false
-          //   });
-          // } else {
-          //   alert('Invalid date.');
-          // }
         }
       }
     },
@@ -289,7 +275,9 @@ function addBusyDay() {
         start: date_complete_start,
         end: date_complete_end,
         color: "red"
-      })
+      });
+
+      API.post_busy_slot(date_complete_start, date_complete_end);
 
       console.log('dates are correct');
     } else {
@@ -306,7 +294,18 @@ API = (function () {
     })
   }
 
+  function post_busy_slot(start_date, end_date) {
+    return fetch('/availability', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: {
+        busy: [start_date.valueOf(), end_date.valueOf()]
+      }
+    })
+  }
+
   return {
     get_appointments,
+    post_busy_slot,
   };
 })();

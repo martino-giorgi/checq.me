@@ -77,7 +77,7 @@ module.exports = {
 
   ensureProfOrTAUser: (req, res, next) => {
     if (req.user.role < 2) {
-      return next;
+      return next();
     } else {
       res.status(403).render('page403');
     }
