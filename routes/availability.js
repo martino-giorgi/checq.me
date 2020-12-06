@@ -31,7 +31,6 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
 //update availability, duplicates, past dates, invalid dates are all ignored
 router.post("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   //input check
-  console.log(req.body);
   let ok = true;
   let new_range;
   let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm", true);
@@ -58,7 +57,6 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
         }
         let test = [[start, end]];
         avail.updateOne({$addToSet: {busy: {$each: test}}}).then((response)=>{
-          //edo è esaurito
           res.status(200).end();
         })
       }

@@ -35,20 +35,108 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
 
     let current_iso_weekday = moment().isoWeekday();
     
-    let mastery_days = await ClassroomMasteryDay.find({ classroom: mastery.classroom._id });
-    //should be sorted by the closest weekday to today.
-
+    let mastery_days = sort_mastery_days(await ClassroomMasteryDay.find({ classroom: mastery.classroom._id }));
+    
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
     let weeks = 0;
 
-    // while (!booked) {
+    //// while (!booked) {
+    //   for (let i = 0; i < mastery_days.length && !booked; i++){
+    //     // console.log(i);
+    //     m_day = mastery_days[i];
+    //     let m_day_start;
+    //     let m_day_end;
+
+    //     if (current_iso_weekday <= m_day.iso_day_n) {
+    //       // then just give me this week's instance of that day
+    //       m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
+    //       m_day_end = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
+    //     } else {
+    //       // otherwise, give me *next week's* instance of that same day
+    //       m_day_start = moment()
+    //         .add(1 + weeks, "weeks")
+    //         .isoWeekday(m_day.iso_day_n);
+    //       m_day_end = moment()
+    //         .add(1 + weeks, "weeks")
+    //         .isoWeekday(m_day.iso_day_n);
+    //     }
+
+    //     m_day_start = m_day_start.set({
+    //       hour: moment(m_day.start_time).get("hour"),
+    //       minute: moment(m_day.start_time).get("minute"),
+    //       second: 0,
+    //     });
+
+    //     m_day_end = m_day_end.set({
+    //       hour: moment(m_day.end_time).get("hour"),
+    //       minute: moment(m_day.end_time).get("minute"),
+    //       second: 0,
+    //     });
+
+    //     // console.log(m_day_start, m_day_end);
+
+    // //     console.log(m_day_start);
+    //     // if(m_day_start.isAfter(moment())){
+    //       let avail = await get_day_busy(assigned_ta, m_day_end);
+    //       // console.log(avail);
+    //       let r = await trybooking(
+    //         assigned_ta,
+    //         mastery_id,
+    //         m_day_start,
+    //         m_day_end,
+    //         mastery.appointment_duration,
+    //         req.user._id,
+    //         typeof avail[0] === 'undefined' ? [] : avail[0].busy
+    //       )
+  
+    //       if (r != false) {
+    //         //booking completed.
+    //         booked = true;
+    //         increaseTa(req.user._id, mastery.classroom._id);
+    //         res.json(r);
+    //         return;
+    //       }
+    //       else {
+    //         let staff = [mastery.classroom.lecturer];
+    //         mastery.classroom.teaching_assistants.forEach((el) => {
+    //           staff.push(mongoose.Types.ObjectId(el))
+    //         });
+  
+    //         let queue = await get_TA_queue(m_day_start, staff, assigned_ta);
+
+  
+    //         for (let j = 0; j < queue.length && !booked; j++) {
+    //           let avail2 = await get_day_busy(queue[j]._id, m_day_end);
+    //           let x = await trybooking(
+    //             queue[j]._id,
+    //             mastery_id,
+    //             m_day_start,
+    //             m_day_end,
+    //             mastery.appointment_duration,
+    //             req.user._id,
+    //             typeof avail2[0] === 'undefined' ? [] : avail2[0].busy
+    //           )
+    //           if (x != false) {
+    //             // booking completed
+    //             res.json(x);
+    //             booked = true;
+    //             return;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    //   // break;
+    //   weeks++;
+    // }
+    while(!booked){
       for (let i = 0; i < mastery_days.length && !booked; i++){
         // console.log(i);
         m_day = mastery_days[i];
         let m_day_start;
         let m_day_end;
-
+  
         if (current_iso_weekday <= m_day.iso_day_n) {
           // then just give me this week's instance of that day
           m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
@@ -62,23 +150,23 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
             .add(1 + weeks, "weeks")
             .isoWeekday(m_day.iso_day_n);
         }
-
+  
         m_day_start = m_day_start.set({
           hour: moment(m_day.start_time).get("hour"),
           minute: moment(m_day.start_time).get("minute"),
           second: 0,
         });
-
+  
         m_day_end = m_day_end.set({
           hour: moment(m_day.end_time).get("hour"),
           minute: moment(m_day.end_time).get("minute"),
           second: 0,
         });
-
+  
         // console.log(m_day_start, m_day_end);
-
+  
     //     console.log(m_day_start);
-        // if(m_day_start.isAfter(moment())){
+        if(m_day_start.isAfter(moment())){
           let avail = await get_day_busy(assigned_ta, m_day_end);
           // console.log(avail);
           let r = await trybooking(
@@ -105,7 +193,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
             });
   
             let queue = await get_TA_queue(m_day_start, staff, assigned_ta);
-
+  
   
             for (let j = 0; j < queue.length && !booked; j++) {
               let avail2 = await get_day_busy(queue[j]._id, m_day_end);
@@ -127,11 +215,11 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
             }
           }
         }
-    //   }
+        }
+      weeks++;
+    }
+    
 
-    //   // break;
-    //   weeks++;
-    // }
     res.send().end();
   } catch(err) {
     console.log(err);
@@ -139,6 +227,49 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
     return;
   }
 });
+
+
+
+function sort_mastery_days(mastery_days){
+  let x = mastery_days.sort(function(a,b){
+    let x = a["iso_day_n"];
+    let y = b["iso_day_n"];
+    if(x<y){
+      return -1;
+    }
+    if(x>y){
+      return 1
+    }
+    return 0
+  })
+
+  let d = moment().isoWeekday();
+  // let d = 3;
+
+  let i;
+  for (i = 0; i < x.length; i++){
+    console.log(x[i].iso_day_n > d);
+    if(x[i].iso_day_n > d){
+      break;
+    }
+  }
+  
+  if(i == 0 || i == x.length - 1){
+    return x;
+  }
+
+  let sorted = [];
+
+  for(let j = i; j < x.length; j++){
+    sorted.push(x[j]);
+  }
+
+  for(let k = 0; k < i; k++){
+    sorted.push(x[k]);
+  }
+
+  return sorted;
+}
 
 router.get("/canbook", (req, res) => {
   Availability.aggregate()
@@ -286,17 +417,21 @@ async function get_TA_queue(date, classroom_tas, exclude) {
           return;
         }
         if(result.length != classroom_tas.length - 1){
-          new_res = []
+          let new_res = []
           classroom_tas.forEach(ta => {
-            if(ta != exclude && !result.some(e => e._id == ta)){
+            if(ta.toString() != exclude.toString() && !result.some(e => e._id == ta)){
               new_res.push({_id:ta,count:0});
             }
           })
           result.forEach(e => new_res.push(e));
+          console.log("Queue no appoinments");
+          console.log(new_res);
+          resolve(new_res)
+        } else {
+          console.log("Queue normal");
+          console.log(result);
+          resolve(result);
         }
-        console.log("Queue: ");
-        console.log(new_res);
-        resolve(new_res);
       });
   });
 }
