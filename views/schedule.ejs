@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
 <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.2.0/main.global.min.js"></script>
@@ -24,21 +25,35 @@
 
           <div class="modal-body">
             <form>
-              <div class="form-group">
-                <label for="recipient-name" class="col-form-label">Event name:</label>
-                <input type="text" class="form-control" id="recipient-name">
+              <div class="row" id="picker"> 
+                <div class="col">
+                  <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
+                </div>
+      
+                <button type="button" class="btn btn-link">to</button>
+      
+                <div class="col">
+                  <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="message-text" class="col-form-label">Message:</label>
-                <textarea class="form-control" id="message-text"></textarea>
+              <div class="row">
+                <div class="col">
+                  <input autocomplete="off" type="time" required class="form-control" id="start-time">
+                </div>
+
+                <button type="button" class="btn btn-link">to</button>
+
+                <div class="col">
+                  <input autocomplete="off" type="time" required class="form-control" id="end-time">
+                </div>
               </div>
             </form>
           </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Send message</button>
+            <input type="submit" class="btn btn-primary">
           </div>
         </div>
       </div>
@@ -46,4 +61,5 @@
   </main>
 </div>
 
+<script src="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/js/datepicker-full.js"></script>
 <script src="/js/ajax_schedule.js"></script>

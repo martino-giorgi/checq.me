@@ -4,6 +4,10 @@
   margin: 26px;
 }
 
+.datepicker {
+  z-index: 1600 !important;
+}
+
 #newEvent {
   font-family: "Roboto", sans-serif;
   font-size: 17px;

@@ -1,3 +1,13 @@
+const elem = document.getElementById('picker');
+const start = document.getElementById('start');
+const end = document.getElementById('end');
+
+let datepicker = new DateRangePicker(elem, {
+    buttonClass: 'btn',
+    format: 'dd/mm/yyyy',
+    input: [start, end]
+});
+
 // function init(){
 //   // // var a = moment('2020-11-27T10:00:00');
 //   // var a = moment('2020-11-27');
@@ -147,7 +157,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
 
-  var calendar = new FullCalendar.Calendar(calendarEl, {
+  calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
@@ -157,11 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initialView: 'timeGridWeek',
     firstDay: '1',
     navLinks: true, // can click day/week names to navigate views
-    // businessHours: true, // display business hours
     editable: true, //set to true only if TA||Professor
     selectable: true,
     allDaySlot: false,
-    // events:data,
+    contentHeight: 'auto',
+    nowIndicator: true,
+    eventOverlap: false,
     customButtons: {
       addEventButton: {
         text: 'add busy day',
@@ -185,24 +196,80 @@ document.addEventListener('DOMContentLoaded', function() {
           // }
         }
       }
-    }
+    },
+    // TODO: Send new data to database if drop of date is detected
+    // TODO: Check if user is student of that class
+    // eventDrop: function(info) {
+    //   alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+  
+    //   if (!confirm("Are you sure about this change?")) {
+    //     info.revert();
+    //   }
+    // }
+
+    // TODO: Send new data to database if resizing of event has finished
+    // TODO: Check if user is student of that class
+    // eventResize: function(info) {
+    // alert(info.event.title + " end is now " + info.event.end.toISOString());
+
+    // if (!confirm("is this okay?")) {
+    //   info.revert();
+    // }
+    //}
+  });
+
+  API.get_appointments().then(data => {
+    parse_Ta_appointments(data);
   });
 
   calendar.render();
 });
 
 
+function parse_Ta_appointments(data) {
+  console.log(data);
+
+  data.appointments.forEach(el => {
+    calendar.addEvent({
+      title: el._masteryId.name,
+      description: el._masteryId.description,
+      student: el._studentId.name + " " + el._studentId.name,
+      start: el.start_time,
+      end: el.end_time
+    });
+  })
+  data.busy.busy.forEach(el => {
+    calendar.addEvent({
+      title: "busy",
+      start: el[0],
+      end: el[1],
+      color: "red"
+    })
+  })
+}
+
+function parse_student_appointments(data){
+  data.forEach(el => {
+    calendar.addEvent({
+      title: el._masteryId.name,
+      description: el._masteryId.description,
+      student: el._studentId.name + " " + el._studentId.name,
+      start: el.start_time,
+      end: el.end_time
+    });
+  })
+}
+
+
 API = (function () {
 
-  function get_appointments(type) {
-    return fetch(`/masterycheck?classroom_id=${classroom_id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body
-    });
+  function get_appointments() {
+    return fetch(`/appointment`).then(res => {
+      return res.json();
+    })
   }
 
   return {
-
+    get_appointments,
   };
 })();

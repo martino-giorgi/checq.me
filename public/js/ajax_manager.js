@@ -1,6 +1,4 @@
 const elem = document.getElementById('picker');
-const start = document.getElementById('start');
-const end = document.getElementById('end');
 
 let datepicker = new DateRangePicker(elem, {
     buttonClass: 'btn',

@@ -3,7 +3,7 @@ const express = require("express");
 const moment = require("moment");
 require("twix");
 const router = express.Router();
-const { ensureAuthenticated, ensureProfessor, ensureStudent, ensureTa } = require("../config/auth");
+const { ensureAuthenticated, ensureProfessor, ensureStudent, ensureTa, ensureProfOrTA } = require("../config/auth");
 
 const { get_available_time, get_available_time2 } = require("../updates/available_time");
 
@@ -351,22 +351,34 @@ async function can_mastery(mastery_id, user_id) {
 }
 
 router.get("/",ensureAuthenticated ,(req,res)=> {
-  if(req.query.type == 'student'){
-    Appointment.find({_id: req.user._id}).then(ap => {
+  if(req.user.role == 2){
+    Appointment.find({_studentId: req.user._id})
+                .populate({ path: "_masteryId", select: ["name", "description","classroom"] })
+                .populate({path: "_taId", select: ["name", "surname"]})
+    .then(ap => {
       res.json(ap);
     })
   }
-  else if (req.query.type == 'ta'){
+  else if (req.user.role == 0 || req.user.role == 1){
     let total = {};
-    Appointment.find({_taId: req.user._id}).then(ap => {
-      ap.set(appointments, ap);
-      Availability.findOne({_id: req.user._id}).then(avail => {
-        total.set('busy', avail);
+    Appointment.find({_taId: req.user._id})
+              .populate({ path: "_masteryId", select: ["name", "description","classroom"] })
+              .populate({path: "_studentId", select: ["name", "surname"]})          
+    .then(ap => {
+      total["appointments"]= ap;
+      Availability.findOne({_userId: req.user._id}).then(avail => {
+        total["busy"] = avail;
+        res.json(total);
       })
     })
   }else {
     res.status(400).end();
   }
+})
+
+
+router.delete("/:id",ensureProfOrTA ,(req,res) => {
+
 })
 
 
