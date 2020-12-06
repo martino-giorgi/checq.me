@@ -26,9 +26,18 @@ module.exports = {
             res.status(403).render('page403');
           }
         });
-      } else {
-        return next();
       }
+      else {
+        res.status(403).render('page403');
+      }
+    } else {
+      res.status(403).render('page403');
+    }
+  },
+
+  ensureProfessorUser: (req,res,next) => {
+    if (req.user.role == 0) {
+      return next();
     } else {
       res.status(403).render('page403');
     }
@@ -58,9 +67,17 @@ module.exports = {
           }
         });
       } else {
-        return next();
+        res.status(403).render('page403');
       }
 
+    } else {
+      res.status(403).render('page403');
+    }
+  },
+
+  ensureProfOrTAUser: (req, res, next) => {
+    if (req.user.role < 2) {
+      return next;
     } else {
       res.status(403).render('page403');
     }

@@ -377,9 +377,22 @@ router.get("/",ensureAuthenticated ,(req,res)=> {
 })
 
 
-router.delete("/:id",ensureProfOrTA ,(req,res) => {
 
+router.delete("/:appointment_id",ensureProfOrTA ,(req,res) => {
+  Appointment.findOneAndDelete({_id: req.params.appointment_id}).then(() => {
+    res.status(400).end();
+  }).catch((err)=> {console.log(err);res.status(400).end()})
 })
+
+// router.patch("/",ensureProfOrTA, (req,res) => {
+//   if(!req.body.start_date || !req.body.end_date || !req.body.appointment_id){
+//     let b = moment(end_date);
+//     let a = moment(start_date);
+//     if(a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {}
+//     // Appointment.findOneAndUpdate({_id: req.body.appointment_id}, {})
+    
+//   }
+// })
 
 
 router.post("/sgrang", (req, res) => {

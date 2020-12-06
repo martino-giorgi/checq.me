@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
           document.querySelector('.fc-addEventButton-button').setAttribute('data-toggle', 'modal');
           document.querySelector('.fc-addEventButton-button').setAttribute('data-target', '#newEvent');
 
-          document.getElementById('newEvent')
+          // var start_time = new Date()
 
           // var date = new Date(dateStr + 'T00:00:00'); // will be in local time
 
@@ -235,12 +235,16 @@ function parse_Ta_appointments(data) {
       description: el._masteryId.description,
       student: el._studentId.name + " " + el._studentId.name,
       start: el.start_time,
-      end: el.end_time
+      end: el.end_time,
+      classroom_id: el._masteryId.classroom,
+      appointment_id:el._id,
     });
+
+    document.querySelector('#newEvent').classList.remove('show');
   })
   data.busy.busy.forEach(el => {
     calendar.addEvent({
-      title: "busy",
+      title: "Busy Time Slot",
       start: el[0],
       end: el[1],
       color: "red"
@@ -255,11 +259,44 @@ function parse_student_appointments(data){
       description: el._masteryId.description,
       student: el._studentId.name + " " + el._studentId.name,
       start: el.start_time,
-      end: el.end_time
+      end: el.end_time,
+      classroom_id: el._masteryId.classroom,
+      appointment_id:el._id,
     });
   })
 }
 
+function addBusyDay() {
+  let time_start = document.getElementById('start-time').value
+  let time_end = document.getElementById('end-time').value
+
+  let date_start = datepicker.datepickers[0].getDate('yyyy-mm-dd');
+  let date_end = datepicker.datepickers[1].getDate('yyyy-mm-dd');
+
+  if (time_start.trim().length == 0 || time_end.trim().length == 0 
+      || date_start === undefined || date_end === undefined) {
+
+    console.log('fill in all input fields')
+  } else {
+    let date_complete_start = moment(date_start + 'T' + time_start);
+    let date_complete_end = moment(date_end + 'T' + time_end);
+
+    if ((date_complete_start.isValid() && date_complete_end.isValid())
+         && date_complete_start.isBefore(date_complete_end)) {
+
+      calendar.addEvent({
+        title: "Busy Time Slot",
+        start: date_complete_start,
+        end: date_complete_end,
+        color: "red"
+      })
+
+      console.log('dates are correct');
+    } else {
+      console.log('time interval is invalid')
+    }
+  }
+}
 
 API = (function () {
 
