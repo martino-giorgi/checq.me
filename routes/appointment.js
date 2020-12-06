@@ -22,134 +22,6 @@ const { captureRejectionSymbol } = require("events");
 
 module.exports = router;
 
-//TODO check if user is in classroooooooooom
-// router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res) => {
-//   let user_id = req.user._id;
-//   let mastery_id = req.body.mastery_id;
-
-//   can_mastery(mastery_id, user_id).then((b) => {
-//     if (b) {
-//       MasteryCheck.findById(mastery_id)
-//         .select({ classroom: 1, appointment_duration: 1 })
-//         .populate({ path: "classroom" })
-//         .then((mastery) => {
-//           ClassroomMasteryDay.find({ classroom: mastery.classroom._id }).then((mastery_days) => {
-//             let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
-//             let booked = false;
-//             let weeks = 0;
-            
-//             while (!booked) {
-//               for (let i = 0; i < mastery_days.length && !booked; i++) {
-//                 m_day = mastery_days[i];
-//                 let m_day_start;
-//                 let m_day_end;
-
-//                 if (moment().isoWeekday() <= m_day.iso_day_n) {
-//                   // then just give me this week's instance of that day
-//                   m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
-//                   m_day_end = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
-//                 } else {
-//                   // otherwise, give me *next week's* instance of that same day
-//                   m_day_start = moment()
-//                     .add(1 + weeks, "weeks")
-//                     .isoWeekday(m_day.iso_day_n);
-//                   m_day_end = moment()
-//                     .add(1 + weeks, "weeks")
-//                     .isoWeekday(m_day.iso_day_n);
-//                 }
-
-//                 m_day_start = m_day_start.set({
-//                   hour: moment(m_day.start_time).get("hour"),
-//                   minute: moment(m_day.start_time).get("minute"),
-//                   second: 0,
-//                 });
-
-//                 m_day_end = m_day_end.set({
-//                   hour: moment(m_day.end_time).get("hour"),
-//                   minute: moment(m_day.end_time).get("minute"),
-//                   second: 0,
-//                 });
-//                 console.log(
-//                   "Start: " + moment(m_day_start).toDate() + ", End:" + moment(m_day_end).toDate()
-//                 );
-
-//                 console.log(assigned_ta);
-
-//                 get_day_busy(assigned_ta, m_day_end)
-//                   .then((avail) => {
-//                     console.log("Busy slots:", avail);
-//                     console.log(mastery.appointment_duration);
-//                     trybooking(
-//                       assigned_ta,
-//                       mastery_id,
-//                       m_day_start,
-//                       m_day_end,
-//                       mastery.appointment_duration,
-//                       req.user._id,
-//                       typeof avail[0].busy === 'undefined' ? [] : avail[0].busy
-//                     ).then((r) => {
-//                       console.log(r);
-//                       if (r != false) {
-//                         //booking completed.
-//                         booked = true;
-//                         increaseTa(req.user._id, mastery.classroom._id);
-//                         res.json(r);
-//                       } else {
-//                         let staff = [mastery.classroom.lecturer];
-//                         mastery.classroom.teaching_assistants.forEach((el) =>
-//                           staff.push(mongoose.Types.ObjectId(el))
-//                         );
-
-//                         get_TA_queue(m_day_start, staff, assigned_ta).then((queue) => {
-//                           for (let j = 0; j < queue.length && !booked; j++) {
-//                             get_day_busy(queue[j]._id, m_day_end)
-//                               .then((avail2) => {
-//                                 // available_slots = get_avail_slots(m_day_start, m_day_end, m_day.iso_day_n, avail2);
-//                                 trybooking(
-//                                   queue[j]._id,
-//                                   mastery_id,
-//                                   m_day_start,
-//                                   m_day_end,
-//                                   mastery.appointment_duration,
-//                                   req.user._id,
-//                                   typeof avail2[0].busy === 'undefined' ? [] : avail2[0].busy
-//                                 ).then((x) => {
-//                                   if (x != false) {
-//                                     // booking completed
-//                                     booked = true;
-//                                     res.json(x);
-//                                   }
-//                                 });
-//                               })
-//                               .catch((err) => {
-//                                 console.log(err);
-//                               });
-//                           }
-//                         });
-//                       }
-//                     });
-//                   })
-//                   .catch((err) => {
-//                     console.log(err);
-//                   });
-//               }
-//               break;
-//               weeks++;
-//             }
-//           });
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//           res.send("error");
-//         });
-//     } else {
-//       res.send("cannot book this mastery").end();
-//     }
-//   });
-// });
-
-
-
 router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res) => {
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
@@ -485,7 +357,7 @@ router.get("/aaa", (req, res) => {
   ]);
 });
 
-// TODO: Cambia nome prima di committare!!
+
 router.post("/sgrang", (req, res) => {
   console.log(req.body);
   let date_start = moment(req.body.start_time, "YYYY-MM-DDTHH:mm", true);
