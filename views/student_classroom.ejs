@@ -1,8 +1,13 @@
 <div class="wrapper">
     <%- include("./partials/navigation", {active: 'classroom'}) %>
     <div>
-        <%= model.classroom[0].title%>
-        <%= model.classroom[0].description%>
+        <h1><%= model.classroom[0].name%></h1>
+        <h3><%= model.classroom[0].description%></h3>
+        <% let lecturers = ""; let tas = "";%>
+        <% lecturers = model.classroom[0].professors.map(prof => "Prof. "+prof.surname).reduce( (prof, acc) => prof += acc); %>
+        <% tas = model.classroom[0].teaching_assistants.map(ta => ta.name+" "+ta.surname).reduce( (ta, acc) => ta += acc); %>
+        <h3>Professors: <%= lecturers%></h3>
+        <h3>Teaching Assistants: <%= tas%></h3>
     </div>
     <div class="container mt-3">
         <h3>Mastery Check List</h3>

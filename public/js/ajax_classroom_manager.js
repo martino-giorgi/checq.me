@@ -7,9 +7,13 @@ function init_manager() {
   c_id = url.searchParams.get('classroom_id')
 
   API.get_class_info(c_id).then(res => {
+    console.log(res);
     API.class_obj = res[0];
     display_class_info();
 
+  })
+  .catch(err => {
+    console.log(err);
   })
 }
 
@@ -184,7 +188,9 @@ API = (function () {
    * @returns {Promise} the promise that will give the classroom object
    */
   function get_class_info(id) {
-    return fetch("/classroom/class?classroom_id=" + id).then(res => {
+    return fetch("/classroom/class?classroom_id=" + id, {
+      headers: { 'Content-Type': 'application/json', 'Accept' : 'application/json' },
+    }).then(res => {
       return res.json();
     })
 
