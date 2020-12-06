@@ -144,33 +144,45 @@
 //   }
 // }
 
-
-
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
     headerToolbar: {
-      center: 'addEventButton'
+      left: 'prev,next today',
+      center: 'title',
+      right: 'addEventButton dayGridMonth,timeGridWeek,listMonth'
     },
+    themeSystem:'bootstrap',
+    initialView: 'timeGridWeek',
+    firstDay: '1',
+    navLinks: true, // can click day/week names to navigate views
+    // businessHours: true, // display business hours
+    editable: true, //set to true only if TA||Professor
+    selectable: true,
+    allDaySlot: false,
+    // events:data,
     customButtons: {
       addEventButton: {
-        text: 'add event...',
+        text: 'add busy day',
         click: function() {
-          var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-          var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+          // Display modal
+          document.querySelector('.fc-addEventButton-button').setAttribute('data-toggle', 'modal');
+          document.querySelector('.fc-addEventButton-button').setAttribute('data-target', '#newEvent');
 
-          if (!isNaN(date.valueOf())) { // valid?
-            calendar.addEvent({
-              title: 'dynamic event',
-              start: date,
-              allDay: true
-            });
-            alert('Great. Now, update your database...');
-          } else {
-            alert('Invalid date.');
-          }
+          document.getElementById('newEvent')
+
+          // var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+          // if (!isNaN(date.valueOf())) {
+          //   calendar.addEvent({
+          //     title: 'dynamic event',
+          //     start: date,
+          //     allDay: false
+          //   });
+          // } else {
+          //   alert('Invalid date.');
+          // }
         }
       }
     }

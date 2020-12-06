@@ -9,7 +9,6 @@ function init_manager() {
   API.get_class_info(c_id).then(res => {
     API.class_obj = res[0];
     display_class_info();
-
   })
 }
 
