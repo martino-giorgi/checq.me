@@ -166,12 +166,19 @@ function create_mastery() {
 }
 
 function show_question_form() {
-  let section = document.getElementById("topics_list");
   
-  section.querySelectorAll("#a_add_question").forEach( link => {
+  document.querySelectorAll("#a_add_question").forEach( link => {
+    console.log("one link");
     link.addEventListener("click", e => {
       e.preventDefault();
-      section.innerHTML = ejs.views_manager_classrooms_new_question();
+
+      let element = link;
+      let cls = "topic_list";
+      // go up the html tree to find the topic section, which will contain the form to create a new question
+      while ((element = element.parentElement) && !element.classList.contains(cls));
+      
+
+      element.innerHTML = ejs.views_manager_classrooms_new_question();
       init_question();
       topic_id = link.dataset.topic_id;
       console.log(topic_id);
