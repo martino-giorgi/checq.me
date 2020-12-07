@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
           // Display modal
           document.querySelector('.fc-addEventButton-button').setAttribute('data-toggle', 'modal');
           document.querySelector('.fc-addEventButton-button').setAttribute('data-target', '#newEvent');
+
+          if 
         }
       }
     },
@@ -126,8 +128,8 @@ function addBusyDay() {
 
       calendar.addEvent({
         title: "Busy Time Slot",
-        start: date_complete_start,
-        end: date_complete_end,
+        start: date_complete_start.toISOString(),
+        end: date_complete_end.toISOString(),
         color: "red"
       });
 
@@ -148,16 +150,19 @@ API = (function () {
   }
 
   function post_busy_slot(start_date, end_date) {
-    console.log(start_date, end_date);
-    let body = {
+    let busy = {
       busy: [start_date, end_date]
     }
 
     return fetch('/availability', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body
+      body: JSON.stringify(busy)
     })
+  }
+
+  function get_current_user() {
+    
   }
 
   return {

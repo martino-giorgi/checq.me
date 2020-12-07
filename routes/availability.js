@@ -28,13 +28,13 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
     });
 });
 
-//update availability, duplicates, past dates, invalid dates are all ignored
 router.post("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   //input check
   let ok = true;
   let new_range;
-  let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm", true);
-  let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm", true);
+  let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm");
+  let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm");
+
   let now = moment();
   if (
     !(start.isValid && end.isValid) ||
