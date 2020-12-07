@@ -95,6 +95,17 @@ router.post("/check", ensureAuthenticated, (req, res) => {
         flag = true;
       }
     }
+    let tot = 0;
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    // Get the total number of correct answers (expected) 
+    // and check that the total number of correct answers (given) is the same
+    let correct_answers = q["answer"].map(e=> e[1]).reduce( reducer );
+    if(correct_answers != given_answers.length) {
+      res.json({ result: false });
+      return;
+    }
+
     // if all given answers are wrong, check that also the expected ones are
     if (given_answers.length == 0) {
 
