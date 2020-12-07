@@ -9,6 +9,7 @@ const {
   ensureStudent,
   ensureTa,
   ensureProfOrTA,
+  ensureProfOrTAUser,
 } = require("../config/auth");
 
 const { get_available_time, get_available_time2 } = require("../updates/available_time");
@@ -207,66 +208,6 @@ async function get_day_busy(user_id, date) {
   });
 }
 
-// async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
-//   // console.log(m_duration);
-//   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
-//   return new Promise((resolve, rejects) => {
-//     Appointment.aggregate()
-//       .match({
-//         _taId: ta,
-//         start_time: { $lte: m_day_end.toDate() },
-//         end_time: { $gt: m_day_start.toDate() },
-//       })
-//       .exec((err, appointments) => {
-//         if (err) {
-//           console.log(err);
-//           rejects(err);
-//           return;
-//         } else {
-//           let busy_total = busy;
-//           appointments.forEach((el) => {
-//             busy_total.push([el.start_time, el.end_time]);
-//           });
-//           // console.log(m_day_start, m_day_end, busy_total);
-//           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
-//           console.log("Busy slots: ");
-//           console.log(busy_total);
-//           console.log("Availability: ");
-//           console.log(availability);
-
-//           if (availability.length == 0) {
-//             resolve(false);
-//             console.log("Booking failed!");
-//             return;
-//           } else {
-//             end_time_appointment = availability[0].start.clone();
-//             end_time_appointment.add(m_duration, "minutes");
-//             const new_appointment = new Appointment({
-//               _masteryId: mastery_id,
-//               _taId: ta,
-//               _studentId: student_id,
-//               start_time: availability[0].start,
-//               end_time: end_time_appointment,
-//               duration: m_duration,
-//             });
-//             new_appointment
-//               .save()
-//               .then(() => {
-//                 resolve(new_appointment);
-//                 console.log("Booking successful!");
-//                 return;
-//               })
-//               .catch((err) => {
-//                 console.log(err);
-//                 rejects(err);
-//                 return;
-//               });
-//           }
-//         }
-//       });
-//   });
-// }
-
 async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy_ta, busy_student) {
   // console.log(m_duration);
   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
@@ -400,6 +341,23 @@ async function get_student_appointments(m_day_start, m_day_end, student_id) {
   });
 }
 
+async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
+  return new Promise((resolve, rejects) => {
+    Appointment.aggregate()
+      .match({
+        _taId: ta_id,
+        start_time: { $lte: m_day_end.toDate() },
+        end_time: { $gt: m_day_start.toDate() },
+      }).exec((err, result) => {
+        if(err){
+          rejects(err);
+          return;
+        }
+        resolve(result);
+      })
+  });
+}
+
 async function can_mastery(mastery_id, user_id) {
   return new Promise((resolve, rejects) => {
     Appointment.find({ _masteryId: mastery_id, _studentId: user_id }).then((ap) => {
@@ -481,15 +439,65 @@ router.delete("/:appointment_id", ensureProfOrTA, (req, res) => {
     });
 });
 
-// router.patch("/",ensureProfOrTA, (req,res) => {
-//   if(!req.body.start_date || !req.body.end_date || !req.body.appointment_id){
-//     let b = moment(end_date);
-//     let a = moment(start_date);
-//     if(a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {}
-//     // Appointment.findOneAndUpdate({_id: req.body.appointment_id}, {})
+router.patch("/",ensureProfOrTAUser, async (req,res) => {
+  if(!req.body.start_date || !req.body.end_date || !req.body.appointment_id){
+    return;
+  }
+  let b = moment(req.body.end_date);
+  let a = moment(req.body.start_date);
+  let start_day = moment(req.body.start_date).startOf('day');
+  let end_day = moment(req.body.end_date).endOf('day');
 
-//   }
-// })
+  console.log(a,b);
+  if(a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {
+    appointment = await Appointment.findOne({_id: req.body.appointment_id});
+    if(!appointment && b.diff(a) != appointment.duration){
+      res.status(400).end();
+      return;
+    }
+    // console.log("here")
+
+    let ta_busy = await get_day_busy(start_day, appointment._taId);
+    let stud_appointments = await get_student_appointments(start_day,end_day,appointment._studentId);
+    let ta_appointments =  await get_ta_appointments(start_day,end_day,appointment._taId);
+
+    let total = []
+
+    if(ta_busy[0]){
+    ta_busy[0].busy.forEach(el => {
+      total.push(el);
+    });
+    }
+
+    stud_appointments.forEach((el) => {
+      if(el._id.toString() != appointment._id.toString()){
+        total.push([el.start_time,el.end_time]);
+      }
+    });
+
+    ta_appointments.forEach((el) => {
+      if(el._id.toString() != appointment._id.toString()){
+        total.push([el.start_time,el.end_time]);
+      }
+    });
+
+    console.log(total);
+    console.log(a,b);
+    let availability = get_available_time2(a,b, total, appointment.duration);
+    console.log(availability)
+    if(availability.length == 1 && availability[0].start.isSame(a) && availability[0].end.isSame(b)){
+      Appointment.findOneAndUpdate({_id:appointment._id},{$set:{start_time: a, end_time:b}},{new : true, upsert:false}).then((updated_el)=> {
+        res.json(updated_el);
+      }).catch(err => {console.log(err); res.status(400).end()})
+      return;
+    }
+    res.status(400).end();
+    // console.log(availability)
+  } else {
+    console.log("invalid");
+    res.status(400).end();
+  }
+})
 
 router.post("/sgrang", (req, res) => {
   console.log(req.body);
