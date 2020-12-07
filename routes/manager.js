@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureProfOrTA } = require("../config/auth");
+const { ensureAuthenticated, ensureProfOrTA, ensureProfessorUser, ensureProfOrTAUser } = require("../config/auth");
 const Classroom = require("../models/Classroom");
 
 
 module.exports = router;
 
-router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Classroom.find({ lecturer: req.user._id })
     .populate({
       path: "teaching_assistants",
