@@ -1,5 +1,18 @@
 @import './vars';
 
 .calendar-container {
-    margin: 26px;
+  margin: 26px;
+}
+
+.datepicker {
+  z-index: 1600 !important;
+}
+
+#newEvent {
+  font-family: "Roboto", sans-serif;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
 }

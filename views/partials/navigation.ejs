@@ -7,11 +7,23 @@
     </a>
   </span>
 
-  <span class="nav-button">
-    <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
-      <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
-    </a>
-  </span>
+  <% if (active == 'dashboard' || active == 'classroom') { %>
+    <% if (model.user.role > 0) { %>
+      <span class="nav-button">
+        <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
+          <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
+        </a>
+      </span>
+    <% } %> 
+  <% } else { %>
+    <% if (user.role > 0) { %>
+      <span class="nav-button">
+        <a class="<%= active === 'classroom' ? "active" : "not_active" %>" id="nav-2" href="/classrooms">
+          <img id="svg2" src="/assets/icons/nav/classroom.svg" alt="classroom icon" />
+        </a>
+      </span>
+    <% } %>
+  <% } %>
 
   <span class="nav-button">
     <a class="<%= active === 'scheduler' ? "active" : "not_active" %>" id="nav-3" href="/schedule">
@@ -19,13 +31,7 @@
     </a>
   </span>
 
-  <span class="nav-button">
-    <a class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4" href="/profile">
-      <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
-    </a>
-  </span>
-
-  <% if (active === 'dashboard' || active === 'classroom') { %>
+  <% if (active == 'dashboard' || active == 'classroom') { %>
     <% if (model.user.role < 2) { %>
     <span class="nav-button">
       <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
@@ -34,12 +40,18 @@
     </span>
     <% } %>
   <% } else { %>
-  <% if (user.role < 2) { %>
+    <% if (user.role < 2) { %>
+      <span class="nav-button">
+        <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
+          <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
+        </a>
+      </span>
+    <% } %>
+  <% } %>
+
   <span class="nav-button">
-    <a class="<%= active === 'manager' ? "active" : "not_active" %>" id="nav-5" href="/manager">
-      <img id="svg5" src="/assets/icons/nav/manager.svg" alt="manager icon" />
+    <a class="<%= active === 'profile' ? "active" : "not_active" %>" id="nav-4" href="/profile">
+      <img id="svg4" src="/assets/icons/nav/profile.svg" alt="profile icon" />
     </a>
   </span>
-  <% } %>
-  <% } %>
 </nav>

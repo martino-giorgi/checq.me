@@ -9,11 +9,11 @@ var options = undefined;
 function init_answer_question() {
     
     let url = new URL(window.location.href)
-    topic_id = url.searchParams.get('topic')
+    let topic_id = url.searchParams.get('topic')
 
     get_questions(topic_id).then( res => {
         questions = res;
-
+        console.log(questions);
         if (questions && questions.length > 0) {
             i = 0;
             set_question(questions[0])
@@ -21,6 +21,7 @@ function init_answer_question() {
             init_editor(questions[0]);
             handle_check_button();
             update_bar()
+            handle_delete_button();
         }
         else {
             document.getElementById("question_area").innerHTML = "<h1> No questions found";
@@ -89,6 +90,7 @@ function handle_next_button() {
         set_question(questions[value]);
         update_editor(questions[value]);
         update_bar();
+        //handle_delete_button();
     })
 }
 
@@ -120,6 +122,28 @@ function handle_check_button() {
             show_answer(res.result, selected);
         })
     })
+}
+
+function handle_delete_button() {
+    let button = document.getElementById("delete_question_btn");
+    if(button){
+        button.addEventListener("click", e=> {
+            let url = new URL(window.location.href)
+            let topic = url.searchParams.get('topic')
+            let classroom = url.searchParams.get('classroom_id');
+           
+            let j = (i-1) % questions.length;
+             
+            let body = {
+                question_id: questions[j]._id,
+                topic_id: topic,
+                classroom_id: classroom
+            }
+            console.log("try deleted", questions[j]);
+            delete_question(JSON.stringify(body), classroom);
+            
+        })
+    }
 }
  
 /**
@@ -219,6 +243,33 @@ function check_question(body) {
     })
     .then( res => {
         return res.json();
+    })
+}
+
+function delete_question(body, classroom_id) {
+    fetch(`/question?classroom_id=${classroom_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: body
+    })
+    .then( res => {
+        if(res.status == 204) {
+            window.FlashMessage.success("Question deleted");
+            i = (i-1) % questions.length;
+            console.log("prima", questions, i);
+            console.log("----------------");
+            questions.splice(i,1);
+            console.log("dopo", questions);
+            if (questions && questions.length > 0) {
+                i = 0;
+                set_question(questions[0])
+                update_editor(questions[0]);
+                update_bar()
+            }
+            else {
+                document.getElementById("question_area").innerHTML = "<h1> No questions found";
+            }
+        }
     })
 }
 

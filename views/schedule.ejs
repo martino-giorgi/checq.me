@@ -1,26 +1,65 @@
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.2.0/main.global.min.js"></script>
-  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/stylesheets/css/main.min.css" />
-</head>
+<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.2.0/main.global.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/stylesheets/css/main.min.css" />
 
 <div class="wrapper">
-  <%- include("./partials/navigation", {active: "scheduler"}) %>
+  <%- include("./partials/navigation", { active: "scheduler" }) %>
 
   <main id="calendar-main">
     <div class="calendar-container">
       <div id="calendar"></div>
     </div>
-  </main>
 
+    <div class="modal fade" id="newEvent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a busy day</h5>
+          </div>
+
+          <div class="modal-body">
+            <form>
+              <div class="row" id="picker"> 
+                <div class="col">
+                  <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
+                </div>
+      
+                <button type="button" class="btn btn-link">to</button>
+      
+                <div class="col">
+                  <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <input autocomplete="off" type="time" required class="form-control" id="start-time">
+                </div>
+
+                <button type="button" class="btn btn-link">to</button>
+
+                <div class="col">
+                  <input autocomplete="off" type="time" required class="form-control" id="end-time">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button onclick="addBusyDay()" type="button" class="btn btn-primary">Add Day</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
+<script src="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/js/datepicker-full.js"></script>
 <script src="/js/ajax_schedule.js"></script>
-<script>
-  window.onload = init;
-</script>

@@ -5,18 +5,13 @@ const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureStudent,
-  ensureTa,
+  ensureProfOrTA
 } = require("../config/auth");
-const path = require("path");
 
-const MasteryCheck = require("../models/MasteryCheck");
-const Classroom = require("../models/Classroom");
-const User = require("../models/User");
+
 const Topic = require("../models/Topic");
-const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
 const Question = require("../models/Question");
+const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
@@ -27,12 +22,12 @@ module.exports = router;
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/new", 
-            ensureAuthenticated, 
-            ensureProfessor || ensureTa,
-            (req, res) => {
-    res.render("manager/classrooms/new_question", {user: req.user})
-})
+router.get("/new",
+  ensureAuthenticated,
+  ensureProfOrTA,
+  (req, res) => {
+    res.render("manager/classrooms/new_question", { user: req.user })
+  })
 
 /**
  * Route serving the posting of new questions.
@@ -41,33 +36,43 @@ router.get("/new",
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
-            (req, res) => {
-              //console.log(req.body);
-              const new_q = new Question ({
-                text: req.body.text,
-                answer: req.body.answer,
-                lang: req.body.lang
-              })
-              let p1 = Topic.findById(req.body.topic);
-              let p2 = new_q.save();
+router.post("/new", ensureAuthenticated, ensureProfOrTA,
+  (req, res) => {
+    if (req.query.classroom_id) {
+      const new_q = new Question({
+        text: req.body.text,
+        answer: req.body.answer,
+        lang: req.body.lang,
+        topic: req.query.topic_id,
+        classroom: req.query.classroom_id
+      })
+      console.log(new_q);
+      console.log(req.query.topic_id);
+      console.log("aaa");
+      let p1 = Topic.findById(req.query.topic_id);
+      let p2 = new_q.save();
 
-              Promise.all([p1, p2]).then( results => {
-                let topic = results[0];
-                let question = results[1]
-                
-                topic.questions.addToSet(question._id);
+      Promise.all([p1, p2]).then(results => {
+        let topic = results[0];
+        let question = results[1]
 
-                topic.save().then( () => {
-                  res.json(question);
-                })
-                
-              })
-              .catch((err)=> {
-                console.log(err);
-              })
+        topic.questions.addToSet(question._id);
 
-})
+        topic.save().then(() => {
+          res.json(topic.questions);
+        })
+          .catch(err => {
+            console.log(err);
+          })
+
+      })
+        .catch((err) => {
+          console.log(err);
+        })
+    } else {
+      res.status(400).end();
+    }
+  })
 
 /**
  * Route serving the posting of answers to questions to be checked.
@@ -77,12 +82,12 @@ router.post("/new", ensureAuthenticated, ensureProfessor || ensureTa,
  * @param {callback} middleware - Express middleware.
  */
 router.post("/check", ensureAuthenticated, (req, res) => {
-  
-  Question.findById(req.body.question).then( q => {
+
+  Question.findById(req.body.question).then(q => {
     let given_answers = req.body.answers;
     let flag = false;
-    for(let i=0; i < given_answers.length; ++i) {
-      
+    for (let i = 0; i < given_answers.length; ++i) {
+
       if (!q.answer[given_answers[i]][1]) {
         flag = false;
         break;
@@ -90,23 +95,62 @@ router.post("/check", ensureAuthenticated, (req, res) => {
         flag = true;
       }
     }
+    let tot = 0;
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    // Get the total number of correct answers (expected) 
+    // and check that the total number of correct answers (given) is the same
+    let correct_answers = q["answer"].map(e=> e[1]).reduce( reducer );
+    if(correct_answers != given_answers.length) {
+      res.json({ result: false });
+      return;
+    }
+
     // if all given answers are wrong, check that also the expected ones are
     if (given_answers.length == 0) {
-     
+
       let all_wrong = true;
-      for(let j=0; j < q.answer.length; ++j) {
+      for (let j = 0; j < q.answer.length; ++j) {
         if (q.answer[j][1]) {
           all_wrong = false;
         }
       }
-      if(all_wrong) {
+      if (all_wrong) {
         flag = true;
       }
     }
-    res.json({result: flag});
-  }) 
-  .catch(err => { 
-    console.log(err);
+    res.json({ result: flag });
   })
+    .catch(err => {
+      console.log(err);
+    })
+})
+
+
+router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  console.log(req.body);
+  Topic.findById(req.body.topic_id).then( topic => {
+    if(topic){
+      topic.questions.remove(req.body.question_id);
+      topic.save().then( () => {
+
+        Question.deleteOne({ _id: req.body.question_id }).then( () => {
+          res.status(204).end();
+        })
+      })
+      .catch(err => {
+        res.status(400).end();
+      })
+
+    }else {
+      res.status(404).end();
+      return;
+    }
+  })
+  .catch(err=> {
+    console.log(err);
+    res.status(400).end();
+  })
+  // res.status(200).end()
 })
 

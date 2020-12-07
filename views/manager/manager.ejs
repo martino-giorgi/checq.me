@@ -1,21 +1,138 @@
+<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
 <link rel="stylesheet" href="/stylesheets/css/flash.min.css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+  crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
 
 <div class="wrapper">
-    <%- include("../partials/navigation", {active: 'manager'}) %>
+  <%- include("../partials/navigation", {active: 'manager'}) %>
+
+  <% if (classrooms.length > 0) { %>
+    <table id="classroom-table">
+      <thead>
+        <!-- Table Header -->
+      
+        <tr>
+            <td class="class-color-header"></td>
+            <td class="small gray"> Name </td>
+            <td class="small gray"> Teaching Assistants </td>
+            <td class=""></td>
+            <td class=""></td>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <!-- Table Body -->
+  
+        <% classrooms.forEach((classroom, index) => { %>
+          <tr>
+            <td class="class-color" style="background-color: #<%= classroom.color %>"></div>
+  
+            <td class="normal class-name" id="manager-name"> <%= classroom.name %> </td>
+  
+            <% if (classroom.teaching_assistants.length > 0) { %>
+              <td>
+              <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
+                  <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
+              <% } %>
+                </td>
+            <% } else { %>
+              <td>
+              <p class="normal"> N.D. </p>
+              </td>
+            <% } %>
+
+            <td>
+              <span class="btn-with-icn" style="cursor: pointer;" onclick="generate_invite_link('<%= classroom._id %>')">
+                <img src="/assets/icons/misc/clip.svg" alt="generate invite link">
+                <p class="bold">Invite Link</p>
+              </span>
+            </td>
+  
+            <td class="class-detail-td">
+                <a href="/manager/classroom?classroom_id=<%= classroom._id %>">
+                  <span class="circle" style="background-color: #<%= classroom.color %>">
+                      <img src="/assets/icons/misc/chevron-right.svg" alt="chevron-right"></img>
+                  </span>
+                </a>
+            </td>
+          </tr>
+        <% }); %>
+
+        <% if(user.role == 0) { %>
+          <tr class="add-class">
+            <td class="class-color"></td>
+
+            <td>
+              <span class="btn-with-icn" onclick="toggle_show_form()" id="show_or_back">
+                <img src="/assets/icons/buttons/add.svg" alt="generate invite link">
+                <p class="bold">Add new class</p>
+              </span>
+            </td>
+          </tr>
+        <% } %> 
+      </tbody>
+    </table>
+  <% } else { %> 
+    <span id="no-classrooms">
+        <% if (user.role == 0) { %> 
+          <img src="/assets/icons/misc/no_classroom.svg" alt="no classrooms">
+        <% } else if (user.role == 1) { %>
+          <img src="/assets/icons/misc/no_classroom_ta.svg" alt="no classrooms">
+        <% } %>
+
+        <% if (user.role == 0) { %> 
+          <span class="btn-with-icn" onclick="toggle_show_form()" id="show_or_back">
+            <p class="bold">Add new class</p>
+          </span>
+        <% } %>
+    </span>  
+  <% } %>
+
+  <section id="form" class="hidden">
     <div>
-        <section id="classroom_list"></section>
+      <span class="btn-with-icn" onclick="toggle_show_form()" id="show_or_back_1">
+        <p class="bold">Back</p>
+      </span>
+    
+      <form id="new_class_form" action="/classroom/new" method="POST">
+        <div class="form-group">
+          <label for="input_name">Class Name</label>
+          <input autocomplete="off" type="text" required class="form-control" name="name" id="input_name" placeholder="Class name">
+        </div>
+    
+        <div class="form-group">
+          <label for="input_name">Class Description</label>
+          <textarea required class="form-control" name="description" id="input_desc" rows="3" placeholder="Classroom description"></textarea>
+        </div>
 
-        <button onclick="toggle_show_form()" id="show_or_back">Add new class</button>
+        <div class="row" id="picker">
+          <div class="col">
+            <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
+          </div>
 
-        <section id="form" class="hidden"></section>
+          <button type="button" class="btn btn-link">to</button>
+
+          <div class="col">
+            <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+          </div>
+        </div>
+    
+        <div style="margin-top: 16px" class="form-check">
+          <input type="checkbox" class="form-check-input" id="input_is_ordered" name="is_ordered" checked>
+          <label class="form-check-label" for="is_ordered">Sequential completion of Mastery Checks</label>
+        </div>
+        
+        <input id="submit-btn" style="margin-top: 16px" type="submit" class="button">
+      </form>
     </div>
+  </section>
 </div>
 
+<script src="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/js/datepicker-full.js"></script>
 <script src="/js/flash.min.js"></script>
 <script src="js/ajax_manager.js"></script>
 <script src="/js/ejs.min.js"></script>
 <script src="/js/views.js"></script>
-<script>
-    window.onload = init;
-</script>

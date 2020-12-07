@@ -1,11 +1,14 @@
-const { rejects } = require("assert");
 const mongoose = require("mongoose");
-const { resolve } = require("path");
+const { use } = require("passport");
 
-async function mapTAs(classroom_id) {
+/*===========================
+CLASSROOM FUNCTIONS
+============================*/
+
+async function re_mapTAs(classroom_id) {
   return new Promise((resolve, rejects) => {
     let mapped = {};
-    let ta_ids;
+    let ta_ids = [];
     let current = 0;
 
     function increaseTa() {
@@ -19,7 +22,9 @@ async function mapTAs(classroom_id) {
     Classroom.findById(classroom_id)
       .select({ teaching_assistants: 1, lecturer: 1, partecipants: 1 })
       .then((r) => {
-        ta_ids = r.teaching_assistants;
+        r.teaching_assistants.forEach(e => {
+          ta_ids.push(e);
+        })
         ta_ids.push(r.lecturer);
         let stud_ids = r.partecipants;
         stud_ids.forEach((s_id) => {
@@ -41,7 +46,7 @@ async function mapTAs(classroom_id) {
   });
 }
 
-async function updateUser(user_id, classroom_id) {
+function updateUser(user_id, classroom_id) {
   const User = require("../models/User");
   const ClassroomGrades = require("../models/ClassroomGrades");
   let classroom_grade = new ClassroomGrades({
@@ -52,17 +57,57 @@ async function updateUser(user_id, classroom_id) {
     User.findById(user_id)
       .then((u) => {
         console.log("user found");
-        let m = u.classroom_grade;
-        m[classroom_id] = classroom_grade._id;
-        u.classroom_grade = m;
-        u.save().then(() => resolve());
-      })
-      .catch((err) => rejects(err));
+        u.classrooms_grades.set(classroom_id.toString(), classroom_grade._id);
+        u.save()
+          .then(() => {return classroom_grade})
+          .catch((err) => console.log(err));
+      }).catch((err) => console.log(err));
   });
 }
 
+async function increaseTa(user_id, classroom_id){
+  const Classroom = require("../models/Classroom");
+
+  return new Promise((resolve, rejects) => {
+    Classroom.findById(classroom_id).then(classroom => {
+      let ta_ids = [];
+
+      classroom.teaching_assistants.forEach(e => {
+        ta_ids.push(e);
+      })
+      ta_ids.push(classroom.lecturer);
+      // console.log(ta_ids);
+      let current_ta = classroom.ta_mapping.get(user_id.toString());
+      // console.log(classroom.ta_mapping);
+      let next_ta_index;
+      for(let i =0; i<ta_ids.length;i++){
+        if(ta_ids[i].toString()==current_ta.toString()){
+          if (i == ta_ids.length - 1) {
+            next_ta_index = 0;
+          } else {
+            next_ta_index = i + 1;
+          }
+        }
+      }
+
+      classroom.ta_mapping.set(user_id.toString(), ta_ids[next_ta_index]);
+      
+      classroom.save()
+        .then(() => resolve())
+        .catch(err => rejects(err));
+    });
+  });
+}
+
+/*===========================
+        USER FUNCTIONS
+============================*/
+
 
 module.exports = {
-    mapTAs,
-    updateUser,
-}
+  re_mapTAs,
+  updateUser,
+  increaseTa
+};
+
+

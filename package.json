@@ -7,7 +7,7 @@
   "author": "Martino Giorgi, Edoardo Riggio, Michele Cattaneo, Jacopo Di Ventura",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node ejs-compile.js && nodemon app.js",
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "sass": "^1.29.0",
-    "smee-client": "^1.2.2"
+    "smee-client": "^1.2.2",
+    "twix": "^1.3.0"
   }
 }

@@ -32,6 +32,16 @@ const QuestionSchema = new mongoose.Schema({
     answer: {
         type: Array,
         required: true
+    },
+    topic: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Topic",
+        required: true
+    },
+    classroom: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Classroom",
+        required: true,
     }
 })
 

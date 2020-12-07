@@ -1,77 +1,237 @@
-function init_mastery() {
-  print_list();
-  add_delete_event();
-}
+const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
+var mastery_id = undefined;
+var topic_id = undefined;
 
 function add_delete_event() {
   document.querySelectorAll(".delete_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      let id = btn.parentNode.parentNode.querySelector("#id_container").dataset
+      let mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
         .id;
-      fetch("/masterycheck", {
+      let classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
+
+      fetch(`/masterycheck?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id,
-        }),
       }).then(() => {
-        print_list();
+        render_mastery_modal();
       });
-    });
+    })
   });
 }
 
-function print_list() {
-  let classroom_id = new URLSearchParams(window.location.search).get("id");
-  fetch(`/masterycheck/list/${classroom_id}`)
-    .then((res) => {
-      return res.json();
-    })
-    .then((list) => {
-      if (list.length > 0) {
-        document.getElementById("list").innerHTML = ejs.views_manager_mastery_mastery_list({
-          result: list,
-        });
-        add_delete_event();
-      } else {
-        document.getElementById("list").innerHTML = "";
+function add_edit_event() {
+  document.querySelectorAll(".edit_btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
+        .id;
+      let card_body = btn.parentNode.parentNode.querySelector(".card-body");
+      let current_values = {
+        name: card_body.querySelector('h5').innerHTML,
+        description: card_body.querySelector('#element_desc').innerHTML,
+        available: card_body.querySelector('#element_available') == "Available" ? true : false
       }
-    });
-}
-
-function empty_field() {
-  document.getElementById("input_name").value = "";
-  document.getElementById("input_description").value = "";
-  document.getElementById("check_available").checked = false;
-}
-
-function add() {
-  let dom = document.getElementById("add");
-  let btn = document.getElementById("add_btn");
-  fetch("/classroom")
-    .then((res) => {
-      return res.json();
+      card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });
     })
-    .then((classroom_list) => {
-      dom.innerHTML = ejs.views_manager_mastery_mastery_add({ classroom_list });
-      btn.style.display = "none";
-      // Client side POST for creating Mastery Check
-      let form = document.getElementById("create_form");
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        fetch("/masterycheck", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: document.getElementById("input_name").value,
-            description: document.getElementById("input_description").value,
-            available: document.getElementById("check_available").checked,
-            classroom: c_id
-          }),
-        }).then(() => {
-          empty_field();
-          print_list();
-        });
-      });
-    });
+  });
 }
+
+function add_new_event() {
+  document.querySelectorAll(".new_topic_btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
+        .id;
+      let card_body = btn.parentNode.parentNode.querySelector(".card-body");
+      card_body.innerHTML = ejs.views_manager_classrooms_new_topic({ current: {} });
+    })
+  });
+}
+
+function add_edit_topic_event() {
+  document.querySelectorAll(".edit_topic_btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      mastery_id = btn.dataset.mastery_id;
+      topic_id = btn.dataset.id;
+
+      let card_body = btn.parentNode.parentNode.parentNode
+      let current_values = {
+        name: btn.dataset.name,
+        description: btn.dataset.description,
+      }
+      card_body.innerHTML = ejs.views_manager_classrooms_new_topic({ current: current_values });
+    })
+  });
+}
+
+
+
+function render_mastery_modal() {
+  API_mastery.get_masteries().then(res => {
+    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res })
+    add_delete_event();
+    add_edit_event();
+    add_new_event();
+    add_edit_topic_event();
+    show_question_form();
+  });
+}
+
+function create_topic() {
+  let body = {
+    name: document.getElementById("input_name").value,
+    description: document.getElementById("input_description").value,
+  }
+
+  if (body.name != "" && body.description != "") {
+
+    API_mastery.add_topic(JSON.stringify(body)).then(res => {
+      if (res.status == 200) {
+        window.FlashMessage.success("Topic Added");
+        render_mastery_modal();
+      }
+      else {
+        window.FlashMessage.error("Could not add new topic, try again later");
+      }
+    })
+  } else {
+    window.FlashMessage.error("Please fill all the fields!");
+  }
+}
+
+function edit_topic() {
+  let body = {
+    name: document.getElementById("input_name").value,
+    description: document.getElementById("input_description").value,
+  }
+
+  if (body.name != "" && body.description != "") {
+
+    API_mastery.edit_topic(JSON.stringify(body)).then(res => {
+      if (res.status == 200) {
+        window.FlashMessage.success("Topic Edited");
+        render_mastery_modal()
+      }
+      else {
+        window.FlashMessage.error("Could not edit the topic, try again later");
+      }
+    })
+  } else {
+    window.FlashMessage.error("Please fill in all the fields!");
+  }
+}
+
+function edit_mastery() {
+  let body = {
+    name: document.getElementById("input_name").value,
+    description: document.getElementById("input_description").value,
+    available: document.getElementById("check_available").checked
+  }
+
+  if (body.name != "" && body.description != "") {
+
+    API_mastery.edit_mastery(JSON.stringify(body)).then(res => {
+      if (res.status == 200) {
+        window.FlashMessage.success("Mastery Check Edited");
+        render_mastery_modal()
+      }
+      else {
+        window.FlashMessage.error("Could not edit mastery check, try again later");
+      }
+    })
+  } else {
+    window.FlashMessage.error("Please fill all the fields!");
+  }
+}
+
+function create_mastery() {
+  let body = {
+    name: document.getElementById("input_name").value,
+    description: document.getElementById("input_description").value,
+    available: document.getElementById("check_available") == "checked" ? true : false
+  }
+
+  if (body.name != "" && body.description != "") {
+
+    API_mastery.post_mastery(JSON.stringify(body)).then(res => {
+      if (res.status == 200) {
+        window.FlashMessage.success("Mastery Check Added");
+        $("#add-mastery-modal").modal('hide');
+      }
+      else {
+        window.FlashMessage.error("Could not add new masterycheck, try again later");
+      }
+    })
+  } else {
+    window.FlashMessage.error("Please fill all the fields!");
+  }
+}
+
+function show_question_form() {
+  
+  document.querySelectorAll("#a_add_question").forEach( link => {
+    console.log("one link");
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      let element = link;
+      let cls = "topic_list";
+      // go up the html tree to find the topic section, which will contain the form to create a new question
+      while ((element = element.parentElement) && !element.classList.contains(cls));
+      
+
+      element.innerHTML = ejs.views_manager_classrooms_new_question();
+      init_question();
+      topic_id = link.dataset.topic_id;
+      console.log(topic_id);
+     
+    })
+  })
+}
+
+API_mastery = (function () {
+
+  function post_mastery(body) {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body
+    });
+  }
+
+  function get_masteries() {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}`).then(res => {
+      return res.json();
+    }).then(result => { return result })
+  }
+
+  function edit_mastery(body) {
+    return fetch(`/masterycheck?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body
+    })
+  }
+
+  function add_topic(body) {
+    return fetch(`/topic?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body
+    })
+  }
+
+  function edit_topic(body) {
+    return fetch(`/topic?classroom_id=${classroom_id}&topic_id=${topic_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body
+    })
+  }
+
+  return {
+    post_mastery,
+    get_masteries,
+    edit_mastery,
+    edit_topic,
+    add_topic
+  };
+})();

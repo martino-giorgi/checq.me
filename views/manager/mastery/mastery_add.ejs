@@ -1,26 +1,35 @@
-<body>
-    <div class="container">
-
-        <div class="container mt-5">
-
-            <form id="create_form" method="POST">
-                <div class="form-group">
-                    <label for="input_name">Mastery Check name</label>
-                    <input required type="text" name="input_name" class="form-control" id="input_name">
-                </div>
-                <div class="form-group">
-                    <label for="input_description">Mastery Check description</label>
-                    <input required type="text" name="input_description" class="form-control" id="input_description">
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" name="check_available" type="checkbox" id="check_available">
-                    <label class="form-check-label" for="check_available">
-                        Available
-                    </label>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Create Mastery Check</button>
-            </form>
-        </div>
-        <script src="/js/ajax_mastery.js"></script>
-</body>
+<div class="container">
+    <div class=" container mt-5">
+        <form id="create_form">
+            <div class="form-group">
+                <label for="input_name">Mastery Check name</label>
+                <input type="text" placeholder="Mastery Name" name="input_name" class="form-control" id="input_name"
+                    value="<%= current.name ? current.name : ""%>" required />
+            </div>
+            <div class="form-group">
+                <label for="input_description">Mastery Check description</label>
+                <input type="text" placeholder="Mastery Description" name="input_description" class="form-control"
+                    id="input_description" value="<%= current.description ? current.description : ""%>" required />
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="check_available" type="checkbox" id="check_available"
+                    <% current.checked ? "checked" : ""%> />
+                <label class="form-check-label" for="check_available">
+                    Available
+                </label>
+            </div>
+        </form>
+        <% if(current.name) {%>
+        <button onclick="edit_mastery()" class="btn btn-primary">
+            Edit
+            Mastery Check
+        </button>
+        <% } else {%>
+        <button onclick="create_mastery()" class="btn btn-primary">
+            Create
+            Mastery Check
+        </button>
+        <% }%>
+    </div>
+    <script src="/js/ajax_mastery.js"></script>
+    <script src="/js/ajax_question.js"></script>
