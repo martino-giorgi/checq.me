@@ -40,7 +40,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
 
     let current_iso_weekday = moment().isoWeekday();
 
-    let mastery_days = sort_mastery_days(
+    let mastery_days = sort_mastery_days( //get mastery days for that class sorted, the closest day to today will be the first
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
 
@@ -54,6 +54,7 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
         let m_day_start;
         let m_day_end;
 
+        //find first m_day
         if (current_iso_weekday <= m_day.iso_day_n) {
           // then just give me this week's instance of that day
           m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
@@ -80,22 +81,24 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
           second: 0,
         });
 
-        if (m_day_start.isAfter(moment())) {
-          let avail = await get_day_busy(assigned_ta, m_day_end);
-          let r = await trybooking(
+        if (m_day_start.isAfter(moment())) { //make sure that the m_day is in the future
+          let student_busy = await get_student_appointments(m_day_start, m_day_end, user_id); //get appointments of student during the mastery day
+          let avail = await get_day_busy(assigned_ta, m_day_end); //get busy days of ta which overlap mastery day
+          let r = await trybooking( //try booking an appointment
             assigned_ta,
             mastery_id,
             m_day_start,
             m_day_end,
             mastery.appointment_duration,
             req.user._id,
-            typeof avail[0] === "undefined" ? [] : avail[0].busy
+            typeof avail[0] === "undefined" ? [] : avail[0].busy,
+            student_busy,
           );
 
           if (r != false) {
             //booking completed.
             booked = true;
-            increaseTa(req.user._id, mastery.classroom._id);
+            increaseTa(req.user._id, mastery.classroom._id); //increase the assigned TA, only happens if the assigned TA was booked
             res.json(r);
             return;
           } else {
@@ -104,9 +107,9 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
               staff.push(mongoose.Types.ObjectId(el));
             });
 
-            let queue = await get_TA_queue(m_day_start, staff, assigned_ta);
+            let queue = await get_TA_queue(m_day_start, staff, assigned_ta);  //get the queue of TAs, sorted by number of appointments on that day
 
-            for (let j = 0; j < queue.length && !booked; j++) {
+            for (let j = 0; j < queue.length && !booked; j++) { //try with all the other TAs, still in the same m_day
               let avail2 = await get_day_busy(queue[j]._id, m_day_end);
               let x = await trybooking(
                 queue[j]._id,
@@ -115,7 +118,8 @@ router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res
                 m_day_end,
                 mastery.appointment_duration,
                 req.user._id,
-                typeof avail2[0] === "undefined" ? [] : avail2[0].busy
+                typeof avail2[0] === "undefined" ? [] : avail2[0].busy,
+                student_busy,
               );
               if (x != false) {
                 // booking completed
@@ -203,7 +207,67 @@ async function get_day_busy(user_id, date) {
   });
 }
 
-async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
+// async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy) {
+//   // console.log(m_duration);
+//   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
+//   return new Promise((resolve, rejects) => {
+//     Appointment.aggregate()
+//       .match({
+//         _taId: ta,
+//         start_time: { $lte: m_day_end.toDate() },
+//         end_time: { $gt: m_day_start.toDate() },
+//       })
+//       .exec((err, appointments) => {
+//         if (err) {
+//           console.log(err);
+//           rejects(err);
+//           return;
+//         } else {
+//           let busy_total = busy;
+//           appointments.forEach((el) => {
+//             busy_total.push([el.start_time, el.end_time]);
+//           });
+//           // console.log(m_day_start, m_day_end, busy_total);
+//           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
+//           console.log("Busy slots: ");
+//           console.log(busy_total);
+//           console.log("Availability: ");
+//           console.log(availability);
+
+//           if (availability.length == 0) {
+//             resolve(false);
+//             console.log("Booking failed!");
+//             return;
+//           } else {
+//             end_time_appointment = availability[0].start.clone();
+//             end_time_appointment.add(m_duration, "minutes");
+//             const new_appointment = new Appointment({
+//               _masteryId: mastery_id,
+//               _taId: ta,
+//               _studentId: student_id,
+//               start_time: availability[0].start,
+//               end_time: end_time_appointment,
+//               duration: m_duration,
+//             });
+//             new_appointment
+//               .save()
+//               .then(() => {
+//                 resolve(new_appointment);
+//                 console.log("Booking successful!");
+//                 return;
+//               })
+//               .catch((err) => {
+//                 console.log(err);
+//                 rejects(err);
+//                 return;
+//               });
+//           }
+//         }
+//       });
+//   });
+// }
+
+async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy_ta, busy_student) {
   // console.log(m_duration);
   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
   return new Promise((resolve, rejects) => {
@@ -219,10 +283,13 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
           rejects(err);
           return;
         } else {
-          let busy_total = busy;
+          let busy_total = busy_ta;
           appointments.forEach((el) => {
             busy_total.push([el.start_time, el.end_time]);
           });
+          busy_student.forEach((el)=>{
+            busy_total.push([el.start_time, el.end_time]);
+          })
           // console.log(m_day_start, m_day_end, busy_total);
           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
           console.log("Busy slots: ");
@@ -262,6 +329,8 @@ async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, st
       });
   });
 }
+
+
 
 async function get_TA_queue(date, classroom_tas, exclude) {
   return new Promise((resolve, rejects) => {
@@ -311,6 +380,23 @@ async function get_TA_queue(date, classroom_tas, exclude) {
           resolve(result);
         }
       });
+  });
+}
+
+async function get_student_appointments(m_day_start, m_day_end, student_id) {
+  return new Promise((resolve, rejects) => {
+    Appointment.aggregate()
+      .match({
+        _studentId: student_id,
+        start_time: { $lte: m_day_end.toDate() },
+        end_time: { $gt: m_day_start.toDate() },
+      }).exec((err, result) => {
+        if(err){
+          rejects(err);
+          return;
+        }
+        resolve(result);
+      })
   });
 }
 
@@ -434,3 +520,9 @@ router.post("/sgrang", (req, res) => {
       });
   }
 });
+
+
+router.post("/test",(req,res)=>{
+  console.log(get_available_time2(moment("2020-12-10").startOf('day'), moment("2020-12-10").endOf('day'),req.body.times))
+  res.end();
+})
