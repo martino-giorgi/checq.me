@@ -18,7 +18,7 @@
             <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
             <p id="element_desc" class="card-text"><%= element.description %></p>
             <p id="element_available" class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
-            <p id="topics_list">
+            <p class="topic_list" id="topics_list">
                 <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
                 <% element.topics.forEach(topic => { %>
                 <span>

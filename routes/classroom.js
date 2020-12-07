@@ -6,7 +6,8 @@ var ObjectID = require("mongodb").ObjectID;
 const {
   ensureAuthenticated,
   ensureProfessor,
-  ensureProfOrTA
+  ensureProfOrTA,
+  ensureMemberOfClass
 } = require("../config/auth");
 
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
@@ -113,11 +114,17 @@ router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
   });
 });
 
-router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
+
   Classroom.find({ _id: req.query.classroom_id })
     .populate("teaching_assistants")
     .populate("professors")
-    .populate("mastery_checks")
+    .populate({
+      path: 'mastery_checks', // The string we passed in before
+      populate: {
+        path: 'topics' // This will populate the friends' addresses
+      }
+    })
     .populate({
       path: "lecturer",
       select: ["email", "name", "surname", "classrooms", "role"],
@@ -126,8 +133,13 @@ router.get("/class", ensureAuthenticated, ensureProfOrTA, (req, res) => {
       path: "partecipants",
       select: ["email", "name", "surname", "classrooms", "role"],
     })
-    .then((result) => {
-      res.json(result);
+    .then((result) => { 
+
+      if (req.accepts('html')) {
+        res.render('student_classroom', { model: { classroom: result, user: req.user } })
+      } else {
+        res.json(result);
+      }
     })
     .catch((err) => {
       console.log(err);

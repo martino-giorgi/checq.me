@@ -1,0 +1,49 @@
+<div class="wrapper">
+    <%- include("./partials/navigation", {active: 'classroom'}) %>
+    <div>
+        <h1><%= model.classroom[0].name%></h1>
+        <h3><%= model.classroom[0].description%></h3>
+        <% let lecturers = ""; let tas = "";%>
+        <% lecturers = model.classroom[0].professors.map(prof => "Prof. "+prof.surname).reduce( (prof, acc) => prof += acc); %>
+        <% tas = model.classroom[0].teaching_assistants.map(ta => ta.name+" "+ta.surname).reduce( (ta, acc) => ta += acc); %>
+        <h3>Professors: <%= lecturers%></h3>
+        <h3>Teaching Assistants: <%= tas%></h3>
+    </div>
+    <div class="container mt-3">
+        <h3>Mastery Check List</h3>
+        <% model.classroom[0].mastery_checks.forEach(element => { %>
+        <div class="card mt-5">
+
+            <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">
+                <span>Mastery Check</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><%= element.name %></h5>
+                <p id="element_desc" class="card-text"><%= element.description %></p>
+                <p id="element_available" class="card-text"><%= element.available  ? "Available" : "Not Available" %>
+                </p>
+                <p class="topic_list" id="topics_list">
+                    <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
+                    <% element.topics.forEach(topic => { %>
+                    <span>
+                        <br>
+                        <%=topic.name%>
+
+
+                        |
+                        <a href="/topic/questions/answer?topic=<%= topic._id%>&classroom_id=<%= element.classroom%>">
+                            View questions (<%= topic.questions.length %>)
+                        </a>
+                    </span>
+
+                    <% }); %>
+                </p>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    <script src="/js/ajax_question.js"></script>
+
+    <!-- classrom info lista mastery -> topic -> questions
+        -->
+</div>

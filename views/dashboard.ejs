@@ -41,9 +41,8 @@
 
             <% if (model.user.classrooms.length > 0) { %>
               <div class="classroom-list">
-                <% model.classrooms.forEach((classroom) => { %>
-                  
-                  <% let href2 = model.user.role == 0 ? `/manager/classroom?classroom_id=${classroom._id}` : `/classrooms/classroom?classroom_id=${classroom._id}`%>
+                <% model.classrooms.forEach((classroom) => { %> 
+                  <% let href2 = model.user.role == 0 ? `/manager/classroom?classroom_id=${classroom._id}` : `/classroom/class?classroom_id=${classroom._id}`%>
                   <a href="<%= href2 %>">
                     <div class="classroom-box" style="background-color: #<%= classroom.color %>">
                       <span class="circle">
@@ -63,10 +62,10 @@
           <div class="profile box">
             <div>
               <% if (model.user.gravatar == "") { %>
-                <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
               <% } else { %>
-                <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
-              <% } %> 
+              <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
+              <% } %>
 
               <div class="info">
                 <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
