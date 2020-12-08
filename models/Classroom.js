@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const Topic = require("./Topic");
 const MasteryCheck = require("./MasteryCheck");
-const { mapTAs, updateUser } = require('../updates/db_updates');
+const { re_mapTAs, updateUser } = require('../updates/db_updates');
 
 const ClassroomSchema = new mongoose.Schema({
   name: {

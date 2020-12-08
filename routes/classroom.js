@@ -7,7 +7,8 @@ const {
   ensureAuthenticated,
   ensureProfessor,
   ensureProfOrTA,
-  ensureMemberOfClass
+  ensureMemberOfClass,
+  ensureProfessorUser
 } = require("../config/auth");
 
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
@@ -83,7 +84,7 @@ PROFESSOR ROUTES
 */
 
 //Post a new classroom
-router.post("/new", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
   console.log(req.body);
   
   if (!req.body.name || !req.body.description) {
@@ -231,24 +232,27 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
 
     User.findById(req.body.professor_id).then(usr => {
       if (usr.role != 0) {
+        console.log("user is not a professor")
         res.status(400).end();
         return;
       }
+      else {
+        console.log("arriva qui")
+        // If the User is a TA, remove him from class list and adjust their schema
+        if (classroom.teaching_assistants.includes(req.body.professor_id)) {
+          classroom.teaching_assistants.remove(req.body.professor_id);
+          User.findById(req.body.professor_id).then(user => {
+            user.ta_for_list.remove(req.query.classroom_id);
+          });
+        }
+    
+        classroom.professors.addToSet(req.body.professor_id);
+        classroom.save().then(() => {
+          classroom.partecipants.remove(req.body.professor_id)
+          classroom.save().then(() => res.status(200).end())
+        });
+      }
     })
-
-    // If the User is a TA, remove him from class list and adjust their schema
-    if (classroom.teaching_assistants.includes(req.body.professor_id)) {
-      classroom.teaching_assistants.remove(req.body.professor_id);
-      User.findById(req.body.professor_id).then(user => {
-        user.ta_for_list.remove(req.query.classroom_id);
-      });
-    }
-
-    classroom.professors.addToSet(req.body.professor_id);
-    classroom.save().then(() => {
-      classroom.partecipants.remove(req.body.professor_id)
-      classroom.save().then(() => res.status(200).end())
-    });
   }).catch((err) => { console.log(err); res.status(400).end() })
 });
 
