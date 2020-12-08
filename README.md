@@ -14,12 +14,14 @@ The idea of this project is to create a web app that manages mastery checks and 
 
 ## Project Progress
 
-The following is a table containing all of the milestones last commits and Google Slides presentation links.
+The following is a table containing all of the milestones' last commit codes, the GitHub milestones and Google Slides presentation links.
 
 |    | Date       | GitHub Milestone      | Final Commit         | Presentation Link              |
 | -- | :--------- | :-------------------- | :------------------- | :----------------------------- |
 | #1 | 23/11/2020 | ---                   | [#45e3e38][1-commit] | [Presentation][1-presentation] |
 | #2 | 30/11/2020 | [Milestone][2-github] | [#8262256][2-commit] | [Presentation][2-presentation] |
+| #3 | 07/12/2020 | [Milestone][3-github] | [#f46bbb6][3-commit] | [Presentation][3-presentation] |
+| #4 | 14/12/2020 | [Milestone][4-github] |  |  |
 
 [1-commit]: https://github.com/martino-giorgi/checq.me/commit/45e3e38c8495fdf87408eaefc78dccf502c901fe
 [1-presentation]: https://docs.google.com/presentation/d/1Ok_0_xCFdj2_HZViIVU45V3DoHg7GLhr2kIlExP6dF8/edit?usp=sharing
@@ -27,3 +29,9 @@ The following is a table containing all of the milestones last commits and Googl
 [2-commit]: https://github.com/martino-giorgi/checq.me/commit/8262256a25a15997593f0163d6d54485347670c8
 [2-presentation]: https://docs.google.com/presentation/d/1ToW-zk9Pz34Yu5m6GzMlDdunKSyOJ-VWfJo2heDFPFs/edit?usp=sharing
 [2-github]: https://github.com/martino-giorgi/checq.me/milestone/1
+
+[3-commit]: https://github.com/martino-giorgi/checq.me/commit/f46bbb6d87b5a5a7254b753a313399958de436ba
+[3-presentation]: https://docs.google.com/presentation/d/1P7G_YHjog65O5cLmvW8pJ3MESYU6EAYACtTqv_VT44Q
+[3-github]: https://github.com/martino-giorgi/checq.me/milestone/2
+
+[4-github]: https://github.com/martino-giorgi/checq.me/milestone/3

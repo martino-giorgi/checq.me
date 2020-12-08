@@ -124,7 +124,10 @@ function toggleProf(user_id) {
     })
   }
   else {
-    API.makeProf(JSON.stringify(body)).then(() => {
+    API.makeProf(JSON.stringify(body)).then( res => {
+      if (res.status == 400) {
+        window.FlashMessage.error("User's account doesn't have Professors rights");
+      }
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
         render_user_modal();
