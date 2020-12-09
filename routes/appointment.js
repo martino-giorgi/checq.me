@@ -5,9 +5,7 @@ require("twix");
 const router = express.Router();
 const {
   ensureAuthenticated,
-  ensureProfessor,
   ensureStudent,
-  ensureTa,
   ensureProfOrTA,
   ensureProfOrTAUser,
 } = require("../config/auth");
@@ -528,9 +526,3 @@ router.post("/sgrang", (req, res) => {
       });
   }
 });
-
-
-router.post("/test",(req,res)=>{
-  console.log(get_available_time2(moment("2020-12-10").startOf('day'), moment("2020-12-10").endOf('day'),req.body.times))
-  res.end();
-})
