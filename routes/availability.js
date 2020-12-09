@@ -30,12 +30,10 @@ router.get('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
 
 router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   //input check
-  console.log(req.body);
   let ok = true;
   let new_range;
   let start = moment(req.body.busy[0], 'YYYY-MM-DDTHH:mm:ssZ');
   let end = moment(req.body.busy[1], 'YYYY-MM-DDTHH:mm:ssZ');
-  console.log(start);
 
   let now = moment();
   if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {
@@ -75,3 +73,7 @@ router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
     res.status(400);
   }
 });
+
+// router.patch('/', (req, res)) {
+  
+// }
