@@ -12,7 +12,6 @@ const {
 const User = require("../models/User");
 const Availability = require("../models/Availability");
 const Appointment = require("../models/Appointment");
-const { twix } = require("moment");
 
 module.exports = router;
 
@@ -36,11 +35,16 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm:ssZ");
   let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm:ssZ");
 
-  let appointments = (await Appointment.aggregate().match({
-    _taId: ta_id,
-    start_time: { $lte: m_day_end.toDate() },
-    end_time: { $gt: m_day_start.toDate() },
-  })).map((el)=> {return [start_time, end_time]});
+  let appointments = (await Appointment.find({
+    _taId: req.user._id,
+    // start_time: { 
+    //   $or : [{$lte: start.format()},{}]
+    // },
+    // end_time: { $gt: end.format() },
+    $or : [{start_time: {$lte: end.toDate()}}, 
+          {$and: [{start_time: {$gte: start.toDate()}},{end_time: {$lte: end.toDate()}}]}, 
+          {end_time: {$gte: end.toDate()}}]
+  }))//.map((el)=> {return [start_time, end_time]});
 
   console.log(appointments);
 
