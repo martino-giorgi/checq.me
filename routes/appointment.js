@@ -206,6 +206,7 @@ async function get_day_busy(user_id, date) {
   });
 }
 
+//check line 216-219 !!!!!!!!!
 async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy_ta, busy_student) {
   // console.log(m_duration);
   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
@@ -322,6 +323,7 @@ async function get_TA_queue(date, classroom_tas, exclude) {
   });
 }
 
+//TODO CHANGE FIX!!!!!!!!!
 async function get_student_appointments(m_day_start, m_day_end, student_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
@@ -339,6 +341,7 @@ async function get_student_appointments(m_day_start, m_day_end, student_id) {
   });
 }
 
+//TODO CHANGE FIX!!!!!!!!!
 async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
