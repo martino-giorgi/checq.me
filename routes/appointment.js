@@ -206,7 +206,7 @@ async function get_day_busy(user_id, date) {
   });
 }
 
-//check line 216-219 !!!!!!!!!
+//FIXME: check line 216-219 !!!!!!!!!
 async function trybooking(ta, mastery_id, m_day_start, m_day_end, m_duration, student_id, busy_ta, busy_student) {
   // console.log(m_duration);
   console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
