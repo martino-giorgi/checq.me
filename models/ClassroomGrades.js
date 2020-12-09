@@ -14,14 +14,13 @@ const ClassroomGradesSchema = new mongoose.Schema({
       required:true,
       ref: 'Classroom'
   },
-  mastery_grades:{
-    type:Map,
+  mastery_grades:{ 
+    type: Map,
     required:true,
-    default: {}
   },
   mastery_topics:{
     type:Map,
-    required:true,
+    required:false,
     default: {}
   }
 });
