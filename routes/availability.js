@@ -1,22 +1,23 @@
-const express = require('express');
-const moment = require('moment');
-require('twix');
+const express = require("express");
+const moment = require("moment");
+require("twix");
 const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessorUser,
   ensureStudent,
   ensureProfOrTAUser,
-} = require('../config/auth');
+} = require("../config/auth");
 
-const User = require('../models/User');
-const Availability = require('../models/Availability');
-const { twix } = require('moment');
+const User = require("../models/User");
+const Availability = require("../models/Availability");
+const Appointment = require("../models/Appointment");
+const { twix } = require("moment");
 
 module.exports = router;
 
 //get availability for the current user
-router.get('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
+router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Availability.findOne({ _userId: req.user._id })
     .select({ busy: 1, _id: 1, _userId: 1 })
     .then((r) => {
@@ -28,12 +29,22 @@ router.get('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
     });
 });
 
-router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
+router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   //input check
   let ok = true;
   let new_range;
-  let start = moment(req.body.busy[0], 'YYYY-MM-DDTHH:mm:ssZ');
-  let end = moment(req.body.busy[1], 'YYYY-MM-DDTHH:mm:ssZ');
+  let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm:ssZ");
+  let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm:ssZ");
+
+  let appointments = (await Appointment.aggregate().match({
+    _taId: ta_id,
+    start_time: { $lte: m_day_end.toDate() },
+    end_time: { $gt: m_day_start.toDate() },
+  })).map((el)=> {return [start_time, end_time]});
+
+  console.log(appointments);
+
+
 
   let now = moment();
   if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {
@@ -41,6 +52,7 @@ router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   } else {
     new_range = start.twix(end);
   }
+
   if (ok) {
     Availability.findOne({ _userId: req.user._id }).then((avail) => {
       if (avail) {
@@ -52,7 +64,9 @@ router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
             new_range.equals(s) ||
             new_range.contains(s)
           ) {
-            res.status(400).end();
+            res
+              .status(400)
+              .send("Make sure that the dates do not overlap existing events in the calendar");
             return;
           }
         }
@@ -62,18 +76,18 @@ router.post('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
         });
       } else {
         console.log(
-          'Professor: ' +
+          "Professor: " +
             req.user._id +
-            ' should have an availability document linked to his account!'
+            " should have an availability document linked to his account!"
         );
         res.status(400).end();
       }
     });
   } else {
-    res.status(400);
+    res.status(400).send("Dates are invalid or are in the past");
   }
 });
 
 // router.patch('/', (req, res)) {
-  
+
 // }

@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
     themeSystem: 'bootstrap',
     initialView: 'timeGridWeek',
     firstDay: '1',
-    navLinks: true, // can click day/week names to navigate views
-    editable: true, //set to true only if TA||Professor
+    navLinks: true,
+    editable: role == 0 || role == 1 ? true : false,
     selectable: true,
     allDaySlot: false,
     contentHeight: 'auto',
@@ -83,21 +83,22 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function parse_Ta_appointments(data) {
-  console.log(data);
+  // console.log(data);
 
   data.appointments.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
       description: el._masteryId.description,
       student: el._studentId.name + ' ' + el._studentId.name,
-      start: moment(el.start_time),
-      end: moment(el.end_time),
+      start : el.start_time,
+      end: el.end_time,
       classroom_id: el._masteryId.classroom,
       appointment_id: el._id,
     });
 
     document.querySelector('#newEvent').classList.remove('show');
   });
+  
   data.busy.busy.forEach((el) => {
     calendar.addEvent({
       title: 'Busy Time Slot',
@@ -115,8 +116,8 @@ function parse_student_appointments(data) {
       title: el._masteryId.name,
       description: el._masteryId.description,
       student: el._studentId.name + ' ' + el._studentId.name,
-      start: moment(el.start_time),
-      end: moment(el.end_time),
+      start: el.start_time,
+      end: el.end_time,
       classroom_id: el._masteryId.classroom,
       appointment_id: el._id,
     });
@@ -136,7 +137,7 @@ function addBusyDay() {
     date_start === undefined ||
     date_end === undefined
   ) {
-    console.log('fill in all input fields');
+    window.FlashMessage.error("Please fill in all of the input fields");
   } else {
     let date_complete_start = moment(date_start + 'T' + time_start, 'YYYY-MM-DDTHH:mm', true);
     let date_complete_end = moment(date_end + 'T' + time_end, 'YYYY-MM-DDTHH:mm', true);
@@ -147,7 +148,6 @@ function addBusyDay() {
       date_complete_start.isBefore(date_complete_end)
     ) {
       API.post_busy_slot(date_complete_start, date_complete_end).then((response) => {
-        console.log(response);
         if (response.status == 200) {
           calendar.addEvent({
             title: 'Busy Time Slot',
@@ -161,13 +161,13 @@ function addBusyDay() {
 
           window.FlashMessage.success("Busy day was added");
         } else {
-          window.FlashMessage.error("There was a problem when adding the event");
+          response.text().then(text => {
+            window.FlashMessage.error(text);
+          })
         }
       });
-
-      console.log('dates are correct');
     } else {
-      console.log('time interval is invalid');
+      window.FlashMessage.error("Time interval is invalid");
     }
   }
 }
