@@ -158,8 +158,10 @@ function addBusyDay() {
 
           document.querySelector('.modal').classList.remove('show');
           document.querySelector('.modal-backdrop').classList.remove('show');
+
+          window.FlashMessage.success("Busy day was added");
         } else {
-          // TODO: Add flash
+          window.FlashMessage.error("There was a problem when adding the event");
         }
       });
 
