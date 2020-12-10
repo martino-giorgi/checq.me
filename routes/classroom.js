@@ -18,9 +18,14 @@ const TokenClassroom = require("../models/TokenClassroom");
 
 module.exports = router;
 
-// if PROFESSOR/TA = Get all the classrooms where the current user is the professor
-// if STUDENT = returns all classes in which the student is enrolled
-
+/**
+ * Route if PROFESSOR/TA = Get all the classrooms where the current user is the professor/ta
+ * if STUDENT = returns all classes in which the student is enrolled
+ * @name get/classroom/
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/", ensureAuthenticated, (req, res) => {
 
   // User is a Professor
@@ -83,7 +88,13 @@ router.get("/", ensureAuthenticated, (req, res) => {
 PROFESSOR ROUTES
 */
 
-//Post a new classroom
+/**
+ * Route to post a new classroom
+ * @name post/classroom/new?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
   console.log(req.body);
   
@@ -115,6 +126,13 @@ router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
   });
 });
 
+/**
+ * Route to get info about a classroom where the client belongs to
+ * @name get/classroom/class?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
 
   Classroom.find({ _id: req.query.classroom_id })
@@ -148,8 +166,13 @@ router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
     });
 });
 
-// Add a TA
-
+/**
+ * Route to add a new TA to the classroom.
+ * @name post/classroom/ta?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
   let classroom = Classroom.findById(req.body.classroom_id);
   let new_ta = User.findById(req.body.user_id);
@@ -191,7 +214,13 @@ router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
 
 })
 
-// Remove a TA
+/**
+ * Route to remove a ta from the classroom
+ * @name delete/classroom/ta?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   let classroom = Classroom.findById(req.body.classroom_id);
@@ -224,7 +253,13 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
     })
 });
 
-// Add professor
+/**
+ * Route to add a professor to the classroom.
+ * @name post/classroom/professor?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   console.log(req.query.classroom_id);
@@ -256,14 +291,18 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
   }).catch((err) => { console.log(err); res.status(400).end() })
 });
 
-// Remove professor
+/**
+ * Route to remove a professor from a classroom.
+ * @name delete/classroom/professor?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
   if (!ObjectID.isValid(req.query.classroom_id)) {
     res.status(400).end();
     return;
   }
-
-
 
   Classroom.findById(req.query.classroom_id).then(classroom => {
 
@@ -284,7 +323,13 @@ router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => 
     .catch(err => console.log(err));
 })
 
-// Remove student from class
+/**
+ * Route to remove a student from a classroom.
+ * @name delete/classroom/student?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
   Classroom.findById(req.query.classroom_id).then(classroom => {
     classroom.partecipants.remove(req.body.student_id);
@@ -299,8 +344,6 @@ router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
 })
 
 //generates the new map for students and tas.
-
-
 router.post("/testmapping", ensureAuthenticated, (req, res) => {
   mapTAs(req.body.classroom_id).then(updated_classroom => {
     console.log(updated_classroom);
@@ -308,7 +351,13 @@ router.post("/testmapping", ensureAuthenticated, (req, res) => {
   })
 })
 
-//create a new invite link
+/**
+ * Route to get a new invite link to the classroom.
+ * @name get/classroom/invite?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get(
   "/invite",
   ensureAuthenticated,
