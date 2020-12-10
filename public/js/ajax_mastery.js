@@ -5,8 +5,7 @@ var topic_id = undefined;
 function add_delete_event() {
   document.querySelectorAll(".delete_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      let mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
-        .id;
+      let mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset.id;
       let classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
 
       fetch(`/masterycheck?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
@@ -22,15 +21,16 @@ function add_delete_event() {
 function add_edit_event() {
   document.querySelectorAll(".edit_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
-        .id;
+      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset.id;
       let card_body = btn.parentNode.parentNode.querySelector(".card-body");
+
       let current_values = {
-        name: card_body.querySelector('h5').innerHTML,
+        name: card_body.querySelector('h2').innerHTML,
         description: card_body.querySelector('#element_desc').innerHTML,
-        available: card_body.querySelector('#element_available').innerHTML == "Available" ? true : false,
-        appointment_duration: card_body.querySelector('#element_durat').innerHTML
+        available: card_body.querySelector('#element_durat').innerHTML.split('|')[1].trim() == "Available" ? true : false,
+        appointment_duration: card_body.querySelector('#element_durat').innerHTML.split('|')[0].trim().replace('Duration: ', '')
       }
+
       card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });
     })
   });
@@ -68,7 +68,6 @@ function add_edit_topic_event() {
 function render_mastery_modal() {
   API_mastery.get_masteries().then(res => {
     document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res });
-    console.log(res)
     add_delete_event();
     add_edit_event();
     add_new_event();

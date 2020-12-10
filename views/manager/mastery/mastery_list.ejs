@@ -1,48 +1,53 @@
 <div class="container mt-3">
-    <h3>Mastery Check List</h3>
-    <% result.forEach(element => { %>
-    <div class="card mt-5">
+  <% result.forEach((element) => { %>
+    <div class="card mt-3">
+      <div style="display: flex;align-items: center;" class="card-header">
+        <span style="margin-right: auto;">Mastery Check</span>
 
-        <div style="display:flex;align-items: center;justify-content: space-between;" class="card-header">
-            <span>Mastery Check</span>
-            <button style="float: right;" type="button" class="btn btn-primary new_topic_btn">Create a Topic
-            </button>
-            <button style="float: right;" type="button" class="btn btn-primary edit_btn">Edit Mastery Check
-            </button>
-            <button style="float: right;" type="button" class="btn btn-primary delete_btn">Delete
-            </button>
-        </div>
-        <div class="card-body">
-            <h4>Classroom ID: <%= element.classroom%></h4>
-            <h5 class="card-title"><%= element.name %></h5>
-            <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
-            <p id="element_desc" class="card-text"><%= element.description %></p>
-            <p id="element_durat" class="card-text"><%= element.appointment_duration %></p>
-            <p id="element_available" class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
-            <p class="topic_list" id="topics_list">
-                <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
-                <% element.topics.forEach(topic => { %>
-                <span>
-                    <br>
-                    <%=topic.name%> 
-                    <a id="a_add_question" data-topic_id="<%= topic._id %>" href="/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>">
-                        Add questions
-                    </a>
-                    |
-                    <a style="cursor: pointer;" data-mastery_id="<%= topic.mastery_id %>" data-id="<%= topic._id%>"
-                        data-name="<%= topic.name%>" data-description="<%= topic.description%>"
-                        class="edit_topic_btn">Edit <i class="fas fa-pencil-alt"></i></a> 
-                    |
-                    <a href="/topic/questions/answer?topic=<%= topic._id%>&classroom_id=<%= element.classroom%>">
-                        View questions  (<%= topic.questions.length %>)
-                    </a>
-                </span>
-                
-                <% }); %>
-            </p>
-        </div>
+        <button style="margin-right: 10px;" type="button" class="btn btn-primary new_topic_btn">
+          Create a Topic
+        </button>
+
+        <button style="margin-right: 10px;" type="button" class="btn btn-primary edit_btn">
+          Edit Mastery Check
+        </button>
+
+        <button type="button" class="btn btn-primary delete_btn">
+          Delete
+        </button>
+      </div>
+
+      <div class="card-body">
+        <h4 hidden>Classroom ID: <%= element.classroom%></h4>
+        <small id="id_container" hidden data-id="<%= element._id %>">Mastery ID: <%= element._id%></small>
+
+        <h2 class="card-title"><%= element.name %></h2>
+        <p id="element_desc" class="card-text"><%= element.description %></p>
+        <p id="element_durat" class="card-text">Duration: <%= element.appointment_duration %> | <%= element.available  ? "Available" : "Not Available" %></p>
+        <p class="topic_list" id="topics_list">
+          <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
+
+          <% element.topics.forEach(topic => { %>
+            <span>
+                <br>
+                <%=topic.name%> 
+                <a id="a_add_question" data-topic_id="<%= topic._id %>" href="/question/new?topic_id=<%=topic._id %>&classroom_id=<%=element.classroom%>">
+                    Add questions
+                </a>
+                |
+                <a style="cursor: pointer;" data-mastery_id="<%= topic.mastery_id %>" data-id="<%= topic._id%>"
+                    data-name="<%= topic.name%>" data-description="<%= topic.description%>"
+                    class="edit_topic_btn">Edit <i class="fas fa-pencil-alt"></i></a> 
+                |
+                <a href="/topic/questions/answer?topic=<%= topic._id%>&classroom_id=<%= element.classroom%>">
+                    View questions  (<%= topic.questions.length %>)
+                </a>
+            </span>
+          <% }); %>
+        </p>
+      </div>
     </div>
-    <% }); %>
+  <% }); %>
 </div>
 
 <script src="/js/ajax_question.js"></script>

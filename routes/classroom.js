@@ -128,11 +128,11 @@ router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
     })
     .populate({
       path: "lecturer",
-      select: ["email", "name", "surname", "classrooms", "role"],
+      select: ["email", "name", "surname", "classrooms", "role", "gravatar"],
     })
     .populate({
       path: "partecipants",
-      select: ["email", "name", "surname", "classrooms", "role"],
+      select: ["email", "name", "surname", "classrooms", "role", "gravatar"],
     })
     .then((result) => { 
 
