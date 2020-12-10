@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
   let role = document.querySelector('#role').innerHTML;
   var calendarEl = document.getElementById('calendar');
 
+  var start_date_drag;
+  var end_date_drag;
+
   calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
       left: 'prev,next today',
@@ -48,15 +51,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           }
         : {},
-    // TODO: Send new data to database if drop of date is detected
-    // TODO: Check if user is student of that class
-    // eventDrop: function(info) {
-    //   alert(info.event.title + " was dropped on " + info.event.start.toISOString());
-
-    //   if (!confirm("Are you sure about this change?")) {
-    //     info.revert();
-    //   }
-    // }
+    eventDragStart: function(info) {
+      start_date_drag = info.event._instance.range.start.toISOString();
+      end_date_drag = info.event._instance.range.end.toISOString();
+    },
+    eventDrop: function(info) {
+      if (!confirm("Are you sure about this change?")) {
+        info.revert();
+      } else {
+        var new_start = info.event._instance.range.start.toISOString();
+        var new_end = info.event._instance.range.end.toISOString();
+        
+        API.patch_appointment(start_date_drag, end_date_drag, new_start, new_end)
+      }
+    },
+    
 
     // TODO: Send new data to database if resizing of event has finished
     // TODO: Check if user is student of that class
@@ -83,8 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function parse_Ta_appointments(data) {
-  // console.log(data);
-
   data.appointments.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
@@ -191,10 +198,24 @@ API = (function () {
     });
   }
 
-  function get_current_user() {}
+  function patch_appointment(old_start, old_end, new_start, new_end) {
+    let times = {
+      old: [old_start, old_end],
+      new: [new_start, new_end]
+    }
+
+    console.log(old_start, old_end, new_start, new_end)
+
+    return fetch(`/availability`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(times)
+    });
+  }
 
   return {
     get_appointments,
     post_busy_slot,
+    patch_appointment,
   };
 })();

@@ -30,7 +30,6 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
 
 router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   //input check
-  let ok = true;
   let new_range;
   let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm:ssZ");
   let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm:ssZ");
@@ -42,11 +41,21 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   }
 
   let appointments = await Appointment.find({
-    _taId: req.user._id,
-    $or: [
-      { start_time: { $lte: end.toDate() } },
-      { $and: [{ start_time: { $gte: start.toDate() } }, { end_time: { $lte: end.toDate() } }] },
-      { end_time: { $gte: end.toDate() } },
+    $and: [
+      { _taId: req.user._id },
+      {
+        $or: [
+          {
+            $and: [{ start_time: { $lte: end.toDate() } }, { start_time: { $gte: start.toDate() } }],
+          },
+          {
+            $and: [{ start_time: { $gte: start.toDate() } }, { end_time: { $lte: end.toDate() } }],
+          },
+          {
+            $and: [{ end_time: { $gte: start.toDate() } }, { end_time: { $lte: end.toDate() } }],
+          },
+        ],
+      },
     ],
   });
 
@@ -88,10 +97,94 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   });
 });
 
-router.patch('/',ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
-  if(!req.body.old){
+router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
+  if (!req.body.old || !req.body.new || !moment(req.body.old[0]).isValid() || !moment(req.body.old[1]).isValid()) {
     res.status(400).end();
     return;
   }
 
-})
+  let r = await validateInput(req.body.new, req.user._id)
+
+  if(r != true){
+    res.status(400).send(r);
+    return;
+  }
+
+  let old_start = moment(req.body.old[0])
+  let old_end = moment(req.body.old[1]);
+
+  console.log(old_start.toDate(),old_end.toDate());
+  
+  Availability.findOne({
+     _userId: req.user._id,
+      busy: [old_start.toDate(), old_end.toDate()]
+  }).then(av => console.log(av))
+//   Availability.findOneAndUpdate(
+//     { _userId: req.user._id, busy: [old_start,old_end] },
+//     { $set: { "busy.$": [moment(req.body.new[0]).toDate(),moment(req.body.new[1]).toDate()] } },
+//     { new: true }
+//   ).then((result) => {
+//     if(result){
+//       res.json(result);
+//     }
+//   }).catch(err => {console.log(err);res.status(400).send("Unknown error")})
+});
+
+
+async function validateInput(busy, user_id){
+
+  let errors = ["Make sure that the dates do not overlap existing events in the calendar","Dates are invalid or are in the past", "Unknown error"]
+
+  let new_range;
+  let start = moment(busy[0], "YYYY-MM-DDTHH:mm:ssZ");
+  let end = moment(busy[1], "YYYY-MM-DDTHH:mm:ssZ");
+  
+  let now = moment();
+  if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {
+    return errors[1]
+  }
+
+  let appointments = await Appointment.find({
+    $and: [
+      { _taId: user_id },
+      {
+        $or: [
+          {
+            $and: [{ start_time: { $lte: end.toDate() } }, { start_time: { $gte: start.toDate() } }],
+          },
+          {
+            $and: [{ start_time: { $gte: start.toDate() } }, { end_time: { $lte: end.toDate() } }],
+          },
+          {
+            $and: [{ end_time: { $gte: start.toDate() } }, { end_time: { $lte: end.toDate() } }],
+          },
+        ],
+      },
+    ],
+  });
+
+  if (appointments.length > 0) {
+    return errors[0];
+  }
+
+  new_range = start.twix(end);
+
+  let avail = await Availability.findOne({ _userId: user_id });
+  
+  if(!avail){
+    return errors[2];
+  }
+
+  for (let i = 0; i < avail.busy.length; i++) {
+    let s = moment(avail.busy[i][0]).twix(moment(avail.busy[i][1]));
+    if (
+      new_range.overlaps(s) ||
+      new_range.engulfs(s) ||
+      new_range.equals(s) ||
+      new_range.contains(s)
+    ) {
+      return errors[0];
+    }
+  }
+  return true;
+} 
