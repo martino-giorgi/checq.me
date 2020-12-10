@@ -54,19 +54,31 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         : {},
     eventDragStart: function(info) {
-      if (info.event.extendedProps.appointment_id) {
+      // if (info.event.extendedProps.appointment_id) {
       
-      } else {
+      // } else {
         start_date_drag = info.event.start.toISOString();
         end_date_drag = info.event.end.toISOString();
-      }
+      // }
     },
     eventDrop: function(info) {
       if (!confirm("Are you sure about this change?")) {
         info.revert();
       } else {
         if (info.event.extendedProps.appointment_id) {
-          
+          var new_start = info.event.start.toISOString();
+          var new_end = info.event.end.toISOString();
+
+          API.patch_appointment(info.event.extendedProps.appointment_id, new_start, new_end).then(res=> {
+            if(res.status != 200){
+              window.FlashMessage.error("error");
+
+            }
+            else {
+              window.FlashMessage.success("Event has been changed successfully");  
+            }
+          })
+
         } else {
           var new_start = info.event.start.toISOString();
           var new_end = info.event.end.toISOString();
@@ -157,7 +169,6 @@ function parse_Ta_appointments(data) {
   data.busy.busy.forEach((el) => {
     let test = moment(el[0]).format();
     let test2 = moment(el[1]).format();
-    console.log(test,test2);
     calendar.addEvent({
       title: 'Busy Time Slot',
       start: test,
@@ -262,7 +273,7 @@ API = (function () {
     return fetch(`/availability`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: body
+      body
     });
   }
 
