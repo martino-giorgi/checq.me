@@ -8,6 +8,22 @@ let datepicker = new DateRangePicker(elem, {
   input: [start, end],
 });
 
+window.onclick = function (event) {
+  if (event.target == document.getElementById("viewEvent")) {
+      closeModal()
+  }
+}
+
+function closeModal() {
+  document.getElementById("viewEvent").classList.remove("show")
+  document.getElementById("backdrop").classList.remove("show");
+  document.getElementById("backdrop").style.display = "none";
+  document.getElementById("viewEvent").style.display = "none";
+
+  document.getElementById("ta-or-student-name").innerHTML = "";
+  document.getElementById("duration").innerHTML = "";
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   let role = document.querySelector('#role').innerHTML;
   var calendarEl = document.getElementById('calendar');
@@ -53,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           }
         : {},
-
     eventDragStart: function (info) {
       start_date_drag = info.event.start.toISOString();
       end_date_drag = info.event.end.toISOString();
@@ -66,14 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
         var new_end = info.event.end.toISOString();
 
         if (info.event.extendedProps.appointment_id) {
-
-          API.patch_appointment(info.event.extendedProps.appointment_id, new_start, new_end).then(res=> {
-            if(res.status != 200){
-              window.FlashMessage.error("error");
-
-            }
-            else {
-              window.FlashMessage.success("Event has been changed successfully");  
+          API.patch_appointment(
+            info.event.extendedProps.appointment_id,
+            new_start,
+            new_end
+          ).then((res) => {
+            if (res.status != 200) {
+              info.revert();
+            } else {
+              window.FlashMessage.success("Appointment was moved successfully")
             }
           })
         }
@@ -120,6 +136,22 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     eventClick: function(info) {
       // Display modal for date (or tooltip)
+      document.getElementById("backdrop").style.display = "block";
+      document.getElementById("viewEvent").style.display = "block";
+      document.getElementById("viewEvent").classList.add("show");
+      document.getElementById("backdrop").classList.add("show");
+
+      document.getElementById("event-name").innerHTML = info.event.title;
+
+      if (info.event.extendedProps.appointment_id) {
+        if (role == 1 || role == 0){
+          document.getElementById("ta-or-student-name").innerHTML = `With student: ${info.event.extendedProps.student}`;
+        } else {
+          // TODO: Set TA/Professor name
+        }
+
+        document.getElementById("duration").innerHTML = `Duration: ${moment(info.event.end).diff(moment(info.event.start), 'minutes')} min`
+      }
     }
   });
 
@@ -148,7 +180,7 @@ function parse_Ta_appointments(data) {
         classroom_id: el._masteryId.classroom,
         appointment_id: el._id,
         description: el._masteryId.description,
-        student: el._studentId.name + ' ' + el._studentId.name,
+        student: el._studentId.name + ' ' + el._studentId.surname,
       },
     });
 
@@ -168,7 +200,6 @@ function parse_Ta_appointments(data) {
 }
 
 function parse_student_appointments(data) {
-  console.log(data);
   data.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
@@ -180,7 +211,7 @@ function parse_student_appointments(data) {
         classroom_id: el._masteryId.classroom,
         appointment_id: el._id,
         description: el._masteryId.description,
-        student: el._studentId.name + ' ' + el._studentId.name,
+        student: el._studentId.name + ' ' + el._studentId.surname,
       },
     });
   });

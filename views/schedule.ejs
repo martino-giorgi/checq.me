@@ -1,16 +1,18 @@
-<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous"></script>
 <script src='https://cdn.jsdelivr.net/npm/moment-timezone@0.5.31/builds/moment-timezone-with-data.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.2.0/main.global.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-  crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"
+  integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+  crossorigin="anonymous"></script>
 
+<link rel="stylesheet" href="https://raw.githack.com/mymth/vanillajs-datepicker/v1.0.3/dist/css/datepicker-bs4.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/stylesheets/css/main.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+  crossorigin="anonymous">
 
 <div class="wrapper">
   <%- include("./partials/navigation", { active: "scheduler" }) %>
@@ -22,6 +24,7 @@
 
     <p hidden id="role"><%- user.role %></p>
 
+    <!-- Add Event modal -->
     <div class="modal fade" id="newEvent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -64,6 +67,30 @@
         </div>
       </div>
     </div>
+
+    <!-- View event modal -->
+    <div class="modal fade" id="viewEvent" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">View Event</h5>
+          </div>
+
+          <!-- TODO: Finish + add delete button -->
+          <div class="modal-body">
+            <h3 id="event-name"></h3>
+            <p id="ta-or-student-name"></p>
+            <p id="duration"></p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" onclick="closeModal()" class="btn btn-secondary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade" id="backdrop" style="display: none;"></div>
   </main>
 </div>
 
