@@ -10,20 +10,20 @@
     <div id="sub_navbar"></div>
 
     <section id="class_options">
-        <button type="button" onClick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
-          data-target="#user-modal">
-          Show User List
-        </button>
+      <button type="button" onClick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
+        data-target="#user-modal">
+        Show User List
+      </button>
 
-        <button type="button" class="btn btn-primary" onclick="render_mastery_modal()" data-toggle="modal"
-          data-target="#mastery-modal">
-          Show Mastery Check List
-        </button>
+      <!-- <button type="button" class="btn btn-primary" onclick="render_mastery_modal()" data-toggle="modal"
+        data-target="#mastery-modal">
+        Show Mastery Check List
+      </button> -->
 
-        <button type="button" class="btn btn-primary" onclick="render_add_mastery_modal()" data-toggle="modal"
-          data-target="#add-mastery-modal">
-          Add a Mastery Check
-        </button>
+      <button type="button" class="btn btn-primary" onclick="render_add_mastery_modal()" data-toggle="modal"
+        data-target="#add-mastery-modal">
+        Add a Mastery Check
+      </button>
     </section>
 
     <div id="add" class="container"></div>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Mastery Check list modal -->
-    <div class="modal fade" id="mastery-modal" tabindex="-1" role="dialog" aria-labelledby="mastery-modal-label" aria-hidden="true">
+    <!-- <div class="modal fade" id="mastery-modal" tabindex="-1" role="dialog" aria-labelledby="mastery-modal-label" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -64,7 +64,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Add Mastery Check modal -->
     <div class="modal fade" id="add-mastery-modal" tabindex="-1" role="dialog" aria-labelledby="add-mastery-modal-label" aria-hidden="true">
@@ -86,6 +86,8 @@
     </div>
 
     <section id="class_info"></section>
+
+    <div id="mastery-modal-body" class="modal-body"></div>
   </main>
 </div>
 
@@ -107,4 +109,5 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css" rel="stylesheet">
 <script>
     window.onload = init_manager;
+    render_mastery_modal();
 </script>

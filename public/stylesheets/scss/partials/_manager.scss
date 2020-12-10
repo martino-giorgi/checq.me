@@ -67,6 +67,17 @@
   }
 }
 
+.btn-primary.delete_btn {
+  background-color: $red !important;
+  border-color: $red_dark !important;
+
+  &:hover {
+    background-color: $red_dark !important;
+  }
+}
+
+
+
 .datepicker-cell.selected {
   background-color: $primary !important;
 
