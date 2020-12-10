@@ -103,35 +103,28 @@ router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
     return;
   }
 
-  let r = await validateInput(req.body.new, req.user._id)
+  let r = await validateInput(req.body.new, req.user._id, req.body.old);
 
   if(r != true){
     res.status(400).send(r);
     return;
   }
-
   let old_start = moment(req.body.old[0])
   let old_end = moment(req.body.old[1]);
 
-  console.log(old_start.toDate(),old_end.toDate());
-  
-  Availability.findOne({
-     _userId: req.user._id,
-      busy: [old_start.toDate(), old_end.toDate()]
-  }).then(av => console.log(av))
-//   Availability.findOneAndUpdate(
-//     { _userId: req.user._id, busy: [old_start,old_end] },
-//     { $set: { "busy.$": [moment(req.body.new[0]).toDate(),moment(req.body.new[1]).toDate()] } },
-//     { new: true }
-//   ).then((result) => {
-//     if(result){
-//       res.json(result);
-//     }
-//   }).catch(err => {console.log(err);res.status(400).send("Unknown error")})
+  Availability.findOneAndUpdate(
+    { _userId: req.user._id, busy: [old_start,old_end] },
+    { $set: { "busy.$": [moment(req.body.new[0]).toDate(),moment(req.body.new[1]).toDate()] } },
+    { new: true }
+  ).then((result) => {
+    if(result){
+      res.json(result);
+    }
+  }).catch(err => {console.log(err);res.status(400).send("Unknown error")})
 });
 
 
-async function validateInput(busy, user_id){
+async function validateInput(busy, user_id, busy_old){
 
   let errors = ["Make sure that the dates do not overlap existing events in the calendar","Dates are invalid or are in the past", "Unknown error"]
 
@@ -176,6 +169,9 @@ async function validateInput(busy, user_id){
   }
 
   for (let i = 0; i < avail.busy.length; i++) {
+    if(busy_old && moment(avail.busy[i][0]).isSame(busy_old[0]) && moment(avail.busy[i][1]).isSame(busy_old[1]) ){
+      continue;
+    }
     let s = moment(avail.busy[i][0]).twix(moment(avail.busy[i][1]));
     if (
       new_range.overlaps(s) ||

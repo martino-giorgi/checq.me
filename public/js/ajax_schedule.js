@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
           ? 'addEventButton dayGridMonth,timeGridWeek,listMonth'
           : 'dayGridMonth,timeGridWeek,listMonth',
     },
+    timeZone: 'local',
     themeSystem: 'bootstrap',
     initialView: 'timeGridWeek',
     firstDay: '1',
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     contentHeight: 'auto',
     nowIndicator: true,
     eventOverlap: false,
+    eventResizableFromStart: true,
     customButtons:
       role == 0 || role == 1
         ? {
@@ -52,30 +54,72 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         : {},
     eventDragStart: function(info) {
-      start_date_drag = info.event._instance.range.start.toISOString();
-      end_date_drag = info.event._instance.range.end.toISOString();
+      if (info.event.extendedProps.appointment_id) {
+      
+      } else {
+        start_date_drag = info.event.start.toISOString();
+        end_date_drag = info.event.end.toISOString();
+      }
     },
     eventDrop: function(info) {
       if (!confirm("Are you sure about this change?")) {
         info.revert();
       } else {
-        var new_start = info.event._instance.range.start.toISOString();
-        var new_end = info.event._instance.range.end.toISOString();
-        
-        API.patch_appointment(start_date_drag, end_date_drag, new_start, new_end)
+        if (info.event.extendedProps.appointment_id) {
+          
+        } else {
+          var new_start = info.event.start.toISOString();
+          var new_end = info.event.end.toISOString();
+
+          API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
+            if (res.status != 200) {
+              res.text().then((text) => {
+                window.FlashMessage.error(text);
+                info.revert();
+                start_date_drag = "";
+                end_date_drag = "";
+              })
+            } else {
+              window.FlashMessage.success("Event has been changed successfully");
+            }
+          })
+        }
       }
     },
-    
+    eventResizeStart: function(info) {
+      if (info.event.extendedProps.appointment_id) {
+      
+      } else {
+        start_date_drag = info.event.start.toISOString();
+        end_date_drag = info.event.end.toISOString();
+      }
+    },
+    eventResize: function(info) {
+      if (!confirm("Are you sure about this change?")) {
+        info.revert();
+      } else {
 
-    // TODO: Send new data to database if resizing of event has finished
-    // TODO: Check if user is student of that class
-    // eventResize: function(info) {
-    // alert(info.event.title + " end is now " + info.event.end.toISOString());
+        if (info.event.extendedProps.appointment_id) {
 
-    // if (!confirm("is this okay?")) {
-    //   info.revert();/
-    // }
-    //}
+        } else {
+          var new_start = info.event.start.toISOString();
+          var new_end = info.event.end.toISOString();
+
+          API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
+            if (res.status != 200) {
+              res.text().then((text) => {
+                window.FlashMessage.error(text);
+                info.revert();
+                start_date_drag = "";
+                end_date_drag = "";
+              })
+            } else {
+              window.FlashMessage.success("Event has been changed successfully");
+            }
+          })
+        }
+      }
+    }
   });
 
   if (role == 0 || role == 1) {
@@ -95,22 +139,29 @@ function parse_Ta_appointments(data) {
   data.appointments.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
-      description: el._masteryId.description,
-      student: el._studentId.name + ' ' + el._studentId.name,
       start : el.start_time,
       end: el.end_time,
-      classroom_id: el._masteryId.classroom,
-      appointment_id: el._id,
+      durationEditable:false,
+
+      extendedProps: {
+        classroom_id: el._masteryId.classroom,
+        appointment_id: el._id,
+        description: el._masteryId.description,
+        student: el._studentId.name + ' ' + el._studentId.name,
+      }
     });
 
     document.querySelector('#newEvent').classList.remove('show');
   });
   
   data.busy.busy.forEach((el) => {
+    let test = moment(el[0]).format();
+    let test2 = moment(el[1]).format();
+    console.log(test,test2);
     calendar.addEvent({
       title: 'Busy Time Slot',
-      start: el[0],
-      end: el[1],
+      start: test,
+      end: test2,
       color: 'red',
     });
   });
@@ -121,12 +172,16 @@ function parse_student_appointments(data) {
   data.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
-      description: el._masteryId.description,
-      student: el._studentId.name + ' ' + el._studentId.name,
       start: el.start_time,
       end: el.end_time,
-      classroom_id: el._masteryId.classroom,
-      appointment_id: el._id,
+      durationEditable:false,
+
+      extendedProps:{
+        classroom_id: el._masteryId.classroom,
+        appointment_id: el._id,
+        description: el._masteryId.description,
+        student: el._studentId.name + ' ' + el._studentId.name,
+      }
     });
   });
 }
@@ -198,18 +253,30 @@ API = (function () {
     });
   }
 
-  function patch_appointment(old_start, old_end, new_start, new_end) {
-    let times = {
+  function patch_busy(old_start, old_end, new_start, new_end) {
+    let body = JSON.stringify({
       old: [old_start, old_end],
       new: [new_start, new_end]
-    }
-
-    console.log(old_start, old_end, new_start, new_end)
+    })
 
     return fetch(`/availability`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(times)
+      body: body
+    });
+  }
+
+  function patch_appointment(id, new_start, new_end) {
+    let body = JSON.stringify({
+      appointment_id:id,
+      start_date: new_start,
+      end_date: new_end,
+    })
+
+    return fetch(`/appointment`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body
     });
   }
 
@@ -217,5 +284,6 @@ API = (function () {
     get_appointments,
     post_busy_slot,
     patch_appointment,
+    patch_busy
   };
 })();
