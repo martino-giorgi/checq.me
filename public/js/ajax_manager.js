@@ -81,12 +81,12 @@ function generate_invite_link(id) {
 function test() {
     console.log("clickked")
     let body = JSON.stringify({
-        appointment_id: '5fce41073031b4611f0eab0c',
+        appointment_id: '5fd29b36fe112412fc0dc8f2',
         topic_grades: {"id1": 0, "id2": 1},
-        mastery_id: '5fcb47317b5c2f1ae6d5df9f',
+        mastery_id: '5fd29bb46ec343577cdce161',
         final_grade: 0
     });
-    fetch('/grades?classroom_id=5fcb44897b5c2f1ae6d5df9e', {
+    fetch('/grades?classroom_id=5fd298eac685cd56e4f0a10c', {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: body

@@ -30,7 +30,7 @@ const AppointmentSchema = new mongoose.Schema({
     },
     duration:{ //minutes
         type: Number,
-        required: true
+        required: true,
     },
     grade:{
         type: String,
