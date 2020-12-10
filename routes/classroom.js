@@ -134,8 +134,7 @@ router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
       path: "partecipants",
       select: ["email", "name", "surname", "classrooms", "role", "gravatar"],
     })
-    .then((result) => { 
-
+    .then((result) => {
       if (req.accepts('html')) {
         res.render('student_classroom', { model: { classroom: result, user: req.user } })
       } else {

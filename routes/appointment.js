@@ -449,7 +449,7 @@ router.patch("/",ensureProfOrTAUser, async (req,res) => {
   let start_day = moment(req.body.start_date).startOf('day');
   let end_day = moment(req.body.end_date).endOf('day');
 
-  console.log(a,b);
+  // console.log(a,b);
   if(a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {
     appointment = await Appointment.findOne({_id: req.body.appointment_id});
     if(!appointment && b.diff(a) != appointment.duration){
@@ -485,7 +485,7 @@ router.patch("/",ensureProfOrTAUser, async (req,res) => {
     console.log(total);
     console.log(a,b);
     let availability = get_available_time2(a,b, total, appointment.duration);
-    console.log(availability)
+    // console.log(availability)
     if(availability.length == 1 && availability[0].start.isSame(a) && availability[0].end.isSame(b)){
       Appointment.findOneAndUpdate({_id:appointment._id},{$set:{start_time: a, end_time:b}},{new : true, upsert:false}).then((updated_el)=> {
         res.json(updated_el);
