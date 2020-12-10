@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
               window.FlashMessage.success("Event has been changed successfully");  
             }
           })
-
         }
         else {
           API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
