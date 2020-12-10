@@ -53,72 +53,72 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           }
         : {},
-    eventDragStart: function(info) {
-      if (info.event.extendedProps.appointment_id) {
-      
-      } else {
-        start_date_drag = info.event.start.toISOString();
-        end_date_drag = info.event.end.toISOString();
-      }
+    eventDragStart: function (info) {
+      start_date_drag = info.event.start.toISOString();
+      end_date_drag = info.event.end.toISOString();
     },
-    eventDrop: function(info) {
-      if (!confirm("Are you sure about this change?")) {
+    eventDrop: function (info) {
+      if (!confirm('Are you sure about this change?')) {
         info.revert();
       } else {
-        if (info.event.extendedProps.appointment_id) {
-          
-        } else {
-          var new_start = info.event.start.toISOString();
-          var new_end = info.event.end.toISOString();
+        var new_start = info.event.start.toISOString();
+        var new_end = info.event.end.toISOString();
 
+        if (info.event.extendedProps.appointment_id) {
+          API.patch_appointment(
+            info.event.extendedProps.appointment_id,
+            new_start,
+            new_end
+          ).then((res) => {
+            if (res.status != 200) {
+
+            } else {
+              window.FlashMessage.success("Appointment was moved successfully")
+            }
+          });
+        } else {
           API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
             if (res.status != 200) {
               res.text().then((text) => {
                 window.FlashMessage.error(text);
                 info.revert();
-                start_date_drag = "";
-                end_date_drag = "";
-              })
+                start_date_drag = '';
+                end_date_drag = '';
+              });
             } else {
-              window.FlashMessage.success("Event has been changed successfully");
+              window.FlashMessage.success('Busy day was moved successfully');
             }
-          })
+          });
         }
       }
     },
-    eventResizeStart: function(info) {
-      if (info.event.extendedProps.appointment_id) {
-      
-      } else {
-        start_date_drag = info.event.start.toISOString();
-        end_date_drag = info.event.end.toISOString();
-      }
+    eventResizeStart: function (info) {
+      start_date_drag = info.event.start.toISOString();
+      end_date_drag = info.event.end.toISOString();
     },
-    eventResize: function(info) {
-      if (!confirm("Are you sure about this change?")) {
+    eventResize: function (info) {
+      if (!confirm('Are you sure about this change?')) {
         info.revert();
       } else {
+        var new_start = info.event.start.toISOString();
+        var new_end = info.event.end.toISOString();
 
-        if (info.event.extendedProps.appointment_id) {
-
-        } else {
-          var new_start = info.event.start.toISOString();
-          var new_end = info.event.end.toISOString();
-
-          API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
-            if (res.status != 200) {
-              res.text().then((text) => {
-                window.FlashMessage.error(text);
-                info.revert();
-                start_date_drag = "";
-                end_date_drag = "";
-              })
-            } else {
-              window.FlashMessage.success("Event has been changed successfully");
-            }
-          })
-        }
+        API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
+          if (res.status != 200) {
+            res.text().then((text) => {
+              window.FlashMessage.error(text);
+              info.revert();
+              start_date_drag = '';
+              end_date_drag = '';
+            });
+          } else {
+            window.FlashMessage.success('Busy day was changed successfully');
+          }
+        });
       }
+    },
+    eventClick: function(info) {
+      // Display modal for date (or tooltip)
     }
   });
 
@@ -139,25 +139,25 @@ function parse_Ta_appointments(data) {
   data.appointments.forEach((el) => {
     calendar.addEvent({
       title: el._masteryId.name,
-      start : el.start_time,
+      start: el.start_time,
       end: el.end_time,
-      durationEditable:false,
+      durationEditable: false,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
         appointment_id: el._id,
         description: el._masteryId.description,
         student: el._studentId.name + ' ' + el._studentId.name,
-      }
+      },
     });
 
     document.querySelector('#newEvent').classList.remove('show');
   });
-  
+
   data.busy.busy.forEach((el) => {
     let test = moment(el[0]).format();
     let test2 = moment(el[1]).format();
-    console.log(test,test2);
+    console.log(test, test2);
     calendar.addEvent({
       title: 'Busy Time Slot',
       start: test,
@@ -174,14 +174,14 @@ function parse_student_appointments(data) {
       title: el._masteryId.name,
       start: el.start_time,
       end: el.end_time,
-      durationEditable:false,
+      durationEditable: false,
 
-      extendedProps:{
+      extendedProps: {
         classroom_id: el._masteryId.classroom,
         appointment_id: el._id,
         description: el._masteryId.description,
         student: el._studentId.name + ' ' + el._studentId.name,
-      }
+      },
     });
   });
 }
@@ -199,7 +199,7 @@ function addBusyDay() {
     date_start === undefined ||
     date_end === undefined
   ) {
-    window.FlashMessage.error("Please fill in all of the input fields");
+    window.FlashMessage.error('Please fill in all of the input fields');
   } else {
     let date_complete_start = moment(date_start + 'T' + time_start, 'YYYY-MM-DDTHH:mm', true);
     let date_complete_end = moment(date_end + 'T' + time_end, 'YYYY-MM-DDTHH:mm', true);
@@ -221,15 +221,15 @@ function addBusyDay() {
           document.querySelector('.modal').classList.remove('show');
           document.querySelector('.modal-backdrop').classList.remove('show');
 
-          window.FlashMessage.success("Busy day was added");
+          window.FlashMessage.success('Busy day was added');
         } else {
-          response.text().then(text => {
+          response.text().then((text) => {
             window.FlashMessage.error(text);
-          })
+          });
         }
       });
     } else {
-      window.FlashMessage.error("Time interval is invalid");
+      window.FlashMessage.error('Time interval is invalid');
     }
   }
 }
@@ -256,27 +256,27 @@ API = (function () {
   function patch_busy(old_start, old_end, new_start, new_end) {
     let body = JSON.stringify({
       old: [old_start, old_end],
-      new: [new_start, new_end]
-    })
+      new: [new_start, new_end],
+    });
 
     return fetch(`/availability`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: body
+      body: body,
     });
   }
 
   function patch_appointment(id, new_start, new_end) {
     let body = JSON.stringify({
-      appointment_id:id,
+      appointment_id: id,
       start_date: new_start,
       end_date: new_end,
-    })
+    });
 
     return fetch(`/appointment`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body
+      body,
     });
   }
 
@@ -284,6 +284,6 @@ API = (function () {
     get_appointments,
     post_busy_slot,
     patch_appointment,
-    patch_busy
+    patch_busy,
   };
 })();
