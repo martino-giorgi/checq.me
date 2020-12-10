@@ -1,22 +1,22 @@
-const express = require("express");
-const moment = require("moment");
-require("twix");
+const express = require('express');
+const moment = require('moment');
+require('twix');
 const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessorUser,
   ensureStudent,
   ensureProfOrTAUser,
-} = require("../config/auth");
+} = require('../config/auth');
 
-const User = require("../models/User");
-const Availability = require("../models/Availability");
-const Appointment = require("../models/Appointment");
+const User = require('../models/User');
+const Availability = require('../models/Availability');
+const Appointment = require('../models/Appointment');
 
 module.exports = router;
 
 //get availability for the current user
-router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
+router.get('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Availability.findOne({ _userId: req.user._id })
     .select({ busy: 1, _id: 1, _userId: 1 })
     .then((r) => {
@@ -28,11 +28,11 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
     });
 });
 
-router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
+router.post('/', ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   //input check
   let new_range;
-  let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm:ssZ");
-  let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm:ssZ");
+  let start = moment(req.body.busy[0], 'YYYY-MM-DDTHH:mm:ssZ');
+  let end = moment(req.body.busy[1], 'YYYY-MM-DDTHH:mm:ssZ');
 
   let now = moment();
   if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {

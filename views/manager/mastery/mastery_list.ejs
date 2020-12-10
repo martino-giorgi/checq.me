@@ -17,6 +17,7 @@
             <h5 class="card-title"><%= element.name %></h5>
             <small id="id_container" data-id="<%= element._id%>">Mastery ID: <%= element._id%></small>
             <p id="element_desc" class="card-text"><%= element.description %></p>
+            <p id="element_durat" class="card-text"><%= element.appointment_duration %></p>
             <p id="element_available" class="card-text"><%= element.available  ? "Available" : "Not Available" %></p>
             <p class="topic_list" id="topics_list">
                 <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>
@@ -43,4 +44,5 @@
     </div>
     <% }); %>
 </div>
+
 <script src="/js/ajax_question.js"></script>

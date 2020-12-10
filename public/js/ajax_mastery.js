@@ -28,7 +28,8 @@ function add_edit_event() {
       let current_values = {
         name: card_body.querySelector('h5').innerHTML,
         description: card_body.querySelector('#element_desc').innerHTML,
-        available: card_body.querySelector('#element_available') == "Available" ? true : false
+        available: card_body.querySelector('#element_available').innerHTML == "Available" ? true : false,
+        appointment_duration: card_body.querySelector('#element_durat').innerHTML
       }
       card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });
     })
@@ -66,7 +67,8 @@ function add_edit_topic_event() {
 
 function render_mastery_modal() {
   API_mastery.get_masteries().then(res => {
-    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res })
+    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res });
+    console.log(res)
     add_delete_event();
     add_edit_event();
     add_new_event();
@@ -123,10 +125,11 @@ function edit_mastery() {
   let body = {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
-    available: document.getElementById("check_available").checked
+    appointment_duration: parseInt(document.getElementById("input_duration").value),
+    available: document.getElementById("check_available").value == "on" ? true : false
   }
 
-  if (body.name != "" && body.description != "") {
+  if (body.name != "" && body.description != "" && body.appointment_duration != "") {
 
     API_mastery.edit_mastery(JSON.stringify(body)).then(res => {
       if (res.status == 200) {
@@ -146,12 +149,15 @@ function create_mastery() {
   let body = {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
-    available: document.getElementById("check_available") == "checked" ? true : false
+    appointment_duration: parseInt(document.getElementById("input_duration").value),
+    available: document.getElementById("check_available").value == "on" ? true : false
   }
 
-  if (body.name != "" && body.description != "") {
+  if (body.name != "" && body.description != "" && body.appointment_duration != "") {
 
     API_mastery.post_mastery(JSON.stringify(body)).then(res => {
+      console.log(body)
+
       if (res.status == 200) {
         window.FlashMessage.success("Mastery Check Added");
         $("#add-mastery-modal").modal('hide');
@@ -166,7 +172,6 @@ function create_mastery() {
 }
 
 function show_question_form() {
-  
   document.querySelectorAll("#a_add_question").forEach( link => {
     console.log("one link");
     link.addEventListener("click", e => {
