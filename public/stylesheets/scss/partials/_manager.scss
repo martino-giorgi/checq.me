@@ -71,7 +71,7 @@
   background-color: $red !important;
   border-color: $red_dark !important;
 
-  &:hover {
+  &:hover, &:focus {
     background-color: $red_dark !important;
   }
 }

@@ -14,7 +14,6 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
       select: ["name", "surname"],
     })
     .then((classrooms) => {
-      console.log(classrooms);
       res.render("manager/manager", { user: req.user, classrooms: classrooms });
     });
 });

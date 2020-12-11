@@ -97,35 +97,74 @@
         <p class="bold">Back</p>
       </span>
     
-      <form id="new_class_form" action="/classroom/new" method="POST">
+      <form id="new_class_form">
         <div class="form-group">
           <label for="input_name">Class Name</label>
           <input autocomplete="off" type="text" required class="form-control" name="name" id="input_name" placeholder="Class name">
         </div>
     
         <div class="form-group">
-          <label for="input_name">Class Description</label>
+          <label for="input_desc">Class Description</label>
           <textarea required class="form-control" name="description" id="input_desc" rows="3" placeholder="Classroom description"></textarea>
         </div>
 
-        <div class="row" id="picker">
-          <div class="col">
-            <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
-          </div>
+        <label for="start_date">Course Duration</label>
+        
+        <div class="form-group">
+          <div class="row" id="picker">
+            <div class="col">
+              <input autocomplete="off" type="text" required class="form-control" id="start" placeholder="Starting date" name="start_date">
+            </div>
 
-          <button type="button" class="btn btn-link">to</button>
+            <button type="button" class="btn btn-link">to</button>
 
-          <div class="col">
-            <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+            <div class="col">
+              <input autocomplete="off" type="text" required class="form-control" id="end" placeholder="Ending date" name="end_date">
+            </div>
           </div>
         </div>
-    
+
+        <label for="input_weekdays">Mastery Days</label>
+
+        <div class="form-group" id="mastery-days">
+          <div class="row" id="m-day-1">
+            <div class="col">
+              <select required class="form-control" id="dates">
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+                <option value="7">Sunday</option>
+              </select>
+            </div>
+            
+            <div class="col">
+              <input type="time" required class="form-control" id="start_time_day_1" placeholder="Starting Time" name="start_time_day">
+            </div>
+
+            <button type="button" class="btn btn-link">to</button>
+
+            <div class="col">
+              <input type="time" required class="form-control" id="end_time_day_1" placeholder="Ending Time" name="end_time_day">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <button onclick="add_mastery_day_frontend()" type="button" class="btn btn-primary">Add Mastery Day</button>
+            <button disabled onclick="remove_mastery_day_frontend()" id="remove-mastery" type="button" class="btn btn-primary delete_btn">Remove Mastery Day</button>
+        </div>
+
+        <p hidden id="counter-m-days">1</p>
+
         <div style="margin-top: 16px" class="form-check">
           <input type="checkbox" class="form-check-input" id="input_is_ordered" name="is_ordered" checked>
           <label class="form-check-label" for="is_ordered">Sequential completion of Mastery Checks</label>
         </div>
         
-        <input id="submit-btn" style="margin-top: 16px" type="submit" class="button">
+        <button onclick="addClass()" id="submit-btn" style="margin-top: 16px" type="button" class="btn btn-primary">Add Class</button>
       </form>
     </div>
   </section>
