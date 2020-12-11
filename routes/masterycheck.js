@@ -79,11 +79,15 @@ router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
         console.log(questions);
         console.log(topics);
         questions.forEach(q => {
-          Question.deleteOne({_id: q._id});
+          Question.deleteOne({_id: q._id}).then( () => {
+            console.log("deleted q")
+          }).catch( err => {console.log(err)})
         });
         topics.forEach(t => {
-          Topic.deleteOne({_id: t._id});
-        })
+          Topic.deleteOne({_id: t._id}).then( () => {
+            console.log("deleted t");
+          }).catch(err => {console.log(err)})
+        });
         MasteryCheck.deleteOne({ _id: req.query.mastery_id })
           .then(() => {
             res.status(200).end();
