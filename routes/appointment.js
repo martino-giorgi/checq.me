@@ -10,7 +10,7 @@ const {
   ensureProfOrTAUser,
 } = require("../config/auth");
 
-const { get_available_time, get_available_time2 } = require("../updates/available_time");
+const { get_available_time2 } = require("../updates/available_time");
 
 const { increaseTa } = require("../updates/db_updates");
 
@@ -23,16 +23,17 @@ const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
-router.post("/scheduletest", ensureAuthenticated, ensureStudent, async (req, res) => {
+router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
-
+  console.log("1");
+  console.log(mastery_id);
   try {
     if ((await can_mastery(mastery_id, user_id)) == false) {
-      res.end();
+      res.status(400).end();
       return;
     }
-
+    console.log("2");
     let mastery = await MasteryCheck.findById(mastery_id)
       .select({ classroom: 1, appointment_duration: 1 })
       .populate({ path: "classroom" });
@@ -359,7 +360,9 @@ async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
 
 async function can_mastery(mastery_id, user_id) {
   return new Promise((resolve, rejects) => {
-    Appointment.find({ _masteryId: mastery_id, _studentId: user_id }).then((ap) => {
+    let now = moment();
+
+    Appointment.find({ _masteryId: mastery_id, _studentId: user_id, start_time: { $gt: now } }).then((ap) => {
       if (ap.length > 0) {
         resolve(false);
         return;
@@ -367,8 +370,9 @@ async function can_mastery(mastery_id, user_id) {
         MasteryCheck.findById(mastery_id)
           .populate({ path: "classroom", select: ["is_ordered_mastery"] })
           .then((ordered) => {
+            console.log(ordered);
             if (ordered != null) {
-              if (ordered.avalable == false) {
+              if (ordered.available == false) {
                 resolve(false);
                 return;
               }

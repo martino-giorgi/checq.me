@@ -18,7 +18,7 @@ window.onclick = function (event) {
 
 async function populateSelection() {
   let form_select_class = document.getElementById('exampleFormControlSelect1');
-  form_select_class.addEventListener("change", getMasteries);
+  form_select_class.addEventListener('change', getMasteries);
 
   classrooms = await API.get_classrooms();
 
@@ -34,8 +34,8 @@ async function populateSelection() {
 }
 
 function getMasteries() {
-  document.getElementById('exampleFormControlSelect2').innerHTML = "";
-  
+  document.getElementById('exampleFormControlSelect2').innerHTML = '';
+
   let classroom_id = document.getElementById('exampleFormControlSelect1').value;
   let i;
   for (i = 0; i < classrooms.length; i++) {
@@ -49,6 +49,7 @@ function getMasteries() {
 
     let option = document.createElement('option');
     option.innerHTML = mastery.name;
+    option.value = mastery._id;
 
     if (mastery.available) {
       form_select_mastery.appendChild(option);
@@ -204,7 +205,6 @@ document.addEventListener('DOMContentLoaded', function () {
             'ta-or-student-name'
           ).innerHTML = `With student: ${info.event.extendedProps.student}`;
         } else {
-          // TODO: Set TA/Professor name
           document.getElementById(
             'ta-or-student-name'
           ).innerHTML = `With student: ${info.event.extendedProps.ta}`;
@@ -329,6 +329,20 @@ function addBusyDay() {
   }
 }
 
+function bookMastery() {
+  let mastery_id = document.getElementById('exampleFormControlSelect1').value;
+
+  API.book_appointment(mastery_id).then((response) => {
+    console.log("ciao")
+    // if (response.status != 200) {
+    //   console.log("ERROR")
+    //   window.FlashMessage.error('Error!');
+    // } else {
+    //   window.FlashMessage.success('Mastery check appointment booked successfully');
+    // }
+  })
+}
+
 API = (function () {
   function get_appointments() {
     return fetch(`/appointment`).then((res) => {
@@ -381,11 +395,24 @@ API = (function () {
     });
   }
 
+  function book_appointment(mastery_id) {
+    let body = JSON.stringify({
+      mastery_id: mastery_id,
+    });
+
+    return fetch(`/appointment/book`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+  }
+
   return {
     get_appointments,
     post_busy_slot,
     patch_appointment,
     patch_busy,
     get_classrooms,
+    book_appointment,
   };
 })();
