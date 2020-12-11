@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function () {
             new_end
           ).then((res) => {
             if (res.status != 200) {
+              res.text().then(t => {
+                window.FlashMessage.error(t);
+              })
               info.revert();
             } else {
               window.FlashMessage.success("Appointment was moved successfully")
@@ -148,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
           document.getElementById("ta-or-student-name").innerHTML = `With student: ${info.event.extendedProps.student}`;
         } else {
           // TODO: Set TA/Professor name
+          document.getElementById("ta-or-student-name").innerHTML = `With student: ${info.event.extendedProps.ta}`;
         }
 
         document.getElementById("duration").innerHTML = `Duration: ${moment(info.event.end).diff(moment(info.event.start), 'minutes')} min`
@@ -201,6 +205,7 @@ function parse_Ta_appointments(data) {
 
 function parse_student_appointments(data) {
   data.forEach((el) => {
+    console.log(el);
     calendar.addEvent({
       title: el._masteryId.name,
       start: el.start_time,
@@ -211,7 +216,7 @@ function parse_student_appointments(data) {
         classroom_id: el._masteryId.classroom,
         appointment_id: el._id,
         description: el._masteryId.description,
-        student: el._studentId.name + ' ' + el._studentId.surname,
+        ta: el._taId.name + ' ' + el._taId.surname,
       },
     });
   });

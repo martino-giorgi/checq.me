@@ -323,7 +323,6 @@ async function get_TA_queue(date, classroom_tas, exclude) {
   });
 }
 
-//TODO CHANGE FIX!!!!!!!!!
 async function get_student_appointments(m_day_start, m_day_end, student_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
@@ -341,7 +340,6 @@ async function get_student_appointments(m_day_start, m_day_end, student_id) {
   });
 }
 
-//TODO CHANGE FIX!!!!!!!!!
 async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
@@ -453,7 +451,7 @@ router.patch("/",ensureProfOrTAUser, async (req,res) => {
   if(a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {
     appointment = await Appointment.findOne({_id: req.body.appointment_id});
     if(!appointment && b.diff(a) != appointment.duration){
-      res.status(400).end();
+      res.status(400).send("Invalid date");
       return;
     }
     // console.log("here")
@@ -482,21 +480,18 @@ router.patch("/",ensureProfOrTAUser, async (req,res) => {
       }
     });
 
-    console.log(total);
-    console.log(a,b);
     let availability = get_available_time2(a,b, total, appointment.duration);
     // console.log(availability)
     if(availability.length == 1 && availability[0].start.isSame(a) && availability[0].end.isSame(b)){
       Appointment.findOneAndUpdate({_id:appointment._id},{$set:{start_time: a, end_time:b}},{new : true, upsert:false}).then((updated_el)=> {
         res.json(updated_el);
-      }).catch(err => {console.log(err); res.status(400).end()})
+      }).catch(err => {console.log(err); res.status(400).send("Unknown error")})
       return;
     }
-    res.status(400).end();
+    res.status(400).send("This student has another appointment at this time");
     // console.log(availability)
   } else {
-    console.log("invalid");
-    res.status(400).end();
+    res.status(400).send("Invalid date");
   }
 })
 
