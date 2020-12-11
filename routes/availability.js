@@ -125,7 +125,6 @@ router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
 
 
 async function validateInput(busy, user_id, busy_old){
-
   let errors = ["Make sure that the dates do not overlap existing events in the calendar","Dates are invalid or are in the past", "Unknown error"]
 
   let new_range;

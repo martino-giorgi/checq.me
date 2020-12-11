@@ -3,6 +3,7 @@ const start = document.getElementById('start');
 const end = document.getElementById('end');
 
 let classrooms;
+let event_to_delete;
 
 let datepicker = new DateRangePicker(elem, {
   buttonClass: 'btn',
@@ -68,7 +69,7 @@ function closeModal() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  let role = document.querySelector('#role').innerHTML;
+  role = document.querySelector('#role').innerHTML;
   var calendarEl = document.getElementById('calendar');
 
   var start_date_drag;
@@ -207,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           document.getElementById(
             'ta-or-student-name'
-          ).innerHTML = `With student: ${info.event.extendedProps.ta}`;
+          ).innerHTML = `With TA: ${info.event.extendedProps.ta}`;
         }
 
         document.getElementById('duration').innerHTML = `Duration: ${moment(info.event.end).diff(
@@ -215,21 +216,19 @@ document.addEventListener('DOMContentLoaded', function () {
           'minutes'
         )} min`;
       }
+
+      if (role == 0 || role == 1) {
+        delete_event(info);
+      }
     },
   });
-
-  if (role == 0 || role == 1) {
-    API.get_appointments().then((data) => {
-      parse_Ta_appointments(data);
-    });
-  } else if (role == 2) {
-    API.get_appointments().then((data) => {
-      parse_student_appointments(data);
-    });
-  }
+  API.populateCalendar();
 
   calendar.render();
 });
+
+
+
 
 function parse_Ta_appointments(data) {
   data.appointments.forEach((el) => {
@@ -264,7 +263,6 @@ function parse_Ta_appointments(data) {
 
 function parse_student_appointments(data) {
   data.forEach((el) => {
-    // console.log(el);
     calendar.addEvent({
       title: el._masteryId.name,
       start: el.start_time,
@@ -278,6 +276,22 @@ function parse_student_appointments(data) {
         ta: el._taId.name + ' ' + el._taId.surname,
       },
     });
+  });
+}
+
+function delete_event(info) {
+  document.getElementById('delete-event').addEventListener('click', () => {
+    if (info.event.extendedProps.appointment_id) {
+      API.delete_appointment(info.event.extendedProps.appointment_id).then((result) => {
+        if (result.status != 200) {
+          window.FlashMessage.error('Something went wrong');
+        } else {
+          info.event.remove();
+          window.FlashMessage.success('Appointment was deleted successfully');
+        }
+      });
+    } else {
+    }
   });
 }
 
@@ -334,14 +348,22 @@ function bookMastery() {
   console.log(mastery_id);
 
   API.book_appointment(mastery_id).then((response) => {
+
     if (response.status != 200) {
-      response.text().then(t => {
+      response.text().then((t) => {
         window.FlashMessage.error(t);
-      })
+      });
     } else {
+      let nodes = document.querySelectorAll('[modal-backdrop]');
+      var last = nodes[nodes.length- 1];
+
+      document.querySelector("body > div.modal-backdrop").classList.remove("show");
+      document.querySelector('#newMastery').classList.remove('show');
       window.FlashMessage.success('Mastery check appointment booked successfully');
+      calendar.removeEvents();
+      API.populateCalendar();
     }
-  })
+  });
 }
 
 API = (function () {
@@ -408,6 +430,25 @@ API = (function () {
     });
   }
 
+  function delete_appointment(id) {
+    return fetch('/appointment/' + id, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  function populateCalendar(){
+    if (role == 0 || role == 1) {
+      get_appointments().then((data) => {
+        parse_Ta_appointments(data);
+      });
+    } else if (role == 2) {
+      get_appointments().then((data) => {
+        parse_student_appointments(data);
+      });
+    }
+  }
+
   return {
     get_appointments,
     post_busy_slot,
@@ -415,5 +456,7 @@ API = (function () {
     patch_busy,
     get_classrooms,
     book_appointment,
+    delete_appointment,
+    populateCalendar,
   };
 })();

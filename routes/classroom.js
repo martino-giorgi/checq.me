@@ -347,7 +347,7 @@ router.get(
 
 //(((move to a new route?)))
 //add a mastery day for this classroom, id of the classromm is expected in the body
-router.post("/mday", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post("/mday", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   let start = moment(req.body.start, "YYYY-MM-DDTHH:mm", true);
   let end = moment(req.body.end, "YYYY-MM-DDTHH:mm", true);
   if (

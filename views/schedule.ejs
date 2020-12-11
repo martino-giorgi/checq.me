@@ -102,8 +102,11 @@
     <div class="modal fade" id="viewEvent" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header" style="display:flex; justify-content: space-between; align-items: center">
             <h5 class="modal-title" id="modalCenterTitle">View Event</h5>
+            <% if (user.role == 0 || user.role == 1) { %>
+              <img id="delete-event" src="/assets/icons/buttons/delete.svg" alt="delete icon">
+            <% } %> 
           </div>
 
           <!-- TODO: Finish + add delete button -->

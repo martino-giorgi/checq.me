@@ -8,6 +8,6 @@ const MasteryCheck = require('../models/MasteryCheck');
 
 module.exports = router;
 
-router.get('/', ensureAuthenticated, ensureStudent, (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
   res.render('schedule', { user: req.user });
 });
