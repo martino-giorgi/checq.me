@@ -5,10 +5,9 @@ const router = express.Router();
 var ObjectID = require("mongodb").ObjectID;
 const {
     ensureAuthenticated,
-    ensureProfessor,
+    ensureStudent,
     ensureProfOrTA,
     ensureMemberOfClass,
-    ensureProfessorUser
 } = require("../config/auth");
 
 const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
@@ -29,7 +28,8 @@ module.exports = router;
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.put('/', ensureProfOrTA, (req, res) => {
+
+router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
     Appointment.findById(req.body.appointment_id).then(appointment => {
         // checks appointment belongs to the TA or is a professor
         if (appointment._taId.equals(req.user._id) || req.user.role === 0) {
@@ -42,27 +42,27 @@ router.put('/', ensureProfOrTA, (req, res) => {
                         // grades object id for this class
                         let grades_id = user.classrooms_grades.get(req.query.classroom_id);
                         ClassroomGrades.findById(grades_id).then(classroom_grades => {
-                                let new_attempt = new Attempt({
-                                    _mastery_id: req.body.mastery_id, 
-                                    topic_grades: req.body.topic_grades,
-                                    final_grade: req.body.final_grade
-                                })
-                                // check if masterycheck_id is in the map
-                                if (classroom_grades.mastery_grades.get(req.body.mastery_id)) {
-                                    let x = classroom_grades.mastery_grades.get(req.body.mastery_id)
-                                    x.push(new_attempt);
-                                    classroom_grades.markModified('mastery_grades');
-                                }
-                                // if there's not a mapping for this mastery check ( first attempt ) mastery_id => Attempts[]
-                                else {
-                                    console.log(classroom_grades._id);
-                                    let attempts = [new_attempt]; 
-                                    classroom_grades.mastery_grades.set(req.body.mastery_id, attempts); 
-                                }
-                                
-                                classroom_grades.save();
-                                res.status(200).end();
+                            let new_attempt = new Attempt({
+                                _mastery_id: req.body.mastery_id,
+                                topic_grades: req.body.topic_grades,
+                                final_grade: req.body.final_grade
                             })
+                            // check if masterycheck_id is in the map
+                            if (classroom_grades.mastery_grades.get(req.body.mastery_id)) {
+                                let x = classroom_grades.mastery_grades.get(req.body.mastery_id)
+                                x.push(new_attempt);
+                                classroom_grades.markModified('mastery_grades');
+                            }
+                            // if there's not a mapping for this mastery check ( first attempt ) mastery_id => Attempts[]
+                            else {
+                                console.log(classroom_grades._id);
+                                let attempts = [new_attempt];
+                                classroom_grades.mastery_grades.set(req.body.mastery_id, attempts);
+                            }
+
+                            classroom_grades.save();
+                            res.status(200).end();
+                        })
                     })
 
             } else {
@@ -85,18 +85,37 @@ router.put('/', ensureProfOrTA, (req, res) => {
 // returns a map |  mastery_id -> [Attempts]
 // Todo: populate!      
 
-router.get("/", ensureProfOrTA, (req, res) => {
+router.get("/student", ensureAuthenticated, ensureProfOrTA, (req, res) => {
     User.findById(req.query.student_id)
-    .populate("classrooms_grades")
-    .then(user => {
-        ClassroomGrades.findById(user.classrooms_grades.get(req.query.classroom_id))
-        .then(grades => {
-            // grades for this classroom of this student
-            res.json(grades.mastery_grades)
+        .populate("classrooms_grades")
+        .then(user => {
+            ClassroomGrades.findById(user.classrooms_grades.get(req.query.classroom_id))
+                .then(grades => {
+                    // grades for this classroom of this student
+                    res.json(grades.mastery_grades)
+                })
+
         })
-        
-    })
 });
+
+router.get("/", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
+    ClassroomGrades.findById(req.user.classrooms_grades.get(req.query.classroom_id)).populate().then(grades => {
+        // for (const key of grades.mastery_grades) {
+
+        //     let mastery_id = key[0];
+        //     let attempts = key[1]
+        //     for (let i = 0; i < attempts.length; i++) {
+        //         console.log(attempts[i])
+        //     }
+        // }
+        res.render("grades", {
+            model: {
+                user: req.user,
+                grades: grades
+            }
+        });
+    })
+})
 
 /*
 
@@ -154,7 +173,7 @@ Ya:::::::::::::88888888888888 8:::::::::8 88888888888888:::::::::::::aP
 */
 
 // for (const key of user.classrooms_grades) {
-            
+
 //     let classroom = key[0];
 //     let classroom_grames = key[1]
 // }

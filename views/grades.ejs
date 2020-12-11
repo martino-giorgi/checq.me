@@ -1,0 +1,40 @@
+<head>
+    <title>checq.me - Grades</title>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <%- include("./partials/navigation", { active: "dashboard" })%>
+
+        <main>
+            <h1>Student name: <%= model.user.name %> <%=model.user.surname%></h1>
+            <h2>Classroom: <%= model.grades._classroomId%></h2>
+
+            <%  for (const key of model.grades.mastery_grades) {
+
+                let mastery_id = key[0]; %>
+            <h3>- Mastery Check: <%=mastery_id %></h3>
+            <% let attempts = key[1]
+                for (let i = 0; i < attempts.length; i++) { %>
+            <h4>Attempt n. <%= i + 1%></h4>
+
+
+            <% for (const attempt_key in attempts[i].topic_grades) { %>
+            <p><%= attempt_key%>:
+                <%= attempts[i].topic_grades[attempt_key] == 0 ? "Exceed" : attempts[i].topic_grades[attempt_key] == 1 ? "Pass" : "Fail"%>
+            </p>
+            <% } %>
+            <h5>Attempt Grade:
+                <%= attempts[i].final_grade == 0 ? "Exceed" : attempts[i].final_grade == 1 ? "Pass" : "Fail"%></h5>
+
+
+            <% } %>
+            <h4>Mastery Check Final grade:
+                <%= attempts[attempts.length-1].final_grade == 0 ? "Exceed" : attempts[attempts.length-1].final_grade == 1 ? "Pass" : "Fail"%>
+            </h4>
+            <hr size="8" width="90%" color="red">
+            <%}%>
+        </main>
+    </div>
+</body>
