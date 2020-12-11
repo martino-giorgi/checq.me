@@ -23,6 +23,8 @@ const Classroom = require("../models/Classroom");
 
 module.exports = router;
 
+const MAX_ATTEMPTS = 15;
+
 router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
@@ -43,12 +45,17 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
     let mastery_days = sort_mastery_days( //get mastery days for that class sorted, the closest day to today will be the first
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
+    if(mastery_days.length == 0){
+      res.status(400).send("No mastery days set for this class");
+      return;
+    }
 
+    console.log("3");
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
     let weeks = 0;
 
-    while (!booked) {
+    while (!booked && weeks < MAX_ATTEMPTS) {
       for (let i = 0; i < mastery_days.length && !booked; i++) {
         m_day = mastery_days[i];
         let m_day_start;
@@ -134,7 +141,7 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
       weeks++;
     }
 
-    res.send().end();
+    res.send("Error, too many attempts").end();
   } catch (err) {
     console.log(err);
     res.send("you cannot book this mastery!").end();
@@ -370,7 +377,6 @@ async function can_mastery(mastery_id, user_id) {
         MasteryCheck.findById(mastery_id)
           .populate({ path: "classroom", select: ["is_ordered_mastery"] })
           .then((ordered) => {
-            console.log(ordered);
             if (ordered != null) {
               if (ordered.available == false) {
                 resolve(false);

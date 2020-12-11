@@ -330,7 +330,8 @@ function addBusyDay() {
 }
 
 function bookMastery() {
-  let mastery_id = document.getElementById('exampleFormControlSelect1').value;
+  let mastery_id = document.getElementById('exampleFormControlSelect2').value;
+  console.log(mastery_id);
 
   API.book_appointment(mastery_id).then((response) => {
     console.log("ciao")
