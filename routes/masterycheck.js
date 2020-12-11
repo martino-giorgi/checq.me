@@ -11,6 +11,7 @@ const MasteryCheck = require("../models/MasteryCheck");
 const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Topic = require("../models/Topic");
+const Question = require("../models/Question");
 
 module.exports = router;
 
@@ -50,13 +51,38 @@ router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
     classroom.mastery_checks.remove(req.query.mastery_id);
     classroom.save();
   })
-
-  // remove masterycheck from the db
-  MasteryCheck.deleteOne({ _id: req.query.mastery_id })
-    .then(() => {
-      res.status(200).end();
+  // Deep delete, delete all topics and questions linked to this masterycheck
+  let topic_promises = [];
+  let question_promises = [];
+  MasteryCheck.findById(req.query.mastery_id).then(mastery=> {
+    mastery.topics.forEach(topic_id => {
+      topic_promises.push(Topic.findById(topic_id));
     })
-    .catch((err) => console.log(err));
+    Promise.all(topic_promises).then( topics => {
+      topics.forEach(topic => {
+        topic.questions.forEach(question => {
+          question_promises.push(Question.findById(question._id));
+        })
+      })
+      Promise.all(question_promises).then( questions => {
+        console.log(questions);
+        console.log(topics);
+        questions.forEach(q => {
+          Question.deleteOne({_id: q._id});
+        });
+        topics.forEach(t => {
+          Topic.deleteOne({_id: t._id});
+        })
+        MasteryCheck.deleteOne({ _id: req.query.mastery_id })
+          .then(() => {
+            res.status(200).end();
+          })
+          .catch((err) => console.log(err));
+      })
+    })
+  })
+  // remove masterycheck from the db
+  
 });
 
 // EDIT mastery check
