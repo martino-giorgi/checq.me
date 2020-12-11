@@ -334,13 +334,13 @@ function bookMastery() {
   console.log(mastery_id);
 
   API.book_appointment(mastery_id).then((response) => {
-    console.log("ciao")
-    // if (response.status != 200) {
-    //   console.log("ERROR")
-    //   window.FlashMessage.error('Error!');
-    // } else {
-    //   window.FlashMessage.success('Mastery check appointment booked successfully');
-    // }
+    if (response.status != 200) {
+      response.text().then(t => {
+        window.FlashMessage.error(t);
+      })
+    } else {
+      window.FlashMessage.success('Mastery check appointment booked successfully');
+    }
   })
 }
 

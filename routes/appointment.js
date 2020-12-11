@@ -28,14 +28,12 @@ const MAX_ATTEMPTS = 15;
 router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
-  console.log("1");
-  console.log(mastery_id);
+
   try {
     if ((await can_mastery(mastery_id, user_id)) == false) {
-      res.status(400).end();
+      res.status(400).send("You cannot book this mastery check");
       return;
     }
-    console.log("2");
     let mastery = await MasteryCheck.findById(mastery_id)
       .select({ classroom: 1, appointment_duration: 1 })
       .populate({ path: "classroom" });
@@ -46,11 +44,10 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
     if(mastery_days.length == 0){
-      res.status(400).send("No mastery days set for this class");
+      res.status(400).send("No mastery days are available for this class, contact your professor");
       return;
     }
 
-    console.log("3");
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
     let weeks = 0;
