@@ -8,33 +8,33 @@
         <%- include("./partials/navigation", { active: "dashboard" })%>
 
         <main>
-            <h1>Student name: <%= model.user.name %> <%=model.user.surname%></h1>
-            <h2>Classroom: <%= model.grades._classroomId%></h2>
+            <h1>Student name: <%= model.grades.user_name %> <%=model.grades.user_surname%></h1>
+            <h2>Classroom: <%= model.grades.name%></h2>
+            <%  for (let b = 0 ; b < model.grades.mastery_grades.length ; b++) { 
+            let mastery = model.grades.mastery_grades[b];%>
+                <h3>- Mastery Check: <%=mastery.mastery_name %></h3>
+            
+                <% let i = 0;
+                mastery.topic.forEach( attempt => {%>
+                    <h4>Attempt n. <%= ++i %></h4>
 
-            <%  for (const key of model.grades.mastery_grades) {
+                    <% for (const attempt_key in attempt.topic_grades) { %>
+                        <p><%= attempt_key%>:
+                <%= attempt.topic_grades[attempt_key] == 0 ? "Exceed" : attempt.topic_grades[attempt_key] == 1 ? "Pass" : "Fail"%>
+                        </p>
+                    <%}%>
+               
+            <%}) %>
+            <h3>Final Grade: <% let grade = mastery.topic[mastery.topic.length-1].final_grade%>
+                             <%= grade == 0 ? "Exceed" : (grade == 1 ? "Pass" : "Fail") %>    
+                             
+            </h3>
 
-                let mastery_id = key[0]; %>
-            <h3>- Mastery Check: <%=mastery_id %></h3>
-            <% let attempts = key[1]
-                for (let i = 0; i < attempts.length; i++) { %>
-            <h4>Attempt n. <%= i + 1%></h4>
-
-
-            <% for (const attempt_key in attempts[i].topic_grades) { %>
-            <p><%= attempt_key%>:
-                <%= attempts[i].topic_grades[attempt_key] == 0 ? "Exceed" : attempts[i].topic_grades[attempt_key] == 1 ? "Pass" : "Fail"%>
-            </p>
-            <% } %>
-            <h5>Attempt Grade:
-                <%= attempts[i].final_grade == 0 ? "Exceed" : attempts[i].final_grade == 1 ? "Pass" : "Fail"%></h5>
-
-
-            <% } %>
-            <h4>Mastery Check Final grade:
-                <%= attempts[attempts.length-1].final_grade == 0 ? "Exceed" : attempts[attempts.length-1].final_grade == 1 ? "Pass" : "Fail"%>
-            </h4>
+            
             <hr size="8" width="90%" color="red">
-            <%}%>
+        <%}%>
         </main>
     </div>
 </body>
+
+

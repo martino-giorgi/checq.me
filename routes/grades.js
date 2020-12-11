@@ -91,8 +91,43 @@ router.get("/student", ensureAuthenticated, ensureProfOrTA, (req, res) => {
         .then(user => {
             ClassroomGrades.findById(user.classrooms_grades.get(req.query.classroom_id))
                 .then(grades => {
-                    // grades for this classroom of this student
-                    res.json(grades.mastery_grades)
+                    Classroom.findById(grades._classroomId).then(classroom => {
+                        
+                        // grades for this classroom of this student
+                        let promises = [];
+                        classroom.mastery_checks.forEach(m_id => {
+                            promises.push(MasteryCheck.findById(m_id));
+                        });
+                        Promise.all(promises).then(results => {
+                            let grades_array = [];
+                            results.forEach( mastery => {
+                                grades_array.push({
+                                    mastery_name: mastery.name,
+                                    topic: grades.mastery_grades.get(mastery._id.toString())
+                                })
+                            })
+                            User.findById(req.query.student_id).then(student => {
+                                
+                                let new_grades = {
+                                    mastery_grades: grades_array,
+                                    _id: grades._id,
+                                    _userId: grades._userId,
+                                    _classroomId: grades._classroomId,
+                                    name: classroom.name,
+                                    user_name: student.name,
+                                    user_surname: student.surname
+                                }
+                                res.render("grades", {
+                                    model: {
+                                        user: req.user,
+                                        grades: new_grades
+                                    }
+                                });
+                            })
+                            
+                        })
+                        
+                    })
                 })
 
         })
@@ -100,25 +135,40 @@ router.get("/student", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 
 router.get("/", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
     ClassroomGrades.findById(req.user.classrooms_grades.get(req.query.classroom_id)).populate().then(grades => {
-        // for (const key of grades.mastery_grades) {
-
-        //     let mastery_id = key[0];
-        //     let attempts = key[1]
-        //     for (let i = 0; i < attempts.length; i++) {
-        //         console.log(attempts[i])
-        //     }
-        // }
-        res.render("grades", {
-            model: {
-                user: req.user,
-                grades: grades
-            }
-        });
-    })
+        Classroom.findById(grades._classroomId).then(classroom => {
+                        
+            // grades for this classroom of this student
+            let promises = [];
+            classroom.mastery_checks.forEach(m_id => {
+                promises.push(MasteryCheck.findById(m_id));
+            });
+            Promise.all(promises).then(results => {
+                let grades_array = [];
+                results.forEach( mastery => {
+                    grades_array.push({
+                        mastery_name: mastery.name,
+                        topic: grades.mastery_grades.get(mastery._id.toString())
+                    })
+                })
+                    
+                    let new_grades = {
+                        mastery_grades: grades_array,
+                        _id: grades._id,
+                        _userId: grades._userId,
+                        _classroomId: grades._classroomId,
+                        name: classroom.name,
+                        user_name: req.user.name,
+                        user_surname: req.user.surname
+                    }
+                    res.render("grades", {
+                        model: {
+                            user: req.user,
+                            grades: new_grades
+                        }
+                    });
+                })
+                
+            })
+            
+        })
 })
-
-// for (const key of user.classrooms_grades) {
-
-//     let classroom = key[0];
-//     let classroom_grames = key[1]
-// }
