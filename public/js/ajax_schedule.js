@@ -2,6 +2,8 @@ const elem = document.getElementById('picker');
 const start = document.getElementById('start');
 const end = document.getElementById('end');
 
+let classrooms;
+
 let datepicker = new DateRangePicker(elem, {
   buttonClass: 'btn',
   format: 'dd/mm/yyyy',
@@ -9,19 +11,59 @@ let datepicker = new DateRangePicker(elem, {
 });
 
 window.onclick = function (event) {
-  if (event.target == document.getElementById("viewEvent")) {
-      closeModal()
+  if (event.target == document.getElementById('viewEvent')) {
+    closeModal();
   }
+};
+
+async function populateSelection() {
+  let form_select_class = document.getElementById('exampleFormControlSelect1');
+  form_select_class.addEventListener("change", getMasteries);
+
+  classrooms = await API.get_classrooms();
+
+  classrooms.forEach((classroom) => {
+    let option = document.createElement('option');
+    option.innerHTML = classroom.name;
+    option.value = classroom._id;
+
+    form_select_class.appendChild(option);
+  });
+
+  getMasteries();
+}
+
+function getMasteries() {
+  document.getElementById('exampleFormControlSelect2').innerHTML = "";
+  
+  let classroom_id = document.getElementById('exampleFormControlSelect1').value;
+  let i;
+  for (i = 0; i < classrooms.length; i++) {
+    if (classrooms[i]._id == classroom_id) {
+      break;
+    }
+  }
+
+  classrooms[i].mastery_checks.forEach((mastery) => {
+    let form_select_mastery = document.getElementById('exampleFormControlSelect2');
+
+    let option = document.createElement('option');
+    option.innerHTML = mastery.name;
+
+    if (mastery.available) {
+      form_select_mastery.appendChild(option);
+    }
+  });
 }
 
 function closeModal() {
-  document.getElementById("viewEvent").classList.remove("show")
-  document.getElementById("backdrop").classList.remove("show");
-  document.getElementById("backdrop").style.display = "none";
-  document.getElementById("viewEvent").style.display = "none";
+  document.getElementById('viewEvent').classList.remove('show');
+  document.getElementById('backdrop').classList.remove('show');
+  document.getElementById('backdrop').style.display = 'none';
+  document.getElementById('viewEvent').style.display = 'none';
 
-  document.getElementById("ta-or-student-name").innerHTML = "";
-  document.getElementById("duration").innerHTML = "";
+  document.getElementById('ta-or-student-name').innerHTML = '';
+  document.getElementById('duration').innerHTML = '';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -38,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
       right:
         role == 0 || role == 1
           ? 'addEventButton dayGridMonth,timeGridWeek,listMonth'
-          : 'dayGridMonth,timeGridWeek,listMonth',
+          : 'addMasteryButton dayGridMonth,timeGridWeek,listMonth',
     },
     timeZone: 'local',
     themeSystem: 'bootstrap',
@@ -68,7 +110,20 @@ document.addEventListener('DOMContentLoaded', function () {
               },
             },
           }
-        : {},
+        : {
+            addMasteryButton: {
+              text: 'add mastery check',
+              click: function () {
+                // Display modal
+                document
+                  .querySelector('.fc-addMasteryButton-button')
+                  .setAttribute('data-toggle', 'modal');
+                document
+                  .querySelector('.fc-addMasteryButton-button')
+                  .setAttribute('data-target', '#newMastery');
+              },
+            },
+          },
     eventDragStart: function (info) {
       start_date_drag = info.event.start.toISOString();
       end_date_drag = info.event.end.toISOString();
@@ -81,22 +136,19 @@ document.addEventListener('DOMContentLoaded', function () {
         var new_end = info.event.end.toISOString();
 
         if (info.event.extendedProps.appointment_id) {
-          API.patch_appointment(
-            info.event.extendedProps.appointment_id,
-            new_start,
-            new_end
-          ).then((res) => {
-            if (res.status != 200) {
-              res.text().then(t => {
-                window.FlashMessage.error(t);
-              })
-              info.revert();
-            } else {
-              window.FlashMessage.success("Appointment was moved successfully")
+          API.patch_appointment(info.event.extendedProps.appointment_id, new_start, new_end).then(
+            (res) => {
+              if (res.status != 200) {
+                res.text().then((t) => {
+                  window.FlashMessage.error(t);
+                });
+                info.revert();
+              } else {
+                window.FlashMessage.success('Appointment was moved successfully');
+              }
             }
-          })
-        }
-        else {
+          );
+        } else {
           API.patch_busy(start_date_drag, end_date_drag, new_start, new_end).then((res) => {
             if (res.status != 200) {
               res.text().then((text) => {
@@ -137,26 +189,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
     },
-    eventClick: function(info) {
+    eventClick: function (info) {
       // Display modal for date (or tooltip)
-      document.getElementById("backdrop").style.display = "block";
-      document.getElementById("viewEvent").style.display = "block";
-      document.getElementById("viewEvent").classList.add("show");
-      document.getElementById("backdrop").classList.add("show");
+      document.getElementById('backdrop').style.display = 'block';
+      document.getElementById('viewEvent').style.display = 'block';
+      document.getElementById('viewEvent').classList.add('show');
+      document.getElementById('backdrop').classList.add('show');
 
-      document.getElementById("event-name").innerHTML = info.event.title;
+      document.getElementById('event-name').innerHTML = info.event.title;
 
       if (info.event.extendedProps.appointment_id) {
-        if (role == 1 || role == 0){
-          document.getElementById("ta-or-student-name").innerHTML = `With student: ${info.event.extendedProps.student}`;
+        if (role == 1 || role == 0) {
+          document.getElementById(
+            'ta-or-student-name'
+          ).innerHTML = `With student: ${info.event.extendedProps.student}`;
         } else {
           // TODO: Set TA/Professor name
-          document.getElementById("ta-or-student-name").innerHTML = `With student: ${info.event.extendedProps.ta}`;
+          document.getElementById(
+            'ta-or-student-name'
+          ).innerHTML = `With student: ${info.event.extendedProps.ta}`;
         }
 
-        document.getElementById("duration").innerHTML = `Duration: ${moment(info.event.end).diff(moment(info.event.start), 'minutes')} min`
+        document.getElementById('duration').innerHTML = `Duration: ${moment(info.event.end).diff(
+          moment(info.event.start),
+          'minutes'
+        )} min`;
       }
-    }
+    },
   });
 
   if (role == 0 || role == 1) {
@@ -205,7 +264,7 @@ function parse_Ta_appointments(data) {
 
 function parse_student_appointments(data) {
   data.forEach((el) => {
-    console.log(el);
+    // console.log(el);
     calendar.addEvent({
       title: el._masteryId.name,
       start: el.start_time,
@@ -298,7 +357,7 @@ API = (function () {
     return fetch(`/availability`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body
+      body,
     });
   }
 
@@ -316,10 +375,17 @@ API = (function () {
     });
   }
 
+  function get_classrooms() {
+    return fetch(`/masterycheck/student`).then((res) => {
+      return res.json();
+    });
+  }
+
   return {
     get_appointments,
     post_busy_slot,
     patch_appointment,
     patch_busy,
+    get_classrooms,
   };
 })();

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { ensureAuthenticated, ensureProfessor, ensureProfOrTA } = require('../config/auth');
+const { ensureAuthenticated, ensureProfessor, ensureProfOrTA, ensureStudent } = require('../config/auth');
 const path = require('path');
 
 const MasteryCheck = require('../models/MasteryCheck');
@@ -94,3 +94,21 @@ router.get('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
       }
     });
 });
+
+
+/*
+STUDENT ROUTES
+*/
+
+router.get('/student',ensureAuthenticated, ensureStudent, (req,res)=> {
+  User.findById(req.user._id)
+    .select({ classrooms: 1 })
+    .populate({
+      path: 'classrooms',
+      select: ['mastery_checks', 'name'],
+      populate: [{ path: 'mastery_checks', model: 'MasteryCheck', select:["available", "name"] }],
+    })
+    .then((result) => {
+      res.json(result.classrooms)
+    });
+})
