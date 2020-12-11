@@ -14,10 +14,24 @@ const { json } = require("express");
 
 module.exports = router;
 
+/**
+ * Route to render the signup page
+ * @name get/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/signup", (req, res) => {
   res.render("signup", {});
 });
 
+/**
+ * Route to render the login page
+ * @name get/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/login", (req, res) => {
   if (req.isUnauthenticated()) {
     res.render("login", {});
@@ -26,6 +40,13 @@ router.get("/login", (req, res) => {
   }
 });
 
+/**
+ * Route to sign up a new user
+ * @name post/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/signup", (req, res) => {
 
   const { name, surname, email, password, conf_password } = req.body;
@@ -179,6 +200,13 @@ router.post("/verify/resend", (req, res) => {
   }
 });
 
+/**
+ * Try sending a verification email
+ * @param {String} host 
+ * @param {Number} token 
+ * @param {String} target_email 
+ * @returns {Promise} the promise for sending an email
+ */
 function send_verification_mail(host, token, target_email) {
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
@@ -200,6 +228,13 @@ function send_verification_mail(host, token, target_email) {
   });
 }
 
+/**
+ * Execute a log in
+ * @name post/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
@@ -223,14 +258,26 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// Logout
+/**
+ * Logout
+ * @name get/user/logout
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
   res.redirect("/user/login");
 });
 
-// Edit the user
+/**
+ * Update informations about a user
+ * @name put/user/update
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.put("/update", ensureAuthenticated, async (req, res) => {
   console.log(req.body);
   if (req.body.password == undefined) {
@@ -263,7 +310,13 @@ router.put("/update", ensureAuthenticated, async (req, res) => {
   }
 })
 
-// Get user info
+/**
+ * Get the informations of a specific user
+ * @name get/user/:id
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/:id', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
 

@@ -81,8 +81,6 @@ router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 
 });
 
-
-
 /**
  * Route to get all questions linked to a specific topic. If the user requesting is a student, the answers are not sent to the client.
  * @name get/topic/:id/questions
