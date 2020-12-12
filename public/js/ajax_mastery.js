@@ -28,7 +28,8 @@ function add_edit_event() {
         name: card_body.querySelector('h2').innerHTML,
         description: card_body.querySelector('#element_desc').innerHTML,
         available: card_body.querySelector('#element_durat').innerHTML.split('|')[1].trim() == "Available" ? true : false,
-        appointment_duration: card_body.querySelector('#element_durat').innerHTML.split('|')[0].trim().replace('Duration: ', '')
+        appointment_duration: card_body.querySelector('#element_durat').innerHTML.split('|')[0].trim().replace('Duration: ', ''),
+        github_repo_name: card_body.querySelector('#github_repo').innerHTML.split(':')[1].trim()
       }
 
       card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });
@@ -125,10 +126,11 @@ function edit_mastery() {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
     appointment_duration: parseInt(document.getElementById("input_duration").value),
-    available: document.getElementById("check_available").value == "on" ? true : false
+    available: document.getElementById("check_available").value == "on" ? true : false,
+    github_repo_name: document.getElementById("github_repo").value
   }
 
-  if (body.name != "" && body.description != "" && body.appointment_duration != "") {
+  if (body.name != "" && body.description != "" && body.appointment_duration != "" && body.github_repo_name != "") {
 
     API_mastery.edit_mastery(JSON.stringify(body)).then(res => {
       if (res.status == 200) {
@@ -149,7 +151,8 @@ function create_mastery() {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
     appointment_duration: parseInt(document.getElementById("input_duration").value),
-    available: document.getElementById("check_available").value == "on" ? true : false
+    available: document.getElementById("check_available").value == "on" ? true : false,
+    github_repo_name: document.getElementById("github_repo").value
   }
 
   if (body.name != "" && body.description != "" && body.appointment_duration != "") {

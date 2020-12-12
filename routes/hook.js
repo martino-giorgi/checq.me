@@ -25,22 +25,13 @@ router.post('/', (req, res) => {
         .select({ password: 0 })
         .then((user) => {
           if (user) {
-            let repo_url = repo.url.split('-');
+            let repo_url = repo.full_name.split('-');
             repo_url.splice(-1);
             repo_url = repo_url.join('-');
 
             MasteryCheck.findOne({ repo: repo_url }).then((mastery) => {
               if (mastery) {
-
-                // // TODO: Change in production to http://checq.me/appointment/book
-                // request.post(
-                //   { url: 'http://localhost:3000/appointment/book', body: body_data },
-                //   function (err, httpResponse, body) {
-                //     console.log('ok')
-                //     console.log(err, body);
-                //   }
-                // );
-                
+                console.log('Appointment request initiated from /hook')
                 appointment.book(user._id, mastery._id)
               }
             });

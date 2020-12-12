@@ -23,6 +23,7 @@
 
         <h2 class="card-title"><%= element.name %></h2>
         <p id="element_desc" class="card-text"><%= element.description %></p>
+        <p id="github_repo" class="card-text">GitHub Repo: <%= element.github_repo_name %></p>
         <p id="element_durat" class="card-text">Duration: <%= element.appointment_duration %> | <%= element.available  ? "Available" : "Not Available" %></p>
         <p class="topic_list" id="topics_list">
           <span><%= element.topics.length == 0 ? "No Topics" : "Topics:"%></span>

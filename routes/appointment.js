@@ -180,7 +180,6 @@ function sort_mastery_days(mastery_days) {
 
   let i;
   for (i = 0; i < x.length; i++) {
-    console.log(x[i].iso_day_n > d);
     if (x[i].iso_day_n > d) {
       break;
     }

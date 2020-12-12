@@ -29,6 +29,10 @@ const MasteryCheckSchema = new mongoose.Schema({
       ref: "Topic",
     },
   ],
+  github_repo_name:{
+    type: String,
+    required: false
+  },
   appointment_duration:{
     type: Number,
     required: true,
