@@ -80,7 +80,7 @@
             <form>
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Choose a classroom</label>
-                <select class="form-control" id="exampleFormControlSelect1"></select>
+                <select class="form-control" id="exampleFormControlSelect1" onchange="getMasteries()"></select>
               </div>
 
               <div class="form-group">
@@ -104,8 +104,14 @@
         <div class="modal-content">
           <div class="modal-header" style="display:flex; justify-content: space-between; align-items: center">
             <h5 class="modal-title" id="modalCenterTitle">View Event</h5>
+            <p hidden id="appointment_id_del"></p>
+            <p hidden id="classroom_id_del"></p>
+            <p hidden id="start_del"></p>
+            <p hidden id="end_del"></p>
+            <p hidden id="event_id_del"></p>
+
             <% if (user.role == 0 || user.role == 1) { %>
-              <img id="delete-event" src="/assets/icons/buttons/delete.svg" alt="delete icon">
+              <img onclick="delete_event()" id="delete-event" src="/assets/icons/buttons/delete.svg" alt="delete icon">
             <% } %> 
           </div>
 

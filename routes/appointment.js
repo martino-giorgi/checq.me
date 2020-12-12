@@ -26,6 +26,10 @@ module.exports = router;
 const MAX_ATTEMPTS = 15;
 
 router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
+  if(req.body.mastery_id == ""){
+    res.status(400).send("Select a mastery check first");
+    return;
+  }
   let user_id = req.user._id;
   let mastery_id = req.body.mastery_id;
 

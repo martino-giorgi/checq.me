@@ -19,7 +19,6 @@ window.onclick = function (event) {
 
 async function populateSelection() {
   let form_select_class = document.getElementById('exampleFormControlSelect1');
-  form_select_class.addEventListener('change', getMasteries);
 
   classrooms = await API.get_classrooms();
 
@@ -35,27 +34,29 @@ async function populateSelection() {
 }
 
 function getMasteries() {
-  document.getElementById('exampleFormControlSelect2').innerHTML = '';
+  if(classrooms.length > 0){
+    document.getElementById('exampleFormControlSelect2').innerHTML = '';
 
-  let classroom_id = document.getElementById('exampleFormControlSelect1').value;
-  let i;
-  for (i = 0; i < classrooms.length; i++) {
-    if (classrooms[i]._id == classroom_id) {
-      break;
+    let classroom_id = document.getElementById('exampleFormControlSelect1').value;
+    let i;
+    for (i = 0; i < classrooms.length; i++) {
+      if (classrooms[i]._id == classroom_id) {
+        break;
+      }
     }
+  
+    classrooms[i].mastery_checks.forEach((mastery) => {
+      let form_select_mastery = document.getElementById('exampleFormControlSelect2');
+  
+      let option = document.createElement('option');
+      option.innerHTML = mastery.name;
+      option.value = mastery._id;
+  
+      if (mastery.available) {
+        form_select_mastery.appendChild(option);
+      }
+    });
   }
-
-  classrooms[i].mastery_checks.forEach((mastery) => {
-    let form_select_mastery = document.getElementById('exampleFormControlSelect2');
-
-    let option = document.createElement('option');
-    option.innerHTML = mastery.name;
-    option.value = mastery._id;
-
-    if (mastery.available) {
-      form_select_mastery.appendChild(option);
-    }
-  });
 }
 
 function closeModal() {
@@ -218,7 +219,13 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (role == 0 || role == 1) {
-        delete_event(info);
+        document.getElementById('appointment_id_del').innerHTML = info.event.extendedProps.appointment_id;
+        document.getElementById('classroom_id_del').innerHTML = info.event.extendedProps.classroom_id;
+        document.getElementById('start_del').innerHTML = info.event.start.toISOString();
+        document.getElementById('end_del').innerHTML = info.event.end.toISOString();
+        document.getElementById('event_id_del').innerHTML = info.event.id;
+
+        console.log(info.event.id)
       }
     },
   });
@@ -234,6 +241,7 @@ function parse_Ta_appointments(data) {
       start: el.start_time,
       end: el.end_time,
       durationEditable: false,
+      id:el._id,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -254,6 +262,7 @@ function parse_Ta_appointments(data) {
       start: test,
       end: test2,
       color: 'red',
+      id:makeid(),
     });
   });
 }
@@ -265,6 +274,7 @@ function parse_student_appointments(data) {
       start: el.start_time,
       end: el.end_time,
       durationEditable: false,
+      id:el._id,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -276,31 +286,34 @@ function parse_student_appointments(data) {
   });
 }
 
-function delete_event(info) {
-  document.getElementById('delete-event').addEventListener('click', () => {
-    if (info.event.extendedProps.appointment_id) {
-      API.delete_appointment(
-        info.event.extendedProps.appointment_id,
-        info.event.extendedProps.classroom_id
-      ).then((result) => {
-        if (result.status != 200) {
-          window.FlashMessage.error('An error occurred while trying to delete the appointment');
-        } else {
-          info.event.remove();
-          window.FlashMessage.success('Appointment was deleted successfully');
-        }
-      });
-    } else {
-      API.delete_busy_day(info.event.start, info.event.end).then((res) => {
-        if (res.status != 200) {
-          window.FlashMessage.error('An error occurred while trying to delete the busy day');
-        } else {
-          info.event.remove();
-          window.FlashMessage.success('Busy day was deleted successfully');
-        }
-      });
-    }
-  });
+function delete_event() {
+  let appointment_id = document.getElementById('appointment_id_del').innerHTML;
+  let classroom_id = document.getElementById('classroom_id_del').innerHTML;
+  let start = document.getElementById('start_del').innerHTML;
+  let end = document.getElementById('end_del').innerHTML;
+  let id = document.getElementById('event_id_del').innerHTML;
+
+  if (appointment_id != 'undefined') {
+    API.delete_appointment(appointment_id, classroom_id).then((result) => {
+      if (result.status != 200) {
+        window.FlashMessage.error('An error occurred while trying to delete the appointment');
+      } else {
+        let ev = calendar.getEventById(id);
+        ev.remove();
+        window.FlashMessage.success('Appointment was deleted successfully');
+      }
+    });
+  } else {
+    API.delete_busy_day(start, end).then((res) => {
+      if (res.status != 200) {
+        window.FlashMessage.error('An error occurred while trying to delete the busy day');
+      } else {
+        let ev = calendar.getEventById(id);
+        ev.remove();
+        window.FlashMessage.success('Busy day was deleted successfully');
+      }
+    });
+  }
 }
 
 function addBusyDay() {
@@ -353,7 +366,6 @@ function addBusyDay() {
 
 function bookMastery() {
   let mastery_id = document.getElementById('exampleFormControlSelect2').value;
-  console.log(mastery_id);
 
   API.book_appointment(mastery_id).then((response) => {
     if (response.status != 200) {
@@ -364,7 +376,7 @@ function bookMastery() {
       document.querySelector('body > div.modal-backdrop').classList.remove('show');
       document.querySelector('#newMastery').classList.remove('show');
       window.FlashMessage.success('Mastery check appointment booked successfully');
-      calendar.removeEvents();
+      calendar.removeAllEvents();
       API.populateCalendar();
     }
   });
@@ -442,9 +454,9 @@ API = (function () {
   }
 
   function delete_busy_day(start_date, end_date) {
-    let body = {
+    let body = JSON.stringify({
       busy: [start_date, end_date],
-    };
+    });
 
     return fetch('/availability', {
       method: 'DELETE',
@@ -477,3 +489,14 @@ API = (function () {
     populateCalendar,
   };
 })();
+
+function makeid() {
+  let length = 15;
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
