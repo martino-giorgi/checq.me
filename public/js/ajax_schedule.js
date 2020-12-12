@@ -455,7 +455,7 @@ API = (function () {
 
   function delete_busy_day(start_date, end_date) {
     let body = JSON.stringify({
-      busy: [start_date, end_date],
+      old_busy: [start_date, end_date],
     });
 
     return fetch('/availability', {
