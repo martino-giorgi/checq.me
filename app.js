@@ -125,6 +125,9 @@ app.use("/github", routers.github);
 // Route to intercept webhooks from GitHub
 app.use("/hook", routers.hook);
 
+// Route for Grades
+app.use("/grades", routers.grades);
+
 
 // Webhook
 const smee = new SmeeClient({

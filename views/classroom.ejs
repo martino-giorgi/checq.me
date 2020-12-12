@@ -39,21 +39,26 @@
             </td>
 
             <% if (classroom.teaching_assistants.length > 0) { %>
-            <td>
-              <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
-              <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
-              <% } %>
-            </td>
+              <td>
+                <% for (let i = 0; i < classroom.teaching_assistants.length; i++) { %>
+                  <p class="normal"> <%= classroom.teaching_assistants[i].name %> <%= classroom.teaching_assistants[i].surname %> </p>
+                <% } %>
+              </td>
             <% } else { %>
-            <td>
-              <p class="normal"> N.D. </p>
-            </td>
+              <td>
+                <p class="normal"> N.D. </p>
+              </td>
             <% } %>
 
-            <td>
-              <!-- TODO: Add grades -->
-              90/100
-            </td>
+            <% if(!classroom.teaching_assistants.map(ta => ta._id).includes(model.user._id)) {  %>
+              <td>
+                <a href="<%= `/grades?classroom_id=${classroom._id}`%>">
+                  <img style="filter: brightness(0);" src="/assets/icons/sections/grades.svg" alt="grades"></img>
+                </a>
+              </td>
+            <% } else { %>
+              <td></td>
+            <% } %>
 
             <td class="class-detail-td">
               <a href="<%= `/classroom/class?classroom_id=${classroom._id}`%>">

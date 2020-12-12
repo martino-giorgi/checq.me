@@ -44,6 +44,12 @@
                               data-toggle="modal" data-target="#edit-user-modal" title=""
                               data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>
                     </ul>
+
+                    <% if (partecipants.includes(p)) { %>
+                      <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                          <li><a href="/grades/student?classroom_id=<%= _id%>&student_id=<%= p._id%>" class="text-info"><i class="fas fa-info-circle"></i></a></li>
+                      </ul>
+                    <%}%>
                   </td>
                 </tr>
               <% }) %>
@@ -73,7 +79,7 @@
                 </button>
                 <button type="button" id="toggleProf_btn" onclick="toggleProf(getUser())" class="btn btn-primary"
                     data-toggle="modal" data-target="#edit-user-modal">
-                    Value
+                    Toggle Prof
                 </button>
             </div>
         </div>

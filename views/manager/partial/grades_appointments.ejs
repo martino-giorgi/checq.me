@@ -1,0 +1,37 @@
+<% console.log('diob',appointments)%>
+<% if ( appointments.length > 0 ) {%>
+    <% appointments.map(appointment => { %>
+
+        <div class="card" data-mastery_id=<%= appointment._masteryId._id%> data-appointment_id=<%= appointment._id%>>
+            <div class="card-header">
+            Appointment
+            </div>
+            <div class="card-body">
+            <h5 class="card-title">Date and Time: <%= moment(appointment.end_time).format('DD.MM.YYYY (HH:mm)')%></h5>
+            <p class="card-text">
+                <strong>Mastery Check</strong>: <%= appointment._masteryId.name%>
+                
+                <% appointment._masteryId.topics.forEach( topics => {%>
+                
+                    <p><strong>Topic</strong>: <%= topics.name%> 
+                    <select class='topic_grade' id="<%= topics._id%>">
+                        <option>Fail</option>
+                        <option>Pass</option>
+                        <option>Exceed</option>
+                    </select>
+                </p>
+                <% })%>
+            </p>
+            <h4>Appointment Grade:                 
+                <select class='final_grade'>
+                    <option>Fail</option>
+                    <option>Pass</option>
+                    <option>Exceed</option>
+                </select></h4>
+            <a onclick="grade(this)" class="btn btn-primary">Grade</a>
+            </div>
+        </div>
+    <% }) %>
+<% } else { %>
+        <h1>Nothing to grade</h1>
+<%} %>

@@ -53,11 +53,11 @@ function set_question(q) {
 
     // Show input buttons
     for (let j=0; j < q.answer.length; ++j) {
-        new_input = document.createElement("label");
+        let new_input = document.createElement("label");
         new_input.id = "label"+j;
         new_input.innerHTML = q.answer[j][0];
 
-        new_checkbox = document.createElement("input");
+        let new_checkbox = document.createElement("input");
         new_checkbox.type = "checkbox";
         new_checkbox.classList.add("option_checkbox")
         new_checkbox.value = j;

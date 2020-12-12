@@ -16,11 +16,25 @@ const { json } = require('express');
 
 module.exports = router;
 
-router.get('/signup', (req, res) => {
-  res.render('signup', {});
+/**
+ * Route to render the signup page
+ * @name get/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get("/signup", (req, res) => {
+  res.render("signup", {});
 });
 
-router.get('/login', (req, res) => {
+/**
+ * Route to render the login page
+ * @name get/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get("/login", (req, res) => {
   if (req.isUnauthenticated()) {
     res.render('login', {});
   } else {
@@ -28,7 +42,15 @@ router.get('/login', (req, res) => {
   }
 });
 
-router.post('/signup', (req, res) => {
+/**
+ * Route to sign up a new user
+ * @name post/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.post("/signup", (req, res) => {
+
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
 
@@ -137,7 +159,7 @@ router.get('/verify/:token', (req, res) => {
             if (err) {
               res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
-              // res.redirect("/user/login"); //account verified successufully
+              // res.redirect("/user/login"); //account verified successfully
               res.render('login', { email: user.email });
               // Todo: create a flash to display that the account is confirmed
             }
@@ -178,6 +200,13 @@ router.post('/verify/resend', (req, res) => {
   }
 });
 
+/**
+ * Try sending a verification email
+ * @param {String} host 
+ * @param {Number} token 
+ * @param {String} target_email 
+ * @returns {Promise} the promise for sending an email
+ */
 function send_verification_mail(host, token, target_email) {
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
@@ -199,8 +228,15 @@ function send_verification_mail(host, token, target_email) {
   });
 }
 
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+/**
+ * Execute a log in
+ * @name post/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
 
     if (user) {
@@ -222,15 +258,27 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-// Logout
-router.get('/logout', (req, res) => {
+/**
+ * Logout
+ * @name get/user/logout
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get("/logout", (req, res) => {
   req.logout();
   req.flash('success_msg', 'You are logged out');
   res.redirect('/user/login');
 });
 
-// Edit the user
-router.put('/update', ensureAuthenticated, async (req, res) => {
+/**
+ * Update information about a user
+ * @name put/user/update
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.put("/update", ensureAuthenticated, async (req, res) => {
   console.log(req.body);
   if (req.body.password == undefined) {
     // Update details
@@ -262,7 +310,13 @@ router.put('/update', ensureAuthenticated, async (req, res) => {
   }
 });
 
-// Get user info
+/**
+ * Get the information of a specific user
+ * @name get/user/:id
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/:id', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
 

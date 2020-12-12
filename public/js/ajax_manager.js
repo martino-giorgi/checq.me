@@ -162,6 +162,24 @@ function generate_invite_link(id) {
       document.body.removeChild(textarea);
     });
 }
+// TODO: remove, just temporary
+function test() {
+    console.log("clickked")
+    let body = JSON.stringify({
+        appointment_id: '5fd29b36fe112412fc0dc8f2',
+        topic_grades: {"id1": 0, "id2": 1},
+        mastery_id: '5fd29bb46ec343577cdce161',
+        final_grade: 0
+    });
+    fetch('/grades?classroom_id=5fd298eac685cd56e4f0a10c', {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: body
+    })
+    .then( res => {
+        console.log(res);
+    })
+}
 
 let API = (function () {
   /**
