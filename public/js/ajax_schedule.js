@@ -282,7 +282,7 @@ function parse_student_appointments(data) {
 function delete_event(info) {
   document.getElementById('delete-event').addEventListener('click', () => {
     if (info.event.extendedProps.appointment_id) {
-      API.delete_appointment(info.event.extendedProps.appointment_id).then((result) => {
+      API.delete_appointment(info.event.extendedProps.appointment_id, info.event.extendedProps.classroom_id).then((result) => {
         if (result.status != 200) {
           window.FlashMessage.error('Something went wrong');
         } else {
@@ -430,8 +430,8 @@ API = (function () {
     });
   }
 
-  function delete_appointment(id) {
-    return fetch('/appointment/' + id, {
+  function delete_appointment(id, classroom_id) {
+    return fetch('/appointment/' + id + `?classroom_id=${classroom_id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });

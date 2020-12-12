@@ -453,7 +453,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
 router.delete('/:appointment_id', ensureProfOrTA, (req, res) => {
   Appointment.findOneAndDelete({ _id: req.params.appointment_id })
     .then(() => {
-      res.status(400).end();
+      res.status(200).end();
     })
     .catch((err) => {
       console.log(err);
