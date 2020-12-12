@@ -20,24 +20,36 @@ const ClassroomMasteryDay = require('../models/ClassroomMasteryDay');
 const Availability = require('../models/Availability');
 const Appointment = require('../models/Appointment');
 const Classroom = require('../models/Classroom');
+const { json } = require('express');
 
-module.exports = router;
+// module.exports = router;
+module.exports = {
+  router:router,
+  book:book,
+}
 
 const MAX_ATTEMPTS = 15;
 
 router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
-  if (req.body.mastery_id == '') {
-    res.status(400).send('Select a mastery check first');
-    return;
-  }
+  book(req.user._id, req.body.mastery_id).then(response => {
+    if(response.status == 200){
+      res.status(200).json(response.element);
+    }
+    else{
+      res.status(response.status).send(response.send);
+    }
+  })
+});
 
-  let user_id = req.body.user_id ? req.body.user_id : req.user._id;
-  let mastery_id = req.body.mastery_id;
+
+async function book(user_id, mastery_id){
+  if(mastery_id == ""){
+    return {status:400, send:"Select a mastery check first"};
+  }
 
   try {
     if ((await can_mastery(mastery_id, user_id)) == false) {
-      res.status(400).send('You cannot book this mastery check');
-      return;
+      return {status: 400, send:"You cannot book this mastery check"};
     }
     let mastery = await MasteryCheck.findById(mastery_id)
       .select({ classroom: 1, appointment_duration: 1 })
@@ -49,11 +61,9 @@ router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
       //get mastery days for that class sorted, the closest day to today will be the first
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
-    if (mastery_days.length == 0) {
-      res.status(400).send('No mastery days are available for this class, contact your professor');
-      return;
+    if(mastery_days.length == 0){
+      return {status: 400, send: "No mastery days are available for this class, contact your professor"};
     }
-
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
     let weeks = 0;
@@ -111,8 +121,7 @@ router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
             //booking completed.
             booked = true;
             increaseTa(user_id, mastery.classroom._id); //increase the assigned TA, only happens if the assigned TA was booked
-            res.json(r);
-            return;
+            return {status:200, element:r}
           } else {
             let staff = [mastery.classroom.lecturer];
             mastery.classroom.teaching_assistants.forEach((el) => {
@@ -136,9 +145,8 @@ router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
               );
               if (x != false) {
                 // booking completed
-                res.json(x);
                 booked = true;
-                return;
+                return {status:200, element:r}
               }
             }
           }
@@ -146,14 +154,15 @@ router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
       }
       weeks++;
     }
-
-    res.send('Error, too many attempts').end();
   } catch (err) {
     console.log(err);
-    res.send('you cannot book this mastery!').end();
-    return;
+    return {status:400, send:'you cannot book this mastery!'}
   }
-});
+  return {status:400, send: "Error, too many attempts"}
+}
+
+
+
 
 function sort_mastery_days(mastery_days) {
   let x = mastery_days.sort(function (a, b) {

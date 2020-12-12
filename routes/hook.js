@@ -6,6 +6,8 @@ const User = require('../models/User');
 const MasteryCheck = require('../models/MasteryCheck');
 const axios = require('axios');
 
+const appointment = require('../routes/appointment');
+
 require('dotenv').config();
 
 module.exports = router;
@@ -29,19 +31,17 @@ router.post('/', (req, res) => {
 
             MasteryCheck.findOne({ repo: repo_url }).then((mastery) => {
               if (mastery) {
-                let body_data = JSON.stringify({
-                  mastery_id: mastery._id,
-                  user_id: user._id,
-                });
 
-                // TODO: Change in production to http://checq.me/appointment/book
-                request.post(
-                  { url: 'http://localhost:3000/appointment/book', body: body_data },
-                  function (err, httpResponse, body) {
-                    console.log('ok')
-                    console.log(err, body);
-                  }
-                );
+                // // TODO: Change in production to http://checq.me/appointment/book
+                // request.post(
+                //   { url: 'http://localhost:3000/appointment/book', body: body_data },
+                //   function (err, httpResponse, body) {
+                //     console.log('ok')
+                //     console.log(err, body);
+                //   }
+                // );
+                
+                appointment.book(user._id, mastery._id)
               }
             });
           }
