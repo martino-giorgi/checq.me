@@ -15,23 +15,27 @@
                 <h3>- Mastery Check: <%=mastery.mastery_name %></h3>
             
                 <% let i = 0;
+                if (mastery.topic) {
                 mastery.topic.forEach( attempt => {%>
-                    <h4>Attempt n. <%= ++i %></h4>
+                    <h4>Attempt n. <%= ++i %></h4> 
 
                     <% for (const attempt_key in attempt.topic_grades) { %>
                         <p><%= attempt_key%>:
                 <%= attempt.topic_grades[attempt_key] == 0 ? "Exceed" : attempt.topic_grades[attempt_key] == 1 ? "Pass" : "Fail"%>
                         </p>
-                    <%}%>
-               
+                    <%}%> 
+                    <h5>Topic Final Grade: <%= attempt.final_grade == 0 ? "Exceed" : attempt.final_grade == 1 ? "Pass" : "Fail"%></h5>
+                    <hr size="8" width="90%" color="red">
+
             <%}) %>
-            <h3>Final Grade: <% let grade = mastery.topic[mastery.topic.length-1].final_grade%>
+            <h3>Mastery Check Final Grade: <% let grade = mastery.topic[mastery.topic.length-1].final_grade%>
                              <%= grade == 0 ? "Exceed" : (grade == 1 ? "Pass" : "Fail") %>    
                              
             </h3>
+            <% } %>
 
             
-            <hr size="8" width="90%" color="red">
+            <hr width="90%" color="blue">
         <%}%>
         </main>
     </div>

@@ -49,11 +49,17 @@
   <p class="normal"> N.D. </p>
 </td>
 <% } %>
-
+<% if(!classroom.teaching_assistants.map(ta => ta._id).includes(model.user._id)) {  %>
 <td>
-  <!-- TODO: Add grades -->
-  90/100
+  <a href="<%= `/grades?classroom_id=${classroom._id}`%>">
+    <span class="circle" style="background-color: #<%= classroom.color %>">
+      <img src="/assets/icons/misc/chevron-right.svg" alt="chevron-right"></img>
+    </span>
+  </a>
 </td>
+<% } else { %>
+<td></td>
+<% } %>
 
 <td class="class-detail-td">
   <a href="<%= `/classroom/class?classroom_id=${classroom._id}`%>">

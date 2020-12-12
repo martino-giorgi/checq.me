@@ -150,7 +150,6 @@ router.get("/", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
                         topic: grades.mastery_grades.get(mastery._id.toString())
                     })
                 })
-                    
                     let new_grades = {
                         mastery_grades: grades_array,
                         _id: grades._id,
