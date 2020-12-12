@@ -22,7 +22,6 @@ const Appointment = require('../models/Appointment');
 const Classroom = require('../models/Classroom');
 const { json } = require('express');
 
-// module.exports = router;
 module.exports = {
   router:router,
   book:book,
@@ -548,41 +547,6 @@ router.patch('/', ensureProfOrTAUser, async (req, res) => {
     res.status(400).send('Invalid date');
   }
 });
-
-router.post('/sgrang', (req, res) => {
-  console.log(req.body);
-  let date_start = moment(req.body.start_time, 'YYYY-MM-DDTHH:mm', true);
-  let date_end = moment(req.body.end_time, 'YYYY-MM-DDTHH:mm', true);
-  let now = moment();
-  let ok = true;
-  // if (!date_start.isValid || date_start.isAfter(now) <= 0) {
-  //   ok = false;
-  // }
-  if (ok) {
-    const new_app = new Appointment({
-      _masteryId: req.body._masteryId,
-      _taId: req.body._taId,
-      _studentId: req.body._studentId,
-      start_time: date_start,
-      end_time: date_end,
-      duration: req.body.duration,
-    });
-    new_app
-      .save()
-      .then(() => {
-        res.json(new_app);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).end();
-      });
-  }
-});
-
-router.post("/test",(req,res)=>{
-  console.log(get_available_time2(moment("2020-12-10").startOf('day'), moment("2020-12-10").endOf('day'),req.body.times))
-  res.end();
-})
 
 router.get("/matching", ensureProfOrTA, (req,res) => {
   Classroom.findById(req.query.classroom_id).then( classroom => {
