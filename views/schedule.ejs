@@ -111,11 +111,10 @@
             <p hidden id="event_id_del"></p>
 
             <% if (user.role == 0 || user.role == 1) { %>
-              <img onclick="delete_event()" id="delete-event" src="/assets/icons/buttons/delete.svg" alt="delete icon">
+              <img style="cursor: pointer;" onclick="delete_event()" id="delete-event" src="/assets/icons/buttons/delete.svg" alt="delete icon">
             <% } %> 
           </div>
 
-          <!-- TODO: Finish + add delete button -->
           <div class="modal-body">
             <h3 id="event-name"></h3>
             <p id="ta-or-student-name"></p>

@@ -168,7 +168,6 @@ function sort_mastery_days(mastery_days) {
   });
 
   let d = moment().isoWeekday();
-  // let d = 3;
 
   let i;
   for (i = 0; i < x.length; i++) {
