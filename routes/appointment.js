@@ -526,3 +526,43 @@ router.post("/test",(req,res)=>{
   console.log(get_available_time2(moment("2020-12-10").startOf('day'), moment("2020-12-10").endOf('day'),req.body.times))
   res.end();
 })
+
+router.get("/matching", ensureProfOrTA, (req,res) => {
+  Classroom.findById(req.query.classroom_id).then( classroom => {
+    
+    let masteries = classroom.mastery_checks;
+
+    let filter = {};
+    if(req.body.ta) {
+      filter = {
+        _studentId: req.query.student_id,
+        _taId: req.query.ta_id,
+        _masteryId: { $in: masteries}, // take appointemtns only for this class
+        end_time: {$lte: moment()},
+        isGraded: false
+      }
+    } 
+    else {
+      filter = {
+        _studentId: req.query.student_id,
+        end_time: {$lte: moment()},
+        _masteryId: { $in: masteries}, // take appointemtns only for this class
+        isGraded: false
+      }
+    }
+    Appointment.find(filter)
+    .populate({
+      path: "_studentId",
+      select: ["name", "surname"]
+    })
+    .populate({
+      path: '_masteryId',
+      populate: {
+        path: 'topics'
+      }
+    })
+    .then( appointments => {
+      res.json(appointments);
+    })
+  })
+})

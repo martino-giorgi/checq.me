@@ -1,0 +1,17 @@
+<div class="wrapper">
+    <%- include("../../partials/navigation", { active: 'manager' }) %>
+    <main>
+        <h2 id="student_name"></h2>
+        <div id="appointments"></div>
+    </main>
+</div>
+
+
+<script src="/js/ejs.min.js"></script>
+<script src="/js/views.js"></script>
+<script src="/js/ajax_add_grade.js"></script>
+<script>
+    var s = <%- JSON.stringify(user) %>
+    
+    window.onload = add_grade_init(s);
+</script>

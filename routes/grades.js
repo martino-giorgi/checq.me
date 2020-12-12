@@ -31,6 +31,10 @@ module.exports = router;
 
 router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
     Appointment.findById(req.body.appointment_id).then(appointment => {
+        if(appointment.isGraded) {
+            res.status(400).end();
+            return;
+        }
         // checks appointment belongs to the TA or is a professor
         if (appointment._taId.equals(req.user._id) || req.user.role === 0) {
             // check if end_time of appointment is after today date
@@ -61,7 +65,11 @@ router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
                             }
 
                             classroom_grades.save();
-                            res.status(200).end();
+                            console.log(classroom_grades);
+                            appointment.isGraded = true;
+                            appointment.save().then( () => {
+                                res.status(200).end();
+                            })
                         })
                     })
 
@@ -170,4 +178,8 @@ router.get("/", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
             })
             
         })
+})
+
+router.get("/add", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+    res.render("manager/mastery/add_grade",   {user: req.user});
 })

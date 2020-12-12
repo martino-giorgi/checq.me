@@ -35,7 +35,12 @@ const AppointmentSchema = new mongoose.Schema({
     grade:{
         type: String,
         required: false
+    },
+    isGraded: {
+        type: Boolean,
+        default: false
     }
+    
 })
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
