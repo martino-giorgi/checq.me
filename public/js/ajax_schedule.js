@@ -227,9 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
   calendar.render();
 });
 
-
-
-
 function parse_Ta_appointments(data) {
   data.appointments.forEach((el) => {
     calendar.addEvent({
@@ -282,15 +279,26 @@ function parse_student_appointments(data) {
 function delete_event(info) {
   document.getElementById('delete-event').addEventListener('click', () => {
     if (info.event.extendedProps.appointment_id) {
-      API.delete_appointment(info.event.extendedProps.appointment_id, info.event.extendedProps.classroom_id).then((result) => {
+      API.delete_appointment(
+        info.event.extendedProps.appointment_id,
+        info.event.extendedProps.classroom_id
+      ).then((result) => {
         if (result.status != 200) {
-          window.FlashMessage.error('Something went wrong');
+          window.FlashMessage.error('An error occurred while trying to delete the appointment');
         } else {
           info.event.remove();
           window.FlashMessage.success('Appointment was deleted successfully');
         }
       });
     } else {
+      API.delete_busy_day(info.event.start, info.event.end).then((res) => {
+        if (res.status != 200) {
+          window.FlashMessage.error('An error occurred while trying to delete the busy day');
+        } else {
+          info.event.remove();
+          window.FlashMessage.success('Busy day was deleted successfully');
+        }
+      });
     }
   });
 }
@@ -348,16 +356,12 @@ function bookMastery() {
   console.log(mastery_id);
 
   API.book_appointment(mastery_id).then((response) => {
-
     if (response.status != 200) {
       response.text().then((t) => {
         window.FlashMessage.error(t);
       });
     } else {
-      let nodes = document.querySelectorAll('[modal-backdrop]');
-      var last = nodes[nodes.length- 1];
-
-      document.querySelector("body > div.modal-backdrop").classList.remove("show");
+      document.querySelector('body > div.modal-backdrop').classList.remove('show');
       document.querySelector('#newMastery').classList.remove('show');
       window.FlashMessage.success('Mastery check appointment booked successfully');
       calendar.removeEvents();
@@ -437,7 +441,19 @@ API = (function () {
     });
   }
 
-  function populateCalendar(){
+  function delete_busy_day(start_date, end_date) {
+    let body = {
+      busy: [start_date, end_date],
+    };
+
+    return fetch('/availability', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+  }
+
+  function populateCalendar() {
     if (role == 0 || role == 1) {
       get_appointments().then((data) => {
         parse_Ta_appointments(data);
@@ -457,6 +473,7 @@ API = (function () {
     get_classrooms,
     book_appointment,
     delete_appointment,
+    delete_busy_day,
     populateCalendar,
   };
 })();
