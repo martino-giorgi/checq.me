@@ -253,6 +253,7 @@ async function trybooking(
           });
           // console.log(m_day_start, m_day_end, busy_total);
           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
+          console.log(m_day_start,m_day_end);
           console.log('Busy slots: ');
           console.log(busy_total);
           console.log('Availability: ');
