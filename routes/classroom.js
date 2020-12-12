@@ -11,6 +11,8 @@ const {
   ensureProfessorUser,
 } = require('../config/auth');
 
+const { addAvailability } = require('../updates/db_updates');
+
 const ClassroomMasteryDay = require('../models/ClassroomMasteryDay');
 const Classroom = require('../models/Classroom');
 const User = require('../models/User');
@@ -177,6 +179,8 @@ router.post('/ta', ensureAuthenticated, ensureProfessor, (req, res) => {
       // Add user id to teaching_assistant of Classroom and remove from participants
       this_classroom.partecipants.remove({ _id: this_user._id });
       this_classroom.teaching_assistants.addToSet(this_user._id);
+
+      addAvailability(req.body.user_id);
 
       let p1 = this_user.save();
       let p2 = this_classroom.save();
@@ -398,6 +402,39 @@ router.post('/mday', ensureAuthenticated, ensureProfOrTA, (req, res) => {
   }
 });
 
+router.patch('/mday', ensureAuthenticated, ensureProfOrTA, (req, res) => {
+  let new_start = moment(req.body.new_start, 'YYYY-MM-DDTHH:mm', true);
+  let new_end = moment(req.body.new_end, 'YYYY-MM-DDTHH:mm', true);
+  if (
+    (!req.body.new_iso_day && new_iso_day >= 1 && new_iso_day <= 7) ||
+    !req.body.new_start ||
+    !req.body.new_end ||
+    !new_start.isValid() ||
+    !new_start.isValid() ||
+    !new_end.isAfter(new_start)
+  ) {
+    res.status(400).send('Not enough fields');
+    return;
+  }
+  ClassroomMasteryDay.find({
+    classroom: req.query.classroom_id,
+    _id: { $ne: req.body.mday_id },
+    iso_day_n: new_iso_day,
+  }).then((mdays) => {
+    if (mdays.length > 0) {
+      res.status(400).send('There cannot be more than one mastery day per day');
+    } else {
+      ClassroomMasteryDay.findByIdAndUpdate(
+        { _id: req.body.mday_id },
+        { $set: { start_time: new_start, end_time: new_end, iso_day_n: new_iso_day } },
+        { new: true }
+      ).then((edited) => {
+        res.json(edited);
+      });
+    }
+  });
+});
+
 router.delete('/mday', ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Classroom.findByIdAndUpdate(req.query.classroom_id, { $pull: req.body.mday_id })
     .then((result) => {
@@ -485,11 +522,3 @@ function randomColor() {
   color = colors[Math.floor(Math.random() * colors.length)];
   return color;
 }
-
-// Convert date to iso
-// function toMoment(date) {
-//   let base_date = date.replace(/\//g, "-").split('-');
-//   let iso = base_date.reverse().join('-') + 'T00:00:00.000Z';
-
-//   return moment(iso);
-// }

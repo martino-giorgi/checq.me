@@ -109,16 +109,22 @@ function addClass() {
           let iso_day = values[i - 1];
           let classroom_id = res;
 
-          API.create_mastery_day(iso_day, start_date, end_date, classroom_id).then((res) => {
-            if (res.status != 200) {
-              window.FlashMessage.error(
-                'Classroom was created but some mastery days might not have been created'
-              );
-            } else {
-              window.FlashMessage.success('Class was successfully created');
-              window.location.href = '/manager';
-            }
-          });
+          if (moment(start_date).isBefore(moment(end_date))) {
+            API.create_mastery_day(iso_day, start_date, end_date, classroom_id).then((res) => {
+              if (res.status != 200) {
+                window.FlashMessage.error(
+                  'Classroom was created but some mastery days might not have been created'
+                );
+              } else {
+                window.FlashMessage.success('Class was successfully created');
+                window.location.href = '/manager';
+              }
+            });
+          } else {
+            window.FlashMessage.error(
+              'Date for one of the mastery days is invalid. Please go to the mastery page of that class and add it again'
+            );
+          }
         }
       }
     });
