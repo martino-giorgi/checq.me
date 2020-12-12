@@ -61,37 +61,38 @@
     <div hidden id="github">
       <h2>Github Integration</h2>
 
-      <p class="normal">
-        By connecting your GitHub account to checq.me, you will be able to reserve your mastery checks.
-        Every time you push a commit to GitHub using a certain phrase (determined by the professor of
-        your course), a mastery check will be automatically reserved.
-        <br><br>
-        For more information on how checq.me does this, check out our repo on
-        <a href="https://github.com/martino-giorgi/checq.me">GitHub</a>.
+      <% if (user.role == 1 || user.role == 2) { %>
+        <p class="normal">
+          By connecting your GitHub account to checq.me, you will be able to reserve your mastery checks.
+          Every time you push a commit to GitHub using a certain phrase (determined by the professor of
+          your course), a mastery check will be automatically reserved.
+          <br><br>
+          For more information on how checq.me does this, check out our repo on
+          <a href="https://github.com/martino-giorgi/checq.me">GitHub</a>.
 
-        <br><br>
-      </p>
+          <br><br>
+        </p>
 
-      <% if (user.githubId == "") { %>
-      <a class="btn btn-social btn-github" href="/github">
-        <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
-      </a>
-      <% } else { %>
-      <span class="github-connected">
-        <a class="btn btn-social btn-github disabled">
-          <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
-        </a>
+        <% if (user.githubId == "") { %>
+          <a class="btn btn-social btn-github" href="/github">
+            <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+          </a>
+        <% } else { %>
+          <span class="github-connected">
+            <a class="btn btn-social btn-github disabled">
+              <span class="fab fa-github" style="font-size: 20px;"></span> Sign in with GitHub
+            </a>
 
-        <img src="/assets/icons/misc/check.svg" alt="connected icon">
-      </span>
+            <img src="/assets/icons/misc/check.svg" alt="connected icon">
+          </span>
+        <% } %>
       <% } %>
-
     </div>
 
-    <div hidden id="notifications">
+    <!-- <div hidden id="notifications">
       <h2>Notifications</h2>
-      <!-- TODO: Add notification manager -->
-    </div>
+      TODO: Add notification manager
+    </div> -->
 
     <div hidden id="security">
       <h2>Password & Security</h2>

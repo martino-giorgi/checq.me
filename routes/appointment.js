@@ -25,17 +25,18 @@ module.exports = router;
 
 const MAX_ATTEMPTS = 15;
 
-router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
-  if(req.body.mastery_id == ""){
-    res.status(400).send("Select a mastery check first");
+router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
+  if (req.body.mastery_id == '') {
+    res.status(400).send('Select a mastery check first');
     return;
   }
-  let user_id = req.user._id;
+
+  let user_id = req.body.user_id ? req.body.user_id : req.user._id;
   let mastery_id = req.body.mastery_id;
 
   try {
     if ((await can_mastery(mastery_id, user_id)) == false) {
-      res.status(400).send("You cannot book this mastery check");
+      res.status(400).send('You cannot book this mastery check');
       return;
     }
     let mastery = await MasteryCheck.findById(mastery_id)
@@ -48,8 +49,8 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
       //get mastery days for that class sorted, the closest day to today will be the first
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
-    if(mastery_days.length == 0){
-      res.status(400).send("No mastery days are available for this class, contact your professor");
+    if (mastery_days.length == 0) {
+      res.status(400).send('No mastery days are available for this class, contact your professor');
       return;
     }
 
@@ -101,7 +102,7 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
             m_day_start,
             m_day_end,
             mastery.appointment_duration,
-            req.user._id,
+            user_id,
             typeof avail[0] === 'undefined' ? [] : avail[0].busy,
             student_busy
           );
@@ -109,7 +110,7 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
           if (r != false) {
             //booking completed.
             booked = true;
-            increaseTa(req.user._id, mastery.classroom._id); //increase the assigned TA, only happens if the assigned TA was booked
+            increaseTa(user_id, mastery.classroom._id); //increase the assigned TA, only happens if the assigned TA was booked
             res.json(r);
             return;
           } else {
@@ -129,7 +130,7 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
                 m_day_start,
                 m_day_end,
                 mastery.appointment_duration,
-                req.user._id,
+                user_id,
                 typeof avail2[0] === 'undefined' ? [] : avail2[0].busy,
                 student_busy
               );
@@ -146,7 +147,7 @@ router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
       weeks++;
     }
 
-    res.send("Error, too many attempts").end();
+    res.send('Error, too many attempts').end();
   } catch (err) {
     console.log(err);
     res.send('you cannot book this mastery!').end();
@@ -252,7 +253,7 @@ async function trybooking(
           });
           // console.log(m_day_start, m_day_end, busy_total);
           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
-          console.log(m_day_start,m_day_end);
+          console.log(m_day_start, m_day_end);
           console.log('Busy slots: ');
           console.log(busy_total);
           console.log('Availability: ');
