@@ -1,6 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 require('twix');
+const mongoose = require('mongoose');
 const router = express.Router();
 const {
   ensureAuthenticated,
@@ -183,3 +184,12 @@ async function validateInput(busy, user_id, busy_old){
   }
   return true;
 } 
+
+
+router.delete("/",ensureAuthenticated, ensureProfOrTAUser, (req,res) => {
+  Availability.findOneAndUpdate({_userId: req.user._id }, {$pull: {busy: req.body.old_busy}}).then((result)=> {
+    res.status(200).send("Delete successful!");
+  }), err => {
+    res.status(400).send("Error");
+  }
+})
