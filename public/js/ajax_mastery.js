@@ -112,9 +112,10 @@ function render_mastery_modal() {
  */
 function create_topic() {
   let body = {
-    name: document.getElementById('input_name').value,
-    description: document.getElementById('input_description').value,
+    name: document.getElementById('topic_input_name').value,
+    description: document.getElementById('topic_input_description').value,
   };
+  console.log(body, "prima");
 
   if (body.name != '' && body.description != '') {
     API_mastery.add_topic(JSON.stringify(body)).then((res) => {
