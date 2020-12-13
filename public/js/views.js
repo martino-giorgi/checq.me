@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Sun Dec 13 2020 14:01:28 GMT+0100 (Central European Standard Time)
+//EJS Compiled Views - This file was automatically generated on Sun Dec 13 2020 14:05:42 GMT+0100 (Central European Standard Time)
 ejs.views_include = function(locals) {
     return function(path, d) {
         return ejs["views_"+path.replace(/\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
@@ -186,7 +186,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<div class=\"container mt-3 mb-4\">\r\n  <div class=\"mt-4 mt-lg-0\">\r\n    <div class=\"row\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm\">\r\n          <table class=\"table manage-candidates-top mb-0\">\r\n            <thead>\r\n              <tr>\r\n                <th>Name</th>\r\n                <th class=\"text-center\">Role</th>\r\n                <th class=\"action text-right\">Action</th>\r\n              </tr>\r\n            </thead>\r\n\r\n            <tbody>\r\n              <% partecipants.concat(teaching_assistants.concat(professors)).forEach(p => { %>\r\n                <% let curr = p._id %>\r\n                <tr class=\"candidates-list\">\r\n                  <td class=\"title\">\r\n                    <div class=\"thumb\">\r\n                      <% if (p.gravatar == '' || typeof p.gravatar === 'undefined') { %>\r\n                        <img class=\"img-fluid\" src=\"/assets/icons/misc/pp_placeholder.svg\" alt=\"profile picture\">\r\n                      <% } else { %>\r\n                        <img class=\"img-fluid\" src=\"<%- p.gravatar %>\" alt=\"profile picture\">\r\n                      <% } %> \r\n                    </div>\r\n\r\n                    <div class=\"candidate-list-details\">\r\n                      <div class=\"candidate-list-info\">\r\n                        <div class=\"candidate-list-title\">\r\n                          <p class=\"mb-0\"><%= p.name%> <%- p.surname %></p>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </td>\r\n                  <td class=\"candidate-list-favourite-time text-center\">\r\n                    <span\r\n                      class=\"candidate-list-time order-1\"><%- professors.map(e => e._id).includes(p._id) ?  \"Professor\" : (teaching_assistants.map(e => e._id).includes(p._id)) ? \"TA\" : \"Student\"%>\r\n                    </span>\r\n                  </td>\r\n                  <td>\r\n                    <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\r\n                      <li><a onclick=\"setUser('<%- curr %>')\" href=\"#\" class=\"text-info\"\r\n                              data-toggle=\"modal\" data-target=\"#edit-user-modal\" title=\"\"\r\n                              data-original-title=\"Edit\"><i class=\"fas fa-pencil-alt\"></i></a></li>\r\n\r\n                      <% if (partecipants.includes(p)) { %>\r\n                        <li><a href=\"/grades/student?classroom_id=<%- _id %>&student_id=<%- p._id %>\" class=\"text-info\"><i class=\"fas fa-info-circle\"></i></a></li>\r\n                        <li><a href=\"http://localhost:3000/grades/add?classroom_id=<%- _id %>&student_id=<%- p._id %>\" class=\"text-info\"><i class=\"fas fa-plus\"></i></a></li>\r\n                      <%}%>\r\n                    </ul>\r\n                  </td>\r\n                </tr>\r\n              <% }) %>\r\n            </tbody>\r\n          </table>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\r\n    aria-hidden=\"true\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <button type=\"button\" class=\"btn btn-primary\" onclick=\"removeFromClass(getUser())\" data-toggle=\"modal\"\r\n                    data-target=\"#edit-user-modal\">\r\n                    Remove from Classroom\r\n                </button>\r\n                <button type=\"button\" id=\"toggleTA_btn\" onclick=\"toggleTA(getUser())\" class=\"btn btn-primary\"\r\n                    data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n                    Value\r\n                </button>\r\n                <button type=\"button\" id=\"toggleProf_btn\" onclick=\"toggleProf(getUser())\" class=\"btn btn-primary\"\r\n                    data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n                    Toggle Prof\r\n                </button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>"
+  , __lines = "<div class=\"container mt-3 mb-4\">\r\n  <div class=\"mt-4 mt-lg-0\">\r\n    <div class=\"row\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm\">\r\n          <table class=\"table manage-candidates-top mb-0\">\r\n            <thead>\r\n              <tr>\r\n                <th>Name</th>\r\n                <th class=\"text-center\">Role</th>\r\n                <th class=\"action text-right\">Action</th>\r\n              </tr>\r\n            </thead>\r\n\r\n            <tbody>\r\n              <% partecipants.concat(teaching_assistants.concat(professors)).forEach(p=> { %>\r\n                <% let curr=p._id %>\r\n                  <tr class=\"candidates-list\">\r\n                    <td class=\"title\">\r\n                      <div class=\"thumb\">\r\n                        <% if (p.gravatar=='' || typeof p.gravatar==='undefined' ) { %>\r\n                          <img class=\"img-fluid\" src=\"/assets/icons/misc/pp_placeholder.svg\" alt=\"profile picture\">\r\n                          <% } else { %>\r\n                            <img class=\"img-fluid\" src=\"<%- p.gravatar %>\" alt=\"profile picture\">\r\n                            <% } %>\r\n                      </div>\r\n\r\n                      <div class=\"candidate-list-details\">\r\n                        <div class=\"candidate-list-info\">\r\n                          <div class=\"candidate-list-title\">\r\n                            <p class=\"mb-0\">\r\n                              <%= p.name%>\r\n                                <%- p.surname %>\r\n                            </p>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </td>\r\n                    <td class=\"candidate-list-favourite-time text-center\">\r\n                      <span class=\"candidate-list-time order-1\">\r\n                        <%- professors.map(e=> e._id).includes(p._id) ? \"Professor\" : (teaching_assistants.map(e =>\r\n                          e._id).includes(p._id)) ? \"TA\" : \"Student\"%>\r\n                      </span>\r\n                    </td>\r\n                    <td>\r\n                      <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\r\n                        <li><a onclick=\"setUser('<%- curr %>')\" href=\"#\" class=\"text-info\" data-toggle=\"modal\"\r\n                            data-target=\"#edit-user-modal\" title=\"\" data-original-title=\"Edit\"><i\r\n                              class=\"fas fa-pencil-alt\"></i></a></li>\r\n\r\n                        <% if (partecipants.includes(p)) { %>\r\n                          <li><a href=\"/grades/student?classroom_id=<%- _id %>&student_id=<%- p._id %>\"\r\n                              class=\"text-info\"><i class=\"fas fa-info-circle\"></i></a></li>\r\n                          <li><a href=\"/grades/add?classroom_id=<%- _id %>&student_id=<%- p._id %>\" class=\"text-info\"><i\r\n                                class=\"fas fa-plus\"></i></a></li>\r\n                          <%}%>\r\n                      </ul>\r\n                    </td>\r\n                  </tr>\r\n                  <% }) %>\r\n            </tbody>\r\n          </table>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\r\n  aria-hidden=\"true\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <button type=\"button\" class=\"btn btn-primary\" onclick=\"removeFromClass(getUser())\" data-toggle=\"modal\"\r\n          data-target=\"#edit-user-modal\">\r\n          Remove from Classroom\r\n        </button>\r\n        <button type=\"button\" id=\"toggleTA_btn\" onclick=\"toggleTA(getUser())\" class=\"btn btn-primary\"\r\n          data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n          Value\r\n        </button>\r\n        <button type=\"button\" id=\"toggleProf_btn\" onclick=\"toggleProf(getUser())\" class=\"btn btn-primary\"\r\n          data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n          Toggle Prof\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -194,54 +194,57 @@ try {
   with (locals || {}) {
     ; __append("<div class=\"container mt-3 mb-4\">\r\n  <div class=\"mt-4 mt-lg-0\">\r\n    <div class=\"row\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm\">\r\n          <table class=\"table manage-candidates-top mb-0\">\r\n            <thead>\r\n              <tr>\r\n                <th>Name</th>\r\n                <th class=\"text-center\">Role</th>\r\n                <th class=\"action text-right\">Action</th>\r\n              </tr>\r\n            </thead>\r\n\r\n            <tbody>\r\n              ")
     ; __line = 16
-    ;  partecipants.concat(teaching_assistants.concat(professors)).forEach(p => { 
+    ;  partecipants.concat(teaching_assistants.concat(professors)).forEach(p=> { 
     ; __append("\r\n                ")
     ; __line = 17
-    ;  let curr = p._id 
-    ; __append("\r\n                <tr class=\"candidates-list\">\r\n                  <td class=\"title\">\r\n                    <div class=\"thumb\">\r\n                      ")
+    ;  let curr=p._id 
+    ; __append("\r\n                  <tr class=\"candidates-list\">\r\n                    <td class=\"title\">\r\n                      <div class=\"thumb\">\r\n                        ")
     ; __line = 21
-    ;  if (p.gravatar == '' || typeof p.gravatar === 'undefined') { 
-    ; __append("\r\n                        <img class=\"img-fluid\" src=\"/assets/icons/misc/pp_placeholder.svg\" alt=\"profile picture\">\r\n                      ")
+    ;  if (p.gravatar=='' || typeof p.gravatar==='undefined' ) { 
+    ; __append("\r\n                          <img class=\"img-fluid\" src=\"/assets/icons/misc/pp_placeholder.svg\" alt=\"profile picture\">\r\n                          ")
     ; __line = 23
     ;  } else { 
-    ; __append("\r\n                        <img class=\"img-fluid\" src=\"")
+    ; __append("\r\n                            <img class=\"img-fluid\" src=\"")
     ; __line = 24
     ; __append( p.gravatar )
-    ; __append("\" alt=\"profile picture\">\r\n                      ")
+    ; __append("\" alt=\"profile picture\">\r\n                            ")
     ; __line = 25
     ;  } 
-    ; __append(" \r\n                    </div>\r\n\r\n                    <div class=\"candidate-list-details\">\r\n                      <div class=\"candidate-list-info\">\r\n                        <div class=\"candidate-list-title\">\r\n                          <p class=\"mb-0\">")
-    ; __line = 31
+    ; __append("\r\n                      </div>\r\n\r\n                      <div class=\"candidate-list-details\">\r\n                        <div class=\"candidate-list-info\">\r\n                          <div class=\"candidate-list-title\">\r\n                            <p class=\"mb-0\">\r\n                              ")
+    ; __line = 32
     ; __append(escapeFn( p.name))
-    ; __append(" ")
+    ; __append("\r\n                                ")
+    ; __line = 33
     ; __append( p.surname )
-    ; __append("</p>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </td>\r\n                  <td class=\"candidate-list-favourite-time text-center\">\r\n                    <span\r\n                      class=\"candidate-list-time order-1\">")
-    ; __line = 38
-    ; __append( professors.map(e => e._id).includes(p._id) ?  "Professor" : (teaching_assistants.map(e => e._id).includes(p._id)) ? "TA" : "Student")
-    ; __append("\r\n                    </span>\r\n                  </td>\r\n                  <td>\r\n                    <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\r\n                      <li><a onclick=\"setUser('")
-    ; __line = 43
-    ; __append( curr )
-    ; __append("')\" href=\"#\" class=\"text-info\"\r\n                              data-toggle=\"modal\" data-target=\"#edit-user-modal\" title=\"\"\r\n                              data-original-title=\"Edit\"><i class=\"fas fa-pencil-alt\"></i></a></li>\r\n\r\n                      ")
+    ; __append("\r\n                            </p>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </td>\r\n                    <td class=\"candidate-list-favourite-time text-center\">\r\n                      <span class=\"candidate-list-time order-1\">\r\n                        ")
+    ; __line = 41
+    ; __append( professors.map(e=> e._id).includes(p._id) ? "Professor" : (teaching_assistants.map(e =>
+                          e._id).includes(p._id)) ? "TA" : "Student")
+    ; __line = 42
+    ; __append("\r\n                      </span>\r\n                    </td>\r\n                    <td>\r\n                      <ul class=\"list-unstyled mb-0 d-flex justify-content-end\">\r\n                        <li><a onclick=\"setUser('")
     ; __line = 47
+    ; __append( curr )
+    ; __append("')\" href=\"#\" class=\"text-info\" data-toggle=\"modal\"\r\n                            data-target=\"#edit-user-modal\" title=\"\" data-original-title=\"Edit\"><i\r\n                              class=\"fas fa-pencil-alt\"></i></a></li>\r\n\r\n                        ")
+    ; __line = 51
     ;  if (partecipants.includes(p)) { 
-    ; __append("\r\n                        <li><a href=\"/grades/student?classroom_id=")
-    ; __line = 48
+    ; __append("\r\n                          <li><a href=\"/grades/student?classroom_id=")
+    ; __line = 52
     ; __append( _id )
     ; __append("&student_id=")
     ; __append( p._id )
-    ; __append("\" class=\"text-info\"><i class=\"fas fa-info-circle\"></i></a></li>\r\n                        <li><a href=\"http://localhost:3000/grades/add?classroom_id=")
-    ; __line = 49
-    ; __append( _id )
-    ; __append("&student_id=")
-    ; __append( p._id )
-    ; __append("\" class=\"text-info\"><i class=\"fas fa-plus\"></i></a></li>\r\n                      ")
-    ; __line = 50
-    ; }
-    ; __append("\r\n                    </ul>\r\n                  </td>\r\n                </tr>\r\n              ")
+    ; __append("\"\r\n                              class=\"text-info\"><i class=\"fas fa-info-circle\"></i></a></li>\r\n                          <li><a href=\"/grades/add?classroom_id=")
     ; __line = 54
+    ; __append( _id )
+    ; __append("&student_id=")
+    ; __append( p._id )
+    ; __append("\" class=\"text-info\"><i\r\n                                class=\"fas fa-plus\"></i></a></li>\r\n                          ")
+    ; __line = 56
+    ; }
+    ; __append("\r\n                      </ul>\r\n                    </td>\r\n                  </tr>\r\n                  ")
+    ; __line = 60
     ;  }) 
-    ; __append("\r\n            </tbody>\r\n          </table>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\r\n    aria-hidden=\"true\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <button type=\"button\" class=\"btn btn-primary\" onclick=\"removeFromClass(getUser())\" data-toggle=\"modal\"\r\n                    data-target=\"#edit-user-modal\">\r\n                    Remove from Classroom\r\n                </button>\r\n                <button type=\"button\" id=\"toggleTA_btn\" onclick=\"toggleTA(getUser())\" class=\"btn btn-primary\"\r\n                    data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n                    Value\r\n                </button>\r\n                <button type=\"button\" id=\"toggleProf_btn\" onclick=\"toggleProf(getUser())\" class=\"btn btn-primary\"\r\n                    data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n                    Toggle Prof\r\n                </button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>")
-    ; __line = 86
+    ; __append("\r\n            </tbody>\r\n          </table>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit-user-modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit-user-modal-label\"\r\n  aria-hidden=\"true\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <h5 class=\"modal-title\" id=\"edit-user-modal-label\">Edit User</h5>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <button type=\"button\" class=\"btn btn-primary\" onclick=\"removeFromClass(getUser())\" data-toggle=\"modal\"\r\n          data-target=\"#edit-user-modal\">\r\n          Remove from Classroom\r\n        </button>\r\n        <button type=\"button\" id=\"toggleTA_btn\" onclick=\"toggleTA(getUser())\" class=\"btn btn-primary\"\r\n          data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n          Value\r\n        </button>\r\n        <button type=\"button\" id=\"toggleProf_btn\" onclick=\"toggleProf(getUser())\" class=\"btn btn-primary\"\r\n          data-toggle=\"modal\" data-target=\"#edit-user-modal\">\r\n          Toggle Prof\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>")
+    ; __line = 92
   }
   return __output;
 } catch (e) {
