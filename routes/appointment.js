@@ -1,65 +1,63 @@
-const mongoose = require('mongoose');
-const express = require('express');
-const moment = require('moment');
-require('twix');
+const mongoose = require("mongoose");
+const express = require("express");
+const moment = require("moment");
+require("twix");
 const router = express.Router();
 const {
   ensureAuthenticated,
   ensureStudent,
   ensureProfOrTA,
   ensureProfOrTAUser,
-} = require('../config/auth');
+} = require("../config/auth");
 
-const { get_available_time2 } = require('../updates/available_time');
+const { get_available_time2 } = require("../updates/available_time");
 
-const { increaseTa } = require('../updates/db_updates');
+const { increaseTa } = require("../updates/db_updates");
 
-const User = require('../models/User');
-const MasteryCheck = require('../models/MasteryCheck');
-const ClassroomMasteryDay = require('../models/ClassroomMasteryDay');
-const Availability = require('../models/Availability');
-const Appointment = require('../models/Appointment');
-const Classroom = require('../models/Classroom');
-const { json } = require('express');
+const User = require("../models/User");
+const MasteryCheck = require("../models/MasteryCheck");
+const ClassroomMasteryDay = require("../models/ClassroomMasteryDay");
+const Availability = require("../models/Availability");
+const Appointment = require("../models/Appointment");
+const Classroom = require("../models/Classroom");
+const { json } = require("express");
 
 module.exports = {
-  router:router,
-  book:book,
-}
+  router: router,
+  book: book,
+};
 
 const MAX_ATTEMPTS = 15;
 
-
-router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
-  book(req.user._id, req.body.mastery_id).then(response => {
-    if(response.status == 200){
+router.post("/book", ensureAuthenticated, ensureStudent, async (req, res) => {
+  book(req.user._id, req.body.mastery_id).then((response) => {
+    if (response.status == 200) {
       res.status(200).json(response.element);
-    }
-    else{
+    } else {
       res.status(response.status).send(response.send);
     }
-  })
+  });
 });
 
 /**
  * books an appointment(mastery check) for the given student
- * @param String user_id 
- * @param String mastery_id 
+ * @param String user_id
+ * @param String mastery_id
  */
-async function book(user_id, mastery_id){
-  if(mastery_id == ""){
-    return {status:400, send:"Select a mastery check first"};
+async function book(user_id, mastery_id) {
+  if (mastery_id == "") {
+    return { status: 400, send: "Select a mastery check first" };
   }
 
   try {
     if ((await can_mastery(mastery_id, user_id)) == false) {
-      return {status: 400, send:"You cannot book this mastery check"};
+      return { status: 400, send: "You cannot book this mastery check" };
     }
     let mastery = await MasteryCheck.findById(mastery_id)
-      .select({ classroom: 1, appointment_duration: 1, question_time:1 })
-      .populate({ path: 'classroom' });
+      .select({ classroom: 1, appointment_duration: 1, question_time: 1 })
+      .populate({ path: "classroom" });
 
-    let is_question_time = !mastery.question_time? false : true
+    let is_question_time = !mastery.question_time ? false : true;
 
     let current_iso_weekday = moment().isoWeekday();
 
@@ -67,8 +65,11 @@ async function book(user_id, mastery_id){
       //get mastery days for that class sorted, the closest day to today will be the first
       await ClassroomMasteryDay.find({ classroom: mastery.classroom._id })
     );
-    if(mastery_days.length == 0){
-      return {status: 400, send: "No mastery days are available for this class, contact your professor"};
+    if (mastery_days.length == 0) {
+      return {
+        status: 400,
+        send: "No mastery days are available for this class, contact your professor",
+      };
     }
     let assigned_ta = mastery.classroom.ta_mapping.get(user_id.toString());
     let booked = false;
@@ -83,27 +84,27 @@ async function book(user_id, mastery_id){
         //find first m_day
         if (current_iso_weekday <= m_day.iso_day_n) {
           // then just give me this week's instance of that day
-          m_day_start = moment().add(weeks, 'weeks').isoWeekday(m_day.iso_day_n);
-          m_day_end = moment().add(weeks, 'weeks').isoWeekday(m_day.iso_day_n);
+          m_day_start = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
+          m_day_end = moment().add(weeks, "weeks").isoWeekday(m_day.iso_day_n);
         } else {
           // otherwise, give me *next week's* instance of that same day
           m_day_start = moment()
-            .add(1 + weeks, 'weeks')
+            .add(1 + weeks, "weeks")
             .isoWeekday(m_day.iso_day_n);
           m_day_end = moment()
-            .add(1 + weeks, 'weeks')
+            .add(1 + weeks, "weeks")
             .isoWeekday(m_day.iso_day_n);
         }
 
         m_day_start = m_day_start.set({
-          hour: moment(m_day.start_time).get('hour'),
-          minute: moment(m_day.start_time).get('minute'),
+          hour: moment(m_day.start_time).get("hour"),
+          minute: moment(m_day.start_time).get("minute"),
           second: 0,
         });
 
         m_day_end = m_day_end.set({
-          hour: moment(m_day.end_time).get('hour'),
-          minute: moment(m_day.end_time).get('minute'),
+          hour: moment(m_day.end_time).get("hour"),
+          minute: moment(m_day.end_time).get("minute"),
           second: 0,
         });
 
@@ -119,7 +120,7 @@ async function book(user_id, mastery_id){
             m_day_end,
             mastery.appointment_duration,
             user_id,
-            typeof avail[0] === 'undefined' ? [] : avail[0].busy,
+            typeof avail[0] === "undefined" ? [] : avail[0].busy,
             student_busy,
             is_question_time
           );
@@ -128,7 +129,7 @@ async function book(user_id, mastery_id){
             //booking completed.
             booked = true;
             increaseTa(user_id, mastery.classroom._id); //increase the assigned TA, only happens if the assigned TA was booked
-            return {status:200, element:r}
+            return { status: 200, element: r };
           } else {
             let staff = [mastery.classroom.lecturer];
             mastery.classroom.teaching_assistants.forEach((el) => {
@@ -147,14 +148,14 @@ async function book(user_id, mastery_id){
                 m_day_end,
                 mastery.appointment_duration,
                 user_id,
-                typeof avail2[0] === 'undefined' ? [] : avail2[0].busy,
+                typeof avail2[0] === "undefined" ? [] : avail2[0].busy,
                 student_busy,
                 is_question_time
               );
               if (x != false) {
                 // booking completed
                 booked = true;
-                return {status:200, element:r}
+                return { status: 200, element: r };
               }
             }
           }
@@ -164,21 +165,19 @@ async function book(user_id, mastery_id){
     }
   } catch (err) {
     console.log(err);
-    return {status:400, send:'you cannot book this mastery!'}
+    return { status: 400, send: "you cannot book this mastery!" };
   }
-  return {status:400, send: "Error, too many attempts"}
+  return { status: 400, send: "Error, too many attempts" };
 }
 
-
-
 /**
- * 
- * @param Map mastery_days 
+ *
+ * @param Map mastery_days
  */
 function sort_mastery_days(mastery_days) {
   let x = mastery_days.sort(function (a, b) {
-    let x = a['iso_day_n'];
-    let y = b['iso_day_n'];
+    let x = a["iso_day_n"];
+    let y = b["iso_day_n"];
     if (x < y) {
       return -1;
     }
@@ -218,15 +217,15 @@ async function get_day_busy(user_id, date) {
   return new Promise((resolve, rejects) => {
     let d = moment(date);
     Availability.aggregate()
-      .unwind('$busy')
+      .unwind("$busy")
       .match({
         _userId: user_id,
         $and: [
-          { 'busy.0': { $lte: d.endOf('day').toDate() } },
-          { 'busy.1': { $gte: d.startOf('day').toDate() } },
+          { "busy.0": { $lte: d.endOf("day").toDate() } },
+          { "busy.1": { $gte: d.startOf("day").toDate() } },
         ],
       })
-      .group({ _id: '$_userId', busy: { $addToSet: '$busy' } })
+      .group({ _id: "$_userId", busy: { $addToSet: "$busy" } })
       .exec((err, avail) => {
         if (err) {
           rejects(err);
@@ -250,7 +249,7 @@ async function trybooking(
   is_question_time
 ) {
   // console.log(m_duration);
-  console.log('Attempting to book ' + student_id + ' for ' + mastery_id + ' with: ' + ta);
+  console.log("Attempting to book " + student_id + " for " + mastery_id + " with: " + ta);
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
       .match({
@@ -274,18 +273,18 @@ async function trybooking(
           // console.log(m_day_start, m_day_end, busy_total);
           let availability = get_available_time2(m_day_start, m_day_end, busy_total, m_duration);
           console.log(m_day_start, m_day_end);
-          console.log('Busy slots: ');
+          console.log("Busy slots: ");
           console.log(busy_total);
-          console.log('Availability: ');
+          console.log("Availability: ");
           console.log(availability);
 
           if (availability.length == 0) {
             resolve(false);
-            console.log('Booking failed!');
+            console.log("Booking failed!");
             return;
           } else {
             end_time_appointment = availability[0].start.clone();
-            end_time_appointment.add(m_duration, 'minutes');
+            end_time_appointment.add(m_duration, "minutes");
             const new_appointment = new Appointment({
               _masteryId: mastery_id,
               _taId: ta,
@@ -294,14 +293,14 @@ async function trybooking(
               end_time: end_time_appointment,
               duration: m_duration,
             });
-            if(is_question_time){
+            if (is_question_time) {
               new_appointment.question = true;
             }
             new_appointment
               .save()
               .then(() => {
                 resolve(new_appointment);
-                console.log('Booking successful!');
+                console.log("Booking successful!");
                 return;
               })
               .catch((err) => {
@@ -317,21 +316,21 @@ async function trybooking(
 
 async function get_TA_queue(date, classroom_tas, exclude) {
   return new Promise((resolve, rejects) => {
-    const date_start = moment(date).startOf('day');
+    const date_start = moment(date).startOf("day");
     // console.log(classroom_tas, exclude);
     Appointment.aggregate()
       .match({
         $and: [{ _taId: { $in: classroom_tas } }, { _taId: { $ne: exclude } }],
       })
       .group({
-        _id: '$_taId',
+        _id: "$_taId",
         count: {
           $sum: {
             $cond: [
               {
                 $and: [
-                  { $gte: ['$start_time', date_start.toDate()] },
-                  { $lte: ['$end_time', date_start.endOf('day').toDate()] },
+                  { $gte: ["$start_time", date_start.toDate()] },
+                  { $lte: ["$end_time", date_start.endOf("day").toDate()] },
                 ],
               },
               1,
@@ -340,7 +339,7 @@ async function get_TA_queue(date, classroom_tas, exclude) {
           },
         },
       })
-      .sort('count')
+      .sort("count")
       .exec((err, result) => {
         if (err) {
           rejects(err);
@@ -354,11 +353,11 @@ async function get_TA_queue(date, classroom_tas, exclude) {
             }
           });
           result.forEach((e) => new_res.push(e));
-          console.log('Queue no appoinments');
+          console.log("Queue no appoinments");
           console.log(new_res);
           resolve(new_res);
         } else {
-          console.log('Queue normal');
+          console.log("Queue normal");
           console.log(result);
           resolve(result);
         }
@@ -416,14 +415,14 @@ async function can_mastery(mastery_id, user_id) {
         return;
       } else {
         MasteryCheck.findById(mastery_id)
-          .populate({ path: 'classroom', select: ['is_ordered_mastery'] })
+          .populate({ path: "classroom", select: ["is_ordered_mastery"] })
           .then((ordered) => {
             if (ordered != null) {
               if (ordered.available == false) {
                 resolve(false);
                 return;
               }
-              if (ordered.classroom.is_ordered_mastery == false || ordered.locked_by == undefined) {
+              if (ordered.classroom.is_ordered_mastery == false) {
                 resolve(true);
                 return;
               } else {
@@ -431,17 +430,12 @@ async function can_mastery(mastery_id, user_id) {
                   .select({ classrooms_grades: 1 })
                   .exec((err, c_grades) => {
                     if (err) {
-                      console.log('error getting grades of user: ' + user_id);
+                      console.log("error getting grades of user: " + user_id);
                       rejects(false);
                       return;
                     } else {
-                      if (c_grades[ordered.classroom].includes(ordered.locked_by)) {
-                        resolve(true);
-                        return;
-                      } else {
-                        resolve(false);
-                        return;
-                      }
+                      resolve(true);
+                      return;
                     }
                   });
               }
@@ -453,23 +447,23 @@ async function can_mastery(mastery_id, user_id) {
   });
 }
 
-router.get('/', ensureAuthenticated, (req, res) => {
+router.get("/", ensureAuthenticated, (req, res) => {
   if (req.user.role == 2) {
     Appointment.find({ _studentId: req.user._id })
-      .populate({ path: '_masteryId', select: ['name', 'description', 'classroom'] })
-      .populate({ path: '_taId', select: ['name', 'surname'] })
+      .populate({ path: "_masteryId", select: ["name", "description", "classroom"] })
+      .populate({ path: "_taId", select: ["name", "surname"] })
       .then((ap) => {
         res.json(ap);
       });
   } else if (req.user.role == 0 || req.user.role == 1) {
     let total = {};
     Appointment.find({ _taId: req.user._id })
-      .populate({ path: '_masteryId', select: ['name', 'description', 'classroom'] })
-      .populate({ path: '_studentId', select: ['name', 'surname'] })
+      .populate({ path: "_masteryId", select: ["name", "description", "classroom"] })
+      .populate({ path: "_studentId", select: ["name", "surname"] })
       .then((ap) => {
-        total['appointments'] = ap;
+        total["appointments"] = ap;
         Availability.findOne({ _userId: req.user._id }).then((avail) => {
-          total['busy'] = avail;
+          total["busy"] = avail;
           res.json(total);
         });
       });
@@ -478,7 +472,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
   }
 });
 
-router.delete('/:appointment_id', ensureProfOrTA, (req, res) => {
+router.delete("/:appointment_id", ensureProfOrTA, (req, res) => {
   Appointment.findOneAndDelete({ _id: req.params.appointment_id })
     .then(() => {
       res.status(200).end();
@@ -489,20 +483,20 @@ router.delete('/:appointment_id', ensureProfOrTA, (req, res) => {
     });
 });
 
-router.patch('/', ensureProfOrTAUser, async (req, res) => {
+router.patch("/", ensureProfOrTAUser, async (req, res) => {
   if (!req.body.start_date || !req.body.end_date || !req.body.appointment_id) {
     return;
   }
   let b = moment(req.body.end_date);
   let a = moment(req.body.start_date);
-  let start_day = moment(req.body.start_date).startOf('day');
-  let end_day = moment(req.body.end_date).endOf('day');
+  let start_day = moment(req.body.start_date).startOf("day");
+  let end_day = moment(req.body.end_date).endOf("day");
 
   // console.log(a,b);
   if (a.isValid && b.isValid && b.isAfter(a) && a.isAfter(moment())) {
     appointment = await Appointment.findOne({ _id: req.body.appointment_id });
     if (!appointment && b.diff(a) != appointment.duration) {
-      res.status(400).send('Invalid date');
+      res.status(400).send("Invalid date");
       return;
     }
     // console.log("here")
@@ -552,55 +546,53 @@ router.patch('/', ensureProfOrTAUser, async (req, res) => {
         })
         .catch((err) => {
           console.log(err);
-          res.status(400).send('Unknown error');
+          res.status(400).send("Unknown error");
         });
       return;
     }
-    res.status(400).send('This student has another appointment at this time');
+    res.status(400).send("This student has another appointment at this time");
     // console.log(availability)
   } else {
-    res.status(400).send('Invalid date');
+    res.status(400).send("Invalid date");
   }
 });
 
-router.get("/matching", ensureProfOrTA, (req,res) => {
-  Classroom.findById(req.query.classroom_id).then( classroom => {
-    
+router.get("/matching", ensureProfOrTA, (req, res) => {
+  Classroom.findById(req.query.classroom_id).then((classroom) => {
     let masteries = classroom.mastery_checks;
 
     let filter = {};
-    if(req.body.ta) {
+    if (req.body.ta) {
       filter = {
         _studentId: req.query.student_id,
         _taId: req.query.ta_id,
-        _masteryId: { $in: masteries}, // take appointements only for this class
-        end_time: {$lte: moment()},
+        _masteryId: { $in: masteries }, // take appointements only for this class
+        end_time: { $lte: moment() },
         isGraded: false,
         question: false,
-      }
-    } 
-    else {
+      };
+    } else {
       filter = {
         _studentId: req.query.student_id,
-        end_time: {$lte: moment()},
-        _masteryId: { $in: masteries}, // take appointements only for this class
+        end_time: { $lte: moment() },
+        _masteryId: { $in: masteries }, // take appointements only for this class
         isGraded: false,
-        question: false
-      }
+        question: false,
+      };
     }
     Appointment.find(filter)
-    .populate({
-      path: "_studentId",
-      select: ["name", "surname"]
-    })
-    .populate({
-      path: '_masteryId',
-      populate: {
-        path: 'topics'
-      }
-    })
-    .then( appointments => {
-      res.json(appointments);
-    })
-  })
-})
+      .populate({
+        path: "_studentId",
+        select: ["name", "surname"],
+      })
+      .populate({
+        path: "_masteryId",
+        populate: {
+          path: "topics",
+        },
+      })
+      .then((appointments) => {
+        res.json(appointments);
+      });
+  });
+});
