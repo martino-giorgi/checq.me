@@ -5,7 +5,11 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Hosted_on_Heroku-informational?style=flat&logo=heroku&logoColor=white&color=430098">
   <img src="https://img.shields.io/badge/Designed_on_Figma-informational?style=flat&logo=figma&logoColor=white&color=F24E1E">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Node.JS-v12.18.3-informational?style=flat&color=007ec6">
+  <img src="https://img.shields.io/badge/Mongoose-v5.10.14-informational?style=flat&color=47A248">
 </p>
 
 checq.me is a web application that allows students, professors, and TAs to easily manage mastery checks and prepare for them.
