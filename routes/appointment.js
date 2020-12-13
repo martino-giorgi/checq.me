@@ -575,12 +575,22 @@ router.patch("/", ensureProfOrTAUser, async (req, res) => {
       }
     });
 
-    let availability = get_available_time2(a, b, total, appointment.duration);
-    // console.log(availability)
+
+    let availability = get_available_time2(start_day, end_day, total.filter((t={},a=>!(t[a]=a in t))), appointment.duration);
+    console.log(availability);
+
+    let new_range = a.twix(b);
+    let can_move = false;
+    for(let i = 0; i < availability.length; i++){
+      let range = availability[i].start.twix(availability[i].end);
+      if(range.engulfs(new_range) || range.equals(new_range)){
+        can_move = true;
+        break;
+      }
+    }
+
     if (
-      availability.length == 1 &&
-      availability[0].start.isSame(a) &&
-      availability[0].end.isSame(b)
+      can_move
     ) {
       Appointment.findOneAndUpdate(
         { _id: appointment._id },
