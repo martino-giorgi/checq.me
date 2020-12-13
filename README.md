@@ -25,7 +25,7 @@ The following is a table containing all of the milestones' last commit codes, th
 | #1 | 23/11/2020 | ---                   | [#45e3e38][1-commit] | [Presentation][1-presentation] |
 | #2 | 30/11/2020 | [Milestone][2-github] | [#8262256][2-commit] | [Presentation][2-presentation] |
 | #3 | 07/12/2020 | [Milestone][3-github] | [#f46bbb6][3-commit] | [Presentation][3-presentation] |
-| #4 | 14/12/2020 | [Milestone][4-github] |  |  |
+| #4 | 14/12/2020 | [Milestone][4-github] |  | [Presentation][4-presentation] |
 
 [1-commit]: https://github.com/martino-giorgi/checq.me/commit/45e3e38c8495fdf87408eaefc78dccf502c901fe
 [1-presentation]: https://docs.google.com/presentation/d/1Ok_0_xCFdj2_HZViIVU45V3DoHg7GLhr2kIlExP6dF8/edit?usp=sharing
@@ -38,4 +38,5 @@ The following is a table containing all of the milestones' last commit codes, th
 [3-presentation]: https://docs.google.com/presentation/d/1P7G_YHjog65O5cLmvW8pJ3MESYU6EAYACtTqv_VT44Q
 [3-github]: https://github.com/martino-giorgi/checq.me/milestone/2
 
+[4-presentation]: https://docs.google.com/presentation/d/1jrh8RyMC1swAo-zN0KyLSHGtkOdJFwVj_g_xCetilkI
 [4-github]: https://github.com/martino-giorgi/checq.me/milestone/3

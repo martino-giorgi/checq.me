@@ -177,7 +177,7 @@ async function book(user_id, mastery_id) {
 }
 
 /**
- *
+ * Sorts the mastery checks chronologically
  * @param Map mastery_days
  */
 function sort_mastery_days(mastery_days) {
@@ -393,10 +393,11 @@ async function get_TA_queue(date, classroom_tas, exclude) {
       });
   });
 }
+
 /**
  * returns all the appointments of the given student in the given day
  * @param {Date || Moment} m_day_start 
- * @param {Date || Monent} m_day_end 
+ * @param {Date || Moment} m_day_end 
  * @param {ObjectId || String} student_id 
  */
 async function get_student_appointments(m_day_start, m_day_end, student_id) {
@@ -416,6 +417,7 @@ async function get_student_appointments(m_day_start, m_day_end, student_id) {
       });
   });
 }
+
 /**
  * returns all the appointments of the given ta in the given day
  * @param {Date || Moment} m_day_start 

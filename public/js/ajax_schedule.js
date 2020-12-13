@@ -218,6 +218,15 @@ document.addEventListener('DOMContentLoaded', function () {
           moment(info.event.start),
           'minutes'
         )} min`;
+
+        document.getElementById('start_time').innerHTML = 'Starts at: '+ moment(info.event.start).format('DD-MM-YYYY HH:mm').toString();
+      }
+
+      if(info.event.title == 'Question Time'){
+        document.getElementById('modalCenterTitle').innerHTML = "Question Time"
+      }
+      else {
+        document.getElementById('modalCenterTitle').innerHTML = "Mastery Check"
       }
 
       if (role == 0 || role == 1) {
@@ -229,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('end_del').innerHTML = info.event.end.toISOString();
         document.getElementById('event_id_del').innerHTML = info.event.id;
 
-        console.log(info.event.id);
+        // console.log(info.event.id);
       }
     },
   });
@@ -246,7 +255,7 @@ function parse_Ta_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.name == 'Question Time' ? 'green' : 'blue',
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -280,7 +289,7 @@ function parse_student_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.name == 'Question Time' ? 'green' : 'blue',
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
