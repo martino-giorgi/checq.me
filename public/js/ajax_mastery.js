@@ -2,6 +2,12 @@ const classroom_id = new URLSearchParams(window.location.search).get('classroom_
 var mastery_id = undefined;
 var topic_id = undefined;
 
+/**
+ * Handle the button to delete mastery checks by removing the mastery check from the view, from the db and every item in the db
+ * linked to that mc.
+ * Finally refresh the list of mc.
+ * @listens click
+ */
 function add_delete_event() {
   document.querySelectorAll('.delete_btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -18,6 +24,10 @@ function add_delete_event() {
   });
 }
 
+/**
+ * Handle the button to edit a masterycheck by showing the form filled with the old values of the mc
+ * @listens click
+ */
 function add_edit_event() {
   document.querySelectorAll('.edit_btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -47,6 +57,10 @@ function add_edit_event() {
   });
 }
 
+/**
+ * Handle to button to add a new mc by showing the form.
+ * @listens click
+ */
 function add_new_event() {
   document.querySelectorAll('.new_topic_btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -57,6 +71,10 @@ function add_new_event() {
   });
 }
 
+/**
+ * Handle the button to edit a topic by showing the form and filling the inputs with the old values
+ * @listens
+ */
 function add_edit_topic_event() {
   document.querySelectorAll('.edit_topic_btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -73,6 +91,9 @@ function add_edit_topic_event() {
   });
 }
 
+/**
+ * Refresh the view of the mastery checks list and handle all event listeners
+ */
 function render_mastery_modal() {
   API_mastery.get_masteries().then((res) => {
     document.getElementById(
@@ -86,6 +107,9 @@ function render_mastery_modal() {
   });
 }
 
+/**
+ * Get the content of the form and add a new topic to the db
+ */
 function create_topic() {
   let body = {
     name: document.getElementById('input_name').value,
@@ -106,6 +130,9 @@ function create_topic() {
   }
 }
 
+/**
+ * Get the content of the form and update the values of a topic.
+ */
 function edit_topic() {
   let body = {
     name: document.getElementById('input_name').value,
@@ -126,6 +153,10 @@ function edit_topic() {
   }
 }
 
+/**
+ * Get the value of the form and edit the content of a mastery check in the db.
+ * Finally refresh the view with the list of mc
+ */
 function edit_mastery() {
   let body = {
     name: document.getElementById('input_name').value,
@@ -154,6 +185,10 @@ function edit_mastery() {
   }
 }
 
+/**
+ * Get the content of the form and add a new masterycheck in the db.
+ * Finally refresh the view with the list of mc
+ */
 function create_mastery() {
   let body = {
     name: document.getElementById('input_name').value,
@@ -180,6 +215,10 @@ function create_mastery() {
   }
 }
 
+/**
+ * Add listeners to all the buttons to add new questions to show the form for a new question
+ * @listens click
+ */
 function show_question_form() {
   document.querySelectorAll('#a_add_question').forEach((link) => {
     console.log('one link');
@@ -199,7 +238,13 @@ function show_question_form() {
   });
 }
 
-API_mastery = (function () {
+let API_mastery = (function () {
+
+  /**
+   * Add a new mastery check to the db
+   * @param {Object} body the body of the request with the content to send to the server
+   * @returns {Promise} the promise with the response
+   */
   function post_mastery(body) {
     return fetch(`/masterycheck?classroom_id=${classroom_id}`, {
       method: 'POST',
@@ -208,6 +253,9 @@ API_mastery = (function () {
     });
   }
 
+  /**
+   * Get all the mastery checks for the specific classroom.
+   */
   function get_masteries() {
     return fetch(`/masterycheck?classroom_id=${classroom_id}`)
       .then((res) => {
@@ -218,6 +266,11 @@ API_mastery = (function () {
       });
   }
 
+  /**
+   * Edit the content of a masterycheck
+   * @param {Object} body the body of the request with the content to send to the server
+   * @returns {Promise} the promise with the response
+   */
   function edit_mastery(body) {
     return fetch(`/masterycheck?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
       method: 'PUT',
@@ -226,6 +279,11 @@ API_mastery = (function () {
     });
   }
 
+  /**
+   * Add a new topic to the db
+   * @param {Object} body the body of the request with the content to send to the server
+   * @returns {Promise} the promise with the response
+   */
   function add_topic(body) {
     return fetch(`/topic?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
       method: 'POST',
@@ -234,6 +292,11 @@ API_mastery = (function () {
     });
   }
 
+  /**
+   * Edit the content of a topic
+   * @param {Object} body the body of the request with the content to send to the server
+   * @returns {Promise} the promise with the response
+   */
   function edit_topic(body) {
     return fetch(`/topic?classroom_id=${classroom_id}&topic_id=${topic_id}`, {
       method: 'PUT',
