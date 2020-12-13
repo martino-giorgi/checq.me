@@ -38,14 +38,14 @@
                       color = model.classrooms[i].color;
 
                       model.classrooms[i].teaching_assistants.forEach((ta) => {
-                        if (ta.toString() == app._taId._id.toString()) {
+                        if (ta.toString() == model.user._id.toString()) {
                           isTA = true;
                         }
                       })
 
                       if (!isTA) {
                         model.classrooms[i].professors.forEach((prof) => {
-                          if (prof.toString() == app._taId._id.toString()) {
+                          if (prof.toString() == model.user._id.toString()) {
                             isTA = true;
                           }
                         })
@@ -66,6 +66,7 @@
 
                   <div class="info-app">
                     <p class="normal mastery-name"><%- app._masteryId.name %></p>
+                    
                     <% if (isTA) { %> 
                       <p class="normal mastery-ta">with: <%- app._studentId.name %> <%- app._studentId.surname %></p>
                     <% } else { %>
