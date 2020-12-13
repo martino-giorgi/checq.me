@@ -135,10 +135,6 @@ var filter_ar_update_partecipants = [{
   }
 }];
 
-// var options = { fullDocument: 'updateLookup' };
-
-//updated partecipants field
-//TODO: add update on ta list.
 Classroom.watch(filter_stud_ar_insert).on("change", (data) => {
   let user_id = data.updateDescription.updatedFields.partecipants.pop();
 
@@ -146,25 +142,6 @@ Classroom.watch(filter_stud_ar_insert).on("change", (data) => {
   updateUser(user_id, data.documentKey._id);
 });
 
-//just for safety, should never happen.
-//if a TA or Professor kicks a user from the class the update should be made ON THE USER which would than trigger the update on the classroom
-// Classroom.watch(filter_stud_ar_remove).on("change", (data) => {
-  // mapTAs(data.documentKey._id);
-// });
-
 Classroom.watch(filter_ta_ar_update).on("change", (data) => {
   re_mapTAs(data.documentKey._id);
 });
-//TODO: add update on ta list.
-// Classroom.watch(filter_ar_update_partecipants).on('change', data => {
-//   let user_id = data.updateDescription.updatedFields.partecipants.pop();
-
-//   mapTAs(data.documentKey._id);
-//   updateUser(user_id, data.documentKey._id)
-// })
-
-// TODO: mapTAs must be called on every update of the field participants
-
-// updateUser must be called when a user is added to the participants field, not if deleted
-// When a user is added to the participants field, the user should be updated by adding
-// the classroom to their classrooms field
