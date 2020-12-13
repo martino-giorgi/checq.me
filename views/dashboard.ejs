@@ -19,13 +19,14 @@
       <section>
         <div class="column">
           <div class="schedule box">
-            <div class="header-box">
-              <img class="icon-s" src="/assets/icons/sections/calendar.svg" alt="calendar icon" />
-              <h3 class="primary"> Schedule </h3>
+            <div class="header">
+              <span class="icn-and-title">
+                <img class="icon-s" src="/assets/icons/sections/calendar.svg" alt="calendar icon" />
+                <h3 class="primary"> Schedule </h3>
+              </span>
+
+              <a class="button-text small gray" href="/schedule">See more</a>
             </div>
-
-            <!-- Content of scheduler -->
-
           </div>
 
           <div class="classrooms box">
@@ -62,9 +63,9 @@
           <div class="profile box">
             <div>
               <% if (model.user.gravatar == "") { %>
-              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+                <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
               <% } else { %>
-              <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
+                <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
               <% } %>
 
               <div class="info">
@@ -83,16 +84,6 @@
                 <% } %>
               </div>
             </div>
-          </div>
-
-          <div class="grades box">
-            <div class="header-box">
-              <img class="icon-s" src="/assets/icons/sections/grades.svg" alt="grades icon" />
-              <h3 class="primary"> Grades </h3>
-            </div>
-
-            <!-- Content -->
-
           </div>
         </div>
       </section>
