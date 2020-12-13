@@ -4,10 +4,10 @@
  * Compile all views/*.ejs files into a single /public/js/views.js file
  */
 
-const fs = require("fs-extra");
-const ejs = require("ejs");
-const glob = require("glob-fs")({ gitignore: true });
-const json_file = require("./settings.json");
+const fs = require('fs-extra');
+const ejs = require('ejs');
+const glob = require('glob-fs')({ gitignore: true });
+const json_file = require('./settings.json');
 
 // console.log(json_file.dirs);
 
@@ -23,7 +23,7 @@ json_file.dirs.forEach((dir) => {
 x = x.concat(json_file.files);
 
 function compile(view) {
-  let v = view.replace(/\//g, "_").replace(/\.ejs$/, "");
+  let v = view.replace(/\//g, '_').replace(/\.ejs$/, '');
 
   console.log(v);
 
@@ -33,16 +33,16 @@ function compile(view) {
   let f_str = f.toString();
 
   f_str = f_str
-    .replace("function anonymous(", "ejs." + v + " = function(")
+    .replace('function anonymous(', 'ejs.' + v + ' = function(')
     .replace(
-      "function(locals, escapeFn, include, rethrow",
-      "function(locals, escapeFn, include = ejs.views_include(locals), rethrow"
+      'function(locals, escapeFn, include, rethrow',
+      'function(locals, escapeFn, include = ejs.views_include(locals), rethrow'
     );
 
   return f_str;
 }
 
-let compiled = x.map(compile).join("\n\n");
+let compiled = x.map(compile).join('\n\n');
 
 let output = `//EJS Compiled Views - This file was automatically generated on ${new Date()}
 ejs.views_include = function(locals) {
@@ -52,4 +52,4 @@ ejs.views_include = function(locals) {
 };
 ${compiled}`;
 
-fs.writeFile(json_file.output_dir+"views.js", output);
+fs.writeFile(json_file.output_dir + 'views.js', output);

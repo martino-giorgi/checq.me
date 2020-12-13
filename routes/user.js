@@ -23,8 +23,8 @@ module.exports = router;
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/signup", (req, res) => {
-  res.render("signup", {});
+router.get('/signup', (req, res) => {
+  res.render('signup', {});
 });
 
 /**
@@ -34,7 +34,7 @@ router.get("/signup", (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/login", (req, res) => {
+router.get('/login', (req, res) => {
   if (req.isUnauthenticated()) {
     res.render('login', {});
   } else {
@@ -49,8 +49,7 @@ router.get("/login", (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/signup", (req, res) => {
-
+router.post('/signup', (req, res) => {
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
 
@@ -76,8 +75,8 @@ router.post("/signup", (req, res) => {
         res.render('signup', { errors, name, surname, email });
       } else {
         let role = 2;
-        // console.log(req.query.code)
-        // console.log(process.env.PROF_CODE);
+        // console.log("request code: "+req.query.code);
+        // console.log("ENV: "+process.env.PROF_CODE);
         if (req.query.code == process.env.PROF_CODE && process.env.PROF_CODE != undefined) {
           role = 0;
         }
@@ -110,6 +109,7 @@ router.post("/signup", (req, res) => {
                     'You are now registered. Please confirm your email and log in'
                   );
                   if (role == 0) {
+                    console.log('here');
                     addAvailability(new_user._id);
                   }
                   //create an email verification token for the new user
@@ -161,11 +161,7 @@ router.get('/verify/:token', (req, res) => {
             } else {
               // res.redirect("/user/login"); //account verified successfully
               res.render('login', { email: user.email });
-              // Todo: create a flash to display that the account is confirmed
-              req.flash(
-                'success_msg',
-                'You have activated your account. You can now login'
-              );
+              req.flash('success_msg', 'You have activated your account. You can now login');
             }
           });
         }
@@ -206,9 +202,9 @@ router.post('/verify/resend', (req, res) => {
 
 /**
  * Try sending a verification email
- * @param {String} host 
- * @param {Number} token 
- * @param {String} target_email 
+ * @param {String} host
+ * @param {Number} token
+ * @param {String} target_email
  * @returns {Promise} the promise for sending an email
  */
 function send_verification_mail(host, token, target_email) {
@@ -239,8 +235,8 @@ function send_verification_mail(host, token, target_email) {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
 
     if (user) {
@@ -269,7 +265,7 @@ router.post("/login", (req, res, next) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/logout", (req, res) => {
+router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success_msg', 'You are logged out');
   res.redirect('/user/login');
@@ -282,7 +278,7 @@ router.get("/logout", (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.put("/update", ensureAuthenticated, async (req, res) => {
+router.put('/update', ensureAuthenticated, async (req, res) => {
   console.log(req.body);
   if (req.body.password == undefined) {
     // Update details

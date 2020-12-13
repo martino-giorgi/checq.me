@@ -34,7 +34,7 @@ async function populateSelection() {
 }
 
 function getMasteries() {
-  if(classrooms.length > 0){
+  if (classrooms.length > 0) {
     document.getElementById('exampleFormControlSelect2').innerHTML = '';
 
     let classroom_id = document.getElementById('exampleFormControlSelect1').value;
@@ -44,14 +44,14 @@ function getMasteries() {
         break;
       }
     }
-  
+
     classrooms[i].mastery_checks.forEach((mastery) => {
       let form_select_mastery = document.getElementById('exampleFormControlSelect2');
-  
+
       let option = document.createElement('option');
       option.innerHTML = mastery.name;
       option.value = mastery._id;
-  
+
       if (mastery.available) {
         form_select_mastery.appendChild(option);
       }
@@ -219,13 +219,15 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (role == 0 || role == 1) {
-        document.getElementById('appointment_id_del').innerHTML = info.event.extendedProps.appointment_id;
-        document.getElementById('classroom_id_del').innerHTML = info.event.extendedProps.classroom_id;
+        document.getElementById('appointment_id_del').innerHTML =
+          info.event.extendedProps.appointment_id;
+        document.getElementById('classroom_id_del').innerHTML =
+          info.event.extendedProps.classroom_id;
         document.getElementById('start_del').innerHTML = info.event.start.toISOString();
         document.getElementById('end_del').innerHTML = info.event.end.toISOString();
         document.getElementById('event_id_del').innerHTML = info.event.id;
 
-        console.log(info.event.id)
+        console.log(info.event.id);
       }
     },
   });
@@ -241,8 +243,8 @@ function parse_Ta_appointments(data) {
       start: el.start_time,
       end: el.end_time,
       durationEditable: false,
-      id:el._id,
-      color: el._masteryId.description == 'Question Time'? 'green': undefined,
+      id: el._id,
+      color: el._masteryId.description == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -263,7 +265,7 @@ function parse_Ta_appointments(data) {
       start: test,
       end: test2,
       color: 'red',
-      id:makeid(),
+      id: makeid(),
     });
   });
 }
@@ -275,8 +277,8 @@ function parse_student_appointments(data) {
       start: el.start_time,
       end: el.end_time,
       durationEditable: false,
-      id:el._id,
-      color: el._masteryId.description == 'Question Time'? 'green': undefined,
+      id: el._id,
+      color: el._masteryId.description == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -494,11 +496,11 @@ API = (function () {
 
 function makeid() {
   let length = 15;
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
 }

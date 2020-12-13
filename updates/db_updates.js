@@ -36,7 +36,8 @@ async function re_mapTAs(classroom_id) {
         console.log('Re-mapped TAs to Students for classroom: ' + classroom_id);
         r.save((err) => {
           if (err) {
-            res.status(500).end();
+            rejects(err);
+            return;
           }
         });
 
@@ -56,7 +57,7 @@ function updateUser(user_id, classroom_id) {
   classroom_grade.save().then(() => {
     User.findById(user_id)
       .then((u) => {
-        console.log('user found');
+        // console.log('user found');
         u.classrooms_grades.set(classroom_id.toString(), classroom_grade._id);
         u.save()
           .then(() => {

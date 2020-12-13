@@ -9,6 +9,7 @@ const {
   ensureProfOrTA,
   ensureMemberOfClass,
   ensureProfessorUser,
+  ensureProfOrTAUser,
 } = require('../config/auth');
 
 const { addAvailability } = require('../updates/db_updates');
@@ -29,8 +30,7 @@ module.exports = router;
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/", ensureAuthenticated, (req, res) => {
-
+router.get('/', ensureAuthenticated, (req, res) => {
   // User is a Professor
   if (req.user.role == 0) {
     Classroom.find({
@@ -103,26 +103,25 @@ PROFESSOR ROUTES
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
-  
+router.post('/new', ensureAuthenticated, ensureProfessorUser, (req, res) => {
   if (!req.body.name || !req.body.description) {
     res.status(400);
   }
 
   const question_mastery = new MasteryCheck({
-    name:"Question Time",
-    description:"Ask questions",
-    available:true,
-    appointment_duration:30,
-    author:req.user._id,
-    question_time:true
-  })
+    name: 'Question Time',
+    description: 'Ask questions',
+    available: true,
+    appointment_duration: 30,
+    author: req.user._id,
+    question_time: true,
+  });
 
   const new_class = new Classroom({
     name: req.body.name,
     description: req.body.description,
     lecturer: req.user._id,
-    mastery_checks:[question_mastery._id],
+    mastery_checks: [question_mastery._id],
     professors: [req.user._id],
     teaching_assistants: [],
     topics: [],
@@ -152,8 +151,7 @@ router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
-
+router.get('/class', ensureAuthenticated, ensureMemberOfClass, (req, res) => {
   Classroom.find({ _id: req.query.classroom_id })
     .populate('teaching_assistants')
     .populate('professors')
@@ -191,7 +189,7 @@ router.get("/class", ensureAuthenticated, ensureMemberOfClass, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post('/ta', ensureAuthenticated, ensureProfessor, (req, res) => {
   let classroom = Classroom.findById(req.body.classroom_id);
   let new_ta = User.findById(req.body.user_id);
 
@@ -240,7 +238,7 @@ router.post("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.delete('/ta', ensureAuthenticated, ensureProfessor, (req, res) => {
   console.log(req.body);
   let classroom = Classroom.findById(req.body.classroom_id);
   let old_ta = User.findById(req.body.user_id);
@@ -280,18 +278,18 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.post('/professor', ensureAuthenticated, ensureProfessor, (req, res) => {
   // console.log(req.body);
   // console.log(req.query.classroom_id);
   Classroom.findById(req.query.classroom_id)
     .then((classroom) => {
       User.findById(req.body.professor_id).then((usr) => {
         if (usr.role != 0) {
-          console.log('user is not a professor');
+          // console.log('user is not a professor');
           res.status(400).end();
           return;
         } else {
-          console.log('arriva qui');
+          // console.log('arriva qui');
           // If the User is a TA, remove him from class list and adjust their schema
           if (classroom.teaching_assistants.includes(req.body.professor_id)) {
             classroom.teaching_assistants.remove(req.body.professor_id);
@@ -321,30 +319,30 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
+router.delete('/professor', ensureAuthenticated, ensureProfessor, (req, res) => {
   if (!ObjectID.isValid(req.query.classroom_id)) {
     res.status(400).end();
     return;
   }
 
-  Classroom.findById(req.query.classroom_id).then(classroom => {
-
-    User.findById(req.body.professor_id).then(prof => {
-      // should not be possible to remove prof role from owner
-      if (prof._id.equals(classroom.lecturer)) {
-        res.status(400).end();
-        console.log("here");
-        return;
-      }
-      classroom.professors.remove(req.body.professor_id);
-      classroom.partecipants.addToSet(req.body.professor_id);
-      classroom.save().then(() => {
-        res.status(200).end();
-      })
-    });
-  })
-    .catch(err => console.log(err));
-})
+  Classroom.findById(req.query.classroom_id)
+    .then((classroom) => {
+      User.findById(req.body.professor_id).then((prof) => {
+        // should not be possible to remove prof role from owner
+        if (prof._id.equals(classroom.lecturer)) {
+          res.status(400).end();
+          console.log('here');
+          return;
+        }
+        classroom.professors.remove(req.body.professor_id);
+        classroom.partecipants.addToSet(req.body.professor_id);
+        classroom.save().then(() => {
+          res.status(200).end();
+        });
+      });
+    })
+    .catch((err) => console.log(err));
+});
 
 /**
  * Route to remove a student from a classroom.
@@ -353,8 +351,8 @@ router.delete("/professor", ensureAuthenticated, ensureProfessor, (req, res) => 
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
-  Classroom.findById(req.query.classroom_id).then(classroom => {
+router.delete('/student', ensureAuthenticated, ensureProfessor, (req, res) => {
+  Classroom.findById(req.query.classroom_id).then((classroom) => {
     classroom.partecipants.remove(req.body.student_id);
     User.findById(req.body.student_id).then((student) => {
       student.classrooms.remove(req.query.classroom_id);
@@ -367,8 +365,8 @@ router.delete("/student", ensureAuthenticated, ensureProfessor, (req, res) => {
 });
 
 //generates the new map for students and tas.
-router.post("/testmapping", ensureAuthenticated, (req, res) => {
-  mapTAs(req.body.classroom_id).then(updated_classroom => {
+router.post('/testmapping', ensureAuthenticated, (req, res) => {
+  mapTAs(req.body.classroom_id).then((updated_classroom) => {
     console.log(updated_classroom);
     res.json(updated_classroom);
   });
@@ -540,8 +538,18 @@ router.get('/join/:token', ensureAuthenticated, (req, res) => {
           let classroom = values[0];
           let user = values[1];
 
+          if (user._id == classroom.lecturer) {
+            res.redirect('/dashboard');
+            return;
+          }
+
+          if (user.role == 0) {
+            classroom.professors.addToSet(user._id);
+          } else {
+            classroom.partecipants.addToSet(req.user._id);
+          }
+
           user.classrooms.addToSet(t._classroomId);
-          classroom.partecipants.addToSet(req.user._id);
 
           let p3 = classroom.save();
           let p4 = user.save();

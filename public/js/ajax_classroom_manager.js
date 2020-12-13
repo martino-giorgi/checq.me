@@ -3,17 +3,18 @@ var selected_user = undefined;
 
 //CLASSROOM MANAGER -- SECTION: Mastery Checks
 function init_manager() {
-  let url = new URL(window.location.href)
-  c_id = url.searchParams.get('classroom_id')
+  let url = new URL(window.location.href);
+  c_id = url.searchParams.get('classroom_id');
 
-  API.get_class_info(c_id).then(res => {
-    // console.log(res);
-    API.class_obj = res[0];
-    display_class_info();
-  })
-  .catch(err => {
-    console.log(err);
-  })
+  API.get_class_info(c_id)
+    .then((res) => {
+      // console.log(res);
+      API.class_obj = res[0];
+      display_class_info();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 /**
@@ -21,18 +22,24 @@ function init_manager() {
  * @param {Object} classroom the classroom object
  */
 function display_class_info() {
-  document.getElementById("class_info").innerHTML = ejs.views_manager_partial_class_info(API.class_obj);
+  document.getElementById('class_info').innerHTML = ejs.views_manager_partial_class_info(
+    API.class_obj
+  );
 }
 
 /**
  * Render the view of the modal for the user list
  */
 function render_user_modal() {
-  document.getElementById("user-modal-body").innerHTML = ejs.views_manager_partial_class_student_list(API.class_obj);
+  document.getElementById(
+    'user-modal-body'
+  ).innerHTML = ejs.views_manager_partial_class_student_list(API.class_obj);
 }
 
 function render_add_mastery_modal() {
-  document.getElementById("add-mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_add({ current: {} });
+  document.getElementById(
+    'add-mastery-modal-body'
+  ).innerHTML = ejs.views_manager_mastery_mastery_add({ current: {} });
 }
 
 /**
@@ -41,15 +48,18 @@ function render_add_mastery_modal() {
  */
 function setUser(user_id) {
   selected_user = user_id;
-  document.getElementById("toggleTA_btn")
-    .innerHTML = API.class_obj.teaching_assistants.map(e => e._id).includes(user_id)
-      ? "Remove as TA" : "Add as TA";
+  document.getElementById('toggleTA_btn').innerHTML = API.class_obj.teaching_assistants
+    .map((e) => e._id)
+    .includes(user_id)
+    ? 'Remove as TA'
+    : 'Add as TA';
 
-  document.getElementById("toggleProf_btn")
-    .innerHTML = API.class_obj.professors.map(e => e._id).includes(user_id)
-      ? "Remove Professor" : "Make Professor";
+  document.getElementById('toggleProf_btn').innerHTML = API.class_obj.professors
+    .map((e) => e._id)
+    .includes(user_id)
+    ? 'Remove Professor'
+    : 'Make Professor';
 }
-
 
 /**
  * Get the id of the selected user from the user list modal
@@ -70,24 +80,23 @@ function getUser() {
 function toggleTA(user_id) {
   let body = {
     classroom_id: c_id,
-    user_id
-  }
+    user_id,
+  };
 
-  if (API.class_obj.teaching_assistants.map(e => e._id).includes(user_id)) {
-    API.removeTa(JSON.stringify(body)).then((res => {
+  if (API.class_obj.teaching_assistants.map((e) => e._id).includes(user_id)) {
+    API.removeTa(JSON.stringify(body)).then((res) => {
       console.log(res.status);
       if (res.status == 403) {
         window.FlashMessage.error("You don't have permissions to do this");
       }
-      API.get_class_info(c_id).then(res => {
+      API.get_class_info(c_id).then((res) => {
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
       });
-    })
-    );
+    });
   } else {
-    API.makeTa(JSON.stringify(body)).then(res => {
+    API.makeTa(JSON.stringify(body)).then((res) => {
       console.log(res.status);
       if (res.status == 400) {
         window.FlashMessage.error("Lecturer role can't be changed");
@@ -95,15 +104,13 @@ function toggleTA(user_id) {
         window.FlashMessage.error("You don't have permissions to do this");
       }
 
-      API.get_class_info(c_id).then(res => {
+      API.get_class_info(c_id).then((res) => {
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
-
-      })
-    })
+      });
+    });
   }
-
 }
 
 /**
@@ -113,38 +120,35 @@ function toggleTA(user_id) {
  */
 function toggleProf(user_id) {
   let body = {
-    professor_id: user_id
-  }
+    professor_id: user_id,
+  };
   // if is a professor, remove
-  if (API.class_obj.professors.map(e => e._id).includes(user_id)) {
-    API.removeProf(JSON.stringify(body)).then(res => {
+  if (API.class_obj.professors.map((e) => e._id).includes(user_id)) {
+    API.removeProf(JSON.stringify(body)).then((res) => {
       if (res.status == 400) {
         window.FlashMessage.error("Owner can't be changed");
       } else if (res.status == 403) {
         window.FlashMessage.error("You don't have permissions to do this");
       }
-      API.get_class_info(c_id).then(res => {
+      API.get_class_info(c_id).then((res) => {
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
-
-      })
-    })
-  }
-  else {
-    API.makeProf(JSON.stringify(body)).then( res => {
+      });
+    });
+  } else {
+    API.makeProf(JSON.stringify(body)).then((res) => {
       if (res.status == 400) {
         window.FlashMessage.error("User's account doesn't have Professors rights");
       } else if (res.status == 403) {
         window.FlashMessage.error("You don't have permissions to do this");
       }
-      API.get_class_info(c_id).then(res => {
+      API.get_class_info(c_id).then((res) => {
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
-
-      })
-    })
+      });
+    });
   }
 }
 
@@ -157,30 +161,30 @@ function toggleProf(user_id) {
  */
 function removeFromClass(user_id) {
   let body = {
-    student_id: user_id
-  }
-  if (API.class_obj.partecipants.map(e => e._id).includes(user_id) && API.class_obj.lecturer != user_id) {
-    API.removeFromClass(JSON.stringify(body)).then(resBigger => {
+    student_id: user_id,
+  };
+  if (
+    API.class_obj.partecipants.map((e) => e._id).includes(user_id) &&
+    API.class_obj.lecturer != user_id
+  ) {
+    API.removeFromClass(JSON.stringify(body)).then((resBigger) => {
       if (resBigger.status == 403) {
         window.FlashMessage.error("You don't have permissions to do this");
-      } 
-      API.get_class_info(c_id).then((res) => {       
+      }
+      API.get_class_info(c_id).then((res) => {
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
-
-      })
-    })
+      });
+    });
   } else {
     if (API.class_obj.lecturer._id == selected_user) {
-      window.FlashMessage.error("Can not remove owner!");
-    } 
-    else {
-      window.FlashMessage.error("Can only remove students, change role of this user!");
+      window.FlashMessage.error('Can not remove owner!');
+    } else {
+      window.FlashMessage.error('Can only remove students, change role of this user!');
     }
   }
 }
-
 
 /**
  * Toggle between showing and hiding the topic form
@@ -188,33 +192,31 @@ function removeFromClass(user_id) {
 function toggle_show_topic_form() {
   let model = {
     id: API.class_obj._id,
-    masterychecks: API.class_obj.mastery_checks
-  }
-  document.getElementById("topic_form").innerHTML = ejs.views_manager_classrooms_new_topic(model)
+    masterychecks: API.class_obj.mastery_checks,
+  };
+  document.getElementById('topic_form').innerHTML = ejs.views_manager_classrooms_new_topic(model);
 }
-
 
 API = (function () {
   let class_obj = undefined;
 
   /**
    * Get the classroom object corresponding to the given id
-   * @param {Number} id the id of the classroom 
+   * @param {Number} id the id of the classroom
    * @returns {Promise} the promise that will give the classroom object
    */
   function get_class_info(id) {
-    return fetch("/classroom/class?classroom_id=" + id, {
-      headers: { 'Content-Type': 'application/json', 'Accept' : 'application/json' },
-    }).then(res => {
+    return fetch('/classroom/class?classroom_id=' + id, {
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    }).then((res) => {
       return res.json();
-    })
-
+    });
   }
 
   function add_topic(body) {
-    return fetch("/topic", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    return fetch('/topic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body,
     });
   }
@@ -225,10 +227,10 @@ API = (function () {
    * @returns {Promise} the promise with the status code of the request.
    */
   function makeTa(body) {
-    return fetch("/classroom/ta?classroom_id=" + c_id, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body
+    return fetch('/classroom/ta?classroom_id=' + c_id, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
     });
   }
 
@@ -238,10 +240,10 @@ API = (function () {
    * @returns {Promise} the promise with the status code of the request
    */
   function removeTa(body) {
-    return fetch("/classroom/ta?classroom_id=" + c_id, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body
+    return fetch('/classroom/ta?classroom_id=' + c_id, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body,
     });
   }
 
@@ -251,10 +253,10 @@ API = (function () {
    * @returns {Promise} the promise with the status code of the request
    */
   function makeProf(body) {
-    return fetch("/classroom/professor?classroom_id=" + c_id, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body
+    return fetch('/classroom/professor?classroom_id=' + c_id, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
     });
   }
 
@@ -264,10 +266,10 @@ API = (function () {
    * @returns {Promise} the promise with the status code of the request
    */
   function removeProf(body) {
-    return fetch("/classroom/professor?classroom_id=" + c_id, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body
+    return fetch('/classroom/professor?classroom_id=' + c_id, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body,
     });
   }
 
@@ -277,10 +279,10 @@ API = (function () {
    * @returns {Promise} the promise with the status code of the request
    */
   function removeFromClass(body) {
-    return fetch("/classroom/student?classroom_id=" + c_id, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body
+    return fetch('/classroom/student?classroom_id=' + c_id, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body,
     });
   }
 
@@ -292,7 +294,7 @@ API = (function () {
       .then((res) => {
         console.log(res);
         document.getElementById(
-          "classrooms_container"
+          'classrooms_container'
         ).innerHTML = ejs.views_manager_classrooms_topic(res);
         // TODO: use the function from ajax_topic API
         handle_dynamic_fields();
@@ -308,6 +310,6 @@ API = (function () {
     removeProf,
     makeProf,
     removeFromClass,
-    get_class_info
+    get_class_info,
   };
 })();
