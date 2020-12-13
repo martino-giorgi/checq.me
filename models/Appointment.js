@@ -40,7 +40,7 @@ const AppointmentSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    question:{
+    question_time:{
         type:Boolean,
         default:false,
         required:true

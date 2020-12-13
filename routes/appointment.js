@@ -219,6 +219,11 @@ function sort_mastery_days(mastery_days) {
   return sorted;
 }
 
+/**
+ * returns a promise, gets all the busy ranges of the given user in the given day
+ * @param {ObjectID || String} user_id 
+ * @param {Date || Moment} date 
+ */
 async function get_day_busy(user_id, date) {
   return new Promise((resolve, rejects) => {
     let d = moment(date);
@@ -243,6 +248,18 @@ async function get_day_busy(user_id, date) {
   });
 }
 
+/**
+ * Attempts to book a mastery check for the given date, mastery, ta and student
+ * @param {ObjectID || String} ta 
+ * @param {ObjectID || String} mastery_id 
+ * @param {Date || Moment} m_day_start 
+ * @param {Date || Moment} m_day_end 
+ * @param {Number} m_duration 
+ * @param {ObjectID || String} student_id 
+ * @param {Array} busy_ta 
+ * @param {Array} busy_student 
+ * @param {Boolean} is_question_time 
+ */
 async function trybooking(
   ta,
   mastery_id,
@@ -320,6 +337,12 @@ async function trybooking(
   });
 }
 
+/**
+ * Generates a queue of TAs based on how many appointments they have on the give day
+ * @param {Date || Moment} date 
+ * @param {Array} classroom_tas 
+ * @param {ObjectID || String} exclude 
+ */
 async function get_TA_queue(date, classroom_tas, exclude) {
   return new Promise((resolve, rejects) => {
     const date_start = moment(date).startOf("day");
@@ -370,7 +393,12 @@ async function get_TA_queue(date, classroom_tas, exclude) {
       });
   });
 }
-
+/**
+ * returns all the appointments of the given student in the given day
+ * @param {Date || Moment} m_day_start 
+ * @param {Date || Monent} m_day_end 
+ * @param {ObjectId || String} student_id 
+ */
 async function get_student_appointments(m_day_start, m_day_end, student_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
@@ -388,7 +416,12 @@ async function get_student_appointments(m_day_start, m_day_end, student_id) {
       });
   });
 }
-
+/**
+ * returns all the appointments of the given ta in the given day
+ * @param {Date || Moment} m_day_start 
+ * @param {Date || Monent} m_day_end 
+ * @param {ObjectId || String} student_id 
+ */
 async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
   return new Promise((resolve, rejects) => {
     Appointment.aggregate()
@@ -407,6 +440,11 @@ async function get_ta_appointments(m_day_start, m_day_end, ta_id) {
   });
 }
 
+/**
+ * checks if the given student can book the given masterycheck
+ * @param {ObjectId || String} mastery_id 
+ * @param {ObjectId || String} user_id 
+ */
 async function can_mastery(mastery_id, user_id) {
   return new Promise((resolve, rejects) => {
     let now = moment();
@@ -575,7 +613,7 @@ router.get("/matching", ensureProfOrTA, (req, res) => {
         _masteryId: { $in: masteries }, // take appointements only for this class
         end_time: { $lte: moment() },
         isGraded: false,
-        question: false,
+        question_time: false,
       };
     } else {
       filter = {
@@ -583,7 +621,7 @@ router.get("/matching", ensureProfOrTA, (req, res) => {
         end_time: { $lte: moment() },
         _masteryId: { $in: masteries }, // take appointements only for this class
         isGraded: false,
-        question: false,
+        question_time: false,
       };
     }
     Appointment.find(filter)
@@ -598,6 +636,7 @@ router.get("/matching", ensureProfOrTA, (req, res) => {
         },
       })
       .then((appointments) => {
+        console.log(appointments)
         res.json(appointments);
       });
   });

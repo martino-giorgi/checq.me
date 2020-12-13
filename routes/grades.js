@@ -99,13 +99,16 @@ router.get('/student', ensureAuthenticated, ensureProfOrTA, (req, res) => {
     .then((user) => {
       ClassroomGrades.findById(user.classrooms_grades.get(req.query.classroom_id)).then(
         (grades) => {
-          Classroom.findById(grades._classroomId).then((classroom) => {
+          Classroom.findById(grades._classroomId).populate("mastery_checks").then((classroom) => {
             // grades for this classroom of this student
-            let promises = [];
-            classroom.mastery_checks.forEach((m_id) => {
-              promises.push(MasteryCheck.findById(m_id));
+            let results = [];
+            classroom.mastery_checks.forEach((m) => {
+              console.log(m);
+              if(!m.question_time){
+                results.push(m);
+              }
             });
-            Promise.all(promises).then((results) => {
+            // Promise.all(promises).then((results) => {
               let grades_array = [];
               results.forEach((mastery) => {
                 grades_array.push({
@@ -130,7 +133,7 @@ router.get('/student', ensureAuthenticated, ensureProfOrTA, (req, res) => {
                   },
                 });
               });
-            });
+            // });
           });
         }
       );
