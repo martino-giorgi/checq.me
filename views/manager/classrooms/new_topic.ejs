@@ -2,14 +2,14 @@
     <div class=" container mt-5">
         <form id="create_form">
             <div class="form-group">
-                <label for="input_name">Topic name</label>
-                <input type="text" placeholder="Topic Name" name="input_name" class="form-control" id="input_name"
+                <label for="topic_input_name">Topic name</label>
+                <input type="text" placeholder="Topic Name" name="input_name" class="form-control" id="topic_input_name"
                     value="<%= current.name ? current.name : ""%>" required />
             </div>
             <div class="form-group">
-                <label for="input_description">Topic description</label>
+                <label for="topic_input_description">Topic description</label>
                 <input type="text" placeholder="Topic Description" name="input_description" class="form-control"
-                    id="input_description" value="<%= current.description ? current.description : ""%>" required />
+                    id="topic_input_description" value="<%= current.description ? current.description : ""%>" required />
             </div>
         </form>
         <% if(current.name) {%>
