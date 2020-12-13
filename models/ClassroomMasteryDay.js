@@ -21,7 +21,7 @@ const ClassroomMasteryDaySchema = new mongoose.Schema({
     end_time:{
         type: Date,
         required: true
-    },
+    }
 })
 
 const ClassroomMasteryDay = mongoose.model('ClassroomMasteryDay', ClassroomMasteryDaySchema);

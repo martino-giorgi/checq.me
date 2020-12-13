@@ -1,0 +1,23 @@
+<div class="row" id="<%="m-day-"+counter%>">
+    <div class="col">
+      <select required class="form-control" id="dates">
+        <option value="1">Monday</option>
+        <option value="2">Tuesday</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday</option>
+        <option value="5">Friday</option>
+        <option value="6">Saturday</option>
+        <option value="7">Sunday</option>
+      </select>
+    </div>
+    
+    <div class="col">
+      <input type="time" required class="form-control" id="<%= "start_time_day_"+counter %>" placeholder="Starting Time" name="start_time_day">
+    </div>
+  
+    <button type="button" class="btn btn-link">to</button>
+  
+    <div class="col">
+      <input type="time" required class="form-control" id="<%= "end_time_day_"+counter %>" placeholder="Ending Time" name="end_time_day">
+    </div>
+  </div>

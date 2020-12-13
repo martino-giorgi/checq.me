@@ -16,6 +16,13 @@ const Topic = require("../models/Topic");
 
 module.exports = router;
 
+/**
+ * Route to get a specific topic
+ * @name get/topic/:id?classroom_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/:id", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Topic.findOne({ _id: req.params.id }).then((this_topic) => {
     if (!this_topic) {
@@ -27,12 +34,26 @@ router.get("/:id", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   })
 })
 
+/**
+ * Route to update a topic
+ * @name put/topic
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
   Topic.updateOne({ _id: req.query.topic_id }, { $set: { name: req.body.name, description: req.body.description } })
     .then(() => res.status(200).end())
     .catch((err) => { console.log(err), res.status(400).end() })
 })
 
+/**
+ * Route to post a new topic
+ * @name post/topic?classroom_id=&mastery_id=
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
   MasteryCheck.findById(req.query.mastery_id).then(this_mastery => {
     if (!this_mastery) {
@@ -60,9 +81,13 @@ router.post("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
 
 });
 
-
-// Get all the questions for the specified topic
-// If the request comes from a student, the answers are filtered out so that they are not sent.
+/**
+ * Route to get all questions linked to a specific topic. If the user requesting is a student, the answers are not sent to the client.
+ * @name get/topic/:id/questions
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/:id/questions", ensureAuthenticated, (req, res) => {
 
   if (!ObjectID.isValid(req.params.id)) {
@@ -100,6 +125,13 @@ router.get("/:id/questions", ensureAuthenticated, (req, res) => {
 
 })
 
+/**
+ * Route used to render the page showing all questions linked to a specific topic.
+ * @name get/topic/questions/answer?topic
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/questions/answer", ensureAuthenticated, (req, res) => {
   if(req.query.topic) {
     if(req.query.classroom_id) {

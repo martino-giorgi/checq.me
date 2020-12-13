@@ -5,8 +5,7 @@ var topic_id = undefined;
 function add_delete_event() {
   document.querySelectorAll(".delete_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      let mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
-        .id;
+      let mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset.id;
       let classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
 
       fetch(`/masterycheck?classroom_id=${classroom_id}&mastery_id=${mastery_id}`, {
@@ -22,14 +21,17 @@ function add_delete_event() {
 function add_edit_event() {
   document.querySelectorAll(".edit_btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset
-        .id;
+      mastery_id = btn.parentNode.parentNode.querySelector("#id_container").dataset.id;
       let card_body = btn.parentNode.parentNode.querySelector(".card-body");
+
       let current_values = {
-        name: card_body.querySelector('h5').innerHTML,
+        name: card_body.querySelector('h2').innerHTML,
         description: card_body.querySelector('#element_desc').innerHTML,
-        available: card_body.querySelector('#element_available') == "Available" ? true : false
+        available: card_body.querySelector('#element_durat').innerHTML.split('|')[1].trim() == "Available" ? true : false,
+        appointment_duration: card_body.querySelector('#element_durat').innerHTML.split('|')[0].trim().replace('Duration: ', ''),
+        github_repo_name: card_body.querySelector('#github_repo').innerHTML.split(':')[1].trim()
       }
+
       card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });
     })
   });
@@ -66,7 +68,7 @@ function add_edit_topic_event() {
 
 function render_mastery_modal() {
   API_mastery.get_masteries().then(res => {
-    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res })
+    document.getElementById("mastery-modal-body").innerHTML = ejs.views_manager_mastery_mastery_list({ result: res });
     add_delete_event();
     add_edit_event();
     add_new_event();
@@ -123,10 +125,12 @@ function edit_mastery() {
   let body = {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
-    available: document.getElementById("check_available").checked
+    appointment_duration: parseInt(document.getElementById("input_duration").value),
+    available: document.getElementById("check_available").value == "on" ? true : false,
+    github_repo_name: document.getElementById("github_repo").value
   }
 
-  if (body.name != "" && body.description != "") {
+  if (body.name != "" && body.description != "" && body.appointment_duration != "" && body.github_repo_name != "") {
 
     API_mastery.edit_mastery(JSON.stringify(body)).then(res => {
       if (res.status == 200) {
@@ -146,12 +150,16 @@ function create_mastery() {
   let body = {
     name: document.getElementById("input_name").value,
     description: document.getElementById("input_description").value,
-    available: document.getElementById("check_available") == "checked" ? true : false
+    appointment_duration: parseInt(document.getElementById("input_duration").value),
+    available: document.getElementById("check_available").value == "on" ? true : false,
+    github_repo_name: document.getElementById("github_repo").value
   }
 
-  if (body.name != "" && body.description != "") {
+  if (body.name != "" && body.description != "" && body.appointment_duration != "") {
 
     API_mastery.post_mastery(JSON.stringify(body)).then(res => {
+      console.log(body)
+
       if (res.status == 200) {
         window.FlashMessage.success("Mastery Check Added");
         $("#add-mastery-modal").modal('hide');
@@ -166,7 +174,6 @@ function create_mastery() {
 }
 
 function show_question_form() {
-  
   document.querySelectorAll("#a_add_question").forEach( link => {
     console.log("one link");
     link.addEventListener("click", e => {

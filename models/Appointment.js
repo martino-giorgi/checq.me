@@ -30,11 +30,20 @@ const AppointmentSchema = new mongoose.Schema({
     },
     duration:{ //minutes
         type: Number,
-        required: true
+        required: true,
     },
     grade:{
         type: String,
         required: false
+    },
+    isGraded: {
+        type: Boolean,
+        default: false
+    },
+    question:{
+        type:Boolean,
+        default:false,
+        required:true
     }
 })
 

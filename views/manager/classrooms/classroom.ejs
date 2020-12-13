@@ -1,96 +1,67 @@
 <link rel="stylesheet" href="/stylesheets/css/flash.min.css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <div class="wrapper">
+  <%- include("../../partials/navigation", { active: 'manager' }) %>
 
-    <%- include("../../partials/navigation", {active: 'manager'}) %>
-    <main>
-        <h1>Classroom Manager</h1>
-        <div id="sub_navbar">
-        </div>
-        <section id="class_options">
-            <button type="button" onClick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
-                data-target="#user-modal">
-                Show User List
+  <main style="margin: 26px">
+    <div class="class-header">
+      <section id="class_info"></section>
+
+      <section id="class_options">
+        <button type="button" onclick="render_user_modal()" class="btn btn-primary" data-toggle="modal"
+          data-target="#user-modal">
+          Show User List
+        </button>
+  
+        <button type="button" class="btn btn-primary" onclick="render_add_mastery_modal()" data-toggle="modal"
+          data-target="#add-mastery-modal">
+          Add a Mastery Check
+        </button>
+      </section>
+    </div>
+
+    <!-- User list modal -->
+    <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modal-label" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="user-modal-label">User list</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
             </button>
-            <button type="button" class="btn btn-primary" onclick="render_mastery_modal()" data-toggle="modal"
-                data-target="#mastery-modal">
-                Show Mastery Check List
+          </div>
+          <div id="user-modal-body" class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Mastery Check modal -->
+    <div class="modal fade" id="add-mastery-modal" tabindex="-1" role="dialog" aria-labelledby="add-mastery-modal-label" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="user-modal-label">Add a Mastery Check</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
             </button>
-
-            <button type="button" class="btn btn-primary" onclick="render_add_mastery_modal()" data-toggle="modal"
-                data-target="#add-mastery-modal">
-                Add a Mastery Check
-            </button>
-
-        </section>
-        <div id="add" class="container"></div>
-
-        <!-- User list modal -->
-        <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modal-label"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="user-modal-label">User list</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div id="user-modal-body" class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <div id="add-mastery-modal-body" class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Mastery Check list modal -->
-        <div class="modal fade" id="mastery-modal" tabindex="-1" role="dialog" aria-labelledby="mastery-modal-label"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="mastery-modal-label">Mastery Check list</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div id="mastery-modal-body" class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Mastery Check modal -->
-        <div class="modal fade" id="add-mastery-modal" tabindex="-1" role="dialog"
-            aria-labelledby="add-mastery-modal-label" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="user-modal-label">Add a Mastery Check</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div id="add-mastery-modal-body" class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <section id="class_info"></section>
-
-    </main>
+    <div id="mastery-modal-body" class="modal-body"></div>
+  </main>
 </div>
 
 <script src="/js/ajax_mastery.js"></script>
@@ -100,6 +71,7 @@
 <script src="/js/views.js"></script>
 <script src="/js/ajax_question.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+
 <!-- CodeMirror CDNs -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/javascript/javascript.min.js"></script>
@@ -110,4 +82,5 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css" rel="stylesheet">
 <script>
     window.onload = init_manager;
+    render_mastery_modal();
 </script>

@@ -1,60 +1,83 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
+const express = require('express');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
-const passport = require("passport");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
+const passport = require('passport');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
-require("dotenv").config();
+require('dotenv').config();
 
-const User = require("../models/User");
-const Token = require("../models/Token");
-const { ensureAuthenticated, ensureProfessor } = require("../config/auth");
-const { json } = require("express");
+const User = require('../models/User');
+const Token = require('../models/Token');
+const Availability = require('../models/Availability');
+const { ensureAuthenticated, ensureProfessor } = require('../config/auth');
+const { addAvailability } = require('../updates/db_updates');
+const { json } = require('express');
 
 module.exports = router;
 
+/**
+ * Route to render the signup page
+ * @name get/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/signup", (req, res) => {
   res.render("signup", {});
 });
 
+/**
+ * Route to render the login page
+ * @name get/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/login", (req, res) => {
   if (req.isUnauthenticated()) {
-    res.render("login", {});
+    res.render('login', {});
   } else {
-    res.redirect("/dashboard");
+    res.redirect('/dashboard');
   }
 });
 
+/**
+ * Route to sign up a new user
+ * @name post/user/signup
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/signup", (req, res) => {
 
   const { name, surname, email, password, conf_password } = req.body;
   let errors = [];
 
   if (!name || !surname || !email || !password || !conf_password) {
-    errors.push({ msg: "Please insert all fields" });
+    errors.push({ msg: 'Please insert all fields' });
   }
 
   if (password != conf_password) {
-    errors.push({ msg: "Passwords do not match" });
+    errors.push({ msg: 'Passwords do not match' });
   }
 
   if (password.length <= 6) {
-    errors.push({ msg: "Password too short" });
+    errors.push({ msg: 'Password too short' });
   }
 
   if (errors.length > 0) {
-    res.render("signup", { errors, name, surname, email });
+    res.render('signup', { errors, name, surname, email });
   } else {
     // Check if a user with the given email already exists
     User.findOne({ email: email }).then((user) => {
       if (user) {
-        errors.push({ msg: "A user with this email already exists" });
-        res.render("signup", { errors, name, surname, email });
+        errors.push({ msg: 'A user with this email already exists' });
+        res.render('signup', { errors, name, surname, email });
       } else {
         let role = 2;
-        console.log(req.query.code)
-        console.log(process.env.PROF_CODE);
+        // console.log(req.query.code)
+        // console.log(process.env.PROF_CODE);
         if (req.query.code == process.env.PROF_CODE && process.env.PROF_CODE != undefined) {
           role = 0;
         }
@@ -64,11 +87,12 @@ router.post("/signup", (req, res) => {
           email,
           role,
           password,
-          githubToken: "",
-          githubId: "",
-          gravatar: "",
-          domain: (req.body.confirmed_domain == 'on' && req.body.domain != "") ? req.body.domain : "",
-          university: (req.body.confirmed_domain == 'on' && req.body.uni_name != "") ? req.body.uni_name : ""
+          githubToken: '',
+          githubId: '',
+          gravatar: '',
+          domain: req.body.confirmed_domain == 'on' && req.body.domain != '' ? req.body.domain : '',
+          university:
+            req.body.confirmed_domain == 'on' && req.body.uni_name != '' ? req.body.uni_name : '',
         });
 
         // Generate an hash from the password
@@ -82,25 +106,24 @@ router.post("/signup", (req, res) => {
                 .save()
                 .then((user) => {
                   req.flash(
-                    "success_msg",
-                    "You are now registered. Please confirm your email and log in"
+                    'success_msg',
+                    'You are now registered. Please confirm your email and log in'
                   );
+                  if (role == 0) {
+                    addAvailability(new_user._id);
+                  }
                   //create an email verification token for the new user
                   let token = new Token({
                     _userId: user._id,
-                    token: crypto.randomBytes(20).toString("hex"),
+                    token: crypto.randomBytes(20).toString('hex'),
                   });
                   token
                     .save()
                     .then(() => {
-                      send_verification_mail(
-                        req.headers.host,
-                        token,
-                        user.email
-                      )
+                      send_verification_mail(req.headers.host, token, user.email)
                         .then((sent_email) => {
-                          res.render("login", {
-                            info: { message: "Please confirm your email" },
+                          res.render('login', {
+                            info: { message: 'Please confirm your email' },
                           });
                         })
                         .catch((err) => {
@@ -119,7 +142,7 @@ router.post("/signup", (req, res) => {
   }
 });
 
-router.get("/verify/:token", (req, res) => {
+router.get('/verify/:token', (req, res) => {
   Token.findOne({ token: req.params.token }, (err, token) => {
     if (!token || err) {
       res.status(400).end(); //unable to verify due to server error or invalid/expired token
@@ -136,9 +159,13 @@ router.get("/verify/:token", (req, res) => {
             if (err) {
               res.status(500).end(); //could not set the user to verified so the verification failed
             } else {
-              // res.redirect("/user/login"); //account verified successufully
-              res.render("login", { email: user.email });
+              // res.redirect("/user/login"); //account verified successfully
+              res.render('login', { email: user.email });
               // Todo: create a flash to display that the account is confirmed
+              req.flash(
+                'success_msg',
+                'You have activated your account. You can now login'
+              );
             }
           });
         }
@@ -147,42 +174,47 @@ router.get("/verify/:token", (req, res) => {
   });
 });
 
-router.post("/verify/resend", (req, res) => {
+router.post('/verify/resend', (req, res) => {
   if (req.body.email) {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
-          Token.deleteMany({ _userId: user._id }).catch((err) => { });
+          Token.deleteMany({ _userId: user._id }).catch((err) => {});
           let token = new Token({
             _userId: user._id,
-            token: crypto.randomBytes(20).toString("hex"),
+            token: crypto.randomBytes(20).toString('hex'),
           });
           token
             .save()
             .then(() => {
-              send_verification_mail(req.headers.host, token, user.email).then(
-                (res) => {
-                  // console.log(res);
-                  // console.log("end");
-                  // Todo: email sent correctly! (the user needs to be aware that the operation was successful)
-                }
-              );
+              send_verification_mail(req.headers.host, token, user.email).then((res) => {
+                // console.log(res);
+                // console.log("end");
+                // Todo: email sent correctly! (the user needs to be aware that the operation was successful)
+              });
             })
-            .catch((err) => { });
+            .catch((err) => {});
         } else {
           res.status(400).end(); //the email does not correspond to a user
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
   } else {
     res.status(400).end(); //no email was given
   }
 });
 
+/**
+ * Try sending a verification email
+ * @param {String} host 
+ * @param {Number} token 
+ * @param {String} target_email 
+ * @returns {Promise} the promise for sending an email
+ */
 function send_verification_mail(host, token, target_email) {
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
-      service: "Sendgrid",
+      service: 'Sendgrid',
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
@@ -190,7 +222,7 @@ function send_verification_mail(host, token, target_email) {
     });
     let verification_link = `http://${host}/user/verify/${token.token}`;
     var mailOptions = {
-      from: "marco.diventura@outlook.com",
+      from: 'marco.diventura@outlook.com',
       to: target_email,
       subject: `Checq.me account verification`,
       text: verification_link,
@@ -200,6 +232,13 @@ function send_verification_mail(host, token, target_email) {
   });
 }
 
+/**
+ * Execute a log in
+ * @name post/user/login
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
@@ -209,28 +248,40 @@ router.post("/login", (req, res, next) => {
         if (err) {
           return next(err);
         }
-        res.redirect("/dashboard");
+        res.redirect('/dashboard');
       });
     }
 
     if (info.err_id === 1) {
-      return res.render("login", { email: req.body.email, info });
+      return res.render('login', { email: req.body.email, info });
     }
 
     if (info.err_id === 2) {
-      return res.render("login", { email: req.body.email, info });
+      return res.render('login', { email: req.body.email, info });
     }
   })(req, res, next);
 });
 
-// Logout
+/**
+ * Logout
+ * @name get/user/logout
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get("/logout", (req, res) => {
   req.logout();
-  req.flash("success_msg", "You are logged out");
-  res.redirect("/user/login");
+  req.flash('success_msg', 'You are logged out');
+  res.redirect('/user/login');
 });
 
-// Edit the user
+/**
+ * Update information about a user
+ * @name put/user/update
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.put("/update", ensureAuthenticated, async (req, res) => {
   console.log(req.body);
   if (req.body.password == undefined) {
@@ -261,14 +312,19 @@ router.put("/update", ensureAuthenticated, async (req, res) => {
       res.status(400).end();
     }
   }
-})
+});
 
-// Get user info
+/**
+ * Get the information of a specific user
+ * @name get/user/:id
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 router.get('/:id', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
 
   User.findOne({ _id: id })
     .then((user) => res.status(200).json(user))
-    .catch((err) => res.status(404).json({}))
-})
-
+    .catch((err) => res.status(404).json({}));
+});

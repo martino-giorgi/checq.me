@@ -7,7 +7,7 @@ function init_manager() {
   c_id = url.searchParams.get('classroom_id')
 
   API.get_class_info(c_id).then(res => {
-    console.log(res);
+    // console.log(res);
     API.class_obj = res[0];
     display_class_info();
   })
@@ -74,7 +74,11 @@ function toggleTA(user_id) {
   }
 
   if (API.class_obj.teaching_assistants.map(e => e._id).includes(user_id)) {
-    API.removeTa(JSON.stringify(body)).then((() => {
+    API.removeTa(JSON.stringify(body)).then((res => {
+      console.log(res.status);
+      if (res.status == 403) {
+        window.FlashMessage.error("You don't have permissions to do this");
+      }
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
         render_user_modal();
@@ -87,6 +91,8 @@ function toggleTA(user_id) {
       console.log(res.status);
       if (res.status == 400) {
         window.FlashMessage.error("Lecturer role can't be changed");
+      } else if (res.status == 403) {
+        window.FlashMessage.error("You don't have permissions to do this");
       }
 
       API.get_class_info(c_id).then(res => {
@@ -114,6 +120,8 @@ function toggleProf(user_id) {
     API.removeProf(JSON.stringify(body)).then(res => {
       if (res.status == 400) {
         window.FlashMessage.error("Owner can't be changed");
+      } else if (res.status == 403) {
+        window.FlashMessage.error("You don't have permissions to do this");
       }
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
@@ -127,6 +135,8 @@ function toggleProf(user_id) {
     API.makeProf(JSON.stringify(body)).then( res => {
       if (res.status == 400) {
         window.FlashMessage.error("User's account doesn't have Professors rights");
+      } else if (res.status == 403) {
+        window.FlashMessage.error("You don't have permissions to do this");
       }
       API.get_class_info(c_id).then(res => {
         API.class_obj = res[0];
@@ -150,8 +160,11 @@ function removeFromClass(user_id) {
     student_id: user_id
   }
   if (API.class_obj.partecipants.map(e => e._id).includes(user_id) && API.class_obj.lecturer != user_id) {
-    API.removeFromClass(JSON.stringify(body)).then(() => {
-      API.get_class_info(c_id).then(res => {
+    API.removeFromClass(JSON.stringify(body)).then(resBigger => {
+      if (resBigger.status == 403) {
+        window.FlashMessage.error("You don't have permissions to do this");
+      } 
+      API.get_class_info(c_id).then((res) => {       
         API.class_obj = res[0];
         render_user_modal();
         display_class_info();
@@ -161,7 +174,7 @@ function removeFromClass(user_id) {
   } else {
     if (API.class_obj.lecturer._id == selected_user) {
       window.FlashMessage.error("Can not remove owner!");
-    }
+    } 
     else {
       window.FlashMessage.error("Can only remove students, change role of this user!");
     }

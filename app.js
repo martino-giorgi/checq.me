@@ -110,7 +110,7 @@ app.use("/topic", routers.topic);
 app.use("/availability", routers.availability);
 
 // Route for Appointment
-app.use("/appointment", routers.appointment);
+app.use("/appointment", routers.appointment.router);
 
 // Route for MasteryCheck
 app.use("/masterycheck", routers.masterycheck);
@@ -124,6 +124,9 @@ app.use("/github", routers.github);
 
 // Route to intercept webhooks from GitHub
 app.use("/hook", routers.hook);
+
+// Route for Grades
+app.use("/grades", routers.grades);
 
 
 // Webhook
