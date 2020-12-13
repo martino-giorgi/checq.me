@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     timeZone: 'local',
     themeSystem: 'bootstrap',
     initialView: 'timeGridWeek',
+    firstHour: 8,
     firstDay: '1',
     navLinks: true,
     editable: role == 0 || role == 1 ? true : false,
