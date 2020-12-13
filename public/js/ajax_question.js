@@ -1,16 +1,11 @@
 var number_of_fields = 1;
 const max_fields = 6;
-// TODO: stack of inputs elements to allow to remove fields
-// TODO: allow only a certain umber of fields
 var input_elements = [];
 var code_div;
 var text_div;
 var editor;
 var code_or_text = 'text';
 var lang = 'text';
-
-//const classroom_id = new URLSearchParams(window.location.search).get("classroom_id");
-//const topic_id = new URLSearchParams(window.location.search).get("topic_id");
 
 /**
  * Initializes the view with the editor and event listeners.

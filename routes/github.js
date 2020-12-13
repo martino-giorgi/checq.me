@@ -9,9 +9,6 @@ require('dotenv').config();
 
 module.exports = router;
 
-// TODO: Remember to change User Authorization Callback URL to "http://www.checq.me/github/oauth-callback"
-// in production
-
 router.get('/', ensureAuthenticated, ensureHasNoGithubToken, (req, res) => {
   res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`);
 });
