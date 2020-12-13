@@ -9,6 +9,7 @@ const {
   ensureProfOrTA,
   ensureMemberOfClass,
   ensureProfessorUser,
+  ensureProfOrTAUser,
 } = require('../config/auth');
 
 const { addAvailability } = require('../updates/db_updates');
@@ -540,8 +541,19 @@ router.get('/join/:token', ensureAuthenticated, (req, res) => {
           let classroom = values[0];
           let user = values[1];
 
+          if(user._id == classroom.lecturer){
+            res.redirect('/dashboard');
+            return;
+          }
+
+          if(user.role == 0){
+            classroom.professors.addToSet(user._id);
+          } 
+          else {
+            classroom.partecipants.addToSet(req.user._id);
+          }
+
           user.classrooms.addToSet(t._classroomId);
-          classroom.partecipants.addToSet(req.user._id);
 
           let p3 = classroom.save();
           let p4 = user.save();
