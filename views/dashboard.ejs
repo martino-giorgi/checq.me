@@ -30,10 +30,10 @@
                 <% 
                   let color;
                   let isTA = false;
-                  console.log()
+                  let timezone_offset = new Date().getTimezoneOffset()/60 * -1;
                   let date_time = app.start_time.toISOString();
                   let date = date_time.substring(5, 10).split('-').reverse().join('/');
-                  let hour = date_time.substring(11, 13).split('-').join('') == '24' ? 0 : parseInt(date_time.substring(11, 13).split('-').join('')) + 1
+                  let hour = date_time.substring(11, 13).split('-').join('') == '24' ? 0 : parseInt(date_time.substring(11, 13).split('-').join('')) + timezone_offset;
                   let time = hour + date_time.substring(13, 16).split('-').join('');
 
                   for (let i = 0; i < model.classrooms.length; i++) {
