@@ -29,6 +29,7 @@ module.exports = {
 
 const MAX_ATTEMPTS = 15;
 
+
 router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
   book(req.user._id, req.body.mastery_id).then(response => {
     if(response.status == 200){
@@ -40,7 +41,11 @@ router.post('/book', ensureAuthenticated, ensureStudent, async (req, res) => {
   })
 });
 
-
+/**
+ * books an appointment(mastery check) for the given student
+ * @param String user_id 
+ * @param String mastery_id 
+ */
 async function book(user_id, mastery_id){
   if(mastery_id == ""){
     return {status:400, send:"Select a mastery check first"};
@@ -51,8 +56,10 @@ async function book(user_id, mastery_id){
       return {status: 400, send:"You cannot book this mastery check"};
     }
     let mastery = await MasteryCheck.findById(mastery_id)
-      .select({ classroom: 1, appointment_duration: 1 })
+      .select({ classroom: 1, appointment_duration: 1, question_time:1 })
       .populate({ path: 'classroom' });
+
+    let is_question_time = !mastery.question_time? false : true
 
     let current_iso_weekday = moment().isoWeekday();
 
@@ -113,7 +120,8 @@ async function book(user_id, mastery_id){
             mastery.appointment_duration,
             user_id,
             typeof avail[0] === 'undefined' ? [] : avail[0].busy,
-            student_busy
+            student_busy,
+            is_question_time
           );
 
           if (r != false) {
@@ -140,7 +148,8 @@ async function book(user_id, mastery_id){
                 mastery.appointment_duration,
                 user_id,
                 typeof avail2[0] === 'undefined' ? [] : avail2[0].busy,
-                student_busy
+                student_busy,
+                is_question_time
               );
               if (x != false) {
                 // booking completed
@@ -162,7 +171,10 @@ async function book(user_id, mastery_id){
 
 
 
-
+/**
+ * 
+ * @param Map mastery_days 
+ */
 function sort_mastery_days(mastery_days) {
   let x = mastery_days.sort(function (a, b) {
     let x = a['iso_day_n'];
@@ -234,7 +246,8 @@ async function trybooking(
   m_duration,
   student_id,
   busy_ta,
-  busy_student
+  busy_student,
+  is_question_time
 ) {
   // console.log(m_duration);
   console.log('Attempting to book ' + student_id + ' for ' + mastery_id + ' with: ' + ta);
@@ -281,6 +294,9 @@ async function trybooking(
               end_time: end_time_appointment,
               duration: m_duration,
             });
+            if(is_question_time){
+              new_appointment.question = true;
+            }
             new_appointment
               .save()
               .then(() => {
@@ -557,17 +573,19 @@ router.get("/matching", ensureProfOrTA, (req,res) => {
       filter = {
         _studentId: req.query.student_id,
         _taId: req.query.ta_id,
-        _masteryId: { $in: masteries}, // take appointemtns only for this class
+        _masteryId: { $in: masteries}, // take appointements only for this class
         end_time: {$lte: moment()},
-        isGraded: false
+        isGraded: false,
+        question: false,
       }
     } 
     else {
       filter = {
         _studentId: req.query.student_id,
         end_time: {$lte: moment()},
-        _masteryId: { $in: masteries}, // take appointemtns only for this class
-        isGraded: false
+        _masteryId: { $in: masteries}, // take appointements only for this class
+        isGraded: false,
+        question: false
       }
     }
     Appointment.find(filter)

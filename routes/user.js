@@ -162,6 +162,10 @@ router.get('/verify/:token', (req, res) => {
               // res.redirect("/user/login"); //account verified successfully
               res.render('login', { email: user.email });
               // Todo: create a flash to display that the account is confirmed
+              req.flash(
+                'success_msg',
+                'You have activated your account. You can now login'
+              );
             }
           });
         }

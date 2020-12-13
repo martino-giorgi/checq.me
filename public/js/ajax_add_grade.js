@@ -1,7 +1,9 @@
-
 let class_id = undefined;
 let student_id = undefined;
+let this_user = undefined;
+
 function add_grade_init(user) {
+    this_user = user;
     let url = new URL(window.location.href)
     class_id = url.searchParams.get('classroom_id');
     student_id = url.searchParams.get('student_id');
@@ -57,6 +59,7 @@ function grade(event) {
     .then(res => {
         console.log(res);
         window.FlashMessage.success("Appointment graded with success");
+        add_grade_init(this_user);
     })
 }
 

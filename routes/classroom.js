@@ -17,6 +17,7 @@ const ClassroomMasteryDay = require('../models/ClassroomMasteryDay');
 const Classroom = require('../models/Classroom');
 const User = require('../models/User');
 const TokenClassroom = require('../models/TokenClassroom');
+const MasteryCheck = require('../models/MasteryCheck');
 
 module.exports = router;
 
@@ -108,10 +109,20 @@ router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
     res.status(400);
   }
 
+  const question_mastery = new MasteryCheck({
+    name:"Question Time",
+    description:"Ask questions",
+    available:true,
+    appointment_duration:30,
+    author:req.user._id,
+    question_time:true
+  })
+
   const new_class = new Classroom({
     name: req.body.name,
     description: req.body.description,
     lecturer: req.user._id,
+    mastery_checks:[question_mastery._id],
     professors: [req.user._id],
     teaching_assistants: [],
     topics: [],
@@ -122,11 +133,13 @@ router.post("/new", ensureAuthenticated, ensureProfessorUser, (req, res) => {
     end_date: req.body.end_date,
   });
 
+  question_mastery.classroom = new_class._id;
+
   new_class.save().then(() => {
     User.findById(req.user._id).then((professor) => {
       professor.classrooms.addToSet(new_class._id);
       professor.save();
-
+      question_mastery.save();
       res.json(new_class.id);
     });
   });
@@ -268,8 +281,8 @@ router.delete("/ta", ensureAuthenticated, ensureProfessor, (req, res) => {
  * @param {callback} middleware - Express middleware.
  */
 router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
-  console.log(req.body);
-  console.log(req.query.classroom_id);
+  // console.log(req.body);
+  // console.log(req.query.classroom_id);
   Classroom.findById(req.query.classroom_id)
     .then((classroom) => {
       User.findById(req.body.professor_id).then((usr) => {
