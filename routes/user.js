@@ -76,8 +76,8 @@ router.post("/signup", (req, res) => {
         res.render('signup', { errors, name, surname, email });
       } else {
         let role = 2;
-        // console.log(req.query.code)
-        // console.log(process.env.PROF_CODE);
+        // console.log("request code: "+req.query.code);
+        // console.log("ENV: "+process.env.PROF_CODE);
         if (req.query.code == process.env.PROF_CODE && process.env.PROF_CODE != undefined) {
           role = 0;
         }
@@ -110,6 +110,7 @@ router.post("/signup", (req, res) => {
                     'You are now registered. Please confirm your email and log in'
                   );
                   if (role == 0) {
+                    console.log("here")
                     addAvailability(new_user._id);
                   }
                   //create an email verification token for the new user

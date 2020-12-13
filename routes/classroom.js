@@ -288,11 +288,11 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
     .then((classroom) => {
       User.findById(req.body.professor_id).then((usr) => {
         if (usr.role != 0) {
-          console.log('user is not a professor');
+          // console.log('user is not a professor');
           res.status(400).end();
           return;
         } else {
-          console.log('arriva qui');
+          // console.log('arriva qui');
           // If the User is a TA, remove him from class list and adjust their schema
           if (classroom.teaching_assistants.includes(req.body.professor_id)) {
             classroom.teaching_assistants.remove(req.body.professor_id);
