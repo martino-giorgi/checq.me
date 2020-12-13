@@ -12,7 +12,7 @@ const MasteryCheck = require('../models/MasteryCheck');
 const Classroom = require('../models/Classroom');
 const User = require('../models/User');
 const Topic = require('../models/Topic');
-const Question = require("../models/Question");
+const Question = require('../models/Question');
 
 module.exports = router;
 
@@ -38,6 +38,7 @@ router.post('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
     classroom: req.query.classroom_id,
     author: req.user._id,
     appointment_duration: req.body.appointment_duration,
+    github_repo_name: req.body.github_repo_name,
   });
 
   mc.save()
@@ -65,51 +66,57 @@ router.post('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.delete("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+router.delete('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
   // remove mastery from the classroom
   Classroom.findById(req.query.classroom_id).then((classroom) => {
     classroom.mastery_checks.remove(req.query.mastery_id);
     classroom.save();
-  })
-  
+  });
+
   // Deep delete, delete all topics and questions linked to this masterycheck
   let topic_promises = [];
   let question_promises = [];
-  MasteryCheck.findById(req.query.mastery_id).then(mastery=> {
-    mastery.topics.forEach(topic_id => {
+  MasteryCheck.findById(req.query.mastery_id).then((mastery) => {
+    mastery.topics.forEach((topic_id) => {
       topic_promises.push(Topic.findById(topic_id));
-    })
-    Promise.all(topic_promises).then( topics => {
-      topics.forEach(topic => {
-        topic.questions.forEach(question => {
+    });
+    Promise.all(topic_promises).then((topics) => {
+      topics.forEach((topic) => {
+        topic.questions.forEach((question) => {
           question_promises.push(Question.findById(question._id));
-        })
-      })
-      Promise.all(question_promises).then( questions => {
+        });
+      });
+      Promise.all(question_promises).then((questions) => {
         console.log(questions);
         console.log(topics);
-        questions.forEach(q => {
-          Question.deleteOne({_id: q._id}).then( () => {
-            console.log("deleted q")
-          }).catch( err => {console.log(err)})
+        questions.forEach((q) => {
+          Question.deleteOne({ _id: q._id })
+            .then(() => {
+              console.log('deleted q');
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         });
-        topics.forEach(t => {
-          Topic.deleteOne({_id: t._id}).then( () => {
-            console.log("deleted t");
-          }).catch(err => {console.log(err)})
+        topics.forEach((t) => {
+          Topic.deleteOne({ _id: t._id })
+            .then(() => {
+              console.log('deleted t');
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         });
         MasteryCheck.deleteOne({ _id: req.query.mastery_id })
           .then(() => {
             res.status(200).end();
           })
           .catch((err) => console.log(err));
-      })
-    })
-  })
+      });
+    });
+  });
   // remove masterycheck from the db
-  
 });
-
 
 /**
  * Route to modify a masterycheck
@@ -128,6 +135,7 @@ router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
         description: req.body.description,
         available: req.body.available,
         appointment_duration: req.body.appointment_duration,
+        github_repo_name: req.body.github_repo_name,
       },
     }
   )
@@ -147,7 +155,7 @@ router.put('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get("/", ensureAuthenticated, ensureProfOrTA, (req, res) => {
+router.get('/', ensureAuthenticated, ensureProfOrTA, (req, res) => {
   MasteryCheck.find({ classroom: req.query.classroom_id })
     .populate('topics')
     .then((result) => {

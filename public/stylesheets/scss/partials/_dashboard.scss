@@ -300,4 +300,53 @@ main {
       }
     }
   }
+
+  // ===============================
+  //           SCHEDULER
+  // ===============================
+
+  .schedule {
+    .header {
+      a:hover {
+        color: $gray;
+      }
+    }
+
+    .icn-and-title {
+      display: flex;
+      flex-flow: row;
+
+      align-items: center;
+
+      margin: 0 0 0 24px;
+
+      h3 {
+        margin: 0 0 0 17px;
+      }
+    }
+  }
+
+  // ===============================
+  //             GRADES
+  // ===============================
+  .grades {
+    .header {
+      a:hover {
+        color: $gray;
+      }
+    }
+
+    .icn-and-title {
+      display: flex;
+      flex-flow: row;
+
+      align-items: center;
+
+      margin: 0 0 0 24px;
+
+      h3 {
+        margin: 0 0 0 17px;
+      }
+    }
+  }
 }

@@ -17,12 +17,12 @@
       </div>
     </a>
 
-    <a id="notifications-button" onclick="display('notifications')">
+    <!-- <a id="notifications-button" onclick="display('notifications')">
       <div class="settings">
         <img src="/assets/icons/nav/notification.svg" alt="edit profile icon" />
         <p class="normal gray"> Notifications </p>
       </div>
-    </a>
+    </a> -->
 
     <a id="security-button" onclick="display('security')">
       <div class="settings">
@@ -86,13 +86,25 @@
             <img src="/assets/icons/misc/check.svg" alt="connected icon">
           </span>
         <% } %>
-      <% } %>
-    </div>
+      <% } else { %>
+        <p class="normal">
+          In order to make your students book a mastery slot automatically, make sure to install our GitHub application
+          on your organization using the button below. Once
+          you add the application to your org, your students will be able to book a slot by sending a GitHub push on any
+          of your org's repos with the commit title <b>"final commit"</b>. N.B.: Your students must connect their GitHub
+          accounts to checq.me in order for this to work. This can be done by going in Settings > GitHub Integration.
+          <br><br>
+          For more information on how checq.me works, check out our repo on
+          <a href="https://github.com/martino-giorgi/checq.me">GitHub</a>.
 
-    <!-- <div hidden id="notifications">
-      <h2>Notifications</h2>
-      TODO: Add notification manager
-    </div> -->
+          <br><br>
+        </p>
+
+        <a class="btn btn-social btn-github" href="https://github.com/apps/checq-me/installations/new">
+          <span class="fab fa-github" style="font-size: 20px;"></span> Add GitHub App
+        </a>
+      <% } %> 
+    </div>
 
     <div hidden id="security">
       <h2>Password & Security</h2>
