@@ -9,6 +9,7 @@ const {
   ensureProfOrTA,
   ensureMemberOfClass,
   ensureProfessorUser,
+  ensureProfOrTAUser,
 } = require('../config/auth');
 
 const { addAvailability } = require('../updates/db_updates');
@@ -287,11 +288,11 @@ router.post("/professor", ensureAuthenticated, ensureProfessor, (req, res) => {
     .then((classroom) => {
       User.findById(req.body.professor_id).then((usr) => {
         if (usr.role != 0) {
-          console.log('user is not a professor');
+          // console.log('user is not a professor');
           res.status(400).end();
           return;
         } else {
-          console.log('arriva qui');
+          // console.log('arriva qui');
           // If the User is a TA, remove him from class list and adjust their schema
           if (classroom.teaching_assistants.includes(req.body.professor_id)) {
             classroom.teaching_assistants.remove(req.body.professor_id);
@@ -540,8 +541,19 @@ router.get('/join/:token', ensureAuthenticated, (req, res) => {
           let classroom = values[0];
           let user = values[1];
 
+          if(user._id == classroom.lecturer){
+            res.redirect('/dashboard');
+            return;
+          }
+
+          if(user.role == 0){
+            classroom.professors.addToSet(user._id);
+          } 
+          else {
+            classroom.partecipants.addToSet(req.user._id);
+          }
+
           user.classrooms.addToSet(t._classroomId);
-          classroom.partecipants.addToSet(req.user._id);
 
           let p3 = classroom.save();
           let p4 = user.save();
