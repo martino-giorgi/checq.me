@@ -160,7 +160,7 @@ function create_mastery() {
     description: document.getElementById('input_description').value,
     appointment_duration: parseInt(document.getElementById('input_duration').value),
     available: document.getElementById('check_available').checked,
-    github_repo_name: document.getElementById('github_repo_card').value,
+    github_repo_name: document.getElementById('github_repo').value,
   };
 
   if (body.name != '' && body.description != '' && body.appointment_duration != '') {
