@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     themeSystem: 'bootstrap',
     initialView: 'timeGridWeek',
     firstHour: 8,
-    firstDay: '1',
+    firstDay: '',
     navLinks: true,
     editable: role == 0 || role == 1 ? true : false,
     selectable: true,
