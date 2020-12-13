@@ -31,8 +31,8 @@ router.post('/', (req, res) => {
 
             MasteryCheck.findOne({ repo: repo_url }).then((mastery) => {
               if (mastery) {
-                console.log('Appointment request initiated from /hook')
-                appointment.book(user._id, mastery._id)
+                console.log('Appointment request initiated from /hook');
+                appointment.book(user._id, mastery._id);
               }
             });
           }

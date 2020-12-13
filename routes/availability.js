@@ -1,23 +1,23 @@
-const express = require("express");
-const moment = require("moment");
-require("twix");
-const mongoose = require("mongoose");
+const express = require('express');
+const moment = require('moment');
+require('twix');
+const mongoose = require('mongoose');
 const router = express.Router();
 const {
   ensureAuthenticated,
   ensureProfessorUser,
   ensureStudent,
   ensureProfOrTAUser,
-} = require("../config/auth");
+} = require('../config/auth');
 
-const User = require("../models/User");
-const Availability = require("../models/Availability");
-const Appointment = require("../models/Appointment");
+const User = require('../models/User');
+const Availability = require('../models/Availability');
+const Appointment = require('../models/Appointment');
 
 module.exports = router;
 
 //get availability for the current user
-router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
+router.get('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Availability.findOne({ _userId: req.user._id })
     .select({ busy: 1, _id: 1, _userId: 1 })
     .then((r) => {
@@ -29,15 +29,15 @@ router.get("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
     });
 });
 
-router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
+router.post('/', ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   //input check
   let new_range;
-  let start = moment(req.body.busy[0], "YYYY-MM-DDTHH:mm:ssZ");
-  let end = moment(req.body.busy[1], "YYYY-MM-DDTHH:mm:ssZ");
+  let start = moment(req.body.busy[0], 'YYYY-MM-DDTHH:mm:ssZ');
+  let end = moment(req.body.busy[1], 'YYYY-MM-DDTHH:mm:ssZ');
 
   let now = moment();
   if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {
-    res.status(400).send("Dates are invalid or are in the past");
+    res.status(400).send('Dates are invalid or are in the past');
     return;
   }
 
@@ -64,7 +64,7 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   });
 
   if (appointments.length > 0) {
-    res.status(400).send("Make sure that the dates do not overlap existing events in the calendar");
+    res.status(400).send('Make sure that the dates do not overlap existing events in the calendar');
     return;
   }
   new_range = start.twix(end);
@@ -81,7 +81,7 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
         ) {
           res
             .status(400)
-            .send("Make sure that the dates do not overlap existing events in the calendar");
+            .send('Make sure that the dates do not overlap existing events in the calendar');
           return;
         }
       }
@@ -91,9 +91,9 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
       });
     } else {
       console.log(
-        "Professor/TA: " +
+        'Professor/TA: ' +
           req.user._id +
-          " should have an availability document linked to his account!"
+          ' should have an availability document linked to his account!'
       );
       res.status(400).end();
       return;
@@ -101,7 +101,7 @@ router.post("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   });
 });
 
-router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
+router.patch('/', ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
   if (
     !req.body.old ||
     !req.body.new ||
@@ -123,7 +123,7 @@ router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
 
   Availability.findOneAndUpdate(
     { _userId: req.user._id, busy: [old_start, old_end] },
-    { $set: { "busy.$": [moment(req.body.new[0]).toDate(), moment(req.body.new[1]).toDate()] } },
+    { $set: { 'busy.$': [moment(req.body.new[0]).toDate(), moment(req.body.new[1]).toDate()] } },
     { new: true }
   )
     .then((result) => {
@@ -133,20 +133,20 @@ router.patch("/", ensureAuthenticated, ensureProfOrTAUser, async (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(400).send("Unknown error");
+      res.status(400).send('Unknown error');
     });
 });
 
 async function validateInput(busy, user_id, busy_old) {
   let errors = [
-    "Make sure that the dates do not overlap existing events in the calendar",
-    "Dates are invalid or are in the past",
-    "Unknown error",
+    'Make sure that the dates do not overlap existing events in the calendar',
+    'Dates are invalid or are in the past',
+    'Unknown error',
   ];
 
   let new_range;
-  let start = moment(busy[0], "YYYY-MM-DDTHH:mm:ssZ");
-  let end = moment(busy[1], "YYYY-MM-DDTHH:mm:ssZ");
+  let start = moment(busy[0], 'YYYY-MM-DDTHH:mm:ssZ');
+  let end = moment(busy[1], 'YYYY-MM-DDTHH:mm:ssZ');
 
   let now = moment();
   if (!(start.isValid && end.isValid) || end.diff(now) <= 0 || start.diff(now) <= 0) {
@@ -209,12 +209,12 @@ async function validateInput(busy, user_id, busy_old) {
 }
 
 //This route will return a success even if the element sent to the server to be deleted doesn't exist
-router.delete("/", ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
+router.delete('/', ensureAuthenticated, ensureProfOrTAUser, (req, res) => {
   Availability.findOneAndUpdate({ _userId: req.user._id }, { $pull: { busy: req.body.old_busy } })
     .then((result) => {
-      res.status(200).send("Delete successful!");
+      res.status(200).send('Delete successful!');
     })
     .catch((err) => {
-      res.status(400).send("Error");
+      res.status(400).send('Error');
     });
 });

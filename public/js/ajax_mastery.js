@@ -36,7 +36,10 @@ function add_edit_event() {
           .innerHTML.split('|')[0]
           .trim()
           .replace('Duration: ', ''),
-        github_repo_name: card_body.querySelector('#github_repo_card').innerHTML.split(':')[1].trim(),
+        github_repo_name: card_body
+          .querySelector('#github_repo_card')
+          .innerHTML.split(':')[1]
+          .trim(),
       };
 
       card_body.innerHTML = ejs.views_manager_mastery_mastery_add({ current: current_values });

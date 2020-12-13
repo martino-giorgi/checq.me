@@ -1,28 +1,23 @@
-const express = require("express");
-const crypto = require("crypto");
+const express = require('express');
+const crypto = require('crypto');
 const router = express.Router();
-const {
-  ensureAuthenticated,
-  ensureProfessor,
-  ensureStudent,
-  ensureTa,
-} = require("../config/auth");
-const path = require("path");
+const { ensureAuthenticated, ensureProfessor, ensureStudent, ensureTa } = require('../config/auth');
+const path = require('path');
 
-const MasteryCheck = require("../models/MasteryCheck");
-const Classroom = require("../models/Classroom");
-const User = require("../models/User");
-const Topic = require("../models/Topic");
-const TokenClassroom = require("../models/TokenClassroom");
-const { response } = require("express");
+const MasteryCheck = require('../models/MasteryCheck');
+const Classroom = require('../models/Classroom');
+const User = require('../models/User');
+const Topic = require('../models/Topic');
+const TokenClassroom = require('../models/TokenClassroom');
+const { response } = require('express');
 
 module.exports = router;
 
-// 
+//
 // This view is used to properly render /classrooms, not for direct interaction with the database.
-// 
+//
 
-router.get("/", ensureAuthenticated, (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
   User.findOne({ _id: req.user._id })
     .select({
       _id: 1,
@@ -38,24 +33,24 @@ router.get("/", ensureAuthenticated, (req, res) => {
             name: 1,
             _id: 1,
             color: 1,
-            description: 1
+            description: 1,
           })
           .populate({
-            path: "teaching_assistants",
-            select: ["email", "name", "surname"],
+            path: 'teaching_assistants',
+            select: ['email', 'name', 'surname'],
           })
           .populate({
-            path: "lecturer",
-            select: ["email", "name", "surname"],
+            path: 'lecturer',
+            select: ['email', 'name', 'surname'],
           })
           .then((re) => {
             let Model = {
               user: user,
-              classrooms: re
-            }
+              classrooms: re,
+            };
 
             res.render('classroom', { model: Model });
           });
       }
-  });
-})
+    });
+});
