@@ -20,6 +20,10 @@ router.get('/', ensureAuthenticated, (req, res) => {
   })
     .populate(['_masteryId', '_taId', '_studentId'])
     .then((result) => {
+      result.sort((a, b) => {
+        return (moment(a.start_time).isBefore(b.start_time) ) ? -1 : 1;
+      });
+
       Classroom.find({ _id: { $in: req.user.classrooms } }).then((classrooms) => {
         if (req.user.githubToken != '' && req.user.gravatar == '') {
           axios({
