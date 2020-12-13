@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
     timeZone: 'local',
     themeSystem: 'bootstrap',
     initialView: 'timeGridWeek',
+    slotMinTime: "08:30:00",
+    slotMaxTime: "20:30:00",
     firstDay: '1',
     navLinks: true,
     editable: role == 0 || role == 1 ? true : false,
@@ -244,7 +246,7 @@ function parse_Ta_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.description == 'Question Time' ? 'green' : undefined,
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -278,7 +280,7 @@ function parse_student_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.description == 'Question Time' ? 'green' : undefined,
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,

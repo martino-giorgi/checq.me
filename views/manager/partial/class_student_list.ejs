@@ -48,16 +48,14 @@
                             data-target="#edit-user-modal" title="" data-original-title="Edit"><i
                               class="fas fa-pencil-alt"></i></a></li>
 
-                        <% if (partecipants.includes(p)) { %>
-                          <li><a href="/grades/student?classroom_id=<%- _id %>&student_id=<%- p._id %>"
-                              class="text-info"><i class="fas fa-info-circle"></i></a></li>
-                          <li><a href="/grades/add?classroom_id=<%- _id %>&student_id=<%- p._id %>" class="text-info"><i
-                                class="fas fa-plus"></i></a></li>
-                          <%}%>
-                      </ul>
-                    </td>
-                  </tr>
-                  <% }) %>
+                      <% if (partecipants.includes(p)) { %>
+                        <li><a href="/grades/student?classroom_id=<%- _id %>&student_id=<%- p._id %>" class="text-info"><i class="fas fa-info-circle"></i></a></li>
+                        <li><a href="/grades/add?classroom_id=<%- _id %>&student_id=<%- p._id %>" class="text-info"><i class="fas fa-plus"></i></a></li>
+                      <%}%>
+                    </ul>
+                  </td>
+                </tr>
+              <% }) %>
             </tbody>
           </table>
         </div>

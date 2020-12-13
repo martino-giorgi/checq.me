@@ -324,6 +324,60 @@ main {
         margin: 0 0 0 17px;
       }
     }
+
+    .schedule-list {
+      display: flex;
+      flex-flow: row wrap;
+
+      margin: 0 26px 26px 26px;
+
+      .appointment-card {
+        display: flex;
+        flex-flow: row;
+
+        width: fit-content;
+
+        padding: 14px 18px 14px 18px;
+        margin-right: 26px;
+        margin-top: 20px;
+
+        border-radius: 8px;
+        
+        color: $white;
+
+        p {
+          margin: 0;
+
+          font-size: 15px;
+        }
+
+        .time-app {
+          display: flex;
+          flex-flow: column;
+
+          align-items: center;
+
+          margin-right: 18px;
+        }
+
+        .info-app {
+          display: flex;
+          flex-flow: column;
+
+          margin-left: 18px;
+
+          .mastery-name {
+            margin-bottom: 3px;
+            font-size: 20px;
+            font-weight: 500;
+          }
+
+          .mastery-ta {
+            font-size: 12px;
+          }
+        }        
+      }
+    } 
   }
 
   // ===============================
