@@ -246,7 +246,7 @@ function parse_Ta_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.name == 'Question Time' ? 'green' : 'blue',
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,
@@ -280,7 +280,7 @@ function parse_student_appointments(data) {
       end: el.end_time,
       durationEditable: false,
       id: el._id,
-      color: el._masteryId.name == 'Question Time' ? 'green' : 'blue',
+      color: el._masteryId.name == 'Question Time' ? 'green' : undefined,
 
       extendedProps: {
         classroom_id: el._masteryId.classroom,

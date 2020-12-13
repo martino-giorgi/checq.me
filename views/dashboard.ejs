@@ -1,111 +1,159 @@
-<head>
-  <title>checq.me - Dashboard</title>
-</head>
+<div class="wrapper">
 
-<body>
-  <div class="wrapper">
+  <%- include("./partials/navigation", { active: "dashboard" })%>
 
-    <%- include("./partials/navigation", { active: "dashboard" })%>
+  <main>
+    <div class="header">
+      <h1 class="main-header"> Welcome Back, <%= capitalize(model.user.name) %>! </h1>
 
-    <main>
-      <div class="header">
-        <h1 class="main-header"> Welcome Back, <%= capitalize(model.user.name) %>! </h1>
+      <a class="button-text normal red" href="/user/logout">
+        <img class="icon-s" src="/assets/icons/buttons/logout.svg" alt="logout icon" />Logout
+      </a>
+    </div>
 
-        <a class="button-text normal red" href="/user/logout">
-          <img class="icon-s" src="/assets/icons/buttons/logout.svg" alt="logout icon" />Logout
-        </a>
+    <section>
+      <div class="column">
+        <div class="schedule box">
+          <div class="header">
+            <span class="icn-and-title">
+              <img class="icon-s" src="/assets/icons/sections/calendar.svg" alt="calendar icon" />
+              <h3 class="primary"> Schedule </h3>
+            </span>
+
+            <a class="button-text small gray" href="/schedule">See more</a>
+          </div>
+
+          <% if (appointments.length > 0) { %>
+            <div class="schedule-list">
+              <% appointments.forEach((app) => { %>
+                <% 
+                  let color;
+                  let isTA = false;
+                  let date_time = app.start_time.toISOString();
+                  let date = date_time.substring(5, 10).split('-').reverse().join('/');
+                  let time = date_time.substring(11, 16).split('-').join('/');
+
+                  for (let i = 0; i < model.classrooms.length; i++) {
+                    if (model.classrooms[i]._id.toString() == app._masteryId.classroom.toString()) {
+                      color = model.classrooms[i].color;
+
+                      model.classrooms[i].teaching_assistants.forEach((ta) => {
+                        if (ta.toString() == app._taId._id.toString()) {
+                          isTA = true;
+                        }
+                      })
+
+                      if (!isTA) {
+                        model.classrooms[i].professors.forEach((prof) => {
+                          if (prof.toString() == app._taId._id.toString()) {
+                            isTA = true;
+                          }
+                        })
+                      }
+
+                      break;
+                    }
+                  }
+                %>
+
+                <div class="appointment-card" style="background-color: #<%= color %>">
+                  <div class="time-app">
+                    <p class="normal date"><%- date %></p>
+                    <p class="normal time"><%- time %></p>
+                  </div>
+
+                  <img src="/assets/icons/misc/line.svg" alt="divider">
+
+                  <div class="info-app">
+                    <p class="normal mastery-name"><%- app._masteryId.name %></p>
+                    <% if (isTA) { %> 
+                      <p class="normal mastery-ta">with: <%- app._studentId.name %> <%- app._studentId.surname %></p>
+                    <% } else { %>
+                      <p class="normal mastery-ta">with: <%- app._taId.name %> <%- app._taId.surname %></p>
+                    <% } %>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="classrooms box">
+          <div class="header">
+            <span class="icn-and-title">
+              <img class="icon-s" src="/assets/icons/sections/classroom.svg" alt="classroom icon" />
+              <h3 class="primary"> Classrooms </h3>
+            </span>
+
+            <% let href = model.user.role == 0 ? '/manager' : '/classrooms'%> 
+            <a class="button-text small gray" href="<%= href %>">See more</a>
+          </div>
+
+          <% if (model.user.classrooms.length > 0) { %>
+            <div class="classroom-list">
+              <% model.classrooms.forEach((classroom) => { %> 
+                <% let href2 = model.user.role == 0 ? `/manager/classroom?classroom_id=${classroom._id}` : `/classroom/class?classroom_id=${classroom._id}`%>
+                <a href="<%= href2 %>">
+                  <div class="classroom-box" style="background-color: #<%= classroom.color %>">
+                    <span class="circle">
+                      <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
+                    </span>
+
+                    <p class="classroom-name"> <%= classroom.name %> </p>
+                  </div>
+                </a>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
       </div>
 
-      <section>
-        <div class="column">
-          <div class="schedule box">
-            <div class="header">
-              <span class="icn-and-title">
-                <img class="icon-s" src="/assets/icons/sections/calendar.svg" alt="calendar icon" />
-                <h3 class="primary"> Schedule </h3>
-              </span>
-
-              <a class="button-text small gray" href="/schedule">See more</a>
-            </div>
-          </div>
-
-          <div class="classrooms box">
-            <div class="header">
-              <span class="icn-and-title">
-                <img class="icon-s" src="/assets/icons/sections/classroom.svg" alt="classroom icon" />
-                <h3 class="primary"> Classrooms </h3>
-              </span>
-
-              <% let href = model.user.role == 0 ? '/manager' : '/classrooms'%> 
-              <a class="button-text small gray" href="<%= href %>">See more</a>
-            </div>
-
-            <% if (model.user.classrooms.length > 0) { %>
-              <div class="classroom-list">
-                <% model.classrooms.forEach((classroom) => { %> 
-                  <% let href2 = model.user.role == 0 ? `/manager/classroom?classroom_id=${classroom._id}` : `/classroom/class?classroom_id=${classroom._id}`%>
-                  <a href="<%= href2 %>">
-                    <div class="classroom-box" style="background-color: #<%= classroom.color %>">
-                      <span class="circle">
-                        <p style="color: #<%= classroom.color %>"> <%= getInitials(classroom.name) %> </p>
-                      </span>
-
-                      <p class="classroom-name"> <%= classroom.name %> </p>
-                    </div>
-                  </a>
-                <% }); %>
-              </div>
+      <div class="column">
+        <div class="profile box">
+          <div>
+            <% if (model.user.gravatar == "") { %>
+              <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
+            <% } else { %>
+              <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
             <% } %>
-          </div>
-        </div>
 
-        <div class="column">
-          <div class="profile box">
-            <div>
-              <% if (model.user.gravatar == "") { %>
-                <img class="icon-xl" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture placeholder icon" />
-              <% } else { %>
-                <img class="icon-xl" src="<%= model.user.gravatar %>" alt="user avatar" style="border-radius: 50%;" />
-              <% } %>
+            <div class="info">
+              <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
 
-              <div class="info">
-                <p class="normal"> <%= capitalize(model.user.name) %> <%= capitalize(model.user.surname) %> </p>
+              <span class="icon-text">
+                <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
+                <p class="small gray"> <%= model.user.email %> </p>
+              </span>
 
+              <% if (typeof model.user.university != 'undefined' && model.user.university != "") { %> 
                 <span class="icon-text">
-                  <img class="icon-xs" src="/assets/icons/misc/email.svg" alt="email icon" />
-                  <p class="small gray"> <%= model.user.email %> </p>
+                  <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
+                  <p class="small gray"> <%= model.user.university %> </p>
                 </span>
-
-                <% if (typeof model.user.university != 'undefined' && model.user.university != "") { %> 
-                  <span class="icon-text">
-                    <img class="icon-xs" src="/assets/icons/misc/university.svg" alt="university icon" />
-                    <p class="small gray"> <%= model.user.university %> </p>
-                  </span>
-                <% } %>
-              </div>
+              <% } %>
             </div>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </section>
+  </main>
+</div>
 
-  <%
-    function capitalize(word) {
-      return word
-        .toLowerCase()
-        .replace(/\w/, firstLetter => firstLetter.toUpperCase());
+<%
+  function capitalize(word) {
+    return word
+      .toLowerCase()
+      .replace(/\w/, firstLetter => firstLetter.toUpperCase());
+  }
+
+  function getInitials (name) {
+    var names = name.split(' '),
+    initials = names[0].substring(0, 1).toUpperCase();
+    
+    if (names.length > 1) {
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
 
-    function getInitials (name) {
-      var names = name.split(' '),
-      initials = names[0].substring(0, 1).toUpperCase();
-      
-      if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
-      }
-
-      return initials;
-    }
-  %>
-</body>
+    return initials;
+  }
+%>
