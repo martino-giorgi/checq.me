@@ -131,7 +131,7 @@ app.use('/grades', routers.grades);
 // Webhook
 const smee = new SmeeClient({
   source: 'https://smee.io/UMN2a46A0lROwbE',
-  target: 'http://www.checq.me/hook',
+  target: 'http://localhost:3000/hook',
   // logger: console
 });
 

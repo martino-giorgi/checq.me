@@ -29,8 +29,8 @@ router.post('/', (req, res) => {
             repo_url.splice(-1);
             repo_url = repo_url.join('-');
 
-            MasteryCheck.findOne({ repo: repo_url }).then((mastery) => {
-              if (mastery) {
+            MasteryCheck.findOne({ github_repo_name: repo_url }).populate({path: "classroom", select: ["teaching_assistants"]}).then((mastery) => {
+              if (mastery && !mastery.classroom.teaching_assistants.includes(user._id)) {
                 console.log('Appointment request initiated from /hook');
                 appointment.book(user._id, mastery._id);
               }
