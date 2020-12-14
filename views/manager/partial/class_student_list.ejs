@@ -13,36 +13,40 @@
             </thead>
 
             <tbody>
-              <% partecipants.concat(teaching_assistants.concat(professors)).forEach(p => { %>
-                <% let curr = p._id %>
-                <tr class="candidates-list">
-                  <td class="title">
-                    <div class="thumb">
-                      <% if (p.gravatar == '' || typeof p.gravatar === 'undefined') { %>
-                        <img class="img-fluid" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture">
-                      <% } else { %>
-                        <img class="img-fluid" src="<%- p.gravatar %>" alt="profile picture">
-                      <% } %> 
-                    </div>
+              <% partecipants.concat(teaching_assistants.concat(professors)).forEach(p=> { %>
+                <% let curr=p._id %>
+                  <tr class="candidates-list">
+                    <td class="title">
+                      <div class="thumb">
+                        <% if (p.gravatar=='' || typeof p.gravatar==='undefined' ) { %>
+                          <img class="img-fluid" src="/assets/icons/misc/pp_placeholder.svg" alt="profile picture">
+                          <% } else { %>
+                            <img class="img-fluid" src="<%- p.gravatar %>" alt="profile picture">
+                            <% } %>
+                      </div>
 
-                    <div class="candidate-list-details">
-                      <div class="candidate-list-info">
-                        <div class="candidate-list-title">
-                          <p class="mb-0"><%= p.name%> <%- p.surname %></p>
+                      <div class="candidate-list-details">
+                        <div class="candidate-list-info">
+                          <div class="candidate-list-title">
+                            <p class="mb-0">
+                              <%= p.name%>
+                                <%- p.surname %>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td class="candidate-list-favourite-time text-center">
-                    <span
-                      class="candidate-list-time order-1"><%- professors.map(e => e._id).includes(p._id) ?  "Professor" : (teaching_assistants.map(e => e._id).includes(p._id)) ? "TA" : "Student"%>
-                    </span>
-                  </td>
-                  <td>
-                    <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                      <li><a onclick="setUser('<%- curr %>')" href="#" class="text-info"
-                              data-toggle="modal" data-target="#edit-user-modal" title=""
-                              data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>
+                    </td>
+                    <td class="candidate-list-favourite-time text-center">
+                      <span class="candidate-list-time order-1">
+                        <%- professors.map(e=> e._id).includes(p._id) ? "Professor" : (teaching_assistants.map(e =>
+                          e._id).includes(p._id)) ? "TA" : "Student"%>
+                      </span>
+                    </td>
+                    <td>
+                      <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                        <li><a onclick="setUser('<%- curr %>')" href="#" class="text-info" data-toggle="modal"
+                            data-target="#edit-user-modal" title="" data-original-title="Edit"><i
+                              class="fas fa-pencil-alt"></i></a></li>
 
                       <% if (partecipants.includes(p)) { %>
                         <li><a href="/grades/student?classroom_id=<%- _id %>&student_id=<%- p._id %>" class="text-info"><i class="fas fa-info-circle"></i></a></li>
@@ -61,26 +65,26 @@
 </div>
 
 <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-label"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="edit-user-modal-label">Edit User</h5>
-            </div>
-            <div class="modal-body">
-                <button type="button" class="btn btn-primary" onclick="removeFromClass(getUser())" data-toggle="modal"
-                    data-target="#edit-user-modal">
-                    Remove from Classroom
-                </button>
-                <button type="button" id="toggleTA_btn" onclick="toggleTA(getUser())" class="btn btn-primary"
-                    data-toggle="modal" data-target="#edit-user-modal">
-                    Value
-                </button>
-                <button type="button" id="toggleProf_btn" onclick="toggleProf(getUser())" class="btn btn-primary"
-                    data-toggle="modal" data-target="#edit-user-modal">
-                    Toggle Prof
-                </button>
-            </div>
-        </div>
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="edit-user-modal-label">Edit User</h5>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn btn-primary" onclick="removeFromClass(getUser())" data-toggle="modal"
+          data-target="#edit-user-modal">
+          Remove from Classroom
+        </button>
+        <button type="button" id="toggleTA_btn" onclick="toggleTA(getUser())" class="btn btn-primary"
+          data-toggle="modal" data-target="#edit-user-modal">
+          Value
+        </button>
+        <button type="button" id="toggleProf_btn" onclick="toggleProf(getUser())" class="btn btn-primary"
+          data-toggle="modal" data-target="#edit-user-modal">
+          Toggle Prof
+        </button>
+      </div>
     </div>
+  </div>
 </div>

@@ -607,7 +607,6 @@ router.patch("/", ensureProfOrTAUser, async (req, res) => {
       return;
     }
     res.status(400).send("This student has another appointment at this time");
-    // console.log(availability)
   } else {
     res.status(400).send("Invalid date");
   }
