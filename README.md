@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Mongoose-v5.10.14-informational?style=flat&color=47A248">
 </p>
 
-<a href="https://github.com/martino-giorgi/checq.me">Demo Video</a>
+<a href="https://www.youtube.com/watch?v=CXkP2-Jxtx8">Demo Video</a>
 
 checq.me is a web application that allows students, professors, and TAs to easily manage mastery checks and prepare for them.
 
